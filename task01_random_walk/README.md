@@ -2,9 +2,9 @@
 
 ## Objective
 
-Model a random walk consisting of \(N\) steps of fixed length \(s\). Each step
+Model a random walk consisting of $N$ steps of fixed length $s$. Each step
 must point in a random direction. Its angle from the positive horizontal axis is
-selected independently from a uniform distribution between \(0\) and \(2\pi\)
+selected independently from a uniform distribution between $0$ and $2\pi$
 radians.
 
 This document defines the mathematical model and the predictions that the
@@ -13,37 +13,34 @@ Python simulation must reproduce.
 ## Variables
 
 | Symbol | Meaning |
-| --- | --- |
-| \(N\) | Total number of steps |
-| \(s\) | Fixed length of every step |
-| \(i\) | Step number, from \(1\) to \(N\) |
-| \(\theta_i\) | Random direction of step \(i\), in radians |
-| \((x_i,y_i)\) | Position after step \(i\) |
-| \(r_i\) | Distance from the starting point after step \(i\) |
+| :---: | --- |
+| $N$ | Total number of steps |
+| $s$ | Fixed length of every step |
+| $i$ | Step number, from $1$ to $N$ |
+| $\theta_i$ | Random direction of step $i$, in radians |
+| $(x_i, y_i)$ | Position after step $i$ |
+| $r_i$ | Distance from the starting point after step $i$ |
 
 The particle begins at the origin:
 
 $$
-(x_0,y_0)=(0,0).
+(x_0, y_0)=(0, 0).
 $$
 
 ## Model assumptions
 
 1. The walk takes place in an unbounded two-dimensional plane.
-2. Every step has exactly the same length \(s\).
+2. Every step has exactly the same length $s$.
 3. The direction of each step is independent of all previous directions.
 4. Every direction is equally likely, so
-
-   $$
-   \theta_i\sim\operatorname{Uniform}(0,2\pi).
-   $$
+   $\theta_i\sim\operatorname{Uniform}(0,2\pi)$.
 
 5. There is no drift, preferred direction, boundary, force, or interaction.
 6. The model is discrete: position changes once per step.
 
 ## One step of the walk
 
-The displacement vector for step \(i\) is
+The displacement vector for step $i$ is
 
 $$
 \Delta\mathbf r_i=s(\cos\theta_i,\sin\theta_i).
@@ -52,22 +49,22 @@ $$
 Therefore, its horizontal and vertical components are
 
 $$
-\Delta x_i=s\cos\theta_i,
-\qquad
-\Delta y_i=s\sin\theta_i.
+\begin{aligned}
+\Delta x_i &= s\cos\theta_i, \\
+\Delta y_i &= s\sin\theta_i.
+\end{aligned}
 $$
 
 The position is updated using
 
 $$
-x_i=x_{i-1}+s\cos\theta_i,
+\begin{aligned}
+x_i &= x_{i-1}+s\cos\theta_i, \\
+y_i &= y_{i-1}+s\sin\theta_i.
+\end{aligned}
 $$
 
-$$
-y_i=y_{i-1}+s\sin\theta_i.
-$$
-
-This construction guarantees that every step has length \(s\), because
+This construction guarantees that every step has length $s$, because
 
 $$
 \sqrt{(\Delta x_i)^2+(\Delta y_i)^2}
@@ -80,14 +77,13 @@ fixed step length, so the random angle must be generated first.
 
 ## Position after multiple steps
 
-After \(n\) steps, the coordinates are the cumulative sums
+After $n$ steps, the coordinates are the cumulative sums
 
 $$
-x_n=s\sum_{i=1}^{n}\cos\theta_i,
-$$
-
-$$
-y_n=s\sum_{i=1}^{n}\sin\theta_i.
+\begin{aligned}
+x_n &= s\sum_{i=1}^{n}\cos\theta_i, \\
+y_n &= s\sum_{i=1}^{n}\sin\theta_i.
+\end{aligned}
 $$
 
 The displacement from the origin is
@@ -100,20 +96,22 @@ $$
 
 ### 1. No preferred direction
 
-For an angle uniformly distributed between \(0\) and \(2\pi\),
+For an angle uniformly distributed between $0$ and $2\pi$,
 
 $$
-\langle\cos\theta\rangle=0,
-\qquad
-\langle\sin\theta\rangle=0.
+\begin{aligned}
+\langle\cos\theta\rangle &= 0, \\
+\langle\sin\theta\rangle &= 0.
+\end{aligned}
 $$
 
 It follows that, over a large ensemble of independent walks,
 
 $$
-\langle x_n\rangle=0,
-\qquad
-\langle y_n\rangle=0.
+\begin{aligned}
+\langle x_n\rangle &= 0, \\
+\langle y_n\rangle &= 0.
+\end{aligned}
 $$
 
 This does not mean that every walk finishes at the origin. It means that the
@@ -131,17 +129,18 @@ $$
 $$
 
 Because successive directions are independent, cross terms average to zero.
-The coordinate variances after \(n\) steps are therefore
+The coordinate variances after $n$ steps are therefore
 
 $$
-\operatorname{Var}(x_n)=\frac{ns^2}{2},
-\qquad
-\operatorname{Var}(y_n)=\frac{ns^2}{2}.
+\begin{aligned}
+\operatorname{Var}(x_n) &= \frac{ns^2}{2}, \\
+\operatorname{Var}(y_n) &= \frac{ns^2}{2}.
+\end{aligned}
 $$
 
 ### 3. Mean squared displacement
 
-Since \(r_n^2=x_n^2+y_n^2\),
+Since $r_n^2=x_n^2+y_n^2$,
 
 $$
 \langle r_n^2\rangle
@@ -155,7 +154,7 @@ $$
 \boxed{\langle r_n^2\rangle=ns^2}.
 $$
 
-At the end of a walk of \(N\) steps,
+At the end of a walk of $N$ steps,
 
 $$
 \boxed{\langle r_N^2\rangle=Ns^2}.
@@ -168,17 +167,18 @@ $$
 $$
 
 The RMS displacement is not the same as the mean distance
-\(\langle r_N\rangle\). This distinction will be preserved in the analysis.
+$\langle r_N\rangle$. This distinction will be preserved in the analysis.
 
-### 4. Large-\(N\) endpoint distribution
+### 4. Endpoint distribution after many steps
 
 For a sufficiently large number of steps, the central limit theorem predicts
 that the endpoint coordinates are approximately normally distributed:
 
 $$
-x_N\approx\mathcal N\left(0,\frac{Ns^2}{2}\right),
-\qquad
-y_N\approx\mathcal N\left(0,\frac{Ns^2}{2}\right).
+\begin{aligned}
+x_N &\approx \mathcal N\left(0,\frac{Ns^2}{2}\right), \\
+y_N &\approx \mathcal N\left(0,\frac{Ns^2}{2}\right).
+\end{aligned}
 $$
 
 The two-dimensional endpoint cloud should therefore be rotationally symmetric
@@ -195,14 +195,14 @@ This is an additional prediction for assessing the endpoint-distribution plot.
 
 The completed simulation must demonstrate that:
 
-1. every individual step has length \(s\), within floating-point precision;
+1. every individual step has length $s$, within floating-point precision;
 2. the sampled directions show no preferred angle;
-3. ensemble averages of \(x_N\) and \(y_N\) are statistically consistent with
+3. ensemble averages of $x_N$ and $y_N$ are statistically consistent with
    zero;
 4. the endpoint cloud is centred and rotationally symmetric;
-5. measured mean squared displacement agrees with \(Ns^2\), within statistical
+5. measured mean squared displacement agrees with $Ns^2$, within statistical
    uncertainty;
-6. RMS displacement scales as \(s\sqrt{N}\).
+6. RMS displacement scales as $s\sqrt{N}$.
 
 These checks distinguish a physically correct random-walk model from a graph
 that merely appears random.
