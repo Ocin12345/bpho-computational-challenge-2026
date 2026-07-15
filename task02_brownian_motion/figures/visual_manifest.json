@@ -1,0 +1,45 @@
+{
+  "task": "BPhO 2026 Task 2 Brownian motion",
+  "reference_seed": 2026,
+  "reference_parameters": {
+    "n_small": 1000,
+    "max_time_ps": 200.0,
+    "restitution": 1.0,
+    "time_step_ps": 0.0056479624975290165
+  },
+  "generation": {
+    "static_png_dpi": 300,
+    "static_vector_format": "SVG",
+    "animation_frame_count": 180,
+    "animation_frames_per_second": 20,
+    "animation_dpi": 110,
+    "statistical_ensembles_rerun": false
+  },
+  "visuals": [
+    {
+      "filename": "reference_particle_scene.png",
+      "caption": "Final molecular scene and complete large-tracer trail for the reproducible seed-2026 reference run.",
+      "source": "reference simulation"
+    },
+    {
+      "filename": "baseline_statistics.png",
+      "caption": "Baseline MSD with pre-declared fit and final displacement cloud with mean confidence intervals.",
+      "source": "analysis/baseline_msd.csv and run_metrics.csv"
+    },
+    {
+      "filename": "parameter_experiments.png",
+      "caption": "One-factor effective-diffusion comparisons with fixed bootstrap confidence intervals.",
+      "source": "analysis/experiment_comparisons.csv"
+    },
+    {
+      "filename": "numerical_validation.png",
+      "caption": "Controlled first-order collision convergence and complete reference time-step refinement.",
+      "source": "validation CSV evidence"
+    },
+    {
+      "filename": "reference_animation.gif",
+      "caption": "Small-particle motion, collision-driven tracer motion, and accumulated tracer trail over 200 ps.",
+      "source": "reference simulation"
+    }
+  ]
+}
