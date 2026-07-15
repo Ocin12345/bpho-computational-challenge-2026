@@ -11,6 +11,7 @@ from task02_brownian_motion.brownian_motion import (
     BrownianParameters,
     BrownianSimulationResult,
     FixedTimeGrid,
+    SimulationDiagnostics,
     SimulationState,
     build_frame_steps,
     create_time_grid,
@@ -61,6 +62,11 @@ class BrownianParameterTests(unittest.TestCase):
             0.028240113,
             places=9,
         )
+        self.assertAlmostEqual(
+            parameters.automatic_time_step_safety_factor,
+            0.40,
+        )
+        self.assertEqual(parameters.max_collision_passes, 16)
 
     def test_parameters_are_immutable(self) -> None:
         parameters = BrownianParameters()
@@ -77,6 +83,12 @@ class BrownianParameterTests(unittest.TestCase):
             with self.subTest(seed=value):
                 with self.assertRaises((TypeError, ValueError)):
                     BrownianParameters(seed=value)  # type: ignore[arg-type]
+        for value in (0, -1, 1.5, True):
+            with self.subTest(max_collision_passes=value):
+                with self.assertRaises((TypeError, ValueError)):
+                    BrownianParameters(
+                        max_collision_passes=value  # type: ignore[arg-type]
+                    )
 
     def test_invalid_positive_real_parameters_are_rejected(self) -> None:
         names = (
@@ -104,7 +116,11 @@ class BrownianParameterTests(unittest.TestCase):
         self.assertEqual(BrownianParameters(restitution=0).restitution, 0.0)
         self.assertEqual(BrownianParameters(restitution=1).restitution, 1.0)
 
-        for name in ("max_step_fraction", "randomization_step_fraction"):
+        for name in (
+            "max_step_fraction",
+            "randomization_step_fraction",
+            "automatic_time_step_safety_factor",
+        ):
             for value in (0.0, -0.1, 1.1, np.inf):
                 with self.subTest(name=name, value=value):
                     with self.assertRaises(ValueError):
@@ -136,13 +152,13 @@ class TimeGridTests(unittest.TestCase):
         parameters = BrownianParameters()
         grid = create_time_grid(parameters)
 
-        self.assertEqual(grid.n_steps, 7_083)
-        self.assertEqual(grid.times_ps.shape, (7_084,))
+        self.assertEqual(grid.n_steps, 17_706)
+        self.assertEqual(grid.times_ps.shape, (17_707,))
         self.assertEqual(grid.times_ps[0], 0.0)
         self.assertEqual(grid.final_time_ps, parameters.max_time_ps)
         self.assertLessEqual(
             grid.step_size_ps,
-            parameters.maximum_time_step_ps,
+            parameters.automatic_time_step_upper_bound_ps,
         )
         np.testing.assert_allclose(
             np.diff(grid.times_ps),
@@ -155,7 +171,9 @@ class TimeGridTests(unittest.TestCase):
     def test_smaller_requested_step_increases_resolution(self) -> None:
         default = compact_parameters()
         refined = compact_parameters(
-            requested_time_step_ps=default.maximum_time_step_ps / 2.0
+            requested_time_step_ps=(
+                default.automatic_time_step_upper_bound_ps / 2.0
+            )
         )
 
         self.assertGreater(
@@ -365,6 +383,7 @@ class ResultContractTests(unittest.TestCase):
             large_velocities_nm_per_ps=large_velocities,
             frame_steps=frame_steps,
             small_position_frames_nm=small_frames,
+            diagnostics=SimulationDiagnostics.zeros(grid.n_steps),
         )
 
     def test_result_properties_and_shapes(self) -> None:
@@ -410,6 +429,7 @@ class ResultContractTests(unittest.TestCase):
                 large_velocities_nm_per_ps=valid.large_velocities_nm_per_ps,
                 frame_steps=valid.frame_steps,
                 small_position_frames_nm=valid.small_position_frames_nm,
+                diagnostics=valid.diagnostics,
             )
 
     def test_nonfinite_result_is_rejected(self) -> None:
@@ -425,6 +445,7 @@ class ResultContractTests(unittest.TestCase):
                 large_velocities_nm_per_ps=valid.large_velocities_nm_per_ps,
                 frame_steps=valid.frame_steps,
                 small_position_frames_nm=valid.small_position_frames_nm,
+                diagnostics=valid.diagnostics,
             )
 
     def test_result_rejects_a_grid_for_different_parameters(self) -> None:
@@ -442,6 +463,7 @@ class ResultContractTests(unittest.TestCase):
                 large_velocities_nm_per_ps=valid.large_velocities_nm_per_ps,
                 frame_steps=valid.frame_steps,
                 small_position_frames_nm=valid.small_position_frames_nm,
+                diagnostics=valid.diagnostics,
             )
 
 

@@ -8,6 +8,7 @@ correction and restitution impulses. The complete run loop remains Step 6.
 
 from __future__ import annotations
 
+import copy
 from dataclasses import dataclass
 
 import numpy as np
@@ -96,7 +97,9 @@ class BrownianParameters:
     max_time_ps: float = 200.0
     max_step_fraction: float = 0.10
     randomization_step_fraction: float = 0.01
+    automatic_time_step_safety_factor: float = 0.40
     requested_time_step_ps: float | None = None
+    max_collision_passes: int = 16
     seed: int | None = 2026
 
     def __post_init__(self) -> None:
@@ -106,6 +109,14 @@ class BrownianParameters:
             self,
             "n_small",
             _validated_integer(self.n_small, "n_small"),
+        )
+        object.__setattr__(
+            self,
+            "max_collision_passes",
+            _validated_integer(
+                self.max_collision_passes,
+                "max_collision_passes",
+            ),
         )
         for name in (
             "small_mass_kg",
@@ -134,7 +145,11 @@ class BrownianParameters:
             raise ValueError("restitution must not exceed 1")
         object.__setattr__(self, "restitution", restitution)
 
-        for name in ("max_step_fraction", "randomization_step_fraction"):
+        for name in (
+            "max_step_fraction",
+            "randomization_step_fraction",
+            "automatic_time_step_safety_factor",
+        ):
             value = _validated_real(getattr(self, name), name)
             if value > 1.0:
                 raise ValueError(f"{name} must not exceed 1")
@@ -235,6 +250,15 @@ class BrownianParameters:
             )
         )
 
+    @property
+    def automatic_time_step_upper_bound_ps(self) -> float:
+        """Conservative default step below the nominal stability ceiling."""
+
+        return (
+            self.automatic_time_step_safety_factor
+            * self.maximum_time_step_ps
+        )
+
 
 @dataclass(frozen=True)
 class FixedTimeGrid:
@@ -302,7 +326,7 @@ def create_time_grid(parameters: BrownianParameters) -> FixedTimeGrid:
     if not isinstance(parameters, BrownianParameters):
         raise TypeError("parameters must be BrownianParameters")
     upper_bound = (
-        parameters.maximum_time_step_ps
+        parameters.automatic_time_step_upper_bound_ps
         if parameters.requested_time_step_ps is None
         else parameters.requested_time_step_ps
     )
@@ -587,6 +611,172 @@ class CollisionBatchReport:
         """Sum of measured kinetic-energy changes in this collision pass."""
 
         return sum(event.kinetic_energy_change_j for event in self.events)
+
+
+@dataclass(frozen=True)
+class SimulationStepReport:
+    """Combined evidence from one complete transport-collision step."""
+
+    transport: TransportStepReport
+    collisions: CollisionBatchReport
+    collision_passes: int
+    post_collision_wall_impacts: WallReflectionReport
+    remaining_contacts: int
+
+    @property
+    def total_small_wall_impacts(self) -> int:
+        """Small-particle wall impacts before and after collision correction."""
+
+        return (
+            self.transport.small_wall_impacts
+            + self.post_collision_wall_impacts.small_particle_impacts
+        )
+
+    @property
+    def total_large_wall_impacts(self) -> int:
+        """Large-particle wall impacts before and after collision correction."""
+
+        return (
+            self.transport.large_wall_impacts
+            + self.post_collision_wall_impacts.large_particle_impacts
+        )
+
+
+@dataclass(frozen=True)
+class SimulationDiagnostics:
+    """Read-only step histories and aggregate numerical validation evidence."""
+
+    direction_resets_per_step: IntegerArray
+    small_wall_impacts_per_step: IntegerArray
+    large_wall_impacts_per_step: IntegerArray
+    contacts_per_step: IntegerArray
+    impulses_per_step: IntegerArray
+    collision_passes_per_step: IntegerArray
+    maximum_displacement_nm: float
+    maximum_residual_penetration_nm: float
+    maximum_normalized_momentum_error: float
+    maximum_normalized_restitution_error: float
+    maximum_normalized_energy_identity_error: float
+    total_collision_energy_change_j: float
+
+    def __post_init__(self) -> None:
+        """Validate count histories, scalar evidence, and immutable ownership."""
+
+        names = (
+            "direction_resets_per_step",
+            "small_wall_impacts_per_step",
+            "large_wall_impacts_per_step",
+            "contacts_per_step",
+            "impulses_per_step",
+            "collision_passes_per_step",
+        )
+        arrays: list[IntegerArray] = []
+        expected_shape: tuple[int, ...] | None = None
+        for name in names:
+            raw = np.asarray(getattr(self, name))
+            if raw.ndim != 1:
+                raise ValueError(f"{name} must be one-dimensional")
+            if not np.issubdtype(raw.dtype, np.integer):
+                raise TypeError(f"{name} must contain integers")
+            array = np.asarray(raw, dtype=np.int64)
+            if np.any(array < 0):
+                raise ValueError(f"{name} must be non-negative")
+            if expected_shape is None:
+                expected_shape = array.shape
+            elif array.shape != expected_shape:
+                raise ValueError("all diagnostic histories must have one shape")
+            arrays.append(array)
+
+        for name, array in zip(names, arrays):
+            object.__setattr__(
+                self,
+                name,
+                _readonly_array(array, dtype=np.dtype(np.int64)),
+            )
+
+        nonnegative_names = (
+            "maximum_displacement_nm",
+            "maximum_residual_penetration_nm",
+            "maximum_normalized_momentum_error",
+            "maximum_normalized_restitution_error",
+            "maximum_normalized_energy_identity_error",
+        )
+        for name in nonnegative_names:
+            value = _validated_real(
+                getattr(self, name),
+                name,
+                minimum=0.0,
+                include_minimum=True,
+            )
+            object.__setattr__(self, name, value)
+        energy_change = _validated_real(
+            self.total_collision_energy_change_j,
+            "total_collision_energy_change_j",
+            minimum=-np.inf,
+            include_minimum=True,
+        )
+        object.__setattr__(
+            self,
+            "total_collision_energy_change_j",
+            energy_change,
+        )
+
+    @classmethod
+    def zeros(cls, n_steps: int) -> SimulationDiagnostics:
+        """Create a valid empty diagnostic record for a known run length."""
+
+        n_steps = _validated_integer(n_steps, "n_steps")
+        zero_counts = np.zeros(n_steps, dtype=np.int64)
+        return cls(
+            direction_resets_per_step=zero_counts,
+            small_wall_impacts_per_step=zero_counts,
+            large_wall_impacts_per_step=zero_counts,
+            contacts_per_step=zero_counts,
+            impulses_per_step=zero_counts,
+            collision_passes_per_step=zero_counts,
+            maximum_displacement_nm=0.0,
+            maximum_residual_penetration_nm=0.0,
+            maximum_normalized_momentum_error=0.0,
+            maximum_normalized_restitution_error=0.0,
+            maximum_normalized_energy_identity_error=0.0,
+            total_collision_energy_change_j=0.0,
+        )
+
+    @property
+    def n_steps(self) -> int:
+        """Number of represented physics steps."""
+
+        return len(self.contacts_per_step)
+
+    @property
+    def total_direction_resets(self) -> int:
+        """Total direction resets in the run."""
+
+        return int(np.sum(self.direction_resets_per_step))
+
+    @property
+    def total_small_wall_impacts(self) -> int:
+        """Total small-particle wall impacts in the run."""
+
+        return int(np.sum(self.small_wall_impacts_per_step))
+
+    @property
+    def total_large_wall_impacts(self) -> int:
+        """Total large-particle wall impacts in the run."""
+
+        return int(np.sum(self.large_wall_impacts_per_step))
+
+    @property
+    def total_contacts(self) -> int:
+        """Total small-large contacts processed."""
+
+        return int(np.sum(self.contacts_per_step))
+
+    @property
+    def total_impulses(self) -> int:
+        """Total approaching contacts receiving impulses."""
+
+        return int(np.sum(self.impulses_per_step))
 
 
 def validate_initial_state(
@@ -1381,6 +1571,251 @@ def resolve_small_large_collisions(
     return CollisionBatchReport(events=tuple(reports))
 
 
+def _count_small_large_contacts(
+    state: SimulationState,
+    parameters: BrownianParameters,
+) -> int:
+    """Count current small-large contacts without changing state."""
+
+    contact_distance = (
+        parameters.small_radius_nm + parameters.large_radius_nm
+    )
+    distances = np.linalg.norm(
+        state.small_positions_nm - state.large_position_nm,
+        axis=1,
+    )
+    return int(np.count_nonzero(distances <= contact_distance))
+
+
+def _restore_state(
+    target: SimulationState,
+    snapshot: SimulationState,
+) -> None:
+    """Restore a state object in place after a failed complete step."""
+
+    target.small_positions_nm[:] = snapshot.small_positions_nm
+    target.small_velocities_nm_per_ps[:] = (
+        snapshot.small_velocities_nm_per_ps
+    )
+    target.next_randomization_times_ps[:] = (
+        snapshot.next_randomization_times_ps
+    )
+    target.large_position_nm[:] = snapshot.large_position_nm
+    target.large_velocity_nm_per_ps[:] = snapshot.large_velocity_nm_per_ps
+    target.time_ps = snapshot.time_ps
+    target.step_index = snapshot.step_index
+
+
+def advance_simulation_step(
+    context: SimulationContext,
+) -> SimulationStepReport:
+    """Advance one complete, transactional transport-collision step."""
+
+    if not isinstance(context, SimulationContext):
+        raise TypeError("context must be SimulationContext")
+    state_snapshot = context.state.copy()
+    random_snapshot = copy.deepcopy(context.reset_rng.bit_generator.state)
+
+    try:
+        transport = advance_transport_step(context)
+        all_events: list[CollisionEventReport] = []
+        collision_passes = 0
+        small_post_wall_impacts = 0
+        large_post_wall_impacts = 0
+        remaining_contacts = _count_small_large_contacts(
+            context.state,
+            context.parameters,
+        )
+
+        while remaining_contacts > 0:
+            if collision_passes >= context.parameters.max_collision_passes:
+                raise RuntimeError(
+                    "small-large contacts did not converge within "
+                    "max_collision_passes"
+                )
+            collision_pass = resolve_small_large_collisions(
+                context.state,
+                context.parameters,
+            )
+            if collision_pass.contacts_detected == 0:
+                raise RuntimeError(
+                    "contact counter and collision pass disagree"
+                )
+            collision_passes += 1
+            all_events.extend(collision_pass.events)
+
+            if (
+                collision_pass.maximum_normalized_momentum_error
+                > 1.0e-12
+            ):
+                raise RuntimeError(
+                    "collision momentum error exceeded 1e-12"
+                )
+            if (
+                collision_pass.maximum_normalized_restitution_error
+                > 1.0e-12
+            ):
+                raise RuntimeError(
+                    "collision restitution error exceeded 1e-12"
+                )
+            if (
+                collision_pass.maximum_normalized_energy_identity_error
+                > 1.0e-12
+            ):
+                raise RuntimeError(
+                    "collision energy identity error exceeded 1e-12"
+                )
+            penetration_limit = (
+                1.0e-9
+                * (
+                    context.parameters.small_radius_nm
+                    + context.parameters.large_radius_nm
+                )
+            )
+            if (
+                collision_pass.maximum_residual_penetration_nm
+                > penetration_limit
+            ):
+                raise RuntimeError(
+                    "collision penetration exceeded the declared tolerance"
+                )
+
+            wall_report = reflect_square_walls(
+                context.state,
+                context.parameters,
+            )
+            small_post_wall_impacts += wall_report.small_particle_impacts
+            large_post_wall_impacts += wall_report.large_particle_impacts
+            remaining_contacts = _count_small_large_contacts(
+                context.state,
+                context.parameters,
+            )
+
+        _validate_runtime_state(context.state, context.parameters)
+        return SimulationStepReport(
+            transport=transport,
+            collisions=CollisionBatchReport(events=tuple(all_events)),
+            collision_passes=collision_passes,
+            post_collision_wall_impacts=WallReflectionReport(
+                small_particle_impacts=small_post_wall_impacts,
+                large_particle_impacts=large_post_wall_impacts,
+            ),
+            remaining_contacts=remaining_contacts,
+        )
+    except Exception:
+        _restore_state(context.state, state_snapshot)
+        context.reset_rng.bit_generator.state = random_snapshot
+        raise
+
+
+def run_simulation(
+    parameters: BrownianParameters | None = None,
+    *,
+    max_frames: int = 240,
+) -> BrownianSimulationResult:
+    """Run the complete baseline model and return immutable recorded evidence."""
+
+    context = initialize_simulation(parameters, max_frames=max_frames)
+    n_steps = context.time_grid.n_steps
+    n_frames = len(context.frame_steps)
+
+    large_positions = np.empty((n_steps + 1, 2), dtype=np.float64)
+    large_velocities = np.empty((n_steps + 1, 2), dtype=np.float64)
+    small_frames = np.empty(
+        (n_frames, context.parameters.n_small, 2),
+        dtype=np.float64,
+    )
+    large_positions[0] = context.state.large_position_nm
+    large_velocities[0] = context.state.large_velocity_nm_per_ps
+    small_frames[0] = context.state.small_positions_nm
+    next_frame = 1
+
+    direction_resets = np.zeros(n_steps, dtype=np.int64)
+    small_wall_impacts = np.zeros(n_steps, dtype=np.int64)
+    large_wall_impacts = np.zeros(n_steps, dtype=np.int64)
+    contacts = np.zeros(n_steps, dtype=np.int64)
+    impulses = np.zeros(n_steps, dtype=np.int64)
+    collision_passes = np.zeros(n_steps, dtype=np.int64)
+    maximum_displacement = 0.0
+    maximum_penetration = 0.0
+    maximum_momentum_error = 0.0
+    maximum_restitution_error = 0.0
+    maximum_energy_error = 0.0
+    total_collision_energy_change = 0.0
+
+    for array_index in range(n_steps):
+        report = advance_simulation_step(context)
+        state_index = context.state.step_index
+        large_positions[state_index] = context.state.large_position_nm
+        large_velocities[state_index] = (
+            context.state.large_velocity_nm_per_ps
+        )
+
+        direction_resets[array_index] = report.transport.direction_resets
+        small_wall_impacts[array_index] = report.total_small_wall_impacts
+        large_wall_impacts[array_index] = report.total_large_wall_impacts
+        contacts[array_index] = report.collisions.contacts_detected
+        impulses[array_index] = report.collisions.impulses_applied
+        collision_passes[array_index] = report.collision_passes
+        maximum_displacement = max(
+            maximum_displacement,
+            report.transport.maximum_displacement_nm,
+        )
+        maximum_penetration = max(
+            maximum_penetration,
+            report.collisions.maximum_residual_penetration_nm,
+        )
+        maximum_momentum_error = max(
+            maximum_momentum_error,
+            report.collisions.maximum_normalized_momentum_error,
+        )
+        maximum_restitution_error = max(
+            maximum_restitution_error,
+            report.collisions.maximum_normalized_restitution_error,
+        )
+        maximum_energy_error = max(
+            maximum_energy_error,
+            report.collisions.maximum_normalized_energy_identity_error,
+        )
+        total_collision_energy_change += (
+            report.collisions.total_kinetic_energy_change_j
+        )
+
+        if (
+            next_frame < n_frames
+            and state_index == context.frame_steps[next_frame]
+        ):
+            small_frames[next_frame] = context.state.small_positions_nm
+            next_frame += 1
+
+    if next_frame != n_frames:
+        raise RuntimeError("not every requested animation frame was recorded")
+
+    diagnostics = SimulationDiagnostics(
+        direction_resets_per_step=direction_resets,
+        small_wall_impacts_per_step=small_wall_impacts,
+        large_wall_impacts_per_step=large_wall_impacts,
+        contacts_per_step=contacts,
+        impulses_per_step=impulses,
+        collision_passes_per_step=collision_passes,
+        maximum_displacement_nm=maximum_displacement,
+        maximum_residual_penetration_nm=maximum_penetration,
+        maximum_normalized_momentum_error=maximum_momentum_error,
+        maximum_normalized_restitution_error=maximum_restitution_error,
+        maximum_normalized_energy_identity_error=maximum_energy_error,
+        total_collision_energy_change_j=total_collision_energy_change,
+    )
+    return BrownianSimulationResult(
+        parameters=context.parameters,
+        time_grid=context.time_grid,
+        large_positions_nm=large_positions,
+        large_velocities_nm_per_ps=large_velocities,
+        frame_steps=context.frame_steps,
+        small_position_frames_nm=small_frames,
+        diagnostics=diagnostics,
+    )
+
+
 @dataclass(frozen=True)
 class BrownianSimulationResult:
     """Immutable, memory-aware output contract for the future engine.
@@ -1396,6 +1831,7 @@ class BrownianSimulationResult:
     large_velocities_nm_per_ps: FloatArray
     frame_steps: IntegerArray
     small_position_frames_nm: FloatArray
+    diagnostics: SimulationDiagnostics
 
     def __post_init__(self) -> None:
         """Validate result dimensions, values, and frame alignment."""
@@ -1404,6 +1840,12 @@ class BrownianSimulationResult:
             raise TypeError("parameters must be BrownianParameters")
         if not isinstance(self.time_grid, FixedTimeGrid):
             raise TypeError("time_grid must be FixedTimeGrid")
+        if not isinstance(self.diagnostics, SimulationDiagnostics):
+            raise TypeError("diagnostics must be SimulationDiagnostics")
+        if self.diagnostics.n_steps != self.time_grid.n_steps:
+            raise ValueError(
+                "diagnostic history length must match time_grid.n_steps"
+            )
         time_tolerance = (
             8.0
             * np.finfo(np.float64).eps

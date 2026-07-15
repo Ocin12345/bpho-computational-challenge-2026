@@ -33,8 +33,8 @@ Its main architectural risks are:
 
 ## Decision
 
-The baseline will use one small Python module built around NumPy arrays and a
-fixed time grid.
+The baseline will use one focused Python implementation module built around
+NumPy arrays and a fixed time grid.
 
 ### 1. Immutable configuration
 
@@ -45,9 +45,11 @@ computed from the configuration, avoiding duplicated constants.
 
 ### 2. Explicit fixed time grid
 
-**FixedTimeGrid** stores a constant step size and read-only array of times. The
-requested time step acts as an upper bound. The builder slightly reduces it
-when necessary so that the final point is exactly the requested maximum time.
+**FixedTimeGrid** stores a constant step size and read-only array of times. An
+explicitly requested time step acts as an upper bound. Without one, the builder
+uses a measured 40% safety factor below the nominal initial ceiling. It then
+slightly reduces the candidate when necessary so that the final point is
+exactly the requested maximum time.
 
 This makes the run length deterministic and allows direct comparisons between
 the baseline and refined time steps.
@@ -82,7 +84,7 @@ reproducible.
 
 **SimulationContext** binds the immutable parameters, time grid, display-frame
 schedule, mutable state, future reset stream, and initialization report. It is
-the object that the Step 4 simulation engine will receive.
+the object that each complete simulation step receives.
 
 Initialization places the large particle at the centre and exactly at rest.
 Small particles are sampled within radius-aware walls and outside the large
@@ -94,15 +96,18 @@ baseline deliberately omits explicit small-small collisions.
 **BrownianSimulationResult** will keep:
 
 - large-particle position and velocity at every physics step; and
-- small-particle positions only at selected animation frames.
+- small-particle positions only at selected animation frames; and
+- immutable per-step counts and aggregate numerical diagnostics.
 
-For the reference run, a full small-particle position history would require
-about 113 MB. Keeping 240 display frames requires about 3.8 MB instead. Result
-arrays are copied and made read-only so later plotting cannot accidentally
-alter the evidence.
+The integrated reference run uses 17,706 physics steps after applying the
+measured time-step safety factor. A full small-particle position history would
+therefore require about 283 MB. Keeping 240 display frames requires about
+3.8 MB instead. Result arrays are copied and made read-only so later plotting
+cannot accidentally alter the evidence.
 
-Collision diagnostics will be added to this result contract when their exact
-definitions are implemented and tested.
+Complete steps snapshot both mutable arrays and the future random stream. A
+failed transport, collision, convergence, or validation operation restores the
+snapshot, preventing a partially advanced trajectory.
 
 ## Consequences
 

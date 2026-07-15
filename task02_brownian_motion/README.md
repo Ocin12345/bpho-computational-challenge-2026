@@ -2,12 +2,14 @@
 
 ## Status
 
-Steps 2 through 5 are complete. The mathematical model, validated architecture,
-reproducible initialization, transport physics, weighted overlap correction,
-and small–large restitution impulses are implemented and tested.
+Steps 2 through 6 are complete. The mathematical model, validated architecture,
+reproducible initialization, transport physics, collision physics, complete
+simulation loop, diagnostics, and memory-aware recording are implemented and
+tested.
 
-Transport and collision operations have not yet been combined into the complete
-simulation loop. That integration is isolated as Step 6.
+Step 7 will independently test numerical convergence and broader deterministic
+validation. Statistical experiments, final visuals, and presentation material
+remain later stages.
 
 ## Official objective
 
@@ -75,7 +77,8 @@ scientific simulation without introducing application frameworks.
 | **FixedTimeGrid** | Read-only, uniformly spaced times that end exactly at $t_{\max}$ |
 | **SimulationState** | Mutable current positions, velocities, reset times, time, and step index |
 | **SimulationContext** | Parameters, grid, frame schedule, initial state, random stream, and validation report |
-| **BrownianSimulationResult** | Read-only large-particle history and sampled small-particle display frames |
+| **SimulationDiagnostics** | Read-only per-step event histories and numerical error evidence |
+| **BrownianSimulationResult** | Read-only tracer history, sampled display frames, and diagnostics |
 
 Initialization uses four independent random-number streams derived from one
 recorded seed: positions, initial directions, initial reset phases, and future
@@ -85,21 +88,33 @@ coupling unrelated random choices.
 The large particle's position and velocity will be retained at every physics
 step for analysis. Small-particle positions will be saved only at up to 240
 selected display frames. For the reference grid this reduces small-position
-storage from about $113\ \mathrm{MB}$ to about $3.8\ \mathrm{MB}$.
+storage from about $283\ \mathrm{MB}$ to about $3.8\ \mathrm{MB}$.
 
 Files:
 
-- [architecture and initialization module](brownian_motion.py);
-- [architecture tests](test_brownian_motion.py); and
+- [simulation implementation](brownian_motion.py);
+- [command-line runner](run_task02.py);
+- [architecture tests](test_brownian_motion.py);
+- [transport tests](test_transport.py);
+- [collision tests](test_collisions.py);
+- [integrated simulation tests](test_simulation.py); and
 - [ADR-001: fixed-step NumPy array model](architecture/ADR-001-fixed-step-array-model.md).
 
 Run the Task 2 tests from the repository root with:
 
     python3 -m unittest discover -s task02_brownian_motion -p 'test_*.py' -v
 
-The architecture and initialization contracts were tested before transport,
-and transport was tested before collision physics. The module now contains both
-operations, but they remain separate until Step 6 combines them.
+Run the complete official-scale baseline with:
+
+    python3 -m task02_brownian_motion.run_task02
+
+For a short terminal check, use:
+
+    python3 -m task02_brownian_motion.run_task02 --particles 100 --time-ps 5
+
+The architecture, initialization, transport, collision, and integration
+contracts were implemented and tested as separate sequential stages before
+being combined.
 
 ## Variables and units
 
@@ -339,11 +354,10 @@ The regression suite includes:
 - exact, corner, radius-specific, and multiple wall impacts;
 - transactional failure of an unsafe time step;
 - repeated-seed trajectory reproduction; and
-- all 7,083 transport steps of the 200 ps reference configuration.
+- all 17,706 transport steps of the 200 ps reference configuration.
 
-This last check deliberately isolates transport. The collision engine now has
-its own independent tests; neither check is presented as the completed
-Brownian-motion simulation until Step 6 combines them.
+This check deliberately isolates transport. The collision engine also retains
+its own independent tests even though Step 6 now combines both operations.
 
 ## Two-body collision geometry
 
@@ -591,8 +605,17 @@ $$
 
 For the official reference parameters,
 $0.01\tau_{\mathrm r}=0.0424\ \mathrm{ps}$, while the displacement condition
-gives approximately $0.0282\ \mathrm{ps}$. We will begin with the safer value
-and monitor the criterion throughout the run.
+gives a nominal ceiling of approximately $0.0282\ \mathrm{ps}$.
+
+Integrated tests showed that using this ceiling directly left no margin after
+collisions accelerated some particles. The automatic baseline therefore uses
+40% of the nominal ceiling. Its actual fixed step is
+$0.011295606\ \mathrm{ps}$, giving 17,706 steps over 200 ps. The physical
+acceptance limit remains $0.10r=0.016\ \mathrm{nm}$ per step.
+
+A user may explicitly request any initial step up to the nominal ceiling, but
+the runtime still rejects the run transactionally if later dynamics exceed the
+displacement limit.
 
 The physics time step remains fixed during one simulation. If the criterion is
 violated, that run fails validation and must be repeated with a smaller step.
@@ -616,6 +639,56 @@ Testing only small–large pairs makes the baseline collision search
 $O(N)$ per time step. An explicit small–small extension would require a
 spatial grid or another neighbour-search method rather than an unoptimized
 $O(N^2)$ loop.
+
+## Step 6 integrated simulation engine
+
+**advance_simulation_step** combines one complete physics step:
+
+1. snapshot the mutable state and future random stream;
+2. perform scheduled resets, free motion, and initial wall reflections;
+3. detect and resolve all current small–large contacts;
+4. re-apply radius-aware wall reflections after positional correction;
+5. repeat contact passes until no contact remains;
+6. enforce momentum, restitution, energy, penetration, and displacement
+   tolerances;
+7. commit the exact fixed-grid time; and
+8. restore the snapshot and random stream if any operation fails.
+
+The measured reference configuration required at most 11 contact passes in one
+step. The validated ceiling is 16, which provides margin while still detecting
+a failure to converge.
+
+**run_simulation** executes the complete grid and records:
+
+- tracer position and velocity at every physics step;
+- small-particle positions only at selected display frames;
+- resets, wall impacts, contacts, impulses, and collision passes per step;
+- maximum displacement and residual penetration;
+- maximum normalized momentum, restitution, and energy-identity errors; and
+- total kinetic-energy change caused specifically by collision impulses.
+
+For the seed-2026 reference run with $N=1000$, $C=1$, and
+$t_{\max}=200\ \mathrm{ps}$, the verified engine completed:
+
+| Quantity | Measured result |
+| --- | ---: |
+| Fixed physics steps | 17,706 |
+| Direction resets | 47,200 |
+| Small-particle wall impacts | 14,519 |
+| Large-particle wall impacts | 0 |
+| Small–large contacts | 5,101 |
+| Applied impulses | 3,698 |
+| Maximum contact passes in one step | 11 |
+| Maximum one-step displacement | $0.012029050\ \mathrm{nm}$ |
+| Allowed one-step displacement | $0.016000000\ \mathrm{nm}$ |
+| Maximum normalized momentum error | $4.05\times10^{-16}$ |
+| Maximum normalized restitution error | $9.36\times10^{-16}$ |
+| Maximum normalized energy-identity error | $1.85\times10^{-15}$ |
+| Maximum residual penetration | $0\ \mathrm{nm}$ |
+| Final tracer displacement in this one run | $1.485777625\ \mathrm{nm}$ |
+
+The single final displacement is a reproducibility check, not a statistical
+conclusion. Step 8 will use ensembles rather than interpreting one trajectory.
 
 ## Theoretical statistical behaviour
 
@@ -773,7 +846,7 @@ Step 4 is complete when:
 7. state time advances only to exact fixed-grid values;
 8. unsafe displacement is rejected before any partial mutation;
 9. complete repeated transport remains finite and within the container; and
-10. the official 200 ps reference transport passes all 7,083 steps.
+10. the official 200 ps reference transport passes all 17,706 steps.
 
 All ten conditions are satisfied by the implementation and regression tests.
 
@@ -795,6 +868,25 @@ Step 5 is complete when:
     $10^{-12}$; and
 11. official-scale randomized stress tests pass all numerical limits.
 
-All eleven conditions are satisfied. The next stage is Step 6: combine reset,
-motion, walls, collision passes, post-collision wall correction, diagnostics,
-and memory-aware recording into one reproducible simulation engine.
+All eleven conditions are satisfied.
+
+## Step 6 completion condition
+
+Step 6 is complete when:
+
+1. one public operation executes the approved reset-motion-wall-collision
+   order;
+2. post-collision wall correction and repeated contact passes converge;
+3. every complete step rolls back state and random numbers on failure;
+4. the automatic baseline has measured margin below the displacement limit;
+5. complete runs record exact fixed-grid tracer histories;
+6. display frames include the initial and final small-particle states;
+7. per-step counts and aggregate numerical errors are immutable;
+8. equal seeds reproduce every recorded trajectory and diagnostic history;
+9. the full 1,000-particle, 200 ps reference run passes all runtime limits; and
+10. a command-line entry point runs on either computer.
+
+All ten conditions are satisfied. The next stage is Step 7: create a separate
+validation program and test the baseline against refined time steps, repeated
+seeds, geometry invariants, collision identities, and declared pass/fail
+thresholds before running scientific parameter experiments.
