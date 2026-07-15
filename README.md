@@ -55,9 +55,14 @@ taskXX_topic/       Code and notes for one challenge task
 notebooks/          Exploratory Jupyter notebooks
 figures/            Saved graphs and visual results
 reports/            Written explanations and final write-up material
+presentation/       Curated slide assets and timed narration scripts
 data/               Small input data files
 requirements.txt    Python packages used by the project
 ```
+
+Current presentation material:
+
+- [Task 1 PowerPoint pack](presentation/task01/README.md)
 
 Large downloads, videos, and local Python environments should stay outside GitHub.
 Never commit passwords, access tokens, or other private information.
