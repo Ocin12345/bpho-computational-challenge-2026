@@ -2,6 +2,8 @@
 
 from task02_brownian_motion.brownian_motion import (
     BrownianParameters,
+    CollisionBatchReport,
+    CollisionEventReport,
     BrownianSimulationResult,
     FixedTimeGrid,
     InitializationValidationReport,
@@ -16,11 +18,14 @@ from task02_brownian_motion.brownian_motion import (
     initialize_simulation,
     randomize_expired_directions,
     reflect_square_walls,
+    resolve_small_large_collisions,
     validate_initial_state,
 )
 
 __all__ = [
     "BrownianParameters",
+    "CollisionBatchReport",
+    "CollisionEventReport",
     "BrownianSimulationResult",
     "FixedTimeGrid",
     "InitializationValidationReport",
@@ -35,5 +40,6 @@ __all__ = [
     "initialize_simulation",
     "randomize_expired_directions",
     "reflect_square_walls",
+    "resolve_small_large_collisions",
     "validate_initial_state",
 ]

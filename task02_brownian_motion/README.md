@@ -2,13 +2,12 @@
 
 ## Status
 
-Steps 2, 3, and 4 are complete. The mathematical model, validated architecture,
-reproducible initialization, free motion, scheduled direction resets, and
-radius-aware wall reflections are implemented and tested.
+Steps 2 through 5 are complete. The mathematical model, validated architecture,
+reproducible initialization, transport physics, weighted overlap correction,
+and small–large restitution impulses are implemented and tested.
 
-Small–large collision impulses have not yet been implemented. They are isolated
-as Step 5 and must pass their own conservation tests before entering the full
-simulation loop.
+Transport and collision operations have not yet been combined into the complete
+simulation loop. That integration is isolated as Step 6.
 
 ## Official objective
 
@@ -98,9 +97,9 @@ Run the Task 2 tests from the repository root with:
 
     python3 -m unittest discover -s task02_brownian_motion -p 'test_*.py' -v
 
-The architecture and initialization contracts were tested before transport was
-added. The module now includes Step 4 transport, but intentionally contains no
-small–large collision impulse until Step 5.
+The architecture and initialization contracts were tested before transport,
+and transport was tested before collision physics. The module now contains both
+operations, but they remain separate until Step 6 combines them.
 
 ## Variables and units
 
@@ -342,9 +341,9 @@ The regression suite includes:
 - repeated-seed trajectory reproduction; and
 - all 7,083 transport steps of the 200 ps reference configuration.
 
-This last check is a transport-only integration test. Small particles may pass
-through the large particle until Step 5 adds the collision impulse; it is not
-yet the completed Brownian-motion simulation.
+This last check deliberately isolates transport. The collision engine now has
+its own independent tests; neither check is presented as the completed
+Brownian-motion simulation until Step 6 combines them.
 
 ## Two-body collision geometry
 
@@ -512,6 +511,53 @@ rounding. This positional correction changes neither velocity nor momentum.
 Exact coincident centres, $d=0$, are forbidden by initialization. The
 collision routine will still detect this case and fail clearly rather than
 divide by zero.
+
+## Step 5 collision implementation
+
+The function **resolve_small_large_collisions** performs one deterministic
+contact pass. It tests only small–large pairs and processes candidate small
+particles in ascending index order. Explicit small–small collisions remain
+outside the baseline model.
+
+For every touching or overlapping pair, the implementation:
+
+1. constructs the normal from the small particle toward the large particle;
+2. records the penetration and pre-collision relative normal speed;
+3. applies the mass-weighted positional correction plus a floating-point
+   clearance;
+4. applies an impulse only when $g<0$;
+5. leaves the relative tangential speed unchanged;
+6. measures the post-collision restitution residual;
+7. measures normalized vector-momentum and analytical energy errors; and
+8. records the residual penetration.
+
+The complete pass is transactional. Position and velocity changes are prepared
+on copies and committed only after every candidate succeeds. If any pair has
+exactly coincident centres, the function raises a clear error without leaving
+earlier particles partially changed.
+
+Each event is preserved in an immutable **CollisionEventReport**. A
+**CollisionBatchReport** supplies contact counts, applied-impulse counts,
+maximum normalized errors, maximum residual penetration, and total measured
+kinetic-energy change.
+
+The tests cover:
+
+- exact one-dimensional elastic results;
+- oblique impacts and unchanged tangential motion;
+- $C=0$, $C=0.5$, $C=0.7$, and $C=1$;
+- the reduced-mass inelastic energy-loss identity;
+- separating overlaps with correction but no impulse;
+- weighted correction and centre-of-mass preservation;
+- coincident-centre failure without partial mutation;
+- deterministic multiple-contact passes; and
+- 2,000 randomized approaching collisions using the official mass scale.
+
+An additional 20,000-collision stress run with the official masses found
+maximum normalized errors of $3.76\times10^{-16}$ for momentum,
+$5.01\times10^{-14}$ for restitution, and $8.73\times10^{-16}$ for the energy
+identity. All are below the declared $10^{-12}$ threshold, and no residual
+penetration remained.
 
 ## Time-step requirement
 
@@ -730,6 +776,25 @@ Step 4 is complete when:
 10. the official 200 ps reference transport passes all 7,083 steps.
 
 All ten conditions are satisfied by the implementation and regression tests.
-The next stage is Step 5: implement the small–large contact geometry, weighted
-overlap correction, and restitution impulse, then verify them independently
-against momentum, restitution, and kinetic-energy identities.
+
+## Step 5 completion condition
+
+Step 5 is complete when:
+
+1. only touching or overlapping small–large pairs are selected;
+2. the contact normal and approaching condition use the documented sign
+   convention;
+3. separating contacts receive no impulse;
+4. overlap correction is mass weighted and leaves negligible penetration;
+5. coincident centres fail without partial state mutation;
+6. normal restitution is satisfied for every $0\leq C\leq1$;
+7. tangential relative motion is unchanged;
+8. vector momentum is conserved to normalized error below $10^{-12}$;
+9. elastic energy is conserved to normalized error below $10^{-12}$;
+10. inelastic energy loss matches the reduced-mass identity below
+    $10^{-12}$; and
+11. official-scale randomized stress tests pass all numerical limits.
+
+All eleven conditions are satisfied. The next stage is Step 6: combine reset,
+motion, walls, collision passes, post-collision wall correction, diagnostics,
+and memory-aware recording into one reproducible simulation engine.

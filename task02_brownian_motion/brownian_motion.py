@@ -1,9 +1,9 @@
-"""Architecture, initialization, and transport for BPhO 2026 Task 2.
+"""Architecture, transport, and collision physics for BPhO 2026 Task 2.
 
 Steps 3 and 4 establish validated parameters, reproducible initialization, a
 fixed time grid, free motion, scheduled direction resets, reflecting walls,
-and result containers. Small-large collision impulses are deliberately absent
-until Step 5.
+and result containers. Step 5 adds independently verified small-large contact
+correction and restitution impulses. The complete run loop remains Step 6.
 """
 
 from __future__ import annotations
@@ -219,6 +219,20 @@ class BrownianParameters:
         return min(
             self.displacement_limited_time_step_ps,
             self.randomization_limited_time_step_ps,
+        )
+
+    @property
+    def collision_clearance_nm(self) -> float:
+        """Floating-point clearance added by overlap correction."""
+
+        return (
+            64.0
+            * np.finfo(np.float64).eps
+            * max(
+                self.small_radius_nm + self.large_radius_nm,
+                self.box_size_nm,
+                1.0,
+            )
         )
 
 
@@ -472,6 +486,107 @@ class TransportStepReport:
         """Total wall impacts resolved during this step."""
 
         return self.small_wall_impacts + self.large_wall_impacts
+
+
+@dataclass(frozen=True)
+class CollisionEventReport:
+    """Numerical evidence for one detected small-large contact."""
+
+    small_particle_index: int
+    contact_normal: tuple[float, float]
+    distance_before_nm: float
+    penetration_before_nm: float
+    distance_after_correction_nm: float
+    residual_penetration_nm: float
+    relative_normal_speed_before_nm_per_ps: float
+    relative_normal_speed_after_nm_per_ps: float
+    relative_tangential_speed_change_nm_per_ps: float
+    impulse_applied: bool
+    impulse_magnitude_kg_nm_per_ps: float
+    normalized_momentum_error: float
+    normalized_restitution_error: float
+    kinetic_energy_change_j: float
+    expected_kinetic_energy_change_j: float
+    normalized_energy_identity_error: float
+
+
+@dataclass(frozen=True)
+class CollisionBatchReport:
+    """Immutable collection and aggregate diagnostics for one collision pass."""
+
+    events: tuple[CollisionEventReport, ...]
+
+    @property
+    def contacts_detected(self) -> int:
+        """Number of touching or overlapping pairs processed."""
+
+        return len(self.events)
+
+    @property
+    def impulses_applied(self) -> int:
+        """Number of approaching contacts that received an impulse."""
+
+        return sum(event.impulse_applied for event in self.events)
+
+    @property
+    def separating_contacts(self) -> int:
+        """Number of contacts corrected without an impulse."""
+
+        return self.contacts_detected - self.impulses_applied
+
+    @property
+    def maximum_residual_penetration_nm(self) -> float:
+        """Greatest remaining penetration after positional correction."""
+
+        return max(
+            (event.residual_penetration_nm for event in self.events),
+            default=0.0,
+        )
+
+    @property
+    def maximum_normalized_momentum_error(self) -> float:
+        """Worst normalized momentum residual among applied impulses."""
+
+        return max(
+            (
+                event.normalized_momentum_error
+                for event in self.events
+                if event.impulse_applied
+            ),
+            default=0.0,
+        )
+
+    @property
+    def maximum_normalized_restitution_error(self) -> float:
+        """Worst normalized restitution residual among applied impulses."""
+
+        return max(
+            (
+                event.normalized_restitution_error
+                for event in self.events
+                if event.impulse_applied
+            ),
+            default=0.0,
+        )
+
+    @property
+    def maximum_normalized_energy_identity_error(self) -> float:
+        """Worst normalized analytical-energy residual."""
+
+        return max(
+            (
+                event.normalized_energy_identity_error
+                for event in self.events
+                if event.impulse_applied
+            ),
+            default=0.0,
+        )
+
+    @property
+    def total_kinetic_energy_change_j(self) -> float:
+        """Sum of measured kinetic-energy changes in this collision pass."""
+
+        return sum(event.kinetic_energy_change_j for event in self.events)
 
 
 def validate_initial_state(
@@ -1058,6 +1173,212 @@ def advance_transport_step(
         displacement_limit_nm=displacement_limit,
         maximum_small_speed_error_nm_per_ps=small_speed_error,
     )
+
+
+def _kinetic_energy_model_units(
+    small_velocity_nm_per_ps: FloatArray,
+    large_velocity_nm_per_ps: FloatArray,
+    parameters: BrownianParameters,
+) -> float:
+    """Pair kinetic energy in kg nm² ps⁻² before conversion to joules."""
+
+    return 0.5 * (
+        parameters.small_mass_kg
+        * float(np.dot(small_velocity_nm_per_ps, small_velocity_nm_per_ps))
+        + parameters.large_mass_kg
+        * float(np.dot(large_velocity_nm_per_ps, large_velocity_nm_per_ps))
+    )
+
+
+def resolve_small_large_collisions(
+    state: SimulationState,
+    parameters: BrownianParameters,
+) -> CollisionBatchReport:
+    """Resolve one deterministic pass of small-large contacts.
+
+    Candidate small particles are processed in ascending index order. Position
+    and velocity changes are prepared on copies and committed only after the
+    entire pass succeeds, so a coincident-centre error cannot leave a partially
+    updated state. Small-small contacts are deliberately ignored.
+    """
+
+    _validate_runtime_state(state, parameters)
+    contact_distance = (
+        parameters.small_radius_nm + parameters.large_radius_nm
+    )
+    displacements = state.large_position_nm - state.small_positions_nm
+    distances = np.linalg.norm(displacements, axis=1)
+    candidates = np.flatnonzero(distances <= contact_distance)
+    if len(candidates) == 0:
+        return CollisionBatchReport(events=())
+    if np.any(distances[candidates] == 0.0):
+        raise RuntimeError(
+            "cannot resolve a collision with exactly coincident centres"
+        )
+
+    small_positions = state.small_positions_nm.copy()
+    small_velocities = state.small_velocities_nm_per_ps.copy()
+    large_position = state.large_position_nm.copy()
+    large_velocity = state.large_velocity_nm_per_ps.copy()
+    reports: list[CollisionEventReport] = []
+
+    small_mass = parameters.small_mass_kg
+    large_mass = parameters.large_mass_kg
+    total_mass = small_mass + large_mass
+    reduced_mass = small_mass * large_mass / total_mass
+    clearance = parameters.collision_clearance_nm
+    tiny = np.finfo(np.float64).tiny
+
+    for raw_index in candidates:
+        index = int(raw_index)
+        displacement = large_position - small_positions[index]
+        distance = float(np.linalg.norm(displacement))
+        if distance > contact_distance:
+            continue
+        if distance == 0.0:
+            raise RuntimeError(
+                "cannot resolve a collision with exactly coincident centres"
+            )
+        normal = displacement / distance
+        tangent = np.array([-normal[1], normal[0]], dtype=np.float64)
+        penetration = max(contact_distance - distance, 0.0)
+
+        correction = penetration + clearance
+        small_positions[index] -= (
+            large_mass / total_mass * correction * normal
+        )
+        large_position += small_mass / total_mass * correction * normal
+        corrected_distance = float(
+            np.linalg.norm(large_position - small_positions[index])
+        )
+        residual_penetration = max(
+            contact_distance - corrected_distance,
+            0.0,
+        )
+
+        small_before = small_velocities[index].copy()
+        large_before = large_velocity.copy()
+        relative_before = large_before - small_before
+        normal_speed_before = float(np.dot(relative_before, normal))
+        tangent_speed_before = float(np.dot(relative_before, tangent))
+        momentum_before = (
+            small_mass * small_before + large_mass * large_before
+        )
+        energy_before = _kinetic_energy_model_units(
+            small_before,
+            large_before,
+            parameters,
+        )
+
+        impulse_applied = normal_speed_before < 0.0
+        impulse_magnitude = 0.0
+        expected_energy_change_model = 0.0
+        if impulse_applied:
+            impulse_magnitude = (
+                -(1.0 + parameters.restitution)
+                * normal_speed_before
+                / (1.0 / small_mass + 1.0 / large_mass)
+            )
+            small_velocities[index] = (
+                small_before
+                - impulse_magnitude / small_mass * normal
+            )
+            large_velocity = (
+                large_before
+                + impulse_magnitude / large_mass * normal
+            )
+            expected_energy_change_model = (
+                -0.5
+                * reduced_mass
+                * (1.0 - parameters.restitution**2)
+                * normal_speed_before**2
+            )
+
+        small_after = small_velocities[index]
+        large_after = large_velocity
+        relative_after = large_after - small_after
+        normal_speed_after = float(np.dot(relative_after, normal))
+        tangent_speed_after = float(np.dot(relative_after, tangent))
+        momentum_after = (
+            small_mass * small_after + large_mass * large_after
+        )
+        energy_after = _kinetic_energy_model_units(
+            small_after,
+            large_after,
+            parameters,
+        )
+        energy_change_model = energy_after - energy_before
+
+        momentum_scale = max(
+            float(np.linalg.norm(momentum_before)),
+            small_mass * float(np.linalg.norm(small_before))
+            + large_mass * float(np.linalg.norm(large_before)),
+            abs(impulse_magnitude),
+            tiny,
+        )
+        normalized_momentum_error = (
+            float(np.linalg.norm(momentum_after - momentum_before))
+            / momentum_scale
+        )
+        restitution_scale = max(
+            abs(normal_speed_before),
+            float(np.linalg.norm(relative_before)),
+            tiny,
+        )
+        normalized_restitution_error = (
+            abs(
+                normal_speed_after
+                + parameters.restitution * normal_speed_before
+            )
+            / restitution_scale
+            if impulse_applied
+            else 0.0
+        )
+        energy_scale = max(
+            abs(energy_before),
+            abs(expected_energy_change_model),
+            tiny,
+        )
+        normalized_energy_error = (
+            abs(energy_change_model - expected_energy_change_model)
+            / energy_scale
+            if impulse_applied
+            else 0.0
+        )
+
+        reports.append(
+            CollisionEventReport(
+                small_particle_index=index,
+                contact_normal=(float(normal[0]), float(normal[1])),
+                distance_before_nm=distance,
+                penetration_before_nm=penetration,
+                distance_after_correction_nm=corrected_distance,
+                residual_penetration_nm=residual_penetration,
+                relative_normal_speed_before_nm_per_ps=normal_speed_before,
+                relative_normal_speed_after_nm_per_ps=normal_speed_after,
+                relative_tangential_speed_change_nm_per_ps=(
+                    tangent_speed_after - tangent_speed_before
+                ),
+                impulse_applied=impulse_applied,
+                impulse_magnitude_kg_nm_per_ps=impulse_magnitude,
+                normalized_momentum_error=normalized_momentum_error,
+                normalized_restitution_error=(
+                    normalized_restitution_error
+                ),
+                kinetic_energy_change_j=energy_change_model * 1.0e6,
+                expected_kinetic_energy_change_j=(
+                    expected_energy_change_model * 1.0e6
+                ),
+                normalized_energy_identity_error=normalized_energy_error,
+            )
+        )
+
+    if reports:
+        state.small_positions_nm[:] = small_positions
+        state.small_velocities_nm_per_ps[:] = small_velocities
+        state.large_position_nm[:] = large_position
+        state.large_velocity_nm_per_ps[:] = large_velocity
+    return CollisionBatchReport(events=tuple(reports))
 
 
 @dataclass(frozen=True)
