@@ -315,3 +315,22 @@ direction and closely matches the theoretical radial containment probabilities.
 
 The exact numerical values, uncertainty estimates, and theoretical comparisons
 are available in [`data/task01/statistical_results.csv`](../data/task01/statistical_results.csv).
+
+## Presentation animation
+
+The animation uses the same reproducible 1,000-step walk as the single-walk
+figure. It keeps the axes fixed and equal throughout, colours the completed path
+by step number, displays the current coordinates and displacement, and holds the
+final frame long enough to inspect the result.
+
+Generate the animation with:
+
+```bash
+python3 -m task01_random_walk.animate_random_walk \
+  --steps 1000 --step-size 1 --seed 2026
+```
+
+The 1,000-step trajectory is sampled into a compact set of animation frames;
+the numerical simulation itself still contains and calculates every step.
+
+![An animated two-dimensional random walk showing the path, current position, and displacement as the step number increases.](../figures/task01/random_walk_animation.gif)
