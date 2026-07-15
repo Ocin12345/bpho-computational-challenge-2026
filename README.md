@@ -63,6 +63,7 @@ requirements.txt    Python packages used by the project
 Current presentation material:
 
 - [Task 1 PowerPoint pack](presentation/task01/README.md)
+- [Task 2 PowerPoint pack](presentation/task02/README.md)
 
 Large downloads, videos, and local Python environments should stay outside GitHub.
 Never commit passwords, access tokens, or other private information.

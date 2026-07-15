@@ -2,16 +2,18 @@
 
 ## Status
 
-Steps 2 through 9 are complete. The mathematical model, validated architecture,
+Steps 2 through 10 are complete. The mathematical model, validated architecture,
 reproducible initialization, transport physics, collision physics, complete
 simulation loop, diagnostics, and memory-aware recording are implemented and
 tested. Controlled convergence and full-reference time-step refinement also
 pass their declared validation thresholds. The statistical ensembles and
 controlled parameter experiments pass all eight pre-declared checks. Their
 saved evidence has now been converted into inspected, presentation-ready
-static figures and a reproducible animation.
+static figures and a reproducible animation. A one-slide PowerPoint, embedded
+speaker notes, timed scripts, optional supporting images, and a rendered
+preview complete the presentation package.
 
-Only the one-slide presentation pack and timed narration remain for Step 10.
+Task 2 is complete and ready to integrate into the final ten-task screencast.
 
 ## Official objective
 
@@ -878,6 +880,30 @@ than the tracer's displacement; hiding that path behind an opaque final disc
 would obscure the Brownian motion. Start, midpoint, and final animation frames
 were visually inspected after generation.
 
+## Step 10 presentation package
+
+The final [Task 2 PowerPoint pack](../presentation/task02/README.md) converts the
+scientific evidence into one editable 16:9 slide for the three-minute
+competition screencast. It uses the reference GIF as the model visual and the
+64-run MSD/endpoints figure as the main evidence. Three visible result lines
+report absence of significant drift, the fitted diffusion result, and the
+time-step/statistical validation without crowding the slide.
+
+The pack includes:
+
+- an editable PowerPoint with the GIF and final narration embedded;
+- a high-resolution rendered preview;
+- a 17–18-second competition script with timed visual cues;
+- expanded and rehearsal scripts for understanding;
+- pronunciation guidance and likely-question answers;
+- a static scene fallback and optional parameter/validation figures; and
+- a pinned generator that rebuilds the deck from the Step 9 assets.
+
+The PowerPoint package was structurally checked, its embedded GIF and speaker
+notes were verified inside the file, and the slide was rendered through
+LibreOffice for visual inspection. The PDF preview is necessarily static, but
+the PowerPoint media relationship retains the original 180-frame GIF.
+
 ## Theoretical statistical behaviour
 
 The system has no preferred direction. Across many independent simulations,
@@ -960,7 +986,7 @@ analysis and recorded with the results.
 
 ## Required outputs
 
-Steps 2 through 9 now provide:
+Steps 2 through 10 provide:
 
 - a tested Python simulation engine;
 - a polished animation of the small particles and large tracer;
@@ -969,9 +995,8 @@ Steps 2 through 9 now provide:
 - ensemble mean-displacement and MSD plots;
 - parameter-comparison figures;
 - reproducible CSV results;
-- a scientific discussion of assumptions and limitations.
-
-Step 10 will add the remaining one-slide PowerPoint pack and timed narration.
+- a scientific discussion of assumptions and limitations; and
+- a one-slide PowerPoint pack with timed narration.
 
 ## Model limitations
 
@@ -1131,6 +1156,22 @@ Step 9 is complete when:
 10. the start, midpoint, and final animation frames are visually inspected; and
 11. one command regenerates the complete visual package.
 
-All eleven conditions are satisfied. Step 10 will assemble the strongest
-evidence into the final slide and narration without changing the scientific
-results.
+All eleven conditions are satisfied.
+
+## Step 10 completion condition
+
+Step 10 is complete when:
+
+1. one 16:9 slide presents a single clear scientific claim;
+2. the reference animation and strongest ensemble evidence remain readable;
+3. visible slide text is limited to three result lines;
+4. the competition narration fits approximately 17–18 seconds;
+5. speaker notes contain the exact final script and timed visual cues;
+6. expanded rehearsal material explains the model and limitations accurately;
+7. image alternative text and a static animation fallback are supplied;
+8. the PowerPoint is editable and can be rebuilt from pinned dependencies;
+9. the embedded GIF and notes are verified inside the PowerPoint package;
+10. a high-resolution render is visually inspected for clipping and scale; and
+11. the full Task 2 report remains linked for supporting detail.
+
+All eleven conditions are satisfied. Task 2 is complete.

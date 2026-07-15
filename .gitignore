@@ -3,6 +3,7 @@ __pycache__/
 *.py[cod]
 .pytest_cache/
 .venv/
+node_modules/
 task02_brownian_motion/.analysis_cache/
 venv/
 env/
