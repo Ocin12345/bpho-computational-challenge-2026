@@ -2,8 +2,12 @@
 
 ## Status
 
-This document completes the mathematical and numerical specification for Task
-2. No Task 2 simulation code has been written yet.
+Steps 2 and 3 are complete. This document fixes the mathematical model, and the
+Python architecture now provides validated parameters, a reproducible initial
+state, an exact fixed time grid, and memory-aware result containers.
+
+Motion, wall reflections, direction-reset updates, and particle collisions have
+not yet been implemented. They begin in Step 4.
 
 ## Official objective
 
@@ -58,6 +62,43 @@ molecular scattering twice.
 
 An optional later extension may replace direction randomization with explicit
 small–small hard-disc collisions. The two modes must remain separate.
+
+## Step 3 software architecture
+
+The architecture is deliberately small: one NumPy-based module, one test
+module, and one decision record. This is enough for a transparent scientific
+simulation without introducing application frameworks.
+
+| Component | Responsibility |
+| --- | --- |
+| **BrownianParameters** | Immutable, validated physical and numerical inputs plus derived quantities |
+| **FixedTimeGrid** | Read-only, uniformly spaced times that end exactly at $t_{\max}$ |
+| **SimulationState** | Mutable current positions, velocities, reset times, time, and step index |
+| **SimulationContext** | Parameters, grid, frame schedule, initial state, random stream, and validation report |
+| **BrownianSimulationResult** | Read-only large-particle history and sampled small-particle display frames |
+
+Initialization uses four independent random-number streams derived from one
+recorded seed: positions, initial directions, initial reset phases, and future
+resets. The same parameters and seed therefore reproduce the same state without
+coupling unrelated random choices.
+
+The large particle's position and velocity will be retained at every physics
+step for analysis. Small-particle positions will be saved only at up to 240
+selected display frames. For the reference grid this reduces small-position
+storage from about $113\ \mathrm{MB}$ to about $3.8\ \mathrm{MB}$.
+
+Files:
+
+- [architecture and initialization module](brownian_motion.py);
+- [architecture tests](test_brownian_motion.py); and
+- [ADR-001: fixed-step NumPy array model](architecture/ADR-001-fixed-step-array-model.md).
+
+Run the Task 2 tests from the repository root with:
+
+    python3 -m unittest discover -s task02_brownian_motion -p 'test_*.py' -v
+
+The module intentionally contains no motion or collision update function yet.
+That boundary keeps Step 3 testable before Step 4 changes particle state.
 
 ## Variables and units
 
@@ -615,5 +656,22 @@ Step 2 is complete when this document:
    small–small collision extension; and
 6. renders correctly on GitHub.
 
-The next stage is architecture only: defining Python data structures and the
-fixed-step simulation interface before implementing motion or collisions.
+These six conditions are satisfied by the current specification.
+
+## Step 3 completion condition
+
+Step 3 is complete when the software:
+
+1. validates every physical and numerical input;
+2. derives the reference speed, reset interval, and safe initial time step;
+3. creates a fixed time grid ending exactly at $t_{\max}$;
+4. initializes valid particle geometry and velocities reproducibly;
+5. separates immutable configuration, mutable state, and immutable results;
+6. stores animation data without retaining an unnecessary full particle
+   history;
+7. documents the architectural trade-offs; and
+8. passes all architecture tests without implementing later physics early.
+
+All eight conditions are now satisfied. The next stage is Step 4: implement and
+test free motion, reflecting walls, and scheduled direction resets. Small–large
+collision impulses remain isolated until Step 5.
