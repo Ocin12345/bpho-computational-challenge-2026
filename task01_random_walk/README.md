@@ -206,3 +206,30 @@ The completed simulation must demonstrate that:
 
 These checks distinguish a physically correct random-walk model from a graph
 that merely appears random.
+
+## Basic simulation implementation
+
+The mathematical model is implemented in `random_walk.py`. It generates one
+walk, stores the origin and every subsequent position, and performs
+deterministic consistency checks before any plotting or statistical analysis is
+added.
+
+Run the basic simulation from the repository root:
+
+```bash
+python3 task01_random_walk/random_walk.py --steps 1000 --step-size 1 --seed 2026
+```
+
+The seed is optional. Supplying one makes the walk exactly reproducible;
+omitting it generates a new walk each time.
+
+Run the automated tests with:
+
+```bash
+python3 -m unittest discover -s task01_random_walk -p 'test_*.py' -v
+```
+
+The tests verify input validation, array dimensions, inclusion of the origin,
+the angular interval, fixed step length, cumulative positions, reproducibility,
+and command-line behaviour. Ensemble statistics and presentation graphics are
+handled in later stages.
