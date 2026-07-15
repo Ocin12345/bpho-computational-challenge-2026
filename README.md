@@ -37,8 +37,8 @@ allowed by the competition if they are useful for a particular task.
 
 | Folder | Topic |
 | --- | --- |
-| `task01_random_walk` | Random walk |
-| `task02_brownian_motion` | Brownian motion |
+| [`task01_random_walk`](task01_random_walk/README.md) | Random walk |
+| [`task02_brownian_motion`](task02_brownian_motion/README.md) | Brownian motion |
 | `task03_thermal_radiation` | Black-body radiation and heat capacity |
 | `task04_photoelectric_effect` | Photoelectric effect |
 | `task05_hydrogen_spectrum` | Hydrogen spectrum and Bohr model |
