@@ -1,3 +1,5 @@
 numpy>=1.24,<3
 matplotlib>=3.7,<4
 pillow>=9.5,<13
+# Matplotlib 3.9 on Python 3.9 emits deprecation warnings with PyParsing 3.3+.
+pyparsing>=3.1,<3.3
