@@ -32,8 +32,8 @@ $$
 1. The walk takes place in an unbounded two-dimensional plane.
 2. Every step has exactly the same length $s$.
 3. The direction of each step is independent of all previous directions.
-4. Every direction is equally likely, so
-   $\theta_i\sim\operatorname{Uniform}(0,2\pi)$.
+4. Every direction is equally likely. In mathematical terms, each
+   $\theta_i$ is sampled uniformly from the interval $[0, 2\pi)$.
 
 5. There is no drift, preferred direction, boundary, force, or interaction.
 6. The model is discrete: position changes once per step.
@@ -133,8 +133,8 @@ The coordinate variances after $n$ steps are therefore
 
 $$
 \begin{aligned}
-\operatorname{Var}(x_n) &= \frac{ns^2}{2}, \\
-\operatorname{Var}(y_n) &= \frac{ns^2}{2}.
+\mathrm{Var}(x_n) &= \frac{ns^2}{2}, \\
+\mathrm{Var}(y_n) &= \frac{ns^2}{2}.
 \end{aligned}
 $$
 
