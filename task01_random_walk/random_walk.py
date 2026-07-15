@@ -3,8 +3,8 @@
 The model takes ``n_steps`` independent steps of fixed length ``step_size``.
 Each direction is sampled uniformly from the interval [0, 2*pi).
 
-This module deliberately contains no plotting. Its purpose is to provide and
-verify the numerical model before presentation code is added in Step 4.
+This module deliberately contains no plotting. It provides the numerical
+models and deterministic validation used by the separate presentation scripts.
 """
 
 from __future__ import annotations
@@ -60,6 +60,37 @@ class RandomWalkResult:
         """Straight-line distance from the origin after the final step."""
 
         return float(np.hypot(*self.positions[-1]))
+
+
+@dataclass
+class RandomWalkEnsembleResult:
+    """Complete numerical result for several independent random walks."""
+
+    n_walks: int
+    n_steps: int
+    step_size: float
+    seed: int | None
+    angles: FloatArray
+    displacements: FloatArray
+    positions: FloatArray
+
+    @property
+    def step_lengths(self) -> FloatArray:
+        """Numerically calculated length of every step in every walk."""
+
+        return np.linalg.norm(self.displacements, axis=2)
+
+    @property
+    def final_positions(self) -> FloatArray:
+        """Final x and y coordinates for every walk."""
+
+        return self.positions[:, -1, :]
+
+    @property
+    def final_distances(self) -> FloatArray:
+        """Final distance from the origin for every walk."""
+
+        return np.linalg.norm(self.final_positions, axis=1)
 
 
 @dataclass(frozen=True)
@@ -152,6 +183,65 @@ def simulate_random_walk(
     )
 
 
+def simulate_random_walk_ensemble(
+    n_walks: int,
+    n_steps: int,
+    step_size: float,
+    *,
+    seed: int | None = None,
+) -> RandomWalkEnsembleResult:
+    """Simulate several independent isotropic two-dimensional random walks.
+
+    Parameters
+    ----------
+    n_walks:
+        Number of independent trajectories. Must be a positive integer.
+    n_steps:
+        Number of fixed-length steps in each trajectory.
+    step_size:
+        Fixed length of every step in every trajectory.
+    seed:
+        Optional non-negative master seed for reproducibility.
+
+    Returns
+    -------
+    RandomWalkEnsembleResult
+        Angles, displacements, and positions for all walks. The positions array
+        has shape ``(n_walks, n_steps + 1, 2)`` and includes every origin.
+    """
+
+    if isinstance(n_walks, (bool, np.bool_)) or not isinstance(
+        n_walks, (int, np.integer)
+    ):
+        raise TypeError("n_walks must be an integer")
+    if n_walks <= 0:
+        raise ValueError("n_walks must be greater than zero")
+
+    n_steps, step_size, seed = _validated_parameters(n_steps, step_size, seed)
+    n_walks = int(n_walks)
+    rng = np.random.default_rng(seed)
+
+    angles = rng.uniform(0.0, 2.0 * np.pi, size=(n_walks, n_steps))
+    displacements = step_size * np.stack(
+        (np.cos(angles), np.sin(angles)),
+        axis=2,
+    )
+
+    positions = np.empty((n_walks, n_steps + 1, 2), dtype=np.float64)
+    positions[:, 0, :] = (0.0, 0.0)
+    positions[:, 1:, :] = np.cumsum(displacements, axis=1)
+
+    return RandomWalkEnsembleResult(
+        n_walks=n_walks,
+        n_steps=n_steps,
+        step_size=step_size,
+        seed=seed,
+        angles=angles,
+        displacements=displacements,
+        positions=positions,
+    )
+
+
 def validate_walk(result: RandomWalkResult) -> ValidationReport:
     """Check exact structural and numerical requirements for one walk.
 
@@ -213,6 +303,79 @@ def validate_walk(result: RandomWalkResult) -> ValidationReport:
             atol=32.0
             * np.finfo(np.float64).eps
             * max(1.0, result.step_size),
+        ):
+            failures.append("not every displacement has the requested step size")
+    else:
+        max_step_length_error = float("nan")
+
+    return ValidationReport(
+        passed=not failures,
+        failures=tuple(failures),
+        max_step_length_error=max_step_length_error,
+    )
+
+
+def validate_ensemble(result: RandomWalkEnsembleResult) -> ValidationReport:
+    """Check deterministic structural and numerical requirements for an ensemble."""
+
+    failures: list[str] = []
+    expected_position_shape = (result.n_walks, result.n_steps + 1, 2)
+    expected_step_shape = (result.n_walks, result.n_steps, 2)
+    expected_angle_shape = (result.n_walks, result.n_steps)
+
+    if result.positions.shape != expected_position_shape:
+        failures.append(
+            "positions must have shape "
+            f"{expected_position_shape}, not {result.positions.shape}"
+        )
+    if result.displacements.shape != expected_step_shape:
+        failures.append(
+            "displacements must have shape "
+            f"{expected_step_shape}, not {result.displacements.shape}"
+        )
+    if result.angles.shape != expected_angle_shape:
+        failures.append(
+            f"angles must have shape {expected_angle_shape}, not {result.angles.shape}"
+        )
+
+    arrays = (result.angles, result.displacements, result.positions)
+    if not all(np.all(np.isfinite(array)) for array in arrays):
+        failures.append("angles, displacements, and positions must all be finite")
+
+    tolerance = 32.0 * np.finfo(np.float64).eps * max(1.0, result.step_size)
+    if result.positions.shape == expected_position_shape:
+        if not np.allclose(
+            result.positions[:, 0, :],
+            0.0,
+            rtol=0.0,
+            atol=tolerance,
+        ):
+            failures.append("every walk must begin at the origin")
+
+        reconstructed_steps = np.diff(result.positions, axis=1)
+        if result.displacements.shape == expected_step_shape and not np.allclose(
+            reconstructed_steps,
+            result.displacements,
+            rtol=2.0e-15,
+            atol=tolerance,
+        ):
+            failures.append("positions are not cumulative displacement sums")
+
+    if result.angles.shape == expected_angle_shape and not np.all(
+        (result.angles >= 0.0) & (result.angles < 2.0 * np.pi)
+    ):
+        failures.append("every angle must lie in the interval [0, 2*pi)")
+
+    if result.displacements.shape == expected_step_shape:
+        step_lengths = result.step_lengths
+        max_step_length_error = float(
+            np.max(np.abs(step_lengths - result.step_size), initial=0.0)
+        )
+        if not np.allclose(
+            step_lengths,
+            result.step_size,
+            rtol=2.0e-15,
+            atol=tolerance,
         ):
             failures.append("not every displacement has the requested step size")
     else:

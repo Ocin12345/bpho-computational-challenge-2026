@@ -250,3 +250,21 @@ and step number are labelled, and the horizontal and vertical axes use equal
 scales to prevent geometric distortion.
 
 ![A 1,000-step two-dimensional random walk with its start, finish, and final displacement labelled.](../figures/task01/single_walk.png)
+
+## Fifty-walk ensemble
+
+The official Challenge Presentation illustrates Task 1 by overlaying about 50
+walks with the same step size. Generate our reproducible version with:
+
+```bash
+python3 -m task01_random_walk.plot_walk_ensemble \
+  --walks 50 --steps 1000 --step-size 1 --seed 2026
+```
+
+All 50 trajectories begin at the origin and independently sample their step
+directions from the same uniform angular distribution. Each trajectory has its
+own colour, its final position is marked, and equal axis scales preserve the
+true geometry. This figure demonstrates the variety of outcomes produced by
+identical model parameters; formal statistical tests follow separately.
+
+![Fifty independent 1,000-step random walks overlaid with their common origin and final positions marked.](../figures/task01/fifty_walks.png)

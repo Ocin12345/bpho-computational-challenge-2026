@@ -11,6 +11,8 @@ import numpy as np
 from task01_random_walk.random_walk import (
     main,
     simulate_random_walk,
+    simulate_random_walk_ensemble,
+    validate_ensemble,
     validate_walk,
 )
 
@@ -109,6 +111,66 @@ class RandomWalkSimulationTests(unittest.TestCase):
         self.assertEqual(exit_code, 0)
         self.assertIn("stored positions: 21", output.getvalue())
         self.assertIn("validation: PASS", output.getvalue())
+
+
+class RandomWalkEnsembleTests(unittest.TestCase):
+    """Verify deterministic requirements for a collection of walks."""
+
+    def test_ensemble_shapes_and_origins(self) -> None:
+        result = simulate_random_walk_ensemble(50, 1_000, 1.0, seed=2026)
+
+        self.assertEqual(result.angles.shape, (50, 1_000))
+        self.assertEqual(result.displacements.shape, (50, 1_000, 2))
+        self.assertEqual(result.positions.shape, (50, 1_001, 2))
+        np.testing.assert_array_equal(
+            result.positions[:, 0, :],
+            np.zeros((50, 2)),
+        )
+
+    def test_every_ensemble_step_has_requested_length(self) -> None:
+        result = simulate_random_walk_ensemble(50, 1_000, 1.75, seed=88)
+
+        np.testing.assert_allclose(
+            result.step_lengths,
+            1.75,
+            rtol=2.0e-15,
+            atol=2.0e-14,
+        )
+
+    def test_ensemble_is_reproducible_from_master_seed(self) -> None:
+        first = simulate_random_walk_ensemble(12, 100, 1.0, seed=991)
+        second = simulate_random_walk_ensemble(12, 100, 1.0, seed=991)
+
+        np.testing.assert_array_equal(first.angles, second.angles)
+        np.testing.assert_array_equal(first.positions, second.positions)
+
+    def test_ensemble_final_properties_have_one_value_per_walk(self) -> None:
+        result = simulate_random_walk_ensemble(25, 80, 0.5, seed=43)
+
+        self.assertEqual(result.final_positions.shape, (25, 2))
+        self.assertEqual(result.final_distances.shape, (25,))
+        np.testing.assert_allclose(
+            result.final_distances,
+            np.linalg.norm(result.positions[:, -1, :], axis=1),
+        )
+
+    def test_valid_ensemble_passes_validation(self) -> None:
+        result = simulate_random_walk_ensemble(50, 1_000, 1.0, seed=2026)
+        report = validate_ensemble(result)
+
+        self.assertTrue(report.passed, report.failures)
+        self.assertEqual(report.failures, ())
+        self.assertLess(report.max_step_length_error, 1.0e-12)
+
+    def test_invalid_walk_counts_are_rejected(self) -> None:
+        for value in (0, -1, 2.5, True):
+            with self.subTest(value=value):
+                with self.assertRaises((TypeError, ValueError)):
+                    simulate_random_walk_ensemble(  # type: ignore[arg-type]
+                        value,
+                        100,
+                        1.0,
+                    )
 
 
 if __name__ == "__main__":
