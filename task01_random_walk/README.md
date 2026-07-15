@@ -268,3 +268,50 @@ true geometry. This figure demonstrates the variety of outcomes produced by
 identical model parameters; formal statistical tests follow separately.
 
 ![Fifty independent 1,000-step random walks overlaid with their common origin and final positions marked.](../figures/task01/fifty_walks.png)
+
+## Statistical validation against theory
+
+A random-looking path is not sufficient evidence that the model is correct. We
+therefore tested the theoretical predictions using 50,000 independent walks at
+each of eight step counts:
+
+$$
+N = 10, 20, 50, 100, 200, 500, 1000, 2000.
+$$
+
+This corresponds to 400,000 complete walks and 194 million independently
+sampled steps. Reproduce the analysis with:
+
+```bash
+python3 -m task01_random_walk.statistical_analysis \
+  --walks 50000 --step-size 1 --seed 2026 \
+  --step-counts 10 20 50 100 200 500 1000 2000 \
+  --reference-steps 1000
+```
+
+### Main results
+
+| Test | Theoretical prediction | Simulation result |
+| --- | --- | --- |
+| Weighted MSD slope | $1.00000$ | $0.99920\pm0.00306$ (95% confidence) |
+| Mean endpoint coordinates | Zero | Every 95% confidence interval includes zero |
+| Coordinate variances | $Ns^2/2$ | Maximum relative difference: 1.01% |
+| Mean squared displacement | $Ns^2$ | Maximum relative difference: 0.77% |
+| Endpoints inside theoretical 50% radius | 50% | 50.16% |
+| Endpoints inside theoretical 95% radius | 95% | 95.21% |
+
+The fitted MSD slope includes the theoretical value within its 95% confidence
+interval. The absence of significant mean displacement in either coordinate,
+the agreement of both coordinate variances, and the circular endpoint cloud all
+support the conclusion that the simulation is isotropic and unbiased.
+
+![A four-panel comparison of simulated mean squared displacement, directional bias, and coordinate variances with theoretical predictions.](../figures/task01/statistical_validation.png)
+
+For $N=1000$, the central limit theorem predicts an approximately circular
+two-dimensional endpoint distribution. The measured cloud has no preferred
+direction and closely matches the theoretical radial containment probabilities.
+
+![A density plot of 50,000 endpoints with theoretical 50 percent and 95 percent radial containment circles.](../figures/task01/endpoint_distribution.png)
+
+The exact numerical values, uncertainty estimates, and theoretical comparisons
+are available in [`data/task01/statistical_results.csv`](../data/task01/statistical_results.csv).
