@@ -1,9 +1,9 @@
-"""Architecture and initialization for BPhO 2026 Task 2.
+"""Architecture, initialization, and transport for BPhO 2026 Task 2.
 
-This module deliberately stops before motion, wall reflection, randomization,
-or particle-collision updates. Step 3 establishes validated parameters,
-reproducible initial state, a fixed time grid, and result containers so later
-physics code has stable and testable contracts.
+Steps 3 and 4 establish validated parameters, reproducible initialization, a
+fixed time grid, free motion, scheduled direction resets, reflecting walls,
+and result containers. Small-large collision impulses are deliberately absent
+until Step 5.
 """
 
 from __future__ import annotations
@@ -438,6 +438,42 @@ class InitializationValidationReport:
     maximum_small_speed_error_nm_per_ps: float
 
 
+@dataclass(frozen=True)
+class WallReflectionReport:
+    """Number of radius-aware wall impacts resolved in one operation."""
+
+    small_particle_impacts: int
+    large_particle_impacts: int
+
+    @property
+    def total_impacts(self) -> int:
+        """Total impacts across both particle classes."""
+
+        return self.small_particle_impacts + self.large_particle_impacts
+
+
+@dataclass(frozen=True)
+class TransportStepReport:
+    """Verified summary of one reset-motion-wall transport step."""
+
+    step_index: int
+    start_time_ps: float
+    end_time_ps: float
+    time_step_ps: float
+    direction_resets: int
+    small_wall_impacts: int
+    large_wall_impacts: int
+    maximum_displacement_nm: float
+    displacement_limit_nm: float
+    maximum_small_speed_error_nm_per_ps: float
+
+    @property
+    def total_wall_impacts(self) -> int:
+        """Total wall impacts resolved during this step."""
+
+        return self.small_wall_impacts + self.large_wall_impacts
+
+
 def validate_initial_state(
     state: SimulationState,
     parameters: BrownianParameters,
@@ -700,6 +736,327 @@ def initialize_simulation(
         state=state,
         reset_rng=reset_rng,
         initialization_report=report,
+    )
+
+
+def _validate_runtime_state(
+    state: SimulationState,
+    parameters: BrownianParameters,
+) -> None:
+    """Reject a malformed runtime state before an in-place update."""
+
+    if not isinstance(state, SimulationState):
+        raise TypeError("state must be SimulationState")
+    if not isinstance(parameters, BrownianParameters):
+        raise TypeError("parameters must be BrownianParameters")
+    if state.n_small != parameters.n_small:
+        raise ValueError("state particle count must match parameters.n_small")
+
+    arrays = (
+        state.small_positions_nm,
+        state.small_velocities_nm_per_ps,
+        state.next_randomization_times_ps,
+        state.large_position_nm,
+        state.large_velocity_nm_per_ps,
+    )
+    if not all(np.all(np.isfinite(array)) for array in arrays):
+        raise ValueError("runtime coordinates, velocities, and times must be finite")
+    if not np.isfinite(state.time_ps):
+        raise ValueError("state.time_ps must be finite")
+    if (
+        isinstance(state.step_index, (bool, np.bool_))
+        or not isinstance(state.step_index, (int, np.integer))
+        or state.step_index < 0
+    ):
+        raise ValueError("state.step_index must be a non-negative integer")
+
+    tolerance = (
+        64.0
+        * np.finfo(np.float64).eps
+        * max(parameters.box_size_nm, 1.0)
+    )
+    small_low = parameters.small_radius_nm - tolerance
+    small_high = (
+        parameters.box_size_nm - parameters.small_radius_nm + tolerance
+    )
+    if np.any(state.small_positions_nm < small_low) or np.any(
+        state.small_positions_nm > small_high
+    ):
+        raise ValueError("small-particle centres begin outside their wall limits")
+
+    large_low = parameters.large_radius_nm - tolerance
+    large_high = (
+        parameters.box_size_nm - parameters.large_radius_nm + tolerance
+    )
+    if np.any(state.large_position_nm < large_low) or np.any(
+        state.large_position_nm > large_high
+    ):
+        raise ValueError("large-particle centre begins outside its wall limits")
+
+
+def _expired_direction_mask(
+    state: SimulationState,
+    parameters: BrownianParameters,
+) -> NDArray[np.bool_]:
+    """Return resets due at the state's current time and reject stale timers."""
+
+    expired = state.next_randomization_times_ps <= state.time_ps
+    if np.any(
+        state.next_randomization_times_ps[expired]
+        + parameters.randomization_interval_ps
+        <= state.time_ps
+    ):
+        raise RuntimeError(
+            "a direction-reset timer is more than one interval overdue"
+        )
+    return expired
+
+
+def _apply_direction_resets(
+    state: SimulationState,
+    parameters: BrownianParameters,
+    rng: np.random.Generator,
+    expired: NDArray[np.bool_],
+) -> int:
+    """Apply one reset to each selected particle and advance its timer."""
+
+    count = int(np.count_nonzero(expired))
+    if count == 0:
+        return 0
+    angles = rng.uniform(0.0, 2.0 * np.pi, size=count)
+    state.small_velocities_nm_per_ps[expired] = (
+        parameters.small_speed_nm_per_ps
+        * np.column_stack((np.cos(angles), np.sin(angles)))
+    )
+    state.next_randomization_times_ps[expired] += (
+        parameters.randomization_interval_ps
+    )
+    return count
+
+
+def randomize_expired_directions(
+    state: SimulationState,
+    parameters: BrownianParameters,
+    rng: np.random.Generator,
+) -> int:
+    """Reset all directions due at the current state time.
+
+    Each affected particle receives a uniform independent angle, its prescribed
+    thermal speed is restored, and its deadline advances by exactly one
+    randomization interval.
+    """
+
+    _validate_runtime_state(state, parameters)
+    if not isinstance(rng, np.random.Generator):
+        raise TypeError("rng must be a numpy.random.Generator")
+    expired = _expired_direction_mask(state, parameters)
+    return _apply_direction_resets(state, parameters, rng, expired)
+
+
+def advance_free_motion(
+    state: SimulationState,
+    time_step_ps: float,
+) -> float:
+    """Advance all positions in place at constant velocity.
+
+    Time and step counters are intentionally unchanged here; the ordered
+    transport-step function commits those values only after wall resolution.
+    The returned value is the greatest distance moved by any particle.
+    """
+
+    if not isinstance(state, SimulationState):
+        raise TypeError("state must be SimulationState")
+    time_step = _validated_real(time_step_ps, "time_step_ps")
+    velocity_arrays = (
+        state.small_velocities_nm_per_ps,
+        state.large_velocity_nm_per_ps,
+    )
+    if not all(np.all(np.isfinite(array)) for array in velocity_arrays):
+        raise ValueError("velocities must be finite before free motion")
+
+    maximum_speed = max(
+        float(np.max(state.small_speeds_nm_per_ps)),
+        float(np.linalg.norm(state.large_velocity_nm_per_ps)),
+    )
+    state.small_positions_nm += (
+        state.small_velocities_nm_per_ps * time_step
+    )
+    state.large_position_nm += state.large_velocity_nm_per_ps * time_step
+    return maximum_speed * time_step
+
+
+def _reflect_array_at_square_walls(
+    positions_nm: FloatArray,
+    velocities_nm_per_ps: FloatArray,
+    *,
+    radius_nm: float,
+    box_size_nm: float,
+) -> int:
+    """Resolve any number of one-dimensional wall crossings per coordinate."""
+
+    if positions_nm.ndim != 2 or positions_nm.shape[1] != 2:
+        raise ValueError("positions_nm must have shape (N, 2)")
+    if velocities_nm_per_ps.shape != positions_nm.shape:
+        raise ValueError("velocities_nm_per_ps must match positions_nm")
+    if not np.all(np.isfinite(positions_nm)) or not np.all(
+        np.isfinite(velocities_nm_per_ps)
+    ):
+        raise ValueError("wall inputs must be finite")
+
+    low = radius_nm
+    high = box_size_nm - radius_nm
+    width = high - low
+    total_impacts = 0
+
+    for axis in range(2):
+        unfolded = positions_nm[:, axis] - low
+        velocity = velocities_nm_per_ps[:, axis]
+        moving_positive = velocity > 0.0
+        moving_negative = velocity < 0.0
+
+        impossible = (
+            ((unfolded < 0.0) & ~moving_negative)
+            | ((unfolded > width) & ~moving_positive)
+        )
+        if np.any(impossible):
+            raise ValueError(
+                "an out-of-bounds coordinate is inconsistent with its velocity"
+            )
+
+        impacts = np.zeros(len(unfolded), dtype=np.int64)
+        right_crossing = moving_positive & (unfolded >= width)
+        impacts[right_crossing] = np.floor(
+            unfolded[right_crossing] / width
+        ).astype(np.int64)
+        left_crossing = moving_negative & (unfolded <= 0.0)
+        impacts[left_crossing] = (
+            np.floor(-unfolded[left_crossing] / width).astype(np.int64)
+            + 1
+        )
+
+        phase = np.mod(unfolded, 2.0 * width)
+        folded = np.where(phase <= width, phase, 2.0 * width - phase)
+        positions_nm[:, axis] = np.clip(low + folded, low, high)
+        odd_impacts = impacts % 2 == 1
+        velocities_nm_per_ps[odd_impacts, axis] *= -1.0
+        total_impacts += int(np.sum(impacts))
+
+    return total_impacts
+
+
+def reflect_square_walls(
+    state: SimulationState,
+    parameters: BrownianParameters,
+) -> WallReflectionReport:
+    """Apply elastic, radius-aware reflections to small and large particles."""
+
+    if not isinstance(state, SimulationState):
+        raise TypeError("state must be SimulationState")
+    if not isinstance(parameters, BrownianParameters):
+        raise TypeError("parameters must be BrownianParameters")
+
+    small_impacts = _reflect_array_at_square_walls(
+        state.small_positions_nm,
+        state.small_velocities_nm_per_ps,
+        radius_nm=parameters.small_radius_nm,
+        box_size_nm=parameters.box_size_nm,
+    )
+    large_impacts = _reflect_array_at_square_walls(
+        state.large_position_nm.reshape(1, 2),
+        state.large_velocity_nm_per_ps.reshape(1, 2),
+        radius_nm=parameters.large_radius_nm,
+        box_size_nm=parameters.box_size_nm,
+    )
+    return WallReflectionReport(
+        small_particle_impacts=small_impacts,
+        large_particle_impacts=large_impacts,
+    )
+
+
+def advance_transport_step(
+    context: SimulationContext,
+) -> TransportStepReport:
+    """Execute one ordered reset-motion-wall step and commit exact grid time."""
+
+    if not isinstance(context, SimulationContext):
+        raise TypeError("context must be SimulationContext")
+    state = context.state
+    parameters = context.parameters
+    _validate_runtime_state(state, parameters)
+
+    if state.step_index >= context.time_grid.n_steps:
+        raise RuntimeError("the simulation is already at its final time")
+    expected_start = context.time_grid.times_ps[state.step_index]
+    time_tolerance = (
+        8.0
+        * np.finfo(np.float64).eps
+        * max(parameters.max_time_ps, 1.0)
+    )
+    if not np.isclose(
+        state.time_ps,
+        expected_start,
+        rtol=8.0 * np.finfo(np.float64).eps,
+        atol=time_tolerance,
+    ):
+        raise RuntimeError("state time and step index do not match the time grid")
+
+    expired = _expired_direction_mask(state, parameters)
+    effective_small_speeds = state.small_speeds_nm_per_ps.copy()
+    effective_small_speeds[expired] = parameters.small_speed_nm_per_ps
+    maximum_speed = max(
+        float(np.max(effective_small_speeds)),
+        float(np.linalg.norm(state.large_velocity_nm_per_ps)),
+    )
+    maximum_displacement = maximum_speed * context.time_grid.step_size_ps
+    displacement_limit = (
+        parameters.max_step_fraction * parameters.small_radius_nm
+    )
+    displacement_tolerance = (
+        64.0
+        * np.finfo(np.float64).eps
+        * max(displacement_limit, 1.0)
+    )
+    if maximum_displacement > displacement_limit + displacement_tolerance:
+        raise RuntimeError(
+            "time-step displacement limit exceeded; repeat with a smaller step"
+        )
+
+    start_time = float(expected_start)
+    reset_count = _apply_direction_resets(
+        state,
+        parameters,
+        context.reset_rng,
+        expired,
+    )
+    measured_displacement = advance_free_motion(
+        state,
+        context.time_grid.step_size_ps,
+    )
+    wall_report = reflect_square_walls(state, parameters)
+
+    state.step_index += 1
+    state.time_ps = float(context.time_grid.times_ps[state.step_index])
+    _validate_runtime_state(state, parameters)
+
+    small_speed_error = float(
+        np.max(
+            np.abs(
+                state.small_speeds_nm_per_ps
+                - parameters.small_speed_nm_per_ps
+            )
+        )
+    )
+    return TransportStepReport(
+        step_index=state.step_index,
+        start_time_ps=start_time,
+        end_time_ps=state.time_ps,
+        time_step_ps=context.time_grid.step_size_ps,
+        direction_resets=reset_count,
+        small_wall_impacts=wall_report.small_particle_impacts,
+        large_wall_impacts=wall_report.large_particle_impacts,
+        maximum_displacement_nm=measured_displacement,
+        displacement_limit_nm=displacement_limit,
+        maximum_small_speed_error_nm_per_ps=small_speed_error,
     )
 
 

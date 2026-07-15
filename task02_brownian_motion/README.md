@@ -2,12 +2,13 @@
 
 ## Status
 
-Steps 2 and 3 are complete. This document fixes the mathematical model, and the
-Python architecture now provides validated parameters, a reproducible initial
-state, an exact fixed time grid, and memory-aware result containers.
+Steps 2, 3, and 4 are complete. The mathematical model, validated architecture,
+reproducible initialization, free motion, scheduled direction resets, and
+radius-aware wall reflections are implemented and tested.
 
-Motion, wall reflections, direction-reset updates, and particle collisions have
-not yet been implemented. They begin in Step 4.
+Small–large collision impulses have not yet been implemented. They are isolated
+as Step 5 and must pass their own conservation tests before entering the full
+simulation loop.
 
 ## Official objective
 
@@ -65,9 +66,9 @@ small–small hard-disc collisions. The two modes must remain separate.
 
 ## Step 3 software architecture
 
-The architecture is deliberately small: one NumPy-based module, one test
-module, and one decision record. This is enough for a transparent scientific
-simulation without introducing application frameworks.
+The architecture is deliberately small: one NumPy-based implementation module,
+focused test modules, and one decision record. This is enough for a transparent
+scientific simulation without introducing application frameworks.
 
 | Component | Responsibility |
 | --- | --- |
@@ -97,8 +98,9 @@ Run the Task 2 tests from the repository root with:
 
     python3 -m unittest discover -s task02_brownian_motion -p 'test_*.py' -v
 
-The module intentionally contains no motion or collision update function yet.
-That boundary keeps Step 3 testable before Step 4 changes particle state.
+The architecture and initialization contracts were tested before transport was
+added. The module now includes Step 4 transport, but intentionally contains no
+small–large collision impulse until Step 5.
 
 ## Variables and units
 
@@ -306,6 +308,43 @@ $$
 Wall reflections conserve the particle's speed. The main reference run should
 be chosen so that the large particle rarely reaches a wall; otherwise
 confinement would dominate the Brownian trajectory.
+
+## Step 4 transport implementation
+
+Transport is split into four independently testable operations:
+
+1. **randomize_expired_directions** resets only particles whose timers are due,
+   restores the prescribed speed, and advances each deadline by exactly
+   $\tau_{\mathrm r}$;
+2. **advance_free_motion** applies the constant-velocity position equations
+   without changing the simulation clock;
+3. **reflect_square_walls** folds every coordinate back into its radius-aware
+   interval and reverses the required velocity components; and
+4. **advance_transport_step** enforces the required reset, motion, wall order
+   and commits the exact next time from the fixed grid.
+
+The wall algorithm uses an unfolded coordinate with period
+$2(L-2a_i)$. It therefore handles corner impacts, arrival exactly at a wall,
+and even multiple wall crossings in one call. Velocity components reverse
+according to the parity of the impact count, so speed is conserved.
+
+Before consuming a random number or changing the state, each ordered step
+calculates the greatest proposed displacement. If it exceeds $0.10r$, the
+operation fails without partially updating positions, timers, the random
+stream, time, or step index.
+
+The regression suite includes:
+
+- isolated free-motion equations;
+- deterministic reset scheduling and speed restoration;
+- exact, corner, radius-specific, and multiple wall impacts;
+- transactional failure of an unsafe time step;
+- repeated-seed trajectory reproduction; and
+- all 7,083 transport steps of the 200 ps reference configuration.
+
+This last check is a transport-only integration test. Small particles may pass
+through the large particle until Step 5 adds the collision impulse; it is not
+yet the completed Brownian-motion simulation.
 
 ## Two-body collision geometry
 
@@ -672,6 +711,25 @@ Step 3 is complete when the software:
 7. documents the architectural trade-offs; and
 8. passes all architecture tests without implementing later physics early.
 
-All eight conditions are now satisfied. The next stage is Step 4: implement and
-test free motion, reflecting walls, and scheduled direction resets. Small–large
-collision impulses remain isolated until Step 5.
+All eight conditions are satisfied.
+
+## Step 4 completion condition
+
+Step 4 is complete when:
+
+1. expired direction timers reset before movement;
+2. reset angles are independent and reproducible from the recorded seed;
+3. resets restore the prescribed molecular speed and advance by one exact
+   interval;
+4. constant-velocity position updates match the analytical equation;
+5. small and large particles use their own radii at every wall;
+6. wall reflections conserve speed and handle corners and repeated crossings;
+7. state time advances only to exact fixed-grid values;
+8. unsafe displacement is rejected before any partial mutation;
+9. complete repeated transport remains finite and within the container; and
+10. the official 200 ps reference transport passes all 7,083 steps.
+
+All ten conditions are satisfied by the implementation and regression tests.
+The next stage is Step 5: implement the small–large contact geometry, weighted
+overlap correction, and restitution impulse, then verify them independently
+against momentum, restitution, and kinetic-energy identities.
