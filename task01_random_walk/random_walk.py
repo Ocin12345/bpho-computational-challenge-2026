@@ -246,7 +246,7 @@ def validate_walk(result: RandomWalkResult) -> ValidationReport:
     """Check exact structural and numerical requirements for one walk.
 
     These checks are deterministic. Statistical predictions such as mean
-    squared displacement require an ensemble of walks and belong to Step 6.
+    squared displacement require the separate ensemble analysis.
     """
 
     failures: list[str] = []
