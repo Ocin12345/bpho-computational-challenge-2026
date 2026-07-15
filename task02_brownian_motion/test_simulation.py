@@ -300,7 +300,7 @@ class ReferenceSimulationIntegrationTests(unittest.TestCase):
         parameters = result.parameters
         diagnostics = result.diagnostics
 
-        self.assertEqual(result.time_grid.n_steps, 17_706)
+        self.assertEqual(result.time_grid.n_steps, 35_411)
         self.assertEqual(result.time_grid.final_time_ps, 200.0)
         self.assertGreater(diagnostics.total_contacts, 0)
         self.assertGreater(diagnostics.total_impulses, 0)

@@ -3,6 +3,7 @@ __pycache__/
 *.py[cod]
 .pytest_cache/
 .venv/
+task02_brownian_motion/.analysis_cache/
 venv/
 env/
 .ipynb_checkpoints/

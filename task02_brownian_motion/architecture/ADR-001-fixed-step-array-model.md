@@ -47,7 +47,7 @@ computed from the configuration, avoiding duplicated constants.
 
 **FixedTimeGrid** stores a constant step size and read-only array of times. An
 explicitly requested time step acts as an upper bound. Without one, the builder
-uses a measured 40% safety factor below the nominal initial ceiling. It then
+uses a measured 20% safety factor below the nominal initial ceiling. It then
 slightly reduces the candidate when necessary so that the final point is
 exactly the requested maximum time.
 
@@ -99,9 +99,9 @@ baseline deliberately omits explicit small-small collisions.
 - small-particle positions only at selected animation frames; and
 - immutable per-step counts and aggregate numerical diagnostics.
 
-The integrated reference run uses 17,706 physics steps after applying the
+The integrated reference run uses 35,411 physics steps after applying the
 measured time-step safety factor. A full small-particle position history would
-therefore require about 283 MB. Keeping 240 display frames requires about
+therefore require about 567 MB. Keeping 240 display frames requires about
 3.8 MB instead. Result arrays are copied and made read-only so later plotting
 cannot accidentally alter the evidence.
 

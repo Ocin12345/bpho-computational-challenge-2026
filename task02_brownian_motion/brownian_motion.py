@@ -97,7 +97,7 @@ class BrownianParameters:
     max_time_ps: float = 200.0
     max_step_fraction: float = 0.10
     randomization_step_fraction: float = 0.01
-    automatic_time_step_safety_factor: float = 0.40
+    automatic_time_step_safety_factor: float = 0.20
     requested_time_step_ps: float | None = None
     max_collision_passes: int = 16
     seed: int | None = 2026

@@ -64,7 +64,7 @@ class BrownianParameterTests(unittest.TestCase):
         )
         self.assertAlmostEqual(
             parameters.automatic_time_step_safety_factor,
-            0.40,
+            0.20,
         )
         self.assertEqual(parameters.max_collision_passes, 16)
 
@@ -152,8 +152,8 @@ class TimeGridTests(unittest.TestCase):
         parameters = BrownianParameters()
         grid = create_time_grid(parameters)
 
-        self.assertEqual(grid.n_steps, 17_706)
-        self.assertEqual(grid.times_ps.shape, (17_707,))
+        self.assertEqual(grid.n_steps, 35_411)
+        self.assertEqual(grid.times_ps.shape, (35_412,))
         self.assertEqual(grid.times_ps[0], 0.0)
         self.assertEqual(grid.final_time_ps, parameters.max_time_ps)
         self.assertLessEqual(

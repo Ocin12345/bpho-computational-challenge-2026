@@ -2,14 +2,15 @@
 
 ## Status
 
-Steps 2 through 7 are complete. The mathematical model, validated architecture,
+Steps 2 through 8 are complete. The mathematical model, validated architecture,
 reproducible initialization, transport physics, collision physics, complete
 simulation loop, diagnostics, and memory-aware recording are implemented and
 tested. Controlled convergence and full-reference time-step refinement also
-pass their declared validation thresholds.
+pass their declared validation thresholds. The statistical ensembles and
+controlled parameter experiments pass all eight pre-declared checks.
 
-Step 8 will run statistical ensembles and controlled parameter experiments.
-Final visuals and presentation material remain later stages.
+Step 9 will create the final scientific figures and animation. Presentation
+material remains Step 10.
 
 ## Official objective
 
@@ -88,7 +89,7 @@ coupling unrelated random choices.
 The large particle's position and velocity will be retained at every physics
 step for analysis. Small-particle positions will be saved only at up to 240
 selected display frames. For the reference grid this reduces small-position
-storage from about $283\ \mathrm{MB}$ to about $3.8\ \mathrm{MB}$.
+storage from about $567\ \mathrm{MB}$ to about $3.8\ \mathrm{MB}$.
 
 Files:
 
@@ -101,6 +102,9 @@ Files:
 - [numerical validation program](validation.py);
 - [validation command-line runner](validate_task02.py);
 - [saved validation evidence](validation/reference_validation.json); and
+- [ensemble-analysis program](analysis.py);
+- [analysis command-line runner](analyze_task02.py);
+- [saved statistical report](analysis/analysis_report.json); and
 - [ADR-001: fixed-step NumPy array model](architecture/ADR-001-fixed-step-array-model.md).
 
 Run the Task 2 tests from the repository root with:
@@ -118,6 +122,10 @@ For a short terminal check, use:
 Reproduce the complete Step 7 validation with:
 
     python3 -m task02_brownian_motion.validate_task02
+
+Reproduce all Step 8 ensembles and statistics with:
+
+    python3 -m task02_brownian_motion.analyze_task02 --workers 4
 
 The architecture, initialization, transport, collision, and integration
 contracts were implemented and tested as separate sequential stages before
@@ -361,7 +369,7 @@ The regression suite includes:
 - exact, corner, radius-specific, and multiple wall impacts;
 - transactional failure of an unsafe time step;
 - repeated-seed trajectory reproduction; and
-- all 17,706 transport steps of the 200 ps reference configuration.
+- all 35,411 transport steps of the 200 ps reference configuration.
 
 This check deliberately isolates transport. The collision engine also retains
 its own independent tests even though Step 6 now combines both operations.
@@ -616,8 +624,8 @@ gives a nominal ceiling of approximately $0.0282\ \mathrm{ps}$.
 
 Integrated tests showed that using this ceiling directly left no margin after
 collisions accelerated some particles. The automatic baseline therefore uses
-40% of the nominal ceiling. Its actual fixed step is
-$0.011295606\ \mathrm{ps}$, giving 17,706 steps over 200 ps. The physical
+20% of the nominal ceiling. Its actual fixed step is
+$0.005647962\ \mathrm{ps}$, giving 35,411 steps over 200 ps. The physical
 acceptance limit remains $0.10r=0.016\ \mathrm{nm}$ per step.
 
 A user may explicitly request any initial step up to the nominal ceiling, but
@@ -679,23 +687,23 @@ $t_{\max}=200\ \mathrm{ps}$, the verified engine completed:
 
 | Quantity | Measured result |
 | --- | ---: |
-| Fixed physics steps | 17,706 |
-| Direction resets | 47,200 |
-| Small-particle wall impacts | 14,519 |
+| Fixed physics steps | 35,411 |
+| Direction resets | 47,201 |
+| Small-particle wall impacts | 14,447 |
 | Large-particle wall impacts | 0 |
-| Small–large contacts | 5,101 |
-| Applied impulses | 3,698 |
-| Maximum contact passes in one step | 11 |
-| Maximum one-step displacement | $0.012029050\ \mathrm{nm}$ |
+| Small–large contacts | 4,307 |
+| Applied impulses | 3,721 |
+| Maximum contact passes in one step | 10 |
+| Maximum one-step displacement | $0.006351287\ \mathrm{nm}$ |
 | Allowed one-step displacement | $0.016000000\ \mathrm{nm}$ |
-| Maximum normalized momentum error | $4.05\times10^{-16}$ |
-| Maximum normalized restitution error | $9.36\times10^{-16}$ |
-| Maximum normalized energy-identity error | $1.85\times10^{-15}$ |
+| Maximum normalized momentum error | $3.97\times10^{-16}$ |
+| Maximum normalized restitution error | $1.06\times10^{-15}$ |
+| Maximum normalized energy-identity error | $1.74\times10^{-15}$ |
 | Maximum residual penetration | $0\ \mathrm{nm}$ |
-| Final tracer displacement in this one run | $1.485777625\ \mathrm{nm}$ |
+| Final tracer displacement in this one run | $0.644497452\ \mathrm{nm}$ |
 
 The single final displacement is a reproducibility check, not a statistical
-conclusion. Step 8 will use ensembles rather than interpreting one trajectory.
+conclusion. Step 8 uses ensembles rather than interpreting one trajectory.
 
 ## Step 7 numerical validation
 
@@ -726,9 +734,9 @@ baseline, half step, and quarter step:
 
 | Refinement | Steps | Contacts | Impulses | Max step distance (nm) | RMS path difference from previous (nm) |
 | ---: | ---: | ---: | ---: | ---: | ---: |
-| $1$ | 17,706 | 5,101 | 3,698 | 0.0120291 | — |
-| $2$ | 35,412 | 4,250 | 3,714 | 0.00618760 | 0.728364 |
-| $4$ | 70,824 | 4,042 | 3,698 | 0.00330018 | 1.61078 |
+| $1$ | 35,411 | 4,307 | 3,721 | 0.00635129 | — |
+| $2$ | 70,822 | 3,982 | 3,725 | 0.00307115 | 1.55259 |
+| $4$ | 141,644 | 3,960 | 3,789 | 0.00160640 | 0.787715 |
 
 The individual trajectories do not converge point by point. That is expected:
 small changes in collision timing alter later collision order and thermal-bath
@@ -736,7 +744,7 @@ directions, so a Brownian trajectory is chaotic. Claiming otherwise would be a
 misleading validation criterion.
 
 The number of physically applied impulses is stable, however:
-$3698,3714,3698$, a relative span of only $0.432\%$. Separating contact
+$3721,3725,3789$, a relative span of $1.816\%$. Separating contact
 corrections decrease with refinement because shallower overlaps need fewer
 positional adjustments.
 
@@ -757,8 +765,83 @@ The saved evidence is available as:
   and
 - [reference refinement data](validation/reference_time_step_refinement.csv).
 
-Step 8 will therefore compare ensemble means, confidence intervals, MSD, and
-effective diffusion estimates. It will not compare individual chaotic paths.
+Step 8 therefore compares ensemble means, confidence intervals, MSD, and
+effective diffusion estimates rather than individual chaotic paths.
+
+## Step 8 ensemble statistics and parameter experiments
+
+The final design uses:
+
+- 64 baseline seeds, 3000–3063;
+- the same 64 seeds at half the baseline time step;
+- the first 12 seeds at every parameter-comparison level;
+- the fixed MSD fitting window $20\leq t\leq100\ \mathrm{ps}$;
+- 2,000 fixed-seed bootstrap resamples for diffusion intervals; and
+- one factor changed at a time.
+
+An initial 32-run baseline and 16-run time-step comparison was too noisy to
+pass the unchanged linearity and time-step criteria. The fitting window and
+thresholds were not altered. Instead, the model's automatic step was promoted
+to the previously tested half step, the two main ensembles were expanded to 64
+runs, and every simulation was regenerated. This decision and both failed
+diagnostics were reported during development rather than hidden.
+
+### Baseline statistical checks
+
+All final checks pass:
+
+| Check | Measured result | Criterion |
+| --- | --- | --- |
+| Mean horizontal displacement | $-0.2055\ \mathrm{nm}$; 95% CI $[-0.4321,0.0211]$ | CI contains zero |
+| Mean vertical displacement | $0.0912\ \mathrm{nm}$; 95% CI $[-0.1342,0.3167]$ | CI contains zero |
+| Horizontal–vertical spread difference | $0.0417\ \mathrm{nm^2}$; 95% CI $[-0.3530,0.4364]$ | CI contains zero |
+| Effective diffusion coefficient | $2.2524\times10^{-3}\ \mathrm{nm^2\,ps^{-1}}$ | Bootstrap lower limit positive |
+| Diffusion 95% bootstrap CI | $[1.5593,3.0096]\times10^{-3}\ \mathrm{nm^2\,ps^{-1}}$ | Positive |
+| MSD linearity over 20–100 ps | $R^2=0.983239$ | $R^2\geq0.90$ |
+| Baseline versus half-step $D$ | Relative difference $5.679\%$; intervals overlap | Difference below 25% |
+| Independent 32-seed halves | Both $D>0$; intervals overlap | Same conclusion |
+| Numerical validity | 224 of 224 unique runs pass | No omitted run |
+
+The zero-containing mean intervals and paired spread interval support the
+expected absence of directional bias. The positive approximately linear MSD
+supports an intermediate diffusive regime in this model.
+
+### Controlled parameter results
+
+The comparison ensembles use the same 12 seeds at every level:
+
+| Experiment | Level | $D$ ($\mathrm{nm^2\,ps^{-1}}$) | Bootstrap 95% CI | Mean impulses per ps |
+| --- | ---: | ---: | ---: | ---: |
+| Particle count | 250 | 0.019157 | [0.011238, 0.027471] | 4.756 |
+| Particle count | 500 | 0.003257 | [0.000863, 0.006309] | 9.556 |
+| Particle count | 1000 | 0.001872 | [0.000520, 0.003668] | 19.015 |
+| Mass ratio $M/m$ | 5 | 0.001369 | [0.000611, 0.002132] | 20.210 |
+| Mass ratio $M/m$ | 10 | 0.001872 | [0.000520, 0.003668] | 19.015 |
+| Mass ratio $M/m$ | 20 | 0.001793 | [0.000569, 0.003169] | 18.685 |
+| Restitution $C$ | 0.5 | 0.001912 | [0.000547, 0.003487] | 21.194 |
+| Restitution $C$ | 0.8 | 0.001968 | [0.000599, 0.003564] | 19.659 |
+| Restitution $C$ | 1.0 | 0.001872 | [0.000520, 0.003668] | 19.015 |
+| Knudsen parameter | 7.5 | 0.001578 | [0.000210, 0.003416] | 18.593 |
+| Knudsen parameter | 15 | 0.001872 | [0.000520, 0.003668] | 19.015 |
+| Knudsen parameter | 30 | 0.001553 | [0.000907, 0.002325] | 18.870 |
+
+Increasing $N$ raises the collision rate but strongly reduces the fitted tracer
+diffusion in this finite model. The numerous impacts more frequently oppose
+one another, while sparse cases permit longer unbalanced tracer excursions.
+This is a result of the simplified scaling model, not a universal claim about
+changing the real molecular density.
+
+The mass-ratio, restitution, and Knudsen confidence intervals overlap broadly,
+so these 12-run comparisons do not establish clear monotonic effects. Their
+measured values are retained rather than over-interpreted.
+
+Machine-readable evidence:
+
+- [complete analysis report](analysis/analysis_report.json);
+- [ensemble summaries](analysis/ensemble_summary.csv);
+- [parameter comparisons](analysis/experiment_comparisons.csv);
+- [baseline MSD and confidence bands](analysis/baseline_msd.csv); and
+- [all 224 run-level metrics](analysis/run_metrics.csv).
 
 ## Theoretical statistical behaviour
 
@@ -916,7 +999,7 @@ Step 4 is complete when:
 7. state time advances only to exact fixed-grid values;
 8. unsafe displacement is rejected before any partial mutation;
 9. complete repeated transport remains finite and within the container; and
-10. the official 200 ps reference transport passes all 17,706 steps.
+10. the official 200 ps reference transport passes all 35,411 steps.
 
 All ten conditions are satisfied by the implementation and regression tests.
 
@@ -973,7 +1056,27 @@ Step 7 is complete when:
 9. chaotic pointwise path divergence is reported rather than hidden; and
 10. machine-readable JSON and CSV evidence can be regenerated by one command.
 
-All ten conditions are satisfied. The next stage is Step 8: pre-declare the
-ensemble design and controlled parameter values, run the experiments, save
-reproducible data, compute confidence intervals and MSD, and interpret the
-results without selecting favourable windows afterward.
+All ten conditions are satisfied.
+
+## Step 8 completion condition
+
+Step 8 is complete when:
+
+1. seed sets, fit window, bootstrap count, and parameter levels are fixed;
+2. mean horizontal and vertical 95% intervals include zero;
+3. the paired horizontal–vertical spread interval includes zero;
+4. the diffusion confidence interval is positive;
+5. intermediate-window MSD has $R^2\geq0.90$;
+6. baseline and half-step $D$ differ by less than 25% with overlapping
+   intervals;
+7. independent seed halves reproduce a positive overlapping $D$ conclusion;
+8. particle count, mass ratio, restitution, and Knudsen level are varied one at
+   a time;
+9. every ensemble run passes the deterministic numerical limits;
+10. failed preliminary statistical checks and the sample-size response are
+    reported transparently; and
+11. JSON and CSV outputs can be regenerated through one cached command.
+
+All eleven conditions are satisfied. Step 9 will turn the saved evidence into
+publication-quality figures and a polished animation without rerunning or
+selectively filtering the statistical experiments.
