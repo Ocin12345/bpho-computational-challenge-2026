@@ -1,34 +1,103 @@
 # BPhO Computational Challenge 2026
 
-Project workspace for the British Physics Olympiad Computational Challenge.
+Private working repository for our British Physics Olympiad Computational Challenge project.
 
-## Project goals
+The repository is currently **private**. We can make it public later if we decide that
+we want to share the finished work.
 
-- Implement the challenge models in Python.
-- Keep code, calculations, figures, and explanations together.
-- Record enough working to support the final three-minute screencast.
+## What we are making
 
-## Suggested workflow
+We are building physics models in Python, checking them with calculations and graphs,
+and keeping enough evidence to explain our working in the final screencast.
 
-1. Work on one task at a time.
-2. Save reusable code in the relevant `taskXX_*` folder.
-3. Save exploratory notebooks in `notebooks/`.
-4. Save generated graphs in `figures/`.
-5. Pull before working and commit/push before switching computers.
+Python is our main tool because it is flexible for numerical modelling, plotting,
+simulation, animation, and possible extensions. Excel and other software are also
+allowed by the competition if they are useful for a particular task.
 
-## Environment
+## Competition requirements
 
-The intended environment uses Python with NumPy, Matplotlib, SciPy, and Jupyter.
+- Work individually or in a pair.
+- Complete the challenge tasks at the level we are aiming for.
+- Keep the code, calculations, graphs, and explanations as evidence of the working.
+- Submit a maximum three-minute **unlisted YouTube screencast**.
+- The screencast should show the models, code or spreadsheets, graphs, results, and
+  explanation of how the results were obtained.
+- The 2026 registration deadline is **30 July 2026**.
+- The final submission deadline is **10pm on Monday 10 August 2026**.
+
+### Award levels
+
+- **Bronze:** spreadsheet-based challenge elements completed, with some basic coding
+  attempted.
+- **Silver:** all tasks completed in code.
+- **Gold:** all tasks completed to a high standard, with possible extensions such as
+  apps, improved models, or a research-style report.
+
+## Task roadmap
+
+| Folder | Topic |
+| --- | --- |
+| `task01_random_walk` | Random walk |
+| `task02_brownian_motion` | Brownian motion |
+| `task03_thermal_radiation` | Black-body radiation and heat capacity |
+| `task04_photoelectric_effect` | Photoelectric effect |
+| `task05_hydrogen_spectrum` | Hydrogen spectrum and Bohr model |
+| `task06_electron_diffraction` | Electron diffraction |
+| `task07_particle_in_box` | Particle in a box and the uncertainty principle |
+| `task08_quantum_cryptography` | Quantum cryptography |
+| `task09_compton_scattering` | Compton scattering |
+| `task10_hydrogenic_orbitals` | Hydrogenic orbitals |
+
+## Project layout
+
+```text
+taskXX_topic/       Code and notes for one challenge task
+notebooks/          Exploratory Jupyter notebooks
+figures/            Saved graphs and visual results
+reports/            Written explanations and final write-up material
+data/               Small input data files
+requirements.txt    Python packages used by the project
+```
+
+Large downloads, videos, and local Python environments should stay outside GitHub.
+Never commit passwords, access tokens, or other private information.
+
+## Setting up Python
+
+From the project folder, create a virtual environment and install the project packages:
 
 ```bash
 python3 -m venv .venv
 source .venv/bin/activate
-pip install -r requirements.txt
+python -m pip install -r requirements.txt
 ```
 
-The virtual environment is intentionally excluded from Git.
+The `.venv` folder is deliberately excluded from Git.
 
-## Competition reminder
+## Using both computers
 
-The final entry is a maximum three-minute unlisted YouTube screencast showing the
-models, code or spreadsheets, graphs, results, and explanation of the working.
+The MacBook Air is the main computer because it is available every day. The 4090 laptop
+is a second computer for backup or more demanding visualisations.
+
+Before starting work on either computer:
+
+```bash
+git pull
+```
+
+When stopping work or changing computers:
+
+```bash
+git add .
+git commit -m "Describe what changed"
+git push
+```
+
+This keeps GitHub as the shared source of truth between both computers.
+
+## Official resources
+
+- [BPhO Computational Challenge page](https://www.bpho.org.uk/bpho/computational-challenge/)
+- [2026 competition specification](https://www.bpho.org.uk/bpho/computational-challenge/BPhO_ComPhys_Challenge_2026.pdf)
+- [2026 course and challenge materials ZIP](https://www.bpho.org.uk/bpho/computational-challenge/BPhO_ComPhys_Challenge_2026.zip)
+- [Anaconda/Python installation guide](https://www.bpho.org.uk/bpho/computational-challenge/Downloading_anaconda.pdf)
