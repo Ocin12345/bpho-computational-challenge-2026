@@ -7,8 +7,8 @@ must point in a random direction. Its angle from the positive horizontal axis is
 selected independently from a uniform distribution between $0$ and $2\pi$
 radians.
 
-This document defines the mathematical model and the predictions that the
-Python simulation must reproduce.
+This document defines the mathematical model, explains its implementation, and
+tests the Python simulation against analytical predictions.
 
 ## Variables
 
@@ -231,8 +231,33 @@ python3 -m unittest discover -s task01_random_walk -p 'test_*.py' -v
 
 The tests verify input validation, array dimensions, inclusion of the origin,
 the angular interval, fixed step length, cumulative positions, reproducibility,
-and command-line behaviour. Ensemble statistics and presentation graphics are
-handled in later stages.
+and command-line behaviour. Separate tests cover the ensemble statistics,
+figures, and animation described below.
+
+## Computational method
+
+The numerical method follows the equations directly:
+
+1. NumPy's random-number generator samples $N$ independent angles from the
+   half-open interval $[0,2\pi)$.
+2. Each angle is converted into the fixed-length displacement
+   $s(\cos\theta_i,\sin\theta_i)$.
+3. A cumulative sum of the displacement vectors produces all positions from
+   $(x_1,y_1)$ to $(x_N,y_N)$; the origin is stored separately as
+   $(x_0,y_0)$.
+4. Deterministic validation checks the array shapes, origin, angle range,
+   finite values, cumulative positions, final displacement, and length of
+   every step before a result is used.
+5. For statistical experiments, complete paths are unnecessary. Walks are
+   processed in batches and only their endpoints are retained, allowing large
+   ensembles to be tested without excessive memory use.
+
+The core model is in [`random_walk.py`](random_walk.py), while
+[`statistical_analysis.py`](statistical_analysis.py) contains the independent
+large-sample analysis. A seed makes an experiment exactly reproducible, but it
+does not alter the probability distribution being sampled. Changing the seed
+changes the particular paths while preserving the same theoretical
+predictions.
 
 ## Single-walk figure
 
@@ -334,3 +359,105 @@ The 1,000-step trajectory is sampled into a compact set of animation frames;
 the numerical simulation itself still contains and calculates every step.
 
 ![An animated two-dimensional random walk showing the path, current position, and displacement as the step number increases.](../figures/task01/random_walk_animation.gif)
+
+## Discussion and interpretation
+
+### What one trajectory shows
+
+The reference trajectory takes 1,000 steps of length 1 and finishes at
+
+$$
+(x_{1000},y_{1000})=(-15.93,-43.61),
+$$
+
+giving a final displacement of approximately 46.43 units. Its total travelled
+distance and theoretical RMS displacement are very different quantities:
+
+$$
+L_{\mathrm{path}}=Ns=1000,
+\qquad
+r_{\mathrm{RMS}}=s\sqrt{N}=\sqrt{1000}\approx31.62.
+$$
+
+The final displacement is only about 4.64% of the total path length because
+steps in different directions repeatedly cancel. Its value is larger than the
+theoretical RMS value, but this is not a disagreement: $r_{\mathrm{RMS}}$ is an
+ensemble statistic, not the distance that every individual walk must reach.
+
+The irregular loops and excursions in the figure are therefore expected. A
+single trajectory demonstrates the construction and fixed step length, but it
+cannot by itself establish isotropy or verify an average law. Those claims
+require many independent walks.
+
+### What the ensemble establishes
+
+The 50-walk figure shows that identical parameters can produce visibly
+different trajectories and endpoints. The larger 50,000-walk experiments then
+provide quantitative evidence:
+
+- every confidence interval for the mean $x$ and $y$ endpoint contains zero,
+  so there is no statistically resolved drift;
+- the two coordinate variances agree with $Ns^2/2$ to within 1.01%, supporting
+  equal spreading in perpendicular directions;
+- the MSD agrees with $Ns^2$ to within 0.77% across all tested values of $N$;
+- the fitted MSD slope, $0.99920\pm0.00306$, contains the theoretical value 1
+  within its 95% confidence interval; and
+- the measured 50% and 95% radial containment fractions are 50.16% and 95.21%,
+  closely matching the approximately Rayleigh endpoint distribution.
+
+The individual MSD measurements fluctuate both above and below theory, as
+finite samples should. Their small, unsystematic deviations and the confidence
+interval on the fitted slope provide stronger evidence than visual similarity
+alone.
+
+### Meaning of the square-root law
+
+The total distance travelled increases linearly as $Ns$, but independent
+directions cause cancellation in the net displacement. Consequently, the
+typical displacement grows only as
+
+$$
+r_{\mathrm{RMS}}=s\sqrt{N}.
+$$
+
+Doubling the number of steps therefore multiplies the RMS displacement by
+$\sqrt{2}$, not 2; four times as many steps are needed to double it. This is the
+central physical behaviour of an unbiased random walk and is the reason its
+mean squared displacement is proportional to $N$.
+
+### Reliability and limitations
+
+The deterministic validation found a maximum step-length error of
+$1.11\times10^{-16}$ for the reference walk, which is at the level expected
+from floating-point arithmetic. Statistical conclusions are reported with 95%
+confidence intervals, and all figures and data can be regenerated from the
+documented commands and seeds.
+
+The model nevertheless has deliberate limits:
+
+- it represents an unbounded, two-dimensional plane;
+- all steps have the same length and all directions are independent;
+- it contains no boundary, drift, force, interaction, or directional
+  correlation;
+- a step is an abstract discrete index unless a physical time per step is
+  specified;
+- its random numbers are pseudorandom, although suitable for this numerical
+  experiment; and
+- the normal and Rayleigh endpoint distributions are large-$N$ approximations,
+  whereas $\langle r_N^2\rangle=Ns^2$ follows exactly from the model
+  assumptions.
+
+These limitations define the scope of the result rather than errors in the
+implementation. Adding any excluded effect would create a different model and
+would require new theoretical predictions for comparison.
+
+## Conclusion
+
+The simulation satisfies the Task 1 definition: it constructs $N$ independent
+two-dimensional steps of fixed length $s$ with uniformly random directions.
+Direct numerical checks confirm the required geometry, and large ensembles
+show zero drift, equal coordinate spreading, a circular endpoint distribution,
+and the predicted linear relation $\langle r_N^2\rangle=Ns^2$. The agreement
+between derivation, implementation, automated tests, and measured uncertainty
+supports the conclusion that the model is both computationally correct and
+statistically consistent with an isotropic random walk.
