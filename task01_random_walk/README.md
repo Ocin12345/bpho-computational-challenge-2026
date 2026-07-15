@@ -233,3 +233,20 @@ The tests verify input validation, array dimensions, inclusion of the origin,
 the angular interval, fixed step length, cumulative positions, reproducibility,
 and command-line behaviour. Ensemble statistics and presentation graphics are
 handled in later stages.
+
+## Single-walk figure
+
+Generate the reference figure with:
+
+```bash
+python3 -m task01_random_walk.plot_single_walk \
+  --steps 1000 --step-size 1 --seed 2026
+```
+
+This produces a high-resolution PNG for convenient viewing and an SVG for
+resolution-independent presentation. Path colour shows the progression from
+the first to the final step. The start, finish, final displacement, parameters,
+and step number are labelled, and the horizontal and vertical axes use equal
+scales to prevent geometric distortion.
+
+![A 1,000-step two-dimensional random walk with its start, finish, and final displacement labelled.](../figures/task01/single_walk.png)
