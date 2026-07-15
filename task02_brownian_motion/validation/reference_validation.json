@@ -1,0 +1,164 @@
+{
+  "model": "BPhO 2026 Task 2 Brownian motion",
+  "seed": 2026,
+  "passed": true,
+  "checks": [
+    {
+      "name": "controlled_error_decreases",
+      "passed": true,
+      "measured": "5.678655e-02 nm -> 2.818027e-02 nm -> 1.406282e-02 nm -> 7.018461e-03 nm",
+      "threshold": "strict decrease at every halving",
+      "explanation": "RMS endpoint error is averaged over collision phases so grid-alignment accidents do not dominate."
+    },
+    {
+      "name": "controlled_first_order_convergence",
+      "passed": true,
+      "measured": "minimum observed order 1.002660",
+      "threshold": "order >= 0.9",
+      "explanation": "A finite-step overlap correction is expected to converge approximately at first order."
+    },
+    {
+      "name": "all_recorded_geometry_valid",
+      "passed": true,
+      "measured": "3 refined runs checked",
+      "threshold": "finite, inside walls, and no recorded overlap",
+      "explanation": "Every stored frame and every tracer history point is checked."
+    },
+    {
+      "name": "runtime_displacement_limit",
+      "passed": true,
+      "measured": "baseline uses 75.182% of limit",
+      "threshold": "maximum displacement <= 0.016000000 nm",
+      "explanation": "The automatic baseline retains margin and refinements reduce the distance further."
+    },
+    {
+      "name": "collision_identity_tolerances",
+      "passed": true,
+      "measured": "worst normalized error 2.030927e-15",
+      "threshold": "< 1e-12",
+      "explanation": "Momentum, restitution, and analytical energy identities are checked on every applied impulse."
+    },
+    {
+      "name": "penetration_tolerance",
+      "passed": true,
+      "measured": "worst residual 0.000000e+00 nm",
+      "threshold": "<= 1e-9 times the small-large contact distance",
+      "explanation": "No unresolved overlap remains after a complete step."
+    },
+    {
+      "name": "collision_pass_convergence",
+      "passed": true,
+      "measured": "maximum 11 passes",
+      "threshold": "<= 16 passes",
+      "explanation": "Post-correction walls and simultaneous contacts converge within the configured ceiling."
+    },
+    {
+      "name": "refined_impulse_count_stability",
+      "passed": true,
+      "measured": "counts [3698, 3714, 3698]; relative span 0.432%",
+      "threshold": "relative span < 2%",
+      "explanation": "Individual chaotic paths diverge, so the physically relevant event count is compared instead of pointwise trajectories."
+    },
+    {
+      "name": "equal_seed_reproducibility",
+      "passed": true,
+      "measured": "all compact-run arrays compared exactly",
+      "threshold": "bit-for-bit equality",
+      "explanation": "Positions, velocities, frames, contacts, impulses, and reset histories must all reproduce."
+    }
+  ],
+  "controlled_convergence": [
+    {
+      "n_steps": 16,
+      "time_step_ps": 0.125,
+      "rms_endpoint_error_nm": 0.05678654649171223,
+      "maximum_endpoint_error_nm": 0.09768802738514294,
+      "observed_order_from_previous": null
+    },
+    {
+      "n_steps": 32,
+      "time_step_ps": 0.0625,
+      "rms_endpoint_error_nm": 0.028180274059577022,
+      "maximum_endpoint_error_nm": 0.04827743894501202,
+      "observed_order_from_previous": 1.0108635338028358
+    },
+    {
+      "n_steps": 64,
+      "time_step_ps": 0.03125,
+      "rms_endpoint_error_nm": 0.014062823564187069,
+      "maximum_endpoint_error_nm": 0.024454947238411448,
+      "observed_order_from_previous": 1.0027993513225364
+    },
+    {
+      "n_steps": 128,
+      "time_step_ps": 0.015625,
+      "rms_endpoint_error_nm": 0.0070184614775168335,
+      "maximum_endpoint_error_nm": 0.0122274736190945,
+      "observed_order_from_previous": 1.002659574949427
+    }
+  ],
+  "reference_refinement": [
+    {
+      "refinement_factor": 1,
+      "n_steps": 17706,
+      "time_step_ps": 0.011295606009262396,
+      "final_displacement_x_nm": -1.4842253634350895,
+      "final_displacement_y_nm": 0.06789860505119982,
+      "final_displacement_nm": 1.485777624690829,
+      "rms_path_difference_from_previous_nm": null,
+      "maximum_path_difference_from_previous_nm": null,
+      "total_contacts": 5101,
+      "total_impulses": 3698,
+      "total_direction_resets": 47200,
+      "maximum_collision_passes": 11,
+      "maximum_displacement_nm": 0.01202904953351022,
+      "maximum_residual_penetration_nm": 0.0,
+      "maximum_normalized_momentum_error": 4.0464010835121063e-16,
+      "maximum_normalized_restitution_error": 9.352157559546978e-16,
+      "maximum_normalized_energy_identity_error": 1.8424869699988532e-15
+    },
+    {
+      "refinement_factor": 2,
+      "n_steps": 35412,
+      "time_step_ps": 0.005647803004631198,
+      "final_displacement_x_nm": -0.715470580463144,
+      "final_displacement_y_nm": -0.08871303522866647,
+      "final_displacement_nm": 0.7209494809816779,
+      "rms_path_difference_from_previous_nm": 0.7283642511409905,
+      "maximum_path_difference_from_previous_nm": 1.3914576034513173,
+      "total_contacts": 4250,
+      "total_impulses": 3714,
+      "total_direction_resets": 47201,
+      "maximum_collision_passes": 10,
+      "maximum_displacement_nm": 0.006187600291036316,
+      "maximum_residual_penetration_nm": 0.0,
+      "maximum_normalized_momentum_error": 3.692866851274921e-16,
+      "maximum_normalized_restitution_error": 1.041095038747028e-15,
+      "maximum_normalized_energy_identity_error": 2.0309274268183667e-15
+    },
+    {
+      "refinement_factor": 4,
+      "n_steps": 70824,
+      "time_step_ps": 0.002823901502315599,
+      "final_displacement_x_nm": -1.88492450261539,
+      "final_displacement_y_nm": -1.9639539040944758,
+      "final_displacement_nm": 2.722141678525901,
+      "rms_path_difference_from_previous_nm": 1.6107777540418204,
+      "maximum_path_difference_from_previous_nm": 2.491161141276202,
+      "total_contacts": 4042,
+      "total_impulses": 3698,
+      "total_direction_resets": 47201,
+      "maximum_collision_passes": 10,
+      "maximum_displacement_nm": 0.0033001816112922483,
+      "maximum_residual_penetration_nm": 0.0,
+      "maximum_normalized_momentum_error": 3.543726690228705e-16,
+      "maximum_normalized_restitution_error": 9.84246643124152e-16,
+      "maximum_normalized_energy_identity_error": 1.7301500732843554e-15
+    }
+  ],
+  "interpretation": [
+    "The controlled collision study demonstrates first-order finite-step convergence after averaging over collision phase.",
+    "Pointwise Brownian trajectories separate under refinement because collision ordering and random-bath timing make the many-particle dynamics chaotic.",
+    "Applied-impulse counts remain stable across the baseline, half-step, and quarter-step reference runs; Step 8 will test ensemble statistics rather than demand identical paths."
+  ]
+}

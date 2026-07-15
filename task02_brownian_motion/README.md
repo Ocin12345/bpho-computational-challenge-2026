@@ -2,14 +2,14 @@
 
 ## Status
 
-Steps 2 through 6 are complete. The mathematical model, validated architecture,
+Steps 2 through 7 are complete. The mathematical model, validated architecture,
 reproducible initialization, transport physics, collision physics, complete
 simulation loop, diagnostics, and memory-aware recording are implemented and
-tested.
+tested. Controlled convergence and full-reference time-step refinement also
+pass their declared validation thresholds.
 
-Step 7 will independently test numerical convergence and broader deterministic
-validation. Statistical experiments, final visuals, and presentation material
-remain later stages.
+Step 8 will run statistical ensembles and controlled parameter experiments.
+Final visuals and presentation material remain later stages.
 
 ## Official objective
 
@@ -98,6 +98,9 @@ Files:
 - [transport tests](test_transport.py);
 - [collision tests](test_collisions.py);
 - [integrated simulation tests](test_simulation.py); and
+- [numerical validation program](validation.py);
+- [validation command-line runner](validate_task02.py);
+- [saved validation evidence](validation/reference_validation.json); and
 - [ADR-001: fixed-step NumPy array model](architecture/ADR-001-fixed-step-array-model.md).
 
 Run the Task 2 tests from the repository root with:
@@ -111,6 +114,10 @@ Run the complete official-scale baseline with:
 For a short terminal check, use:
 
     python3 -m task02_brownian_motion.run_task02 --particles 100 --time-ps 5
+
+Reproduce the complete Step 7 validation with:
+
+    python3 -m task02_brownian_motion.validate_task02
 
 The architecture, initialization, transport, collision, and integration
 contracts were implemented and tested as separate sequential stages before
@@ -690,6 +697,69 @@ $t_{\max}=200\ \mathrm{ps}$, the verified engine completed:
 The single final displacement is a reproducibility check, not a statistical
 conclusion. Step 8 will use ensembles rather than interpreting one trajectory.
 
+## Step 7 numerical validation
+
+The independent validation program separates exact deterministic convergence
+from chaotic many-particle behaviour.
+
+### Controlled collision convergence
+
+A single analytical head-on collision was repeated over 61 different collision
+phases. This avoids accidentally making a coarse grid appear exact merely
+because contact happens to fall on one of its time points.
+
+| Steps over 2 ps | $\Delta t$ (ps) | RMS endpoint error (nm) | Observed order |
+| ---: | ---: | ---: | ---: |
+| 16 | 0.125000 | 0.0567865 | — |
+| 32 | 0.062500 | 0.0281803 | 1.01086 |
+| 64 | 0.031250 | 0.0140628 | 1.00280 |
+| 128 | 0.015625 | 0.00701846 | 1.00266 |
+
+Every halving reduces the RMS error by approximately two, demonstrating the
+expected first-order convergence of finite-step collision detection and
+overlap correction.
+
+### Complete reference refinement
+
+The full seed-2026, 1,000-particle, 200 ps simulation was then run at the
+baseline, half step, and quarter step:
+
+| Refinement | Steps | Contacts | Impulses | Max step distance (nm) | RMS path difference from previous (nm) |
+| ---: | ---: | ---: | ---: | ---: | ---: |
+| $1$ | 17,706 | 5,101 | 3,698 | 0.0120291 | — |
+| $2$ | 35,412 | 4,250 | 3,714 | 0.00618760 | 0.728364 |
+| $4$ | 70,824 | 4,042 | 3,698 | 0.00330018 | 1.61078 |
+
+The individual trajectories do not converge point by point. That is expected:
+small changes in collision timing alter later collision order and thermal-bath
+directions, so a Brownian trajectory is chaotic. Claiming otherwise would be a
+misleading validation criterion.
+
+The number of physically applied impulses is stable, however:
+$3698,3714,3698$, a relative span of only $0.432\%$. Separating contact
+corrections decrease with refinement because shallower overlaps need fewer
+positional adjustments.
+
+All three complete runs also pass:
+
+- finite coordinates and radius-aware wall geometry;
+- no overlap in any recorded frame;
+- the $0.016\ \mathrm{nm}$ displacement limit;
+- normalized momentum, restitution, and energy errors below $10^{-12}$;
+- residual penetration below $10^{-9}(r+R)$;
+- contact convergence within 16 passes; and
+- exact equal-seed reproduction of every recorded output.
+
+The saved evidence is available as:
+
+- [complete validation report](validation/reference_validation.json);
+- [controlled convergence data](validation/controlled_collision_convergence.csv);
+  and
+- [reference refinement data](validation/reference_time_step_refinement.csv).
+
+Step 8 will therefore compare ensemble means, confidence intervals, MSD, and
+effective diffusion estimates. It will not compare individual chaotic paths.
+
 ## Theoretical statistical behaviour
 
 The system has no preferred direction. Across many independent simulations,
@@ -886,7 +956,24 @@ Step 6 is complete when:
 9. the full 1,000-particle, 200 ps reference run passes all runtime limits; and
 10. a command-line entry point runs on either computer.
 
-All ten conditions are satisfied. The next stage is Step 7: create a separate
-validation program and test the baseline against refined time steps, repeated
-seeds, geometry invariants, collision identities, and declared pass/fail
-thresholds before running scientific parameter experiments.
+All ten conditions are satisfied.
+
+## Step 7 completion condition
+
+Step 7 is complete when:
+
+1. a controlled collision study averages over different grid phases;
+2. RMS endpoint error decreases at every time-step halving;
+3. observed convergence order is at least $0.9$;
+4. baseline, half-step, and quarter-step reference runs all complete;
+5. every refined run passes geometry and numerical-identity limits;
+6. the automatic baseline retains measured displacement margin;
+7. refined applied-impulse counts have relative span below $2\%$;
+8. equal seeds reproduce all recorded outputs exactly;
+9. chaotic pointwise path divergence is reported rather than hidden; and
+10. machine-readable JSON and CSV evidence can be regenerated by one command.
+
+All ten conditions are satisfied. The next stage is Step 8: pre-declare the
+ensemble design and controlled parameter values, run the experiments, save
+reproducible data, compute confidence intervals and MSD, and interpret the
+results without selecting favourable windows afterward.
