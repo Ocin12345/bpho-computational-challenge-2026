@@ -2,7 +2,7 @@
 
 ## Status
 
-Stages 1 through 11 are complete. The two official source files have been read,
+All 12 stages are complete. The two official source files have been read,
 and the mandatory model, reference inputs, baseline deliverables, optional
 extension, exclusions, staged workflow, and final acceptance boundary are
 frozen below. The complete equations, constants, units, physical domains,
@@ -28,6 +28,9 @@ motion and the quantitative model.
 The finished one-slide [PowerPoint package](../presentation/task04/README.md)
 contains the editable slide, selected assets, high-resolution preview, embedded
 speaker notes, timed narration, rehearsal explanation, and question guide.
+The [final acceptance report](FINAL_ACCEPTANCE.md) records the clean
+regeneration, complete tests, presentation checks, repository hygiene, private
+GitHub status, and accepted limitations.
 
 ## Official sources reviewed
 
@@ -662,3 +665,30 @@ Stage 11 is complete because:
 The next milestone is **Stage 12: clean regeneration, full acceptance checks,
 repository hygiene, private GitHub synchronization, and final acceptance
 report**.
+
+## Stage 12 final acceptance
+
+Stage 12 added [`FINAL_ACCEPTANCE.md`](FINAL_ACCEPTANCE.md) and closed every
+item in the acceptance boundary.
+
+The final audit confirms:
+
+- the official mandatory graph and all nine source records are present;
+- the physical model, domains, equations, constants, units, and cut-offs match
+  the frozen specification;
+- all 43 independent scientific checks pass;
+- clean out-of-tree generation reproduces all 17 data, static-figure, GIF, and
+  storyboard artifacts byte-for-byte;
+- all final figures and animation states have been inspected at original
+  resolution;
+- the optional animation remains scientifically bounded and secondary;
+- the editable one-slide PowerPoint, embedded GIF, preview, notes, selected
+  assets, and 46-word script regenerate and validate deterministically;
+- all 149 focused Task 4 tests and all 373 repository tests pass;
+- syntax, whitespace, link, secret, portability, temporary-file, and hidden-file
+  checks pass;
+- GitHub reports the repository as private; and
+- local `main` and `origin/main` are synchronized after the final acceptance
+  commit.
+
+**Task 4 is complete. No Task 4 stage remains pending.**
