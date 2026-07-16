@@ -2,7 +2,7 @@
 
 ## Status
 
-Stages 1 through 7 are complete. The official requirements, reference
+Stages 1 through 8 are complete. The official requirements, reference
 examples, project scope, planned evidence, and exclusions are recorded below.
 The complete equations, notation, units, constants, numerical conventions,
 reference targets, and pre-declared validation tolerances are frozen in the
@@ -15,9 +15,9 @@ conversion, and focused Stage 4 tests are implemented. The complete in-memory
 Planck study passes the pre-declared Wien, Stefan--Boltzmann,
 radiance-integral, finiteness, and exitance-identity checks. The immutable
 seven-solid source table and all three vectorized Einstein-model functions are
-also implemented and unit-tested. Both complete in-memory studies now pass one
-combined 27-check validation report. Saved result files and figures remain for
-later stages.
+also implemented and unit-tested. Both complete in-memory studies pass one
+combined 27-check validation report, and their deterministic CSV and JSON
+evidence is committed under `data/task03/`. Figures remain for later stages.
 
 ## Official sources reviewed
 
@@ -427,6 +427,66 @@ Stage 7 is complete because:
 - the combined report passes all 27 checks; and
 - all 84 Task 3 tests and all 117 earlier tests pass.
 
-No CSV, JSON, figure, or presentation output was created during this stage.
-The next stage is **Stage 8: deterministic serialization of the complete
-numerical studies and validation evidence**.
+No CSV, JSON, figure, or presentation output was created during Stage 7.
+Stage 8 implements deterministic numerical serialization below.
+
+## Stage 8 implementation and completion check
+
+Stage 8 added:
+
+- [`generate_task03.py`](generate_task03.py), which builds both studies,
+  validates all 27 checks, and writes data through temporary siblings;
+- [`test_generation.py`](test_generation.py), covering schemas, ordering,
+  precision, portability, reproducibility, failure refusal, atomic cleanup,
+  committed-data agreement, and command-line behavior; and
+- the complete validated evidence set in [`data/task03`](../data/task03).
+
+Generate data from the repository root with:
+
+```bash
+python3 -m task03_thermal_radiation.generate_task03 --data-only
+```
+
+The ordered outputs are:
+
+| File | Content | Data rows |
+| --- | --- | ---: |
+| `planck_spectra.csv` | Three spectral-exitance curves | $8703$ |
+| `planck_validation.csv` | Wien and Stefan--Boltzmann results | $3$ |
+| `einstein_materials.csv` | Seven source and converted material records | $7$ |
+| `einstein_heat_capacity.csv` | Seven curves from $0$ to $800\ \mathrm K$ | $5607$ |
+| `einstein_normalized.csv` | Seven normalized curves | $7007$ |
+| `validation_report.json` | Complete 27-check report | $27$ checks |
+| `reproducibility_manifest.json` | Constants, configuration, sources, and filenames | one manifest |
+
+All calculated CSV fields use 17-significant-digit text for round-trip
+`float64` precision. Official four-decimal source frequencies remain displayed
+exactly as supplied. JSON is UTF-8, indented, key-sorted, and written with
+`allow_nan=False`. Every text file uses LF line endings.
+
+The manifest records the complete configuration, exact constants, official
+material inputs, ordered filenames, and mathematical-specification path. It
+deliberately excludes timestamps, host names, user names, absolute paths, and
+random identifiers. The seven files occupy about $768\ \mathrm{KiB}$, well
+below the frozen $10\ \mathrm{MiB}$ budget.
+
+Stage 8 is complete because:
+
+- validation finishes before the output directory is created or changed;
+- a failed validation leaves existing evidence untouched;
+- every output is fully prepared as a temporary sibling before any destination
+  is replaced;
+- an injected writer failure preserves all existing destinations and removes
+  every temporary file;
+- all CSV schemas, row counts, values, units, and ordering match the frozen
+  contracts;
+- both JSON files are finite, parseable, deterministic, and portable;
+- separate and repeated runs are byte-identical;
+- freshly regenerated files exactly match the committed evidence;
+- data-only generation does not import Matplotlib;
+- all 97 Task 3 tests and all 117 earlier tests pass; and
+- the complete data-only command remains far below the time and size budgets.
+
+No figure or presentation output was created during this stage. The next stage
+is **Stage 9: publication-quality Planck, validation, Einstein, normalized, and
+summary figures in PNG and SVG formats**.

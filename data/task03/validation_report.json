@@ -1,0 +1,276 @@
+{
+  "checks": [
+    {
+      "comparison": "exact",
+      "expected": 1.0,
+      "explanation": "Both declared display spectra contain finite values.",
+      "name": "planck_spectra_finite",
+      "observed": 1.0,
+      "passed": true,
+      "tolerance": 0.0,
+      "unit": "dimensionless"
+    },
+    {
+      "comparison": "exact",
+      "expected": 1.0,
+      "explanation": "Black-body spectral densities cannot be negative.",
+      "name": "planck_spectra_non_negative",
+      "observed": 1.0,
+      "passed": true,
+      "tolerance": 0.0,
+      "unit": "dimensionless"
+    },
+    {
+      "comparison": "exact",
+      "expected": 1.0,
+      "explanation": "All wavelength integrals are finite.",
+      "name": "planck_integrals_finite",
+      "observed": 1.0,
+      "passed": true,
+      "tolerance": 0.0,
+      "unit": "dimensionless"
+    },
+    {
+      "comparison": "relative_error_le",
+      "expected": 0.0,
+      "explanation": "Spectral exitance equals pi times radiance with the per-nm unit conversion.",
+      "name": "planck_exitance_identity",
+      "observed": 0.0,
+      "passed": true,
+      "tolerance": 1e-14,
+      "unit": "dimensionless"
+    },
+    {
+      "comparison": "relative_error_le",
+      "expected": 7.24442988796293e-07,
+      "explanation": "The numerical wavelength peak agrees with Wien's law.",
+      "name": "wien_peak_4000_k",
+      "observed": 7.2444e-07,
+      "passed": true,
+      "tolerance": 0.001,
+      "unit": "m"
+    },
+    {
+      "comparison": "relative_error_le",
+      "expected": 14516158.513112145,
+      "explanation": "Integrated spectral exitance agrees with sigma T^4.",
+      "name": "stefan_boltzmann_4000_k",
+      "observed": 14516158.528790792,
+      "passed": true,
+      "tolerance": 0.002,
+      "unit": "W m^-2"
+    },
+    {
+      "comparison": "relative_error_le",
+      "expected": 4620636.7641345905,
+      "explanation": "Integrated spectral radiance agrees with sigma T^4/pi.",
+      "name": "radiance_integral_4000_k",
+      "observed": 4620636.769125261,
+      "passed": true,
+      "tolerance": 0.002,
+      "unit": "W m^-2 sr^-1"
+    },
+    {
+      "comparison": "relative_error_le",
+      "expected": 5.795543910370345e-07,
+      "explanation": "The numerical wavelength peak agrees with Wien's law.",
+      "name": "wien_peak_5000_k",
+      "observed": 5.7955e-07,
+      "passed": true,
+      "tolerance": 0.001,
+      "unit": "m"
+    },
+    {
+      "comparison": "relative_error_le",
+      "expected": 35439840.11990269,
+      "explanation": "Integrated spectral exitance agrees with sigma T^4.",
+      "name": "stefan_boltzmann_5000_k",
+      "observed": 35439840.15822195,
+      "passed": true,
+      "tolerance": 0.002,
+      "unit": "W m^-2"
+    },
+    {
+      "comparison": "relative_error_le",
+      "expected": 11280851.474937964,
+      "explanation": "Integrated spectral radiance agrees with sigma T^4/pi.",
+      "name": "radiance_integral_5000_k",
+      "observed": 11280851.487135367,
+      "passed": true,
+      "tolerance": 0.002,
+      "unit": "W m^-2 sr^-1"
+    },
+    {
+      "comparison": "relative_error_le",
+      "expected": 4.829619925308621e-07,
+      "explanation": "The numerical wavelength peak agrees with Wien's law.",
+      "name": "wien_peak_6000_k",
+      "observed": 4.8296e-07,
+      "passed": true,
+      "tolerance": 0.001,
+      "unit": "m"
+    },
+    {
+      "comparison": "relative_error_le",
+      "expected": 73488052.47263023,
+      "explanation": "Integrated spectral exitance agrees with sigma T^4.",
+      "name": "stefan_boltzmann_6000_k",
+      "observed": 73488052.55212693,
+      "passed": true,
+      "tolerance": 0.002,
+      "unit": "W m^-2"
+    },
+    {
+      "comparison": "relative_error_le",
+      "expected": 23391973.618431367,
+      "explanation": "Integrated spectral radiance agrees with sigma T^4/pi.",
+      "name": "radiance_integral_6000_k",
+      "observed": 23391973.64373594,
+      "passed": true,
+      "tolerance": 0.002,
+      "unit": "W m^-2 sr^-1"
+    },
+    {
+      "comparison": "exact",
+      "expected": 1.0,
+      "explanation": "Every Einstein conversion and curve is finite.",
+      "name": "einstein_results_finite",
+      "observed": 1.0,
+      "passed": true,
+      "tolerance": 0.0,
+      "unit": "dimensionless"
+    },
+    {
+      "comparison": "absolute_error_le",
+      "expected": 0.0,
+      "explanation": "The continuous Einstein limit is exactly zero at T=0.",
+      "name": "einstein_zero_limit",
+      "observed": 0.0,
+      "passed": true,
+      "tolerance": 0.0,
+      "unit": "J mol^-1 K^-1"
+    },
+    {
+      "comparison": "relative_slack_le",
+      "expected": 0.0,
+      "explanation": "Both declared curve sets remain between zero and 3R.",
+      "name": "einstein_physical_bounds",
+      "observed": 0.0,
+      "passed": true,
+      "tolerance": 1e-12,
+      "unit": "dimensionless"
+    },
+    {
+      "comparison": "absolute_slack_le",
+      "expected": 0.0,
+      "explanation": "Heat capacity is non-decreasing on both declared grids.",
+      "name": "einstein_monotonicity",
+      "observed": 0.0,
+      "passed": true,
+      "tolerance": 1e-12,
+      "unit": "J mol^-1 K^-1"
+    },
+    {
+      "comparison": "absolute_error_le",
+      "expected": 0.0,
+      "explanation": "At T=T_E, every curve matches the analytical ratio.",
+      "name": "einstein_anchor_ratio",
+      "observed": 2.220446049250313e-16,
+      "passed": true,
+      "tolerance": 1e-12,
+      "unit": "dimensionless"
+    },
+    {
+      "comparison": "relative_error_le",
+      "expected": 0.0,
+      "explanation": "At T=100T_E, heat capacity agrees with the 3R limit.",
+      "name": "einstein_high_temperature_limit",
+      "observed": 8.33329166595293e-06,
+      "passed": true,
+      "tolerance": 1e-05,
+      "unit": "dimensionless"
+    },
+    {
+      "comparison": "equal_after_4_decimal_rounding",
+      "expected": 0.2855,
+      "explanation": "Calculated frequency reproduces the official displayed value for Au.",
+      "name": "einstein_frequency_au",
+      "observed": 0.2855019301935329,
+      "passed": true,
+      "tolerance": 0.0,
+      "unit": "1e13 Hz"
+    },
+    {
+      "comparison": "equal_after_4_decimal_rounding",
+      "expected": 0.5769,
+      "explanation": "Calculated frequency reproduces the official displayed value for Cu.",
+      "name": "einstein_frequency_cu",
+      "observed": 0.5768818413028151,
+      "passed": true,
+      "tolerance": 0.0,
+      "unit": "1e13 Hz"
+    },
+    {
+      "comparison": "equal_after_4_decimal_rounding",
+      "expected": 0.7054,
+      "explanation": "Calculated frequency reproduces the official displayed value for Ti.",
+      "name": "einstein_frequency_ti",
+      "observed": 0.7053577098899048,
+      "passed": true,
+      "tolerance": 0.0,
+      "unit": "1e13 Hz"
+    },
+    {
+      "comparison": "equal_after_4_decimal_rounding",
+      "expected": 0.7188,
+      "explanation": "Calculated frequency reproduces the official displayed value for Al.",
+      "name": "einstein_frequency_al",
+      "observed": 0.7187930948401887,
+      "passed": true,
+      "tolerance": 0.0,
+      "unit": "1e13 Hz"
+    },
+    {
+      "comparison": "equal_after_4_decimal_rounding",
+      "expected": 0.7893,
+      "explanation": "Calculated frequency reproduces the official displayed value for Fe.",
+      "name": "einstein_frequency_fe",
+      "observed": 0.7893288658291792,
+      "passed": true,
+      "tolerance": 0.0,
+      "unit": "1e13 Hz"
+    },
+    {
+      "comparison": "equal_after_4_decimal_rounding",
+      "expected": 1.0832,
+      "explanation": "Calculated frequency reproduces the official displayed value for Si.",
+      "name": "einstein_frequency_si",
+      "observed": 1.0832279116166397,
+      "passed": true,
+      "tolerance": 0.0,
+      "unit": "1e13 Hz"
+    },
+    {
+      "comparison": "equal_after_4_decimal_rounding",
+      "expected": 3.7451,
+      "explanation": "Calculated frequency reproduces the official displayed value for C.",
+      "name": "einstein_frequency_c",
+      "observed": 3.7451135548916374,
+      "passed": true,
+      "tolerance": 0.0,
+      "unit": "1e13 Hz"
+    },
+    {
+      "comparison": "maximum_absolute_difference_le",
+      "expected": 0.0,
+      "explanation": "All materials collapse onto one C_V/(3R) versus T/T_E curve.",
+      "name": "einstein_normalized_collapse",
+      "observed": 8.881784197001252e-16,
+      "passed": true,
+      "tolerance": 1e-12,
+      "unit": "dimensionless"
+    }
+  ],
+  "passed": true,
+  "schema_version": 1
+}
