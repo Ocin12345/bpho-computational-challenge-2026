@@ -2,14 +2,16 @@
 
 ## Status
 
-Stages 1 through 3 are complete. The two official source files have been read,
+Stages 1 through 4 are complete. The two official source files have been read,
 and the mandatory model, reference inputs, baseline deliverables, optional
 extension, exclusions, staged workflow, and final acceptance boundary are
 frozen below. The complete equations, constants, units, physical domains,
 reference cut-offs, grids, numerical conventions, serialization rules, and
 pre-declared tolerances are fixed in the
-[mathematical and numerical specification](MATHEMATICAL_MODEL.md). No Task 4
-physics code has been written yet. The accepted
+[mathematical and numerical specification](MATHEMATICAL_MODEL.md). The exact
+constants, frozen numerical configuration, immutable official material table,
+complete vectorized photoelectric model, and focused Stage 4 tests are now
+implemented. The accepted
 [architecture decision](architecture/ADR-001-deterministic-photoelectric-model.md)
 now fixes module ownership, immutable records, public APIs, output schemas,
 command-line contracts, tests, transaction rules, and cross-computer
@@ -248,5 +250,49 @@ Stage 3 is complete because:
 
 The complete decision is in
 [`ADR-001`](architecture/ADR-001-deterministic-photoelectric-model.md). The
-next milestone is **Stage 4: exact constants, immutable official material
-records, and the complete vectorized photoelectric model**.
+architecture remains the implementation contract.
+
+## Stage 4 implementation and completion check
+
+Stage 4 added:
+
+- [`constants.py`](constants.py), containing exact SI definitions and derived
+  photoelectric conversion constants;
+- [`configuration.py`](configuration.py), protecting the frozen grids,
+  visible-band convention, tolerances, and portability budgets;
+- [`materials.py`](materials.py), containing immutable official records in the
+  exact Ag, Al, Au, Cu, Sn, Pb, W, Ni, Na order;
+- [`models.py`](models.py), containing all eight scalar/broadcast vectorized
+  cut-off, signed-voltage, emission-mask, and physical-voltage functions;
+- [`__init__.py`](__init__.py), exposing only the Stage 4 public API;
+- [`test_constants_and_materials.py`](test_constants_and_materials.py); and
+- [`test_models.py`](test_models.py).
+
+Run the focused suite from the repository root with:
+
+```bash
+python3 -m unittest discover -s task04_photoelectric_effect -p 'test_*.py' -v
+```
+
+Stage 4 is complete because:
+
+- the exact values of $h$, $e$, and $c$ and all derived identities are tested;
+- the configuration rejects endpoint drift, invalid tolerances, and ambiguous
+  types;
+- all nine source records are immutable and duplicate symbols are rejected;
+- both coordinate forms reproduce the frozen cut-offs and scalar anchors;
+- scalar, array, explicit broadcasting, unit, dtype, and non-mutation
+  contracts are tested;
+- the physical functions return non-negative voltage only in the exact
+  emission domain and `NaN` rather than zero below threshold;
+- exact threshold neighbours, coincident work functions, and the sodium
+  visible-light distinction are tested;
+- booleans, text, complex numbers, non-finite values, invalid domains,
+  incompatible shapes, and unrepresentable results fail explicitly;
+- package import writes no files and does not import Matplotlib; and
+- all 46 focused Task 4 tests pass.
+
+No complete study, validation report, CSV, JSON, figure, animation, or
+presentation output was added during this stage. The next milestone is
+**Stage 5: immutable frequency and wavelength studies with analytical
+cut-offs**.
