@@ -1,5 +1,9 @@
 """Task 4: stopping voltage in the photoelectric effect."""
 
+from task04_photoelectric_effect.analysis import (
+    Task04StudyResult,
+    build_task04_study,
+)
 from task04_photoelectric_effect.configuration import (
     DEFAULT_CONFIGURATION,
     Task04Configuration,
@@ -44,6 +48,8 @@ __all__ = [
     "PhotoelectricMaterial",
     "SPEED_OF_LIGHT_M_S",
     "Task04Configuration",
+    "Task04StudyResult",
+    "build_task04_study",
     "cutoff_frequency_hz",
     "cutoff_wavelength_m",
     "emission_possible_from_frequency",

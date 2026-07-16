@@ -2,7 +2,7 @@
 
 ## Status
 
-Stages 1 through 4 are complete. The two official source files have been read,
+Stages 1 through 5 are complete. The two official source files have been read,
 and the mandatory model, reference inputs, baseline deliverables, optional
 extension, exclusions, staged workflow, and final acceptance boundary are
 frozen below. The complete equations, constants, units, physical domains,
@@ -293,6 +293,43 @@ Stage 4 is complete because:
 - all 46 focused Task 4 tests pass.
 
 No complete study, validation report, CSV, JSON, figure, animation, or
-presentation output was added during this stage. The next milestone is
-**Stage 5: immutable frequency and wavelength studies with analytical
-cut-offs**.
+presentation output was added during this stage.
+
+## Stage 5 implementation and completion check
+
+Stage 5 added [`analysis.py`](analysis.py), containing the frozen
+`Task04StudyResult` and side-effect-free `build_task04_study` entry point, plus
+[`test_analysis.py`](test_analysis.py).
+
+The default study contains:
+
+- all nine immutable official material records;
+- work functions in electronvolts and joules;
+- nine analytical cut-off frequencies and wavelengths;
+- the inclusive 2001-point frequency grid and three aligned `(9, 2001)`
+  signed-voltage, mask, and physical-voltage arrays;
+- the inclusive 2201-point metre/nanometre wavelength grids and three aligned
+  `(9, 2201)` arrays; and
+- `NaN` only where the corresponding exact mask declares no photoemission.
+
+Stage 5 is complete because:
+
+- source order, values, units, shapes, dtypes, endpoints, and intervals are
+  tested;
+- every stored scientific array equals the appropriate Stage 4 public model
+  result;
+- result construction makes defensive copies and marks every array read-only;
+- invalid shapes, grids, masks, active values, inactive values, and metadata
+  fail explicitly;
+- structurally valid scientific perturbations remain representable so Stage 6
+  can prove that validation detects them;
+- repeated builds are exactly reproducible, including masks and `NaN`
+  positions;
+- custom material collections produce the correct outer shape;
+- complete study construction remains below the two-second budget; and
+- building a study writes no files and does not import Matplotlib.
+
+All 71 current Task 4 tests pass. No independent reference module, validation
+report, output file, figure, animation, or presentation was created in this
+stage. The next milestone is **Stage 6: independent Decimal references,
+structured validation, deliberate failure detection, and validation CLI**.
