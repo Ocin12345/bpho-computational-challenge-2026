@@ -2,15 +2,17 @@
 
 ## Status
 
-Stages 1 through 3 are complete. The official requirements, reference
+Stages 1 through 4 are complete. The official requirements, reference
 examples, project scope, planned evidence, and exclusions are recorded below.
 The complete equations, notation, units, constants, numerical conventions,
 reference targets, and pre-declared validation tolerances are frozen in the
 [mathematical and numerical specification](MATHEMATICAL_MODEL.md). The
 [accepted architecture decision](architecture/ADR-001-deterministic-vectorized-model.md)
 now fixes module ownership, public APIs, output schemas, command-line
-contracts, tests, and reproducibility rules. No Task 3 physics code has been
-implemented yet.
+contracts, tests, and reproducibility rules. The exact physical constants,
+vectorized Planck spectral-radiance and spectral-exitance functions, unit
+conversion, and focused Stage 4 tests are now implemented. Einstein modelling,
+full Planck validation, saved results, and figures remain for later stages.
 
 ## Official sources reviewed
 
@@ -217,5 +219,40 @@ Stage 3 is complete because:
 - no physics implementation has begun.
 
 The complete design is in
-[ADR-001](architecture/ADR-001-deterministic-vectorized-model.md). The next
-stage is **Stage 4: Planck-model implementation and unit tests**.
+[ADR-001](architecture/ADR-001-deterministic-vectorized-model.md). Stage 4
+implements its first physical-model boundary.
+
+## Stage 4 implementation and completion check
+
+Stage 4 added:
+
+- [`constants.py`](constants.py), containing the exact SI and derived constants;
+- [`models.py`](models.py), containing the vectorized Planck radiance,
+  exitance, and per-nanometre conversion functions;
+- [`__init__.py`](__init__.py), exposing the Stage 4 public API;
+- [`test_constants_and_materials.py`](test_constants_and_materials.py),
+  protecting the authoritative constants; and
+- [`test_planck_model.py`](test_planck_model.py), testing reference values,
+  domains, broadcasting, units, both numerical branches, and asymptotic
+  behaviour.
+
+Run the current Task 3 suite from the repository root with:
+
+```bash
+python3 -m unittest discover -s task03_thermal_radiation -p 'test_*.py' -v
+```
+
+Stage 4 is complete because:
+
+- all three planned Planck/unit-conversion APIs are implemented;
+- scalar and broadcast array contracts are tested;
+- invalid and non-finite physical inputs fail explicitly;
+- the short-wavelength branch underflows cleanly instead of producing `NaN`;
+- the long-wavelength result approaches the Rayleigh--Jeans law;
+- the full declared integration domain evaluates without runtime warnings;
+- all 21 Task 3 tests pass; and
+- all 117 earlier Task 1 and Task 2 tests still pass.
+
+No Einstein, study-building, validation-report, output, or plotting code was
+added during this stage. The next stage is **Stage 5: Planck-spectrum
+validation using Wien's displacement law and the Stefan--Boltzmann law**.
