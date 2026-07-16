@@ -2,12 +2,15 @@
 
 ## Status
 
-Stages 1 and 2 are complete. The official requirements, reference examples,
-project scope, planned evidence, and exclusions are recorded below. The
-complete equations, notation, units, constants, numerical conventions,
+Stages 1 through 3 are complete. The official requirements, reference
+examples, project scope, planned evidence, and exclusions are recorded below.
+The complete equations, notation, units, constants, numerical conventions,
 reference targets, and pre-declared validation tolerances are frozen in the
-[mathematical and numerical specification](MATHEMATICAL_MODEL.md). No Task 3
-physics code has been implemented yet.
+[mathematical and numerical specification](MATHEMATICAL_MODEL.md). The
+[accepted architecture decision](architecture/ADR-001-deterministic-vectorized-model.md)
+now fixes module ownership, public APIs, output schemas, command-line
+contracts, tests, and reproducibility rules. No Task 3 physics code has been
+implemented yet.
 
 ## Official sources reviewed
 
@@ -196,5 +199,23 @@ Stage 2 is complete because:
 - validation tolerances were fixed before implementation.
 
 The complete details are in
-[MATHEMATICAL_MODEL.md](MATHEMATICAL_MODEL.md). The next stage is **Stage 3:
-software architecture and reproducibility design**.
+[MATHEMATICAL_MODEL.md](MATHEMATICAL_MODEL.md). Stage 3 records how that frozen
+specification will be implemented reproducibly.
+
+## Stage 3 completion check
+
+Stage 3 is complete because:
+
+- a deterministic vectorized NumPy architecture has been accepted;
+- modules have single, explicit scientific responsibilities;
+- public APIs, units, broadcasting, and error behaviour are frozen;
+- immutable configuration, material, result, and validation records are
+  defined;
+- CSV, JSON, figure, and presentation paths have fixed ownership;
+- output transactions and cross-computer reproducibility rules are explicit;
+- tests and portability budgets are pre-declared; and
+- no physics implementation has begun.
+
+The complete design is in
+[ADR-001](architecture/ADR-001-deterministic-vectorized-model.md). The next
+stage is **Stage 4: Planck-model implementation and unit tests**.
