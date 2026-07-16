@@ -7,8 +7,16 @@ from dataclasses import dataclass
 
 import numpy as np
 
-from task03_thermal_radiation.analysis import PlanckStudyResult
+from task03_thermal_radiation.analysis import (
+    EinsteinStudyResult,
+    PlanckStudyResult,
+)
 from task03_thermal_radiation.configuration import Task03Configuration
+from task03_thermal_radiation.models import einstein_molar_heat_capacity
+from task03_thermal_radiation.reference import (
+    dulong_petit_limit,
+    einstein_anchor_ratio,
+)
 
 
 @dataclass(frozen=True)
@@ -100,6 +108,18 @@ def _temperature_label(temperature_k: float) -> str:
     if temperature_k.is_integer():
         return f"{int(temperature_k)}_k"
     return f"{temperature_k:g}_k".replace(".", "p")
+
+
+def _material_label(symbol: str) -> str:
+    """Return a stable lower-case identifier for one chemical symbol."""
+
+    label = "".join(
+        character.lower() if character.isalnum() else "_"
+        for character in symbol
+    ).strip("_")
+    if not label:
+        raise ValueError("material symbol must contain an alphanumeric value")
+    return label
 
 
 def validate_planck_study(
@@ -290,8 +310,278 @@ def validate_planck_study(
     )
 
 
+def validate_einstein_study(
+    result: EinsteinStudyResult,
+    configuration: Task03Configuration | None = None,
+) -> Task03ValidationReport:
+    """Validate an Einstein study against every pre-declared Stage 7 check."""
+
+    if not isinstance(result, EinsteinStudyResult):
+        raise TypeError("result must be an EinsteinStudyResult")
+    if configuration is None:
+        configuration = result.configuration
+    if not isinstance(configuration, Task03Configuration):
+        raise TypeError("configuration must be a Task03Configuration")
+    if configuration != result.configuration:
+        raise ValueError("configuration must match the study result")
+
+    checks: list[ValidationCheck] = []
+    arrays = (
+        result.einstein_temperatures_k,
+        result.einstein_frequencies_hz,
+        result.temperatures_k,
+        result.molar_heat_capacity_j_mol_k,
+        result.reduced_temperatures,
+        result.normalized_heat_capacity,
+    )
+    all_finite = bool(all(np.all(np.isfinite(array)) for array in arrays))
+    checks.append(
+        ValidationCheck(
+            name="einstein_results_finite",
+            passed=all_finite,
+            observed=float(all_finite),
+            expected=1.0,
+            tolerance=0.0,
+            comparison="exact",
+            unit="dimensionless",
+            explanation="Every Einstein conversion and curve is finite.",
+        )
+    )
+
+    limit = dulong_petit_limit()
+    zero_temperature_indices = np.flatnonzero(result.temperatures_k == 0.0)
+    zero_reduced_indices = np.flatnonzero(result.reduced_temperatures == 0.0)
+    if zero_temperature_indices.size != 1 or zero_reduced_indices.size != 1:
+        raise ValueError("Einstein study grids must each contain exactly one zero")
+    zero_capacity = np.concatenate(
+        (
+            result.molar_heat_capacity_j_mol_k[
+                :,
+                int(zero_temperature_indices[0]),
+            ],
+            (
+                result.normalized_heat_capacity[
+                    :,
+                    int(zero_reduced_indices[0]),
+                ]
+                * limit
+            ),
+        )
+    )
+    zero_error = float(np.max(np.abs(zero_capacity)))
+    checks.append(
+        ValidationCheck(
+            name="einstein_zero_limit",
+            passed=(zero_error == 0.0),
+            observed=zero_error,
+            expected=0.0,
+            tolerance=0.0,
+            comparison="absolute_error_le",
+            unit="J mol^-1 K^-1",
+            explanation="The continuous Einstein limit is exactly zero at T=0.",
+        )
+    )
+
+    normalized_principal = result.molar_heat_capacity_j_mol_k / limit
+    lower_violation = max(0.0, -float(np.min(normalized_principal)))
+    upper_violation = max(0.0, float(np.max(normalized_principal)) - 1.0)
+    normalized_lower_violation = max(
+        0.0,
+        -float(np.min(result.normalized_heat_capacity)),
+    )
+    normalized_upper_violation = max(
+        0.0,
+        float(np.max(result.normalized_heat_capacity)) - 1.0,
+    )
+    bound_violation = max(
+        lower_violation,
+        upper_violation,
+        normalized_lower_violation,
+        normalized_upper_violation,
+    )
+    checks.append(
+        ValidationCheck(
+            name="einstein_physical_bounds",
+            passed=(
+                bound_violation <= configuration.einstein_bound_relative_slack
+            ),
+            observed=bound_violation,
+            expected=0.0,
+            tolerance=configuration.einstein_bound_relative_slack,
+            comparison="relative_slack_le",
+            unit="dimensionless",
+            explanation="Both declared curve sets remain between zero and 3R.",
+        )
+    )
+
+    principal_differences = np.diff(
+        result.molar_heat_capacity_j_mol_k,
+        axis=1,
+    )
+    normalized_differences = np.diff(
+        result.normalized_heat_capacity * limit,
+        axis=1,
+    )
+    monotonic_violation = max(
+        0.0,
+        -float(np.min(principal_differences)),
+        -float(np.min(normalized_differences)),
+    )
+    checks.append(
+        ValidationCheck(
+            name="einstein_monotonicity",
+            passed=(
+                monotonic_violation
+                <= configuration.einstein_monotonic_absolute_slack
+            ),
+            observed=monotonic_violation,
+            expected=0.0,
+            tolerance=configuration.einstein_monotonic_absolute_slack,
+            comparison="absolute_slack_le",
+            unit="J mol^-1 K^-1",
+            explanation="Heat capacity is non-decreasing on both declared grids.",
+        )
+    )
+
+    anchor_indices = np.flatnonzero(result.reduced_temperatures == 1.0)
+    if anchor_indices.size != 1:
+        raise ValueError(
+            "Einstein reduced-temperature grid must contain exactly one anchor"
+        )
+    anchor_observed = result.normalized_heat_capacity[
+        :,
+        int(anchor_indices[0]),
+    ]
+    anchor_expected = einstein_anchor_ratio()
+    anchor_error = float(np.max(np.abs(anchor_observed - anchor_expected)))
+    checks.append(
+        ValidationCheck(
+            name="einstein_anchor_ratio",
+            passed=(
+                anchor_error <= configuration.einstein_anchor_absolute_tolerance
+            ),
+            observed=anchor_error,
+            expected=0.0,
+            tolerance=configuration.einstein_anchor_absolute_tolerance,
+            comparison="absolute_error_le",
+            unit="dimensionless",
+            explanation="At T=T_E, every curve matches the analytical ratio.",
+        )
+    )
+
+    high_temperature_capacity = einstein_molar_heat_capacity(
+        100.0 * result.einstein_temperatures_k,
+        result.einstein_temperatures_k,
+    )
+    high_temperature_error = float(
+        np.max(np.abs(high_temperature_capacity - limit) / limit)
+    )
+    checks.append(
+        ValidationCheck(
+            name="einstein_high_temperature_limit",
+            passed=(
+                high_temperature_error
+                <= configuration.einstein_high_temperature_relative_tolerance
+            ),
+            observed=high_temperature_error,
+            expected=0.0,
+            tolerance=(
+                configuration.einstein_high_temperature_relative_tolerance
+            ),
+            comparison="relative_error_le",
+            unit="dimensionless",
+            explanation="At T=100T_E, heat capacity agrees with the 3R limit.",
+        )
+    )
+
+    for index, material in enumerate(result.materials):
+        observed_frequency = float(result.einstein_frequencies_hz[index] / 1.0e13)
+        expected_frequency = material.official_frequency_1e13_hz
+        passed = round(observed_frequency, 4) == expected_frequency
+        checks.append(
+            ValidationCheck(
+                name=f"einstein_frequency_{_material_label(material.symbol)}",
+                passed=passed,
+                observed=observed_frequency,
+                expected=expected_frequency,
+                tolerance=0.0,
+                comparison="equal_after_4_decimal_rounding",
+                unit="1e13 Hz",
+                explanation=(
+                    "Calculated frequency reproduces the official displayed "
+                    f"value for {material.symbol}."
+                ),
+            )
+        )
+
+    collapse_error = float(
+        np.max(
+            np.abs(
+                result.normalized_heat_capacity
+                - result.normalized_heat_capacity[0:1, :]
+            )
+        )
+    )
+    checks.append(
+        ValidationCheck(
+            name="einstein_normalized_collapse",
+            passed=(
+                collapse_error
+                <= configuration.einstein_normalized_collapse_tolerance
+            ),
+            observed=collapse_error,
+            expected=0.0,
+            tolerance=configuration.einstein_normalized_collapse_tolerance,
+            comparison="maximum_absolute_difference_le",
+            unit="dimensionless",
+            explanation=(
+                "All materials collapse onto one C_V/(3R) versus T/T_E curve."
+            ),
+        )
+    )
+
+    frozen_checks = tuple(checks)
+    return Task03ValidationReport(
+        schema_version=configuration.schema_version,
+        passed=all(check.passed for check in frozen_checks),
+        checks=frozen_checks,
+    )
+
+
+def validate_task03(
+    planck_result: PlanckStudyResult,
+    einstein_result: EinsteinStudyResult,
+    configuration: Task03Configuration | None = None,
+) -> Task03ValidationReport:
+    """Return one ordered report containing all Planck and Einstein checks."""
+
+    if not isinstance(planck_result, PlanckStudyResult):
+        raise TypeError("planck_result must be a PlanckStudyResult")
+    if not isinstance(einstein_result, EinsteinStudyResult):
+        raise TypeError("einstein_result must be an EinsteinStudyResult")
+    if configuration is None:
+        configuration = planck_result.configuration
+    if not isinstance(configuration, Task03Configuration):
+        raise TypeError("configuration must be a Task03Configuration")
+    if configuration != planck_result.configuration:
+        raise ValueError("configuration must match the Planck study result")
+    if configuration != einstein_result.configuration:
+        raise ValueError("configuration must match the Einstein study result")
+
+    planck_report = validate_planck_study(planck_result, configuration)
+    einstein_report = validate_einstein_study(einstein_result, configuration)
+    checks = planck_report.checks + einstein_report.checks
+    return Task03ValidationReport(
+        schema_version=configuration.schema_version,
+        passed=all(check.passed for check in checks),
+        checks=checks,
+    )
+
+
 __all__ = [
     "Task03ValidationReport",
     "ValidationCheck",
+    "validate_einstein_study",
     "validate_planck_study",
+    "validate_task03",
 ]

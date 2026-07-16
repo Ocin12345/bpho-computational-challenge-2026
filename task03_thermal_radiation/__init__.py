@@ -1,7 +1,9 @@
 """Task 3: Planck radiation and Einstein heat capacity."""
 
 from task03_thermal_radiation.analysis import (
+    EinsteinStudyResult,
     PlanckStudyResult,
+    build_einstein_study,
     build_planck_study,
 )
 from task03_thermal_radiation.constants import (
@@ -31,13 +33,17 @@ from task03_thermal_radiation.materials import (
     OFFICIAL_MATERIALS,
 )
 from task03_thermal_radiation.reference import (
+    dulong_petit_limit,
+    einstein_anchor_ratio,
     stefan_boltzmann_exitance,
     wien_peak_wavelength,
 )
 from task03_thermal_radiation.validation import (
     Task03ValidationReport,
     ValidationCheck,
+    validate_einstein_study,
     validate_planck_study,
+    validate_task03,
 )
 
 
@@ -46,6 +52,7 @@ __all__ = [
     "DEFAULT_CONFIGURATION",
     "EINSTEIN_DEBYE_FACTOR",
     "EinsteinMaterial",
+    "EinsteinStudyResult",
     "METRES_PER_NANOMETRE",
     "MOLAR_GAS_CONSTANT_J_MOL_K",
     "OFFICIAL_MATERIALS",
@@ -58,6 +65,9 @@ __all__ = [
     "ValidationCheck",
     "WIEN_DISPLACEMENT_CONSTANT_M_K",
     "build_planck_study",
+    "build_einstein_study",
+    "dulong_petit_limit",
+    "einstein_anchor_ratio",
     "einstein_frequency_from_temperature",
     "einstein_molar_heat_capacity",
     "einstein_temperature_from_debye",
@@ -65,6 +75,8 @@ __all__ = [
     "planck_spectral_radiance",
     "spectral_density_per_nanometre",
     "stefan_boltzmann_exitance",
+    "validate_einstein_study",
     "validate_planck_study",
+    "validate_task03",
     "wien_peak_wavelength",
 ]

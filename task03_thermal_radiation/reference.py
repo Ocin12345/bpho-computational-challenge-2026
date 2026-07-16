@@ -1,15 +1,18 @@
 """Independent analytical reference relationships for Task 3.
 
 This module deliberately does not import ``models.py``. Its values provide
-external targets against which the numerical Planck calculation is checked.
+external targets against which the numerical calculations are checked.
 """
 
 from __future__ import annotations
+
+import math
 
 import numpy as np
 from numpy.typing import ArrayLike, NDArray
 
 from task03_thermal_radiation.constants import (
+    MOLAR_GAS_CONSTANT_J_MOL_K,
     STEFAN_BOLTZMANN_CONSTANT_W_M2_K4,
     WIEN_DISPLACEMENT_CONSTANT_M_K,
 )
@@ -60,4 +63,21 @@ def stefan_boltzmann_exitance(temperature_k: ArrayLike) -> FloatArray:
     return np.asarray(result, dtype=np.float64)
 
 
-__all__ = ["stefan_boltzmann_exitance", "wien_peak_wavelength"]
+def dulong_petit_limit() -> float:
+    """Return the Einstein model's high-temperature molar limit ``3R``."""
+
+    return 3.0 * MOLAR_GAS_CONSTANT_J_MOL_K
+
+
+def einstein_anchor_ratio() -> float:
+    """Return ``C_V/(3R)`` at the independent reference point ``T = T_E``."""
+
+    return math.exp(1.0) / math.expm1(1.0) ** 2
+
+
+__all__ = [
+    "dulong_petit_limit",
+    "einstein_anchor_ratio",
+    "stefan_boltzmann_exitance",
+    "wien_peak_wavelength",
+]

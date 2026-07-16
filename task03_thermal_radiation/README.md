@@ -2,7 +2,7 @@
 
 ## Status
 
-Stages 1 through 6 are complete. The official requirements, reference
+Stages 1 through 7 are complete. The official requirements, reference
 examples, project scope, planned evidence, and exclusions are recorded below.
 The complete equations, notation, units, constants, numerical conventions,
 reference targets, and pre-declared validation tolerances are frozen in the
@@ -15,8 +15,9 @@ conversion, and focused Stage 4 tests are implemented. The complete in-memory
 Planck study passes the pre-declared Wien, Stefan--Boltzmann,
 radiance-integral, finiteness, and exitance-identity checks. The immutable
 seven-solid source table and all three vectorized Einstein-model functions are
-also implemented and unit-tested. Einstein study construction, full Einstein
-validation, saved result files, and figures remain for later stages.
+also implemented and unit-tested. Both complete in-memory studies now pass one
+combined 27-check validation report. Saved result files and figures remain for
+later stages.
 
 ## Official sources reviewed
 
@@ -368,6 +369,64 @@ Stage 6 is complete because:
 - imports remain deterministic and side-effect free.
 
 No Einstein study result, combined validation report, CSV, JSON, figure, or
-presentation output was created during this stage. The next stage is
-**Stage 7: Einstein study construction and validation against all pre-declared
-limits and official-material checks**.
+presentation output was created during Stage 6. Stage 7 implements the full
+in-memory Einstein study and validation layer below.
+
+## Stage 7 implementation and completion check
+
+Stage 7 added:
+
+- `EinsteinStudyResult` and `build_einstein_study` in
+  [`analysis.py`](analysis.py);
+- independent `dulong_petit_limit` and `einstein_anchor_ratio` targets in
+  [`reference.py`](reference.py), which still does not import the model;
+- `validate_einstein_study` and the combined `validate_task03` entry point in
+  [`validation.py`](validation.py);
+- combined command-line reporting in
+  [`validate_task03.py`](validate_task03.py);
+- the complete public Stage 7 API in [`__init__.py`](__init__.py); and
+- study-contract, reproducibility, analytical-reference, validation, failure,
+  and command-line tests in
+  [`test_analysis_and_validation.py`](test_analysis_and_validation.py).
+
+The principal Einstein study contains seven curves on the inclusive
+$0$--$800\ \mathrm K$ grid at $1\ \mathrm K$ intervals. The supporting study
+contains seven normalized curves on $0\leq T/T_E\leq5$ using 1001 points. All
+material records and numerical arrays are copied into immutable result fields.
+
+Run the complete validation from the repository root with:
+
+```bash
+python3 -m task03_thermal_radiation.validate_task03
+```
+
+The command now evaluates 13 Planck checks and 14 Einstein checks. The key
+Einstein results are:
+
+| Check | Observed error or violation | Frozen tolerance | Result |
+| --- | ---: | ---: | :---: |
+| Exact $T=0$ limit | $0$ | $0$ | Pass |
+| Physical bounds | $0$ | $10^{-12}$ relative slack | Pass |
+| Monotonicity | $0$ | $10^{-12}\ \mathrm{J\,mol^{-1}K^{-1}}$ slack | Pass |
+| $T=T_E$ anchor | $2.22\times10^{-16}$ | $10^{-12}$ absolute | Pass |
+| $T=100T_E$ high-temperature limit | $8.33\times10^{-6}$ | $10^{-5}$ relative | Pass |
+| Seven official frequencies | All reproduce four-decimal displays | Exact after rounding | Pass |
+| Normalized curve collapse | $8.88\times10^{-16}$ | $10^{-12}$ maximum difference | Pass |
+
+Stage 7 is complete because:
+
+- all official material conversions and both frozen grids are assembled in one
+  immutable Einstein result;
+- every principal and normalized heat-capacity value is finite and bounded;
+- both curve sets are non-decreasing;
+- the exact zero limit and independent $T=T_E$ anchor pass;
+- the $100T_E$ calculation reaches the declared $3R$ tolerance;
+- each official frequency has its own stable validation check;
+- all normalized material curves collapse within the declared tolerance;
+- deliberate frequency and curve-collapse errors are detected;
+- the combined report passes all 27 checks; and
+- all 84 Task 3 tests and all 117 earlier tests pass.
+
+No CSV, JSON, figure, or presentation output was created during this stage.
+The next stage is **Stage 8: deterministic serialization of the complete
+numerical studies and validation evidence**.

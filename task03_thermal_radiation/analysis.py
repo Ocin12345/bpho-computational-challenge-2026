@@ -12,7 +12,15 @@ from task03_thermal_radiation.configuration import (
     DEFAULT_CONFIGURATION,
     Task03Configuration,
 )
+from task03_thermal_radiation.constants import MOLAR_GAS_CONSTANT_J_MOL_K
+from task03_thermal_radiation.materials import (
+    EinsteinMaterial,
+    OFFICIAL_MATERIALS,
+)
 from task03_thermal_radiation.models import (
+    einstein_frequency_from_temperature,
+    einstein_molar_heat_capacity,
+    einstein_temperature_from_debye,
     planck_spectral_exitance,
     planck_spectral_radiance,
     spectral_density_per_nanometre,
@@ -139,6 +147,99 @@ class PlanckStudyResult:
             )
 
 
+@dataclass(frozen=True)
+class EinsteinStudyResult:
+    """Immutable material conversions and Einstein heat-capacity curves."""
+
+    configuration: Task03Configuration
+    materials: tuple[EinsteinMaterial, ...]
+    einstein_temperatures_k: FloatArray
+    einstein_frequencies_hz: FloatArray
+    temperatures_k: FloatArray
+    molar_heat_capacity_j_mol_k: FloatArray
+    reduced_temperatures: FloatArray
+    normalized_heat_capacity: FloatArray
+
+    def __post_init__(self) -> None:
+        """Validate the complete scientific record and freeze every array."""
+
+        if not isinstance(self.configuration, Task03Configuration):
+            raise TypeError("configuration must be a Task03Configuration")
+
+        materials = tuple(self.materials)
+        if not materials:
+            raise ValueError("materials must not be empty")
+        if not all(isinstance(item, EinsteinMaterial) for item in materials):
+            raise TypeError("materials must contain EinsteinMaterial records")
+        if len({item.name for item in materials}) != len(materials):
+            raise ValueError("material names must be unique")
+        if len({item.symbol for item in materials}) != len(materials):
+            raise ValueError("material symbols must be unique")
+        object.__setattr__(self, "materials", materials)
+
+        n_material = len(materials)
+        n_temperature = int(
+            round(
+                (
+                    self.configuration.einstein_temperature_max_k
+                    - self.configuration.einstein_temperature_min_k
+                )
+                / self.configuration.einstein_temperature_interval_k
+            )
+        ) + 1
+        n_reduced_temperature = (
+            self.configuration.einstein_reduced_temperature_points
+        )
+        shapes = {
+            "einstein_temperatures_k": (n_material,),
+            "einstein_frequencies_hz": (n_material,),
+            "temperatures_k": (n_temperature,),
+            "molar_heat_capacity_j_mol_k": (n_material, n_temperature),
+            "reduced_temperatures": (n_reduced_temperature,),
+            "normalized_heat_capacity": (
+                n_material,
+                n_reduced_temperature,
+            ),
+        }
+        for field_name, expected_shape in shapes.items():
+            object.__setattr__(
+                self,
+                field_name,
+                _readonly_float_array(
+                    getattr(self, field_name),
+                    name=field_name,
+                    shape=expected_shape,
+                ),
+            )
+
+        if np.any(self.einstein_temperatures_k <= 0.0):
+            raise ValueError("einstein_temperatures_k must be strictly positive")
+        if np.any(self.einstein_frequencies_hz <= 0.0):
+            raise ValueError("einstein_frequencies_hz must be strictly positive")
+
+        expected_temperatures = _inclusive_grid(
+            self.configuration.einstein_temperature_min_k,
+            self.configuration.einstein_temperature_max_k,
+            self.configuration.einstein_temperature_interval_k,
+        )
+        if not np.array_equal(self.temperatures_k, expected_temperatures):
+            raise ValueError("temperatures_k must match the configuration")
+
+        expected_reduced_temperatures = np.linspace(
+            self.configuration.einstein_reduced_temperature_min,
+            self.configuration.einstein_reduced_temperature_max,
+            self.configuration.einstein_reduced_temperature_points,
+            dtype=np.float64,
+        )
+        if not np.array_equal(
+            self.reduced_temperatures,
+            expected_reduced_temperatures,
+        ):
+            raise ValueError(
+                "reduced_temperatures must match the configuration"
+            )
+
+
 def build_planck_study(
     configuration: Task03Configuration = DEFAULT_CONFIGURATION,
 ) -> PlanckStudyResult:
@@ -219,4 +320,72 @@ def build_planck_study(
     )
 
 
-__all__ = ["PlanckStudyResult", "build_planck_study"]
+def build_einstein_study(
+    configuration: Task03Configuration = DEFAULT_CONFIGURATION,
+    materials: tuple[EinsteinMaterial, ...] = OFFICIAL_MATERIALS,
+) -> EinsteinStudyResult:
+    """Calculate all material conversions and Einstein heat-capacity curves."""
+
+    if not isinstance(configuration, Task03Configuration):
+        raise TypeError("configuration must be a Task03Configuration")
+    material_records = tuple(materials)
+    if not material_records:
+        raise ValueError("materials must not be empty")
+    if not all(
+        isinstance(material, EinsteinMaterial) for material in material_records
+    ):
+        raise TypeError("materials must contain EinsteinMaterial records")
+
+    debye_temperatures = np.asarray(
+        [material.debye_temperature_k for material in material_records],
+        dtype=np.float64,
+    )
+    einstein_temperatures = einstein_temperature_from_debye(
+        debye_temperatures
+    )
+    einstein_frequencies = einstein_frequency_from_temperature(
+        einstein_temperatures
+    )
+
+    temperatures = _inclusive_grid(
+        configuration.einstein_temperature_min_k,
+        configuration.einstein_temperature_max_k,
+        configuration.einstein_temperature_interval_k,
+    )
+    heat_capacity = einstein_molar_heat_capacity(
+        temperatures[None, :],
+        einstein_temperatures[:, None],
+    )
+
+    reduced_temperatures = np.linspace(
+        configuration.einstein_reduced_temperature_min,
+        configuration.einstein_reduced_temperature_max,
+        configuration.einstein_reduced_temperature_points,
+        dtype=np.float64,
+    )
+    reduced_physical_temperatures = (
+        einstein_temperatures[:, None] * reduced_temperatures[None, :]
+    )
+    normalized_heat_capacity = einstein_molar_heat_capacity(
+        reduced_physical_temperatures,
+        einstein_temperatures[:, None],
+    ) / (3.0 * MOLAR_GAS_CONSTANT_J_MOL_K)
+
+    return EinsteinStudyResult(
+        configuration=configuration,
+        materials=material_records,
+        einstein_temperatures_k=einstein_temperatures,
+        einstein_frequencies_hz=einstein_frequencies,
+        temperatures_k=temperatures,
+        molar_heat_capacity_j_mol_k=heat_capacity,
+        reduced_temperatures=reduced_temperatures,
+        normalized_heat_capacity=normalized_heat_capacity,
+    )
+
+
+__all__ = [
+    "EinsteinStudyResult",
+    "PlanckStudyResult",
+    "build_einstein_study",
+    "build_planck_study",
+]
