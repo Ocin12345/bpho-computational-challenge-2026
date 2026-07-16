@@ -33,6 +33,18 @@ from task04_photoelectric_effect.models import (
     physical_stopping_voltage_from_frequency,
     physical_stopping_voltage_from_wavelength,
 )
+from task04_photoelectric_effect.reference import (
+    reference_common_gradient_v_s,
+    reference_cutoff_frequency_hz,
+    reference_cutoff_wavelength_nm,
+    reference_voltage_at_frequency_v,
+    reference_voltage_at_wavelength_v,
+)
+from task04_photoelectric_effect.validation import (
+    Task04ValidationReport,
+    ValidationCheck,
+    validate_task04,
+)
 
 
 __all__ = [
@@ -49,6 +61,8 @@ __all__ = [
     "SPEED_OF_LIGHT_M_S",
     "Task04Configuration",
     "Task04StudyResult",
+    "Task04ValidationReport",
+    "ValidationCheck",
     "build_task04_study",
     "cutoff_frequency_hz",
     "cutoff_wavelength_m",
@@ -58,5 +72,11 @@ __all__ = [
     "linear_stopping_voltage_from_wavelength",
     "physical_stopping_voltage_from_frequency",
     "physical_stopping_voltage_from_wavelength",
+    "reference_common_gradient_v_s",
+    "reference_cutoff_frequency_hz",
+    "reference_cutoff_wavelength_nm",
+    "reference_voltage_at_frequency_v",
+    "reference_voltage_at_wavelength_v",
     "validate_material_collection",
+    "validate_task04",
 ]

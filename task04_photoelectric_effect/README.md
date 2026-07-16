@@ -2,7 +2,7 @@
 
 ## Status
 
-Stages 1 through 5 are complete. The two official source files have been read,
+Stages 1 through 6 are complete. The two official source files have been read,
 and the mandatory model, reference inputs, baseline deliverables, optional
 extension, exclusions, staged workflow, and final acceptance boundary are
 frozen below. The complete equations, constants, units, physical domains,
@@ -10,7 +10,8 @@ reference cut-offs, grids, numerical conventions, serialization rules, and
 pre-declared tolerances are fixed in the
 [mathematical and numerical specification](MATHEMATICAL_MODEL.md). The exact
 constants, frozen numerical configuration, immutable official material table,
-complete vectorized photoelectric model, and focused Stage 4 tests are now
+complete vectorized photoelectric model, immutable in-memory study, independent
+Decimal references, and deterministic 43-check validation report are now
 implemented. The accepted
 [architecture decision](architecture/ADR-001-deterministic-photoelectric-model.md)
 now fixes module ownership, immutable records, public APIs, output schemas,
@@ -333,3 +334,50 @@ All 71 current Task 4 tests pass. No independent reference module, validation
 report, output file, figure, animation, or presentation was created in this
 stage. The next milestone is **Stage 6: independent Decimal references,
 structured validation, deliberate failure detection, and validation CLI**.
+
+## Stage 6 implementation and completion check
+
+Stage 6 added:
+
+- [`reference.py`](reference.py), containing five independent scalar
+  calculations built from standard-library `Decimal` and exact SI text;
+- [`validation.py`](validation.py), containing immutable `ValidationCheck` and
+  `Task04ValidationReport` records plus the stable `validate_task04` entry
+  point;
+- [`validate_task04.py`](validate_task04.py), a validation-only command that
+  prints every observed value, target, unit, comparison, and tolerance;
+- [`test_validation.py`](test_validation.py), covering analytical references,
+  all report contracts, every check family, deliberate failures, command exit
+  statuses, runtime, determinism, and side effects; and
+- the expanded package API in [`__init__.py`](__init__.py).
+
+Run the independent validation from the repository root with:
+
+```bash
+python3 -m task04_photoelectric_effect.validate_task04
+```
+
+The baseline passes all 43 checks. They cover exact constants and source
+records, work-function conversion, both grids, finiteness, both energy
+identities, the common gradient, all 18 metal-specific cut-offs, both threshold
+forms, both masks, physical voltages and bounds, both monotonic trends,
+coincident materials, cut-off ordering, cross-coordinate consistency, and both
+frozen scalar anchors.
+
+Stage 6 is complete because:
+
+- the independent path imports neither NumPy nor the production model;
+- all analytical targets originate from exact decimal strings rather than from
+  the arrays being tested;
+- check names, ordering, schemas, comparisons, and tolerances are immutable and
+  deterministic;
+- changing a work function, one curve value, one emission-mask value, or one
+  analytical cut-off causes the intended checks to fail;
+- validation never mutates the immutable study or repairs failed values;
+- the command exits `0` only for a passing report and `1` for a failed report;
+- validation writes no files and does not import Matplotlib; and
+- all 95 focused Task 4 tests pass within the declared runtime budget.
+
+No CSV, JSON, figure, animation, or presentation artifact was created during
+this stage. The next milestone is **Stage 7: deterministic CSV and JSON
+evidence, validation-first generation, and transactional output safety**.
