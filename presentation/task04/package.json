@@ -1,0 +1,14 @@
+{
+  "name": "bpho-task04-presentation",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Reproducible one-slide Task 4 PowerPoint generator",
+  "scripts": {
+    "build": "node create_task04_presentation.js",
+    "preview": "bash render_preview.sh",
+    "validate": "python3 validate_task04_presentation.py"
+  },
+  "dependencies": {
+    "pptxgenjs": "4.0.1"
+  }
+}

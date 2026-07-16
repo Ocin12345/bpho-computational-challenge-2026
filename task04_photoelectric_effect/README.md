@@ -2,7 +2,7 @@
 
 ## Status
 
-Stages 1 through 10 are complete. The two official source files have been read,
+Stages 1 through 11 are complete. The two official source files have been read,
 and the mandatory model, reference inputs, baseline deliverables, optional
 extension, exclusions, staged workflow, and final acceptance boundary are
 frozen below. The complete equations, constants, units, physical domains,
@@ -25,6 +25,9 @@ provide the approved explanation boundary for the later presentation.
 The separate [animation decision](ANIMATION_DECISION.md) records why the
 extension was implemented and the precise boundary between its schematic
 motion and the quantitative model.
+The finished one-slide [PowerPoint package](../presentation/task04/README.md)
+contains the editable slide, selected assets, high-resolution preview, embedded
+speaker notes, timed narration, rehearsal explanation, and question guide.
 
 ## Official sources reviewed
 
@@ -596,3 +599,66 @@ Stage 10 is complete because:
 
 The next milestone is **Stage 11: editable presentation slide, selected assets,
 preview, speaker notes, and timed narration script**.
+
+## Stage 11 implementation and completion check
+
+Stage 11 added the complete
+[`presentation/task04`](../presentation/task04/README.md) package:
+
+- [`Task04_Photoelectric_Effect.pptx`](../presentation/task04/Task04_Photoelectric_Effect.pptx),
+  a reproducible editable 16:9 PowerPoint with one competition slide;
+- the high-resolution
+  [`2401x1350 preview`](../presentation/task04/preview/Task04_Photoelectric_Effect_preview.png);
+- [`SPEAKER_SCRIPT.md`](../presentation/task04/SPEAKER_SCRIPT.md), containing a
+  46-word competition script, timed cues, expanded and rehearsal versions,
+  pronunciation guidance, and likely-question answers;
+- [`SLIDE_CONTENT.md`](../presentation/task04/SLIDE_CONTENT.md), freezing the
+  visible text, alternative text, and content boundary;
+- [`deck-style.md`](../presentation/task04/deck-style.md), preserving visual
+  continuity with Tasks 2 and 3;
+- seven copied source assets in
+  [`images`](../presentation/task04/images/), ordered for immediate manual use;
+- a pinned PptxGenJS generator, lock file, preview renderer, and structural
+  validator.
+
+The required nine-metal frequency graph occupies the largest slide area. The
+validated animated GIF remains a smaller supporting visual. A compact evidence
+card displays $eV_s=hf-W$, the common-gradient form, sodium's
+$516.6\ \mathrm{nm}$ visible cut-off, and the 43/43 validation result.
+
+Regenerate and validate the presentation with:
+
+```bash
+cd presentation/task04
+npm ci
+npm run build
+npm run preview
+npm run validate
+```
+
+Stage 11 is complete because:
+
+- the slide follows the established one-slide, 17--18-second format for the
+  ten-task competition video;
+- the required output is visually dominant and the optional extension cannot
+  be mistaken for the official requirement;
+- both embedded visuals are byte-identical to their validated source assets;
+- the embedded GIF remains a continuous 48-frame animation rather than a
+  flattened still;
+- the slide has meaningful alternative text and editable text, equations,
+  shapes, captions, and notes;
+- the final narration is 46 words and explicitly states the common gradient,
+  sodium result, undefined below-threshold domain, and 43-check validation;
+- all seven convenient presentation assets remain exact copies of the source
+  figures and animation;
+- the PowerPoint archive has exactly one slide, one notes page, and two embedded
+  visuals, with fixed portable metadata;
+- two consecutive builds produced the same PowerPoint SHA-256 digest, and two
+  consecutive renders produced the same preview digest;
+- the validator passes with a $2401\times1350$ 16:9 preview; and
+- the preview was inspected at original resolution with no overlap, clipping,
+  cropping, or unreadable principal result.
+
+The next milestone is **Stage 12: clean regeneration, full acceptance checks,
+repository hygiene, private GitHub synchronization, and final acceptance
+report**.
