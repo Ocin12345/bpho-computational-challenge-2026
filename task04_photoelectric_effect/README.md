@@ -2,14 +2,18 @@
 
 ## Status
 
-Stages 1 and 2 are complete. The two official source files have been read, and
-the mandatory model, reference inputs, baseline deliverables, optional
+Stages 1 through 3 are complete. The two official source files have been read,
+and the mandatory model, reference inputs, baseline deliverables, optional
 extension, exclusions, staged workflow, and final acceptance boundary are
 frozen below. The complete equations, constants, units, physical domains,
 reference cut-offs, grids, numerical conventions, serialization rules, and
 pre-declared tolerances are fixed in the
 [mathematical and numerical specification](MATHEMATICAL_MODEL.md). No Task 4
-physics code has been written yet.
+physics code has been written yet. The accepted
+[architecture decision](architecture/ADR-001-deterministic-photoelectric-model.md)
+now fixes module ownership, immutable records, public APIs, output schemas,
+command-line contracts, tests, transaction rules, and cross-computer
+reproducibility before implementation.
 
 ## Official sources reviewed
 
@@ -222,6 +226,27 @@ Stage 2 is complete because:
 - the assumptions and real-surface limitations are explicit.
 
 The complete details are in
-[`MATHEMATICAL_MODEL.md`](MATHEMATICAL_MODEL.md). The next milestone is
-**Stage 3: deterministic software architecture, APIs, output schemas, tests,
-and reproducibility rules**.
+[`MATHEMATICAL_MODEL.md`](MATHEMATICAL_MODEL.md).
+
+## Stage 3 completion check
+
+Stage 3 is complete because:
+
+- a focused vectorized NumPy package was selected over a monolithic script,
+  spreadsheet, or stateful notebook;
+- model, reference, analysis, validation, serialization, plotting, and command
+  responsibilities have one-way dependencies;
+- exact public model and independent decimal-reference APIs are frozen;
+- configuration, material, study, and validation records have immutable field,
+  shape, unit, and missing-value contracts;
+- all five data files and ten static figure files have exact schemas and
+  filenames;
+- command-line, transaction, error, plotting, testing, portability, and
+  reproducibility contracts are explicit; and
+- no empty module, physics implementation, placeholder result, or generated
+  figure was added prematurely.
+
+The complete decision is in
+[`ADR-001`](architecture/ADR-001-deterministic-photoelectric-model.md). The
+next milestone is **Stage 4: exact constants, immutable official material
+records, and the complete vectorized photoelectric model**.
