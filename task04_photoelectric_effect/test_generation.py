@@ -594,16 +594,24 @@ class Task04DataGenerationTests(unittest.TestCase):
                 )
                 self.assertEqual(tuple(Path(working_directory).iterdir()), ())
 
-    def test_incomplete_stage_default_command_refuses_before_output(self) -> None:
+    def test_data_only_command_does_not_create_figure_directory(self) -> None:
         with tempfile.TemporaryDirectory() as temporary_directory:
-            output_directory = Path(temporary_directory) / "data"
-            error = io.StringIO()
-            with redirect_stderr(error):
-                with self.assertRaises(SystemExit) as context:
-                    main(["--data-dir", str(output_directory)])
-            self.assertEqual(context.exception.code, 2)
-            self.assertIn("use --data-only", error.getvalue())
-            self.assertFalse(output_directory.exists())
+            root = Path(temporary_directory)
+            data_directory = root / "data"
+            figure_directory = root / "figures"
+            with redirect_stdout(io.StringIO()):
+                status = main(
+                    [
+                        "--data-only",
+                        "--data-dir",
+                        str(data_directory),
+                        "--figure-dir",
+                        str(figure_directory),
+                    ]
+                )
+            self.assertEqual(status, 0)
+            self.assertTrue(data_directory.is_dir())
+            self.assertFalse(figure_directory.exists())
 
     def test_unknown_cli_option_refuses_before_output(self) -> None:
         with tempfile.TemporaryDirectory() as temporary_directory:

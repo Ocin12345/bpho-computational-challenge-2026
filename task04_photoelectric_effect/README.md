@@ -2,7 +2,7 @@
 
 ## Status
 
-Stages 1 through 7 are complete. The two official source files have been read,
+Stages 1 through 8 are complete. The two official source files have been read,
 and the mandatory model, reference inputs, baseline deliverables, optional
 extension, exclusions, staged workflow, and final acceptance boundary are
 frozen below. The complete equations, constants, units, physical domains,
@@ -11,8 +11,9 @@ pre-declared tolerances are fixed in the
 [mathematical and numerical specification](MATHEMATICAL_MODEL.md). The exact
 constants, frozen numerical configuration, immutable official material table,
 complete vectorized photoelectric model, immutable in-memory study, independent
-Decimal references, deterministic 43-check validation report, and reproducible
-CSV/JSON evidence transaction are now implemented. The accepted
+Decimal references, deterministic 43-check validation report, reproducible
+CSV/JSON evidence, and the complete deterministic PNG/SVG figure package are
+now implemented. The accepted
 [architecture decision](architecture/ADR-001-deterministic-photoelectric-model.md)
 now fixes module ownership, immutable records, public APIs, output schemas,
 command-line contracts, tests, transaction rules, and cross-computer
@@ -403,9 +404,9 @@ python3 -m task04_photoelectric_effect.generate_task04 --data-only
 ```
 
 The default destination is resolved from the repository root, while
-`--data-dir PATH` supports a deliberate alternative location. The command
-currently requires `--data-only`; Stage 8 will activate the default combined
-data-and-figure command after the complete plotting package exists.
+`--data-dir PATH` supports a deliberate alternative location. The
+`--data-only` path remains available after Stage 8 and never imports
+Matplotlib.
 
 Stage 7 is complete because:
 
@@ -433,3 +434,60 @@ Stage 7 is complete because:
 The next milestone is **Stage 8: deterministic PNG/SVG figures, required
 scientific annotations, transactional plotting, and original-resolution visual
 inspection**.
+
+## Stage 8 implementation and completion check
+
+Stage 8 added [`plotting.py`](plotting.py), its 19 focused tests in
+[`test_plotting.py`](test_plotting.py), and five committed PNG/SVG pairs in
+[`../figures/task04`](../figures/task04):
+
+| Figure stem | Purpose | PNG dimensions |
+| --- | --- | ---: |
+| `stopping_voltage_frequency` | Required nine-metal frequency comparison | $1872\times1044$ |
+| `stopping_voltage_wavelength` | Supporting wavelength and visible-band comparison | $1872\times1044$ |
+| `copper_threshold_explanation` | Physical curve versus non-physical extrapolation | $1512\times936$ |
+| `photoelectric_validation` | Error-to-tolerance evidence for all numerical check families | $1872\times936$ |
+| `task04_summary` | Presentation-ready four-panel overview | $2400\times1350$ |
+
+Regenerate validated data and all figures with:
+
+```bash
+python3 -m task04_photoelectric_effect.generate_task04
+```
+
+Use `--data-dir PATH` and `--figure-dir PATH` for deliberate alternative
+destinations. Add `--data-only` when figures are not required.
+
+The required frequency graph represents all nine official records using seven
+visually distinct ideal curves: Ag, Al, and Pb are grouped because their
+official $4.3\ \mathrm{eV}$ values produce exactly coincident results. Each
+physical segment begins at a coloured analytical threshold marker; the graph
+explicitly states that the absent region is no photoemission, not zero stopping
+potential.
+
+Stage 8 is complete because:
+
+- every plot is built from the validated immutable study arrays rather than
+  from a second plotting-only physics calculation;
+- the wavelength graph marks the visible band and explains why only sodium
+  reaches it in the ideal official table;
+- the copper graph labels the dashed negative section exactly as a mathematical
+  extrapolation with no photoemission;
+- the validation graph normalizes observed errors by their pre-declared
+  tolerances, with every ratio below one;
+- the summary combines both coordinates, the copper threshold, the governing
+  equation, the key conclusions, and the 43/43 validation result in 16:9;
+- the palette is colour-blind-conscious, units are explicit, metadata is fixed,
+  SVG dates are absent, and SVG IDs use a fixed hash salt;
+- temporary PNG/SVG files are parsed and dimension-checked before installation;
+- existing figures are backed up and fully restored after injected writer,
+  verification, or later atomic-install failures;
+- all ten outputs are byte-identical across clean and overwrite regeneration;
+- the complete figure set is below the ten-megabyte portability budget;
+- all five PNGs were inspected at original resolution, after which one
+  legend/visible-band overlap was corrected and the affected figures were
+  re-inspected; and
+- all 137 focused Task 4 tests pass.
+
+The next milestone is **Stage 9: concise scientific results, interpretation,
+assumptions, limitations, and presentation-facing explanation**.

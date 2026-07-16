@@ -608,21 +608,34 @@ def main(argv: Sequence[str] | None = None) -> int:
         "--figure-dir",
         type=Path,
         default=DEFAULT_FIGURE_DIRECTORY,
-        help="reserved destination for Stage 8 PNG and SVG figures",
+        help="destination directory for PNG and SVG figures",
     )
     arguments = parser.parse_args(argv)
-    if not arguments.data_only:
-        parser.error(
-            "Stage 7 supports validated evidence only; use --data-only. "
-            "Complete figure generation is added in Stage 8."
-        )
 
-    result = generate_task04_data(arguments.data_dir)
-    print("Task 4 Stage 7: validated numerical evidence")
+    study = build_task04_study()
+    result = write_task04_data(study, arguments.data_dir)
+    if arguments.data_only:
+        print("Task 4 Stage 7: validated numerical evidence")
+    else:
+        print("Task 4 Stage 8: validated evidence and figures")
     for path in result.output_paths:
         print(path)
+    if not arguments.data_only:
+        # Local import is required: --data-only must not load Matplotlib.
+        from task04_photoelectric_effect.plotting import write_task04_figures
+
+        figure_result = write_task04_figures(
+            study,
+            result.report,
+            arguments.figure_dir,
+        )
+        for path in figure_result.output_paths:
+            print(path)
     print(f"Validation checks: {len(result.report.checks)}")
-    print("Task 4 data generation: PASS")
+    if arguments.data_only:
+        print("Task 4 data generation: PASS")
+    else:
+        print("Task 4 complete generation: PASS")
     return 0
 
 
