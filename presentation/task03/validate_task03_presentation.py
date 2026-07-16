@@ -16,6 +16,7 @@ PREVIEW_PATH = (
     / "preview"
     / "Task03_Planck_Einstein_preview.png"
 )
+REPRODUCIBLE_CORE_TIMESTAMP = "2026-01-01T00:00:00Z"
 
 ASSET_PAIRS = (
     (
@@ -114,6 +115,12 @@ def validate() -> None:
         for required in REQUIRED_XML_TEXT:
             if required not in xml:
                 raise AssertionError(f"missing PowerPoint content: {required}")
+        core_properties = archive.read("docProps/core.xml").decode("utf-8")
+        if core_properties.count(REPRODUCIBLE_CORE_TIMESTAMP) != 2:
+            raise AssertionError(
+                "PowerPoint creation and modification timestamps are not "
+                "reproducible"
+            )
 
     width, height = _png_dimensions(PREVIEW_PATH)
     if width < 1900 or height < 1000:

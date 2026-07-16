@@ -97,6 +97,12 @@ notes, and writes `Task03_Planck_Einstein.pptx`. Dependency versions are pinned
 in `package-lock.json`. Preview rendering requires LibreOffice and Poppler; the
 PowerPoint build itself requires only Node.js and the pinned package.
 
+The exporter freezes the PowerPoint creation and modification metadata to
+`2026-01-01T00:00:00Z` as a reproducibility marker; it is not the real build
+time. This prevents the current clock from changing an otherwise identical
+file. Stage 12 confirmed that two consecutive clean builds have the same
+SHA-256 digest.
+
 ## Supporting-slide guidance
 
 Use only the main slide in the three-minute ten-task submission. If Task 3 is

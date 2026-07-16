@@ -2,7 +2,8 @@
 
 ## Status
 
-Stages 1 through 11 are complete. The official requirements, reference
+Stages 1 through 12 are complete, and Task 3 is accepted. The official
+requirements, reference
 examples, project scope, planned evidence, and exclusions are recorded below.
 The complete equations, notation, units, constants, numerical conventions,
 reference targets, and pre-declared validation tolerances are frozen in the
@@ -20,8 +21,10 @@ combined 27-check validation report. Their deterministic CSV and JSON evidence,
 five publication-quality PNG/SVG figure pairs, and complete
 [scientific results and interpretation](RESULTS_AND_INTERPRETATION.md) are
 committed. The editable one-slide PowerPoint, timed narration, supporting
-assets, preview, and regeneration tools are complete under `presentation/task03/`.
-Only final cross-computer and clean-rebuild quality assurance remains.
+assets, preview, and regeneration tools are complete under
+`presentation/task03/`. The isolated rebuild, complete test suite, visual
+inspection, repository-hygiene checks, and remote synchronization are recorded
+in the [final acceptance report](FINAL_ACCEPTANCE.md).
 
 ## Official sources reviewed
 
@@ -633,5 +636,28 @@ Stage 11 is complete because:
 - a clean build, preview render, and package validation pass from their
   documented commands.
 
-The next and final milestone is **Stage 12: clean regeneration, full tests,
-repository hygiene, synchronization, and final Task 3 acceptance review**.
+## Stage 12 final acceptance
+
+Stage 12 completed the independent acceptance pass recorded in
+[`FINAL_ACCEPTANCE.md`](FINAL_ACCEPTANCE.md). It confirmed that:
+
+- an isolated complete generation finished in $2.21$ seconds and reproduced
+  all seven data files and ten figure files byte for byte;
+- all 27 physical and numerical checks passed without relaxing a tolerance;
+- all 224 repository tests passed, including 107 Task 3 tests and all 117
+  earlier Task 1 and Task 2 tests;
+- all five Task 3 figures and the rendered slide were inspected at original
+  resolution and showed no clipping, overlap, or scientific inconsistency;
+- two consecutive PowerPoint builds were byte-identical, and the rebuilt deck
+  passed its structural, asset-integrity, speaker-note, script-length, and
+  preview checks;
+- tracked documentation links, file sizes, sensitive filenames, source
+  compilation, Git objects, and machine-specific home paths passed their
+  audits; and
+- the private GitHub repository was synchronized with the clean local `main`
+  branch.
+
+The complete official Task 3 baseline is therefore finished. No further Task
+3 code or simulation is required unless we deliberately choose an optional
+extension. The next challenge milestone should be Task 4 only when we decide
+to begin it.

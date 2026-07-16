@@ -12,6 +12,7 @@ const OUTPUT_PATH = path.join(
   PRESENTATION_DIRECTORY,
   "Task03_Planck_Einstein.pptx",
 );
+const REPRODUCIBLE_TIMESTAMP = "2026-01-01T00:00:00.000Z";
 
 const COLOURS = {
   background: "F7FAFC",
@@ -42,6 +43,28 @@ function prepareAssets() {
       throw new Error(`Missing Stage 9 visual: ${sourcePath}`);
     }
     fs.copyFileSync(sourcePath, path.join(IMAGE_DIRECTORY, targetName));
+  }
+}
+
+async function writePresentationDeterministically(pptx) {
+  // PptxGenJS otherwise writes the current time into core.xml and ZIP entries.
+  // Freezing the clock only during export makes clean builds byte-identical.
+  const SystemDate = global.Date;
+  const fixedTime = SystemDate.parse(REPRODUCIBLE_TIMESTAMP);
+  global.Date = class ReproducibleDate extends SystemDate {
+    constructor(...args) {
+      super(...(args.length === 0 ? [fixedTime] : args));
+    }
+
+    static now() {
+      return fixedTime;
+    }
+  };
+
+  try {
+    await pptx.writeFile({ fileName: OUTPUT_PATH, compression: true });
+  } finally {
+    global.Date = SystemDate;
   }
 }
 
@@ -260,7 +283,7 @@ async function buildPresentation() {
       "14–18 s: validation band.",
   );
 
-  await pptx.writeFile({ fileName: OUTPUT_PATH, compression: true });
+  await writePresentationDeterministically(pptx);
   console.log(`Created ${OUTPUT_PATH}`);
 }
 
