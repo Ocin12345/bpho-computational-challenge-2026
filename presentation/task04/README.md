@@ -20,7 +20,8 @@ is an editable 16:9 PowerPoint with:
 A high-resolution static rendering is available at
 [`preview/Task04_Photoelectric_Effect_preview.png`](preview/Task04_Photoelectric_Effect_preview.png).
 The preview shows the GIF's first frame; the GIF animates in PowerPoint slide
-show mode.
+show mode. The embedded animation is a six-second, 60-frame,
+$1920\times1080$ GIF rendered at 10 frames per second.
 
 ## What to say
 
@@ -55,15 +56,15 @@ replace the quantitative result.
 The [`images`](images/) folder is arranged so the slide can be rebuilt or
 adapted quickly in PowerPoint, Keynote, or another editor:
 
-| File | Use |
-| --- | --- |
-| `01_stopping_voltage_frequency.png` | Required comparison; main competition visual |
-| `02_photoelectric_demo.gif` | Optional threshold/intensity/stopping extension |
-| `03_stopping_voltage_wavelength.png` | Optional wavelength and visible-band support |
-| `04_copper_threshold_explanation.png` | Optional physical-domain explanation |
-| `05_photoelectric_validation.png` | Optional detailed validation evidence |
-| `06_task04_summary.png` | Optional standalone four-panel overview |
-| `07_photoelectric_demo_storyboard.png` | Static fallback when GIF playback is unavailable |
+| File | Dimensions | Use |
+| --- | ---: | --- |
+| `01_stopping_voltage_frequency.png` | $3840\times2160$ | Required comparison; main competition visual |
+| `02_photoelectric_demo.gif` | $1920\times1080$ | Optional threshold/intensity/stopping extension |
+| `03_stopping_voltage_wavelength.png` | $3840\times2160$ | Optional wavelength and visible-band support |
+| `04_copper_threshold_explanation.png` | $3200\times1800$ | Optional physical-domain explanation |
+| `05_photoelectric_validation.png` | $3840\times1920$ | Optional detailed validation evidence |
+| `06_task04_summary.png` | $3840\times2160$ | Optional standalone four-panel overview |
+| `07_photoelectric_demo_storyboard.png` | $2400\times1350$ | Static fallback when GIF playback is unavailable |
 
 The corresponding SVG files remain in `figures/task04/` where available.
 Preserve aspect ratios and do not crop axes, units, legends, threshold markers,

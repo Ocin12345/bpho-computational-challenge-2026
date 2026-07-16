@@ -52,7 +52,7 @@ class Task04AnimationContentTests(unittest.TestCase):
         self,
     ) -> None:
         configuration = DEFAULT_ANIMATION_CONFIGURATION
-        self.assertEqual(configuration.total_frames, 48)
+        self.assertEqual(configuration.total_frames, 60)
         self.assertEqual(configuration.duration_s, 6.0)
         self.assertEqual(configuration.figure_size_in, (12.0, 6.75))
         with self.assertRaises(FrozenInstanceError):
@@ -187,10 +187,10 @@ class Task04AnimationWriterTests(unittest.TestCase):
 
             with Image.open(result.output_paths[0]) as image:
                 self.assertEqual(image.format, "GIF")
-                self.assertEqual(image.size, (1200, 675))
-                self.assertEqual(image.n_frames, 48)
+                self.assertEqual(image.size, (1920, 1080))
+                self.assertEqual(image.n_frames, 60)
                 self.assertEqual(image.info["loop"], 0)
-                self.assertEqual(image.info["duration"], 120)
+                self.assertEqual(image.info["duration"], 100)
             with Image.open(result.output_paths[1]) as image:
                 self.assertEqual(image.format, "PNG")
                 self.assertEqual(image.size, STORYBOARD_DIMENSIONS)

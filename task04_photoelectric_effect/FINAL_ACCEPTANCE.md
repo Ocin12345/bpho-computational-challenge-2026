@@ -34,7 +34,7 @@ a replacement for the required graph.
 | Independent validation | Decimal references and the complete [`43-check report`](../data/task04/validation_report.json) |
 | Reproducible numerical evidence | Five deterministic files in [`data/task04`](../data/task04/) plus the complete manifest |
 | Scientific interpretation | [`RESULTS_AND_INTERPRETATION.md`](RESULTS_AND_INTERPRETATION.md) |
-| Optional extension | Validated [`48-frame GIF`](../figures/task04/photoelectric_demo.gif), static [`storyboard`](../figures/task04/photoelectric_demo_storyboard.png), and [`ANIMATION_DECISION.md`](ANIMATION_DECISION.md) |
+| Optional extension | Validated [`60-frame GIF`](../figures/task04/photoelectric_demo.gif), static [`storyboard`](../figures/task04/photoelectric_demo_storyboard.png), and [`ANIMATION_DECISION.md`](ANIMATION_DECISION.md) |
 | Competition presentation | Editable [`Task04_Photoelectric_Effect.pptx`](../presentation/task04/Task04_Photoelectric_Effect.pptx), [`preview`](../presentation/task04/preview/Task04_Photoelectric_Effect_preview.png), and [`speaker script`](../presentation/task04/SPEAKER_SCRIPT.md) |
 
 ## Physics acceptance
@@ -102,24 +102,30 @@ python3 -m task04_photoelectric_effect.generate_task04 \
 
 produced the exact declared file sets. All **17** generated artifacts matched
 the committed bytes: five data files, ten static PNG/SVG files, one animated
-GIF, and one storyboard PNG. Their combined size was **4,041,179 bytes**. The
+GIF, and one storyboard PNG. Their combined size was **5,607,430 bytes**. The
 ordered aggregate comparison digest was:
 
 ```text
-0f1616444d2d5cd8be451c188135a2c3cc8eee7aa930d730a110674af49f3866
+67c0492bd606e978def3f3d03f608d86704bbead2f7d27ab2661f2213c8f32a2
 ```
+
+This SHA-256 digest uses the declared artifact order and, for each artifact,
+hashes its UTF-8 filename, a null separator, its complete bytes, and another
+null separator.
 
 Transactional tests also confirm that writer, verification, or later install
 failures preserve pre-existing outputs and leave no temporary siblings.
 
 ## Visual and animation acceptance
 
-All five principal static PNGs were inspected at original resolution. A
+All five principal static PNGs were regenerated at 300 dpi, with the main
+comparison and summary outputs at $3840\times2160$. They were inspected at
+original resolution. A
 wavelength-legend overlap was corrected and the affected outputs re-inspected.
 
 The optional animation was also inspected through its complete four-panel
 storyboard and extracted full-resolution frames. It is a deterministic,
-six-second, $1200\times675$, 48-frame looping GIF. One right-edge status-label
+six-second, $1920\times1080$, 60-frame looping GIF. One right-edge status-label
 defect was corrected before acceptance. The display explicitly marks maximum
 kinetic energy and stopping potential as undefined below threshold.
 
@@ -137,7 +143,7 @@ for approximately 17--18 seconds.
 
 The presentation validator confirms exactly one slide, one notes page, and two
 embedded visuals. The embedded graph and animated GIF are byte-identical to
-their validated source assets, and the GIF remains a complete 48-frame loop.
+their validated source assets, and the GIF remains a complete 60-frame loop.
 The static preview is $2401\times1350$ and was inspected at original
 resolution.
 
@@ -145,8 +151,8 @@ Two consecutive clean builds and renders were byte-identical. Their accepted
 SHA-256 digests are:
 
 ```text
-548e4031a1d443e0fa1092829452c1b9022f82c0d4e6528f6ebf94dbfda88005  Task04_Photoelectric_Effect.pptx
-02c756820a90cdfb60b3401f0b1ada0fe03241e4b42b873c55df01dea4aacdb0  Task04_Photoelectric_Effect_preview.png
+c9450623d5188262d7f12297a67128c4d511fef131f654ae42057a54c4b06829  Task04_Photoelectric_Effect.pptx
+0738bc249aaf2956b99205198617ee386d23a263a7b2b228fe9973aabc97d726  Task04_Photoelectric_Effect_preview.png
 ```
 
 ## Test, hygiene, and synchronization acceptance

@@ -99,9 +99,9 @@ def validate() -> None:
             raise AssertionError(f"presentation asset differs from source: {copied}")
 
     with Image.open(ASSET_PAIRS[1][1]) as animation:
-        if animation.size != (1200, 675):
+        if animation.size != (1920, 1080):
             raise AssertionError(f"invalid GIF dimensions: {animation.size}")
-        if animation.n_frames != 48:
+        if animation.n_frames != 60:
             raise AssertionError(f"invalid GIF frame count: {animation.n_frames}")
         if animation.info.get("loop") != 0:
             raise AssertionError("the embedded GIF does not loop continuously")
@@ -192,7 +192,7 @@ def validate() -> None:
     print(
         "Task 4 presentation validation: PASS "
         f"(1 slide, 2 embedded visuals, {word_count}-word final script, "
-        f"{width}x{height} preview, 48-frame GIF)"
+        f"{width}x{height} preview, 60-frame GIF)"
     )
 
 

@@ -49,8 +49,8 @@ PASS_COLOUR = "#14804A"
 STOP_COLOUR = "#B45309"
 FAIL_COLOUR = "#B91C1C"
 
-STORYBOARD_DIMENSIONS = (1600, 900)
-STORYBOARD_DPI = 100
+STORYBOARD_DIMENSIONS = (2400, 1350)
+STORYBOARD_DPI = 150
 
 
 def _integer(
@@ -91,11 +91,11 @@ def _non_empty_text(value: str, *, name: str) -> str:
 class AnimationConfiguration:
     """Frozen portable rendering configuration for the optional extension."""
 
-    fps: int = 8
-    frames_per_scene: int = 12
-    width_px: int = 1200
-    height_px: int = 675
-    dpi: int = 100
+    fps: int = 10
+    frames_per_scene: int = 15
+    width_px: int = 1920
+    height_px: int = 1080
+    dpi: int = 160
 
     def __post_init__(self) -> None:
         object.__setattr__(

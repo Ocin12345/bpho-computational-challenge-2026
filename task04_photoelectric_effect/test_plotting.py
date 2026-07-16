@@ -55,31 +55,31 @@ class Task04FigureContentTests(unittest.TestCase):
         specifications = (
             (
                 create_stopping_voltage_frequency_figure,
-                (10.4, 5.8),
+                (3840 / 300, 2160 / 300),
                 2,
                 "Stopping potential versus frequency",
             ),
             (
                 create_stopping_voltage_wavelength_figure,
-                (10.4, 5.8),
+                (3840 / 300, 2160 / 300),
                 2,
                 "Stopping potential versus vacuum wavelength",
             ),
             (
                 create_copper_threshold_explanation_figure,
-                (8.4, 5.2),
+                (3200 / 300, 1800 / 300),
                 1,
                 "Copper threshold",
             ),
             (
                 create_photoelectric_validation_figure,
-                (10.4, 5.2),
+                (3840 / 300, 1920 / 300),
                 2,
                 "Whole-study numerical checks",
             ),
             (
                 create_task04_summary_figure,
-                (2400 / 180, 1350 / 180),
+                (3840 / 300, 2160 / 300),
                 4,
                 "Stopping potential versus frequency",
             ),

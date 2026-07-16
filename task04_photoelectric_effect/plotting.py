@@ -31,11 +31,11 @@ from task04_photoelectric_effect.validation import (
 )
 
 
-FIGURE_DPI = 180
-REGULAR_FIGURE_SIZE_IN = (8.4, 5.2)
-WIDE_FIGURE_SIZE_IN = (10.4, 5.8)
-VALIDATION_FIGURE_SIZE_IN = (10.4, 5.2)
-SUMMARY_FIGURE_SIZE_IN = (2400 / FIGURE_DPI, 1350 / FIGURE_DPI)
+FIGURE_DPI = 300
+REGULAR_FIGURE_SIZE_IN = (3200 / FIGURE_DPI, 1800 / FIGURE_DPI)
+WIDE_FIGURE_SIZE_IN = (3840 / FIGURE_DPI, 2160 / FIGURE_DPI)
+VALIDATION_FIGURE_SIZE_IN = (3840 / FIGURE_DPI, 1920 / FIGURE_DPI)
+SUMMARY_FIGURE_SIZE_IN = (3840 / FIGURE_DPI, 2160 / FIGURE_DPI)
 
 GROUP_COLOURS = (
     "#0072B2",
@@ -53,22 +53,22 @@ VISIBLE_COLOUR = "#FDE68A"
 
 PLOT_STYLE: dict[str, object] = {
     "font.family": "DejaVu Sans",
-    "font.size": 10.0,
-    "axes.titlesize": 13.0,
+    "font.size": 12.0,
+    "axes.titlesize": 15.5,
     "axes.titleweight": "bold",
-    "axes.labelsize": 10.5,
+    "axes.labelsize": 13.0,
     "axes.labelcolor": TEXT_COLOUR,
     "axes.edgecolor": "#64748B",
-    "axes.linewidth": 0.8,
+    "axes.linewidth": 1.0,
     "axes.grid": True,
     "axes.axisbelow": True,
     "grid.color": GRID_COLOUR,
     "grid.alpha": 0.6,
-    "grid.linewidth": 0.7,
+    "grid.linewidth": 0.8,
     "xtick.color": "#475569",
     "ytick.color": "#475569",
     "legend.frameon": False,
-    "legend.fontsize": 8.6,
+    "legend.fontsize": 10.0,
     "figure.facecolor": "white",
     "axes.facecolor": "white",
     "savefig.facecolor": "white",
@@ -98,11 +98,11 @@ CURVE_GROUPS = (
 )
 
 EXPECTED_PNG_DIMENSIONS = {
-    "stopping_voltage_frequency.png": (1872, 1044),
-    "stopping_voltage_wavelength.png": (1872, 1044),
-    "copper_threshold_explanation.png": (1512, 936),
-    "photoelectric_validation.png": (1872, 936),
-    "task04_summary.png": (2400, 1350),
+    "stopping_voltage_frequency.png": (3840, 2160),
+    "stopping_voltage_wavelength.png": (3840, 2160),
+    "copper_threshold_explanation.png": (3200, 1800),
+    "photoelectric_validation.png": (3840, 1920),
+    "task04_summary.png": (3840, 2160),
 }
 
 
@@ -184,7 +184,7 @@ def _threshold_guide(
         title,
         ha="left",
         va="top",
-        fontsize=10.5,
+        fontsize=13.0,
         fontweight="bold",
         color=TEXT_COLOUR,
     )
@@ -200,7 +200,7 @@ def _threshold_guide(
             [0.03, 0.18],
             [y, y],
             color=group.colour,
-            linewidth=2.8,
+            linewidth=3.5,
             solid_capstyle="round",
         )
         axis.text(
@@ -209,7 +209,7 @@ def _threshold_guide(
             f"{group.label:<12} {threshold:.3f}",
             ha="left",
             va="center",
-            fontsize=8.8,
+            fontsize=10.5,
             color=TEXT_COLOUR,
             family="DejaVu Sans Mono",
         )
@@ -219,7 +219,7 @@ def _threshold_guide(
         "Ag, Al and Pb coincide\nbecause each is 4.3 eV.",
         ha="left",
         va="bottom",
-        fontsize=8.0,
+        fontsize=9.8,
         color="#64748B",
     )
 
@@ -240,13 +240,13 @@ def _plot_frequency_curves(
             scaled_frequency,
             study.frequency_physical_voltage_v[row],
             color=group.colour,
-            linewidth=1.8 if compact else 2.35,
+            linewidth=1.8 if compact else 3.0,
             label=f"{group.label} ({work_function:.1f} eV)",
         )
         axis.scatter(
             [study.cutoff_frequencies_hz[row] / 1.0e15],
             [0.0],
-            s=24 if compact else 42,
+            s=24 if compact else 64,
             color=group.colour,
             edgecolor="white",
             linewidth=0.8,
@@ -260,7 +260,7 @@ def _plot_frequency_curves(
     axis.legend(
         ncol=2,
         loc="upper left",
-        fontsize=6.6 if compact else 8.0,
+        fontsize=6.6 if compact else 9.6,
         columnspacing=0.9,
         handlelength=2.0,
     )
@@ -273,7 +273,7 @@ def _plot_frequency_curves(
             transform=axis.transAxes,
             ha="right",
             va="bottom",
-            fontsize=8.4,
+            fontsize=10.2,
             color="#475569",
             bbox={
                 "boxstyle": "round,pad=0.35",
@@ -289,7 +289,7 @@ def _plot_frequency_curves(
             transform=axis.transAxes,
             ha="right",
             va="top",
-            fontsize=8.7,
+            fontsize=10.5,
             color="#475569",
         )
     _style_axes(axis)
@@ -325,13 +325,13 @@ def _plot_wavelength_curves(
             study.wavelength_nm,
             study.wavelength_physical_voltage_v[row],
             color=group.colour,
-            linewidth=1.8 if compact else 2.35,
+            linewidth=1.8 if compact else 3.0,
             label=f"{group.label} ({work_function:.1f} eV)",
         )
         axis.scatter(
             [study.cutoff_wavelengths_nm[row]],
             [0.0],
-            s=24 if compact else 42,
+            s=24 if compact else 64,
             color=group.colour,
             edgecolor="white",
             linewidth=0.8,
@@ -345,7 +345,7 @@ def _plot_wavelength_curves(
     axis.legend(
         ncol=2,
         loc="upper right",
-        fontsize=6.6 if compact else 8.0,
+        fontsize=6.6 if compact else 9.6,
         columnspacing=0.9,
         handlelength=2.0,
     )
@@ -355,7 +355,7 @@ def _plot_wavelength_curves(
         "Visible band",
         ha="center",
         va="top",
-        fontsize=8.4 if compact else 9.0,
+        fontsize=8.4 if compact else 11.0,
         color="#806515",
         fontweight="bold",
     )
@@ -368,7 +368,7 @@ def _plot_wavelength_curves(
             transform=axis.transAxes,
             ha="right",
             va="bottom",
-            fontsize=8.4,
+            fontsize=10.2,
             color="#475569",
             bbox={
                 "boxstyle": "round,pad=0.35",
@@ -383,12 +383,12 @@ def _plot_wavelength_curves(
             xytext=(565.0, 1.55),
             ha="center",
             va="center",
-            fontsize=8.6,
+            fontsize=10.5,
             color=GROUP_COLOURS[6],
             arrowprops={
                 "arrowstyle": "->",
                 "color": GROUP_COLOURS[6],
-                "linewidth": 1.1,
+                "linewidth": 1.5,
             },
         )
     _style_axes(axis)
@@ -416,27 +416,27 @@ def _plot_copper_explanation(
         below_y,
         color="#94A3B8",
         linestyle="--",
-        linewidth=1.8 if compact else 2.2,
+        linewidth=1.8 if compact else 3.0,
         label="Mathematical extrapolation",
     )
     axis.plot(
         active_x,
         active_y,
         color=GROUP_COLOURS[2],
-        linewidth=2.1 if compact else 2.8,
+        linewidth=2.1 if compact else 3.6,
         label="Physical stopping potential",
     )
-    axis.axhline(0.0, color="#64748B", linewidth=0.9)
+    axis.axhline(0.0, color="#64748B", linewidth=1.1)
     axis.axvline(
         cutoff,
         color=GROUP_COLOURS[2],
         linestyle=":",
-        linewidth=1.4,
+        linewidth=1.8,
     )
     axis.scatter(
         [cutoff],
         [0.0],
-        s=32 if compact else 55,
+        s=32 if compact else 76,
         color=GROUP_COLOURS[2],
         edgecolor="white",
         linewidth=0.9,
@@ -447,7 +447,7 @@ def _plot_copper_explanation(
     axis.set_xlabel("Incident-light frequency, $f$ ($10^{15}$ Hz)")
     axis.set_ylabel("Signed model voltage (V)")
     axis.set_title("Copper threshold: $W = 4.7$ eV")
-    axis.legend(loc="upper left", fontsize=6.8 if compact else 8.5)
+    axis.legend(loc="upper left", fontsize=6.8 if compact else 10.0)
     if not compact:
         axis.text(
             0.05,
@@ -456,7 +456,7 @@ def _plot_copper_explanation(
             transform=axis.transAxes,
             ha="left",
             va="bottom",
-            fontsize=8.5,
+            fontsize=10.2,
             color="#64748B",
             fontstyle="italic",
         )
@@ -466,12 +466,12 @@ def _plot_copper_explanation(
             xytext=(1.43, -1.45),
             ha="center",
             va="center",
-            fontsize=8.8,
+            fontsize=10.5,
             color=TEXT_COLOUR,
             arrowprops={
                 "arrowstyle": "->",
                 "color": GROUP_COLOURS[2],
-                "linewidth": 1.1,
+                "linewidth": 1.5,
             },
         )
         axis.text(
@@ -481,7 +481,7 @@ def _plot_copper_explanation(
             transform=axis.transAxes,
             ha="right",
             va="bottom",
-            fontsize=13.0,
+            fontsize=15.5,
             color=TEXT_COLOUR,
             bbox={
                 "boxstyle": "round,pad=0.35",
@@ -552,7 +552,7 @@ def _build_frequency_figure(study: Task04StudyResult) -> Figure:
         _threshold_guide(axes[1], study, frequency=True)
         figure.suptitle(
             "Photoelectric stopping potential for nine official metals",
-            fontsize=16.0,
+            fontsize=20.0,
             fontweight="bold",
             color=TEXT_COLOUR,
             y=0.965,
@@ -579,7 +579,7 @@ def _build_wavelength_figure(study: Task04StudyResult) -> Figure:
         _threshold_guide(axes[1], study, frequency=False)
         figure.suptitle(
             "Vacuum wavelength reveals the photoemission cut-off",
-            fontsize=16.0,
+            fontsize=20.0,
             fontweight="bold",
             color=TEXT_COLOUR,
             y=0.965,
@@ -605,7 +605,7 @@ def _build_copper_figure(study: Task04StudyResult) -> Figure:
             "stopping potential.",
             ha="left",
             va="top",
-            fontsize=9.1,
+            fontsize=11.2,
             color="#475569",
         )
         figure.subplots_adjust(left=0.12, right=0.97, bottom=0.14, top=0.86)
@@ -635,7 +635,7 @@ def _build_validation_figure(report: Task04ValidationReport) -> Figure:
             1.0,
             color="#B91C1C",
             linestyle="--",
-            linewidth=1.5,
+            linewidth=2.0,
             label="Declared tolerance",
         )
         axes[0].set_yscale("log")
@@ -651,7 +651,7 @@ def _build_validation_figure(report: Task04ValidationReport) -> Figure:
             positions,
             np.maximum(frequency_errors, display_floor),
             marker="o",
-            linewidth=1.8,
+            linewidth=2.3,
             color="#E69F00",
             label="Frequency cut-off",
         )
@@ -659,7 +659,7 @@ def _build_validation_figure(report: Task04ValidationReport) -> Figure:
             positions,
             np.maximum(wavelength_errors, display_floor),
             marker="s",
-            linewidth=1.8,
+            linewidth=2.3,
             color="#009E73",
             label="Wavelength cut-off",
         )
@@ -667,7 +667,7 @@ def _build_validation_figure(report: Task04ValidationReport) -> Figure:
             1.0,
             color="#B91C1C",
             linestyle="--",
-            linewidth=1.5,
+            linewidth=2.0,
             label="Declared tolerance",
         )
         axes[1].set_ylim(display_floor / 2.0, 2.0)
@@ -678,12 +678,12 @@ def _build_validation_figure(report: Task04ValidationReport) -> Figure:
         axes[1].set_xlabel("Metal")
         axes[1].set_ylabel("Relative error / declared tolerance")
         axes[1].set_title("Independent analytical cut-offs")
-        axes[1].legend(loc="upper left", fontsize=7.8)
+        axes[1].legend(loc="upper left", fontsize=9.5)
         _style_axes(axes[1])
 
         figure.suptitle(
             "Independent validation — every error remains below tolerance",
-            fontsize=15.5,
+            fontsize=19.5,
             fontweight="bold",
             color=TEXT_COLOUR,
             y=0.965,
@@ -695,7 +695,7 @@ def _build_validation_figure(report: Task04ValidationReport) -> Figure:
             "zero errors shown at display floor",
             ha="center",
             va="center",
-            fontsize=9.2,
+            fontsize=11.5,
             fontweight="bold",
             color=PASS_COLOUR,
         )

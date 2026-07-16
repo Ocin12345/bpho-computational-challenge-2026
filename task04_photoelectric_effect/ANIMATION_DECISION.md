@@ -56,11 +56,11 @@ maximum kinetic energy or stopping potential could be measured.
 
 [`animation.py`](animation.py) writes exactly:
 
-- [`photoelectric_demo.gif`](../figures/task04/photoelectric_demo.gif): 48
-  deterministic frames, $1200\times675$, 8 frames per second, 6 seconds,
+- [`photoelectric_demo.gif`](../figures/task04/photoelectric_demo.gif): 60
+  deterministic frames, $1920\times1080$, 10 frames per second, 6 seconds,
   continuous loop; and
 - [`photoelectric_demo_storyboard.png`](../figures/task04/photoelectric_demo_storyboard.png):
-  a $1600\times900$ four-panel static preview suitable for documents or slides
+  a $2400\times1350$ four-panel static preview suitable for documents or slides
   that cannot play GIF files.
 
 Both files are installed in one rollback-safe transaction only after the core

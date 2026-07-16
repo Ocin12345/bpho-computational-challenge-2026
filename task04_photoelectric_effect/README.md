@@ -452,11 +452,11 @@ Stage 8 added [`plotting.py`](plotting.py), its 19 focused tests in
 
 | Figure stem | Purpose | PNG dimensions |
 | --- | --- | ---: |
-| `stopping_voltage_frequency` | Required nine-metal frequency comparison | $1872\times1044$ |
-| `stopping_voltage_wavelength` | Supporting wavelength and visible-band comparison | $1872\times1044$ |
-| `copper_threshold_explanation` | Physical curve versus non-physical extrapolation | $1512\times936$ |
-| `photoelectric_validation` | Error-to-tolerance evidence for all numerical check families | $1872\times936$ |
-| `task04_summary` | Presentation-ready four-panel overview | $2400\times1350$ |
+| `stopping_voltage_frequency` | Required nine-metal frequency comparison | $3840\times2160$ |
+| `stopping_voltage_wavelength` | Supporting wavelength and visible-band comparison | $3840\times2160$ |
+| `copper_threshold_explanation` | Physical curve versus non-physical extrapolation | $3200\times1800$ |
+| `photoelectric_validation` | Error-to-tolerance evidence for all numerical check families | $3840\times1920$ |
+| `task04_summary` | Presentation-ready four-panel overview | $3840\times2160$ |
 
 Regenerate validated data and all figures with:
 
@@ -556,9 +556,9 @@ completed baseline. It added:
   reproducibility, transactions, direct and integrated command lines, and
   committed-output freshness;
 - [`photoelectric_demo.gif`](../figures/task04/photoelectric_demo.gif), a
-  six-second, 48-frame, $1200\times675$ looping demonstration; and
+  six-second, 60-frame, $1920\times1080$ looping demonstration; and
 - [`photoelectric_demo_storyboard.png`](../figures/task04/photoelectric_demo_storyboard.png),
-  a $1600\times900$ static four-panel preview.
+  a $2400\times1350$ static four-panel preview.
 
 The four scenes use sodium and compare $550\ \mathrm{nm}$ below threshold with
 $450\ \mathrm{nm}$ above threshold. They then raise the illustrative intensity
@@ -646,7 +646,7 @@ Stage 11 is complete because:
 - the required output is visually dominant and the optional extension cannot
   be mistaken for the official requirement;
 - both embedded visuals are byte-identical to their validated source assets;
-- the embedded GIF remains a continuous 48-frame animation rather than a
+- the embedded GIF remains a continuous 60-frame animation rather than a
   flattened still;
 - the slide has meaningful alternative text and editable text, equations,
   shapes, captions, and notes;
