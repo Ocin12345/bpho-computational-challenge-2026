@@ -2,7 +2,7 @@
 
 ## Status
 
-Stages 1 through 9 are complete. The two official source files have been read,
+Stages 1 through 10 are complete. The two official source files have been read,
 and the mandatory model, reference inputs, baseline deliverables, optional
 extension, exclusions, staged workflow, and final acceptance boundary are
 frozen below. The complete equations, constants, units, physical domains,
@@ -12,8 +12,8 @@ pre-declared tolerances are fixed in the
 constants, frozen numerical configuration, immutable official material table,
 complete vectorized photoelectric model, immutable in-memory study, independent
 Decimal references, deterministic 43-check validation report, reproducible
-CSV/JSON evidence, and the complete deterministic PNG/SVG figure package are
-now implemented. The accepted
+CSV/JSON evidence, complete deterministic PNG/SVG figure package, and optional
+validated GIF/storyboard extension are now implemented. The accepted
 [architecture decision](architecture/ADR-001-deterministic-photoelectric-model.md)
 now fixes module ownership, immutable records, public APIs, output schemas,
 command-line contracts, tests, transaction rules, and cross-computer
@@ -22,6 +22,9 @@ reproducibility before implementation.
 The evidence-based
 [results and scientific interpretation](RESULTS_AND_INTERPRETATION.md) now
 provide the approved explanation boundary for the later presentation.
+The separate [animation decision](ANIMATION_DECISION.md) records why the
+extension was implemented and the precise boundary between its schematic
+motion and the quantitative model.
 
 ## Official sources reviewed
 
@@ -148,22 +151,18 @@ The final implementation will check that:
 These are checks of the mathematical model. They are not evidence that we have
 performed a laboratory measurement of a real metal surface.
 
-## Optional extension gate
+## Optional extension decision
 
-After the complete baseline passes its scientific and visual checks, we will
-decide whether a small PhET-style animation materially improves the final
-submission. A worthwhile extension could show:
+After the complete baseline passed its scientific and visual checks, the
+extension gate approved a compact four-scene sodium demonstration. It shows
+below-threshold suppression, above-threshold emission, the effect of intensity
+on illustrative electron count rather than maximum energy, and the stopping
+potential suppressing the photocurrent.
 
-- a selectable metal;
-- adjustable photon wavelength or frequency;
-- adjustable intensity affecting the number of emitted electrons but not
-  their maximum energy;
-- electron emission turning on at the threshold; and
-- a stopping-potential control suppressing the photocurrent.
-
-The extension cannot delay or destabilize the required graph, evidence, or
-three-minute presentation. If it does not add enough explanatory value, Stage
-10 will record a justified decision to omit it.
+The animation is explicitly schematic, reads its numerical values from the
+validated immutable study, and remains separate from the required graph and
+quantitative evidence. Its exact scientific and visual boundaries are recorded
+in [`ANIMATION_DECISION.md`](ANIMATION_DECISION.md).
 
 ## Explicit exclusions from the baseline
 
@@ -535,5 +534,65 @@ the report contains no machine-specific path, and all 137 Task 4 tests remain
 passing.
 
 No animation, PowerPoint, or speaker script was created during this stage. The
-next milestone is **Stage 10: decide whether the optional PhET-style animation
+next milestone was **Stage 10: decide whether the optional PhET-style animation
 adds enough explanatory value to justify its implementation and validation**.
+
+## Stage 10 implementation and completion check
+
+Stage 10 approved and implemented the optional extension after protecting the
+completed baseline. It added:
+
+- [`ANIMATION_DECISION.md`](ANIMATION_DECISION.md), recording the value gate,
+  four-scene story, claims, omissions, and acceptance criteria;
+- [`animation.py`](animation.py), containing immutable scene/configuration
+  records and rollback-safe GIF/storyboard generation;
+- [`test_animation.py`](test_animation.py), protecting physics, dimensions,
+  reproducibility, transactions, direct and integrated command lines, and
+  committed-output freshness;
+- [`photoelectric_demo.gif`](../figures/task04/photoelectric_demo.gif), a
+  six-second, 48-frame, $1200\times675$ looping demonstration; and
+- [`photoelectric_demo_storyboard.png`](../figures/task04/photoelectric_demo_storyboard.png),
+  a $1600\times900$ static four-panel preview.
+
+The four scenes use sodium and compare $550\ \mathrm{nm}$ below threshold with
+$450\ \mathrm{nm}$ above threshold. They then raise the illustrative intensity
+without changing $K_{\max}$ or $V_s$, and finally apply the calculated reverse
+stopping potential. Below threshold, the display explicitly marks both
+$K_{\max}$ and $V_s$ as undefined.
+
+Generate only the extension with:
+
+```bash
+python3 -m task04_photoelectric_effect.animation
+```
+
+Generate all Task 4 evidence, figures, and animation artifacts with:
+
+```bash
+python3 -m task04_photoelectric_effect.generate_task04 --with-animation
+```
+
+Stage 10 is complete because:
+
+- the extension is generated only from a passing, exactly matched 43-check
+  validation report;
+- all displayed energy and voltage values come from immutable study-grid
+  entries rather than duplicated physics;
+- the below-threshold scene never represents an undefined quantity as a
+  physical zero or negative stopping potential;
+- intensity changes the illustrative photon/electron count while preserving
+  maximum energy and stopping potential;
+- the final scene applies $V=V_s$ and clearly reports zero photocurrent;
+- motion, counts, trajectories, geometry, speed, and scale are labelled
+  schematic rather than experimental predictions;
+- both artifacts satisfy their declared format, dimensions, frame count,
+  duration, loop, permissions, file-order, and portability contracts;
+- repeated outputs are byte-identical and injected late failures preserve
+  every pre-existing destination byte;
+- the complete and extension-only command-line paths both pass; and
+- the GIF's frames and the complete storyboard were visually inspected at
+  original resolution after the right-edge status annotation was corrected;
+- all 149 focused Task 4 tests and all 373 repository tests pass.
+
+The next milestone is **Stage 11: editable presentation slide, selected assets,
+preview, speaker notes, and timed narration script**.

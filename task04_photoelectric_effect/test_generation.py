@@ -21,6 +21,7 @@ import numpy as np
 from task04_photoelectric_effect.analysis import build_task04_study
 from task04_photoelectric_effect.configuration import DEFAULT_CONFIGURATION
 from task04_photoelectric_effect.generate_task04 import (
+    ANIMATION_FILENAMES,
     DATA_FILENAMES,
     DEFAULT_DATA_DIRECTORY,
     FIGURE_FILENAMES,
@@ -323,6 +324,10 @@ class Task04DataGenerationTests(unittest.TestCase):
         self.assertEqual(
             payload["expected_figure_filenames"],
             list(FIGURE_FILENAMES),
+        )
+        self.assertEqual(
+            payload["optional_animation_filenames"],
+            list(ANIMATION_FILENAMES),
         )
         self.assertEqual(
             payload["mathematical_specification"],

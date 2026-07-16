@@ -63,6 +63,10 @@ FIGURE_FILENAMES = (
     "task04_summary.png",
     "task04_summary.svg",
 )
+ANIMATION_FILENAMES = (
+    "photoelectric_demo.gif",
+    "photoelectric_demo_storyboard.png",
+)
 
 _MATERIAL_HEADER = (
     "material",
@@ -294,6 +298,7 @@ def _manifest_payload(
         ],
         "expected_data_filenames": list(DATA_FILENAMES),
         "expected_figure_filenames": list(FIGURE_FILENAMES),
+        "optional_animation_filenames": list(ANIMATION_FILENAMES),
         "mathematical_specification": MATHEMATICAL_SPECIFICATION_PATH,
     }
 
@@ -599,6 +604,11 @@ def main(argv: Sequence[str] | None = None) -> int:
         help="write CSV and JSON evidence without importing Matplotlib",
     )
     parser.add_argument(
+        "--with-animation",
+        action="store_true",
+        help="also write the optional GIF and four-panel storyboard",
+    )
+    parser.add_argument(
         "--data-dir",
         type=Path,
         default=DEFAULT_DATA_DIRECTORY,
@@ -611,11 +621,15 @@ def main(argv: Sequence[str] | None = None) -> int:
         help="destination directory for PNG and SVG figures",
     )
     arguments = parser.parse_args(argv)
+    if arguments.data_only and arguments.with_animation:
+        parser.error("--with-animation cannot be combined with --data-only")
 
     study = build_task04_study()
     result = write_task04_data(study, arguments.data_dir)
     if arguments.data_only:
         print("Task 4 Stage 7: validated numerical evidence")
+    elif arguments.with_animation:
+        print("Task 4 Stage 10: validated evidence, figures and animation")
     else:
         print("Task 4 Stage 8: validated evidence and figures")
     for path in result.output_paths:
@@ -631,15 +645,30 @@ def main(argv: Sequence[str] | None = None) -> int:
         )
         for path in figure_result.output_paths:
             print(path)
+        if arguments.with_animation:
+            from task04_photoelectric_effect.animation import (
+                write_task04_animation,
+            )
+
+            animation_result = write_task04_animation(
+                study,
+                result.report,
+                arguments.figure_dir,
+            )
+            for path in animation_result.output_paths:
+                print(path)
     print(f"Validation checks: {len(result.report.checks)}")
     if arguments.data_only:
         print("Task 4 data generation: PASS")
+    elif arguments.with_animation:
+        print("Task 4 complete generation with animation: PASS")
     else:
         print("Task 4 complete generation: PASS")
     return 0
 
 
 __all__ = [
+    "ANIMATION_FILENAMES",
     "DATA_FILENAMES",
     "DEFAULT_DATA_DIRECTORY",
     "DEFAULT_FIGURE_DIRECTORY",

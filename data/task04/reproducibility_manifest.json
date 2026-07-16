@@ -101,6 +101,10 @@
       "work_function_ev": 2.4
     }
   ],
+  "optional_animation_filenames": [
+    "photoelectric_demo.gif",
+    "photoelectric_demo_storyboard.png"
+  ],
   "output_schema_version": "task04-data-v1",
   "schema_version": "task04-v1",
   "tolerances": {
