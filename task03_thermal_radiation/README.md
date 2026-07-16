@@ -2,11 +2,12 @@
 
 ## Status
 
-Stage 1 is complete: the official requirements, reference examples, project
-scope, planned evidence, and exclusions are recorded below. No Task 3 physics
-code has been implemented yet. Stage 2 will define the complete mathematical
-model, notation, units, constants, and numerical conventions before
-implementation begins.
+Stages 1 and 2 are complete. The official requirements, reference examples,
+project scope, planned evidence, and exclusions are recorded below. The
+complete equations, notation, units, constants, numerical conventions,
+reference targets, and pre-declared validation tolerances are frozen in the
+[mathematical and numerical specification](MATHEMATICAL_MODEL.md). No Task 3
+physics code has been implemented yet.
 
 ## Official sources reviewed
 
@@ -182,4 +183,18 @@ Stage 1 is complete because:
 - the expected deliverables and final acceptance boundary are recorded; and
 - no mathematical or software implementation has begun prematurely.
 
-The next stage is **Stage 2: complete mathematical specification**.
+## Stage 2 completion check
+
+Stage 2 is complete because:
+
+- both official models have precise definitions, units, and domains;
+- spectral radiance and spectral exitance are distinguished explicitly;
+- exact SI constants and independent analytical targets are recorded;
+- all seven official material conversions reproduce the displayed table;
+- stable numerical forms and fixed calculation grids are declared;
+- assumptions, limitations, and output rules are explicit; and
+- validation tolerances were fixed before implementation.
+
+The complete details are in
+[MATHEMATICAL_MODEL.md](MATHEMATICAL_MODEL.md). The next stage is **Stage 3:
+software architecture and reproducibility design**.
