@@ -2,7 +2,7 @@
 
 ## Status
 
-Stages 1 through 4 are complete. The official requirements, reference
+Stages 1 through 5 are complete. The official requirements, reference
 examples, project scope, planned evidence, and exclusions are recorded below.
 The complete equations, notation, units, constants, numerical conventions,
 reference targets, and pre-declared validation tolerances are frozen in the
@@ -11,8 +11,10 @@ reference targets, and pre-declared validation tolerances are frozen in the
 now fixes module ownership, public APIs, output schemas, command-line
 contracts, tests, and reproducibility rules. The exact physical constants,
 vectorized Planck spectral-radiance and spectral-exitance functions, unit
-conversion, and focused Stage 4 tests are now implemented. Einstein modelling,
-full Planck validation, saved results, and figures remain for later stages.
+conversion, and focused Stage 4 tests are implemented. The complete in-memory
+Planck study now passes the pre-declared Wien, Stefan--Boltzmann,
+radiance-integral, finiteness, and exitance-identity checks. Einstein modelling,
+saved result files, and figures remain for later stages.
 
 ## Official sources reviewed
 
@@ -254,5 +256,57 @@ Stage 4 is complete because:
 - all 117 earlier Task 1 and Task 2 tests still pass.
 
 No Einstein, study-building, validation-report, output, or plotting code was
-added during this stage. The next stage is **Stage 5: Planck-spectrum
-validation using Wien's displacement law and the Stefan--Boltzmann law**.
+added during Stage 4. Stage 5 implements the Planck-spectrum validation
+specified by that architecture.
+
+## Stage 5 implementation and completion check
+
+Stage 5 added:
+
+- [`configuration.py`](configuration.py), containing immutable grids and
+  pre-declared tolerances;
+- [`reference.py`](reference.py), containing independent Wien and
+  Stefan--Boltzmann targets without importing the numerical model;
+- [`analysis.py`](analysis.py), constructing immutable spectra, peak searches,
+  and wavelength integrals;
+- [`validation.py`](validation.py), returning structured, serializable checks;
+- [`validate_task03.py`](validate_task03.py), providing a validation-only
+  command with a meaningful exit status; and
+- [`test_analysis_and_validation.py`](test_analysis_and_validation.py),
+  testing configuration, references, immutability, reproducibility, deliberate
+  failure detection, runtime, and command-line behaviour.
+
+Run the current validation with:
+
+```bash
+python3 -m task03_thermal_radiation.validate_task03
+```
+
+The reference Stage 5 results are:
+
+| $T$ / K | Numerical peak / nm | Wien target / nm | Peak relative error | Exitance-integral relative error |
+| ---: | ---: | ---: | ---: | ---: |
+| $4000$ | $724.440$ | $724.442989$ | $4.13\times10^{-6}$ | $1.08\times10^{-9}$ |
+| $5000$ | $579.550$ | $579.554391$ | $7.58\times10^{-6}$ | $1.08\times10^{-9}$ |
+| $6000$ | $482.960$ | $482.961993$ | $4.13\times10^{-6}$ | $1.08\times10^{-9}$ |
+
+The allowed relative errors are $10^{-3}$ for Wien peaks and $2\times10^{-3}$
+for the Stefan--Boltzmann and radiance integrals. All 13 Stage 5 checks pass
+without changing those thresholds. A complete study takes about $0.08$ seconds
+on the MacBook Air, well below the five-second portability budget.
+
+Stage 5 is complete because:
+
+- analytical references and numerical model paths are separated;
+- all spectrum and integral arrays are finite and non-negative;
+- all three numerical peaks satisfy Wien's displacement law;
+- all three exitance integrals satisfy the Stefan--Boltzmann law;
+- all three radiance integrals satisfy $\sigma T^4/\pi$;
+- the $M_\lambda=\pi B_\lambda$ identity passes point by point;
+- immutable results reproduce exactly across repeated runs;
+- a deliberately incorrect peak causes validation to fail; and
+- all 40 Task 3 tests and all 117 earlier tests pass.
+
+No CSV, JSON, figure, presentation, or Einstein-model output was created in
+this stage. The next stage is **Stage 6: Einstein heat-capacity implementation
+and unit tests for the seven official solids**.
