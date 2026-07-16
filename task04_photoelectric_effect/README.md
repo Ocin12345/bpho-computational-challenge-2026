@@ -2,7 +2,7 @@
 
 ## Status
 
-Stages 1 through 6 are complete. The two official source files have been read,
+Stages 1 through 7 are complete. The two official source files have been read,
 and the mandatory model, reference inputs, baseline deliverables, optional
 extension, exclusions, staged workflow, and final acceptance boundary are
 frozen below. The complete equations, constants, units, physical domains,
@@ -11,8 +11,8 @@ pre-declared tolerances are fixed in the
 [mathematical and numerical specification](MATHEMATICAL_MODEL.md). The exact
 constants, frozen numerical configuration, immutable official material table,
 complete vectorized photoelectric model, immutable in-memory study, independent
-Decimal references, and deterministic 43-check validation report are now
-implemented. The accepted
+Decimal references, deterministic 43-check validation report, and reproducible
+CSV/JSON evidence transaction are now implemented. The accepted
 [architecture decision](architecture/ADR-001-deterministic-photoelectric-model.md)
 now fixes module ownership, immutable records, public APIs, output schemas,
 command-line contracts, tests, transaction rules, and cross-computer
@@ -381,3 +381,55 @@ Stage 6 is complete because:
 No CSV, JSON, figure, animation, or presentation artifact was created during
 this stage. The next milestone is **Stage 7: deterministic CSV and JSON
 evidence, validation-first generation, and transactional output safety**.
+
+## Stage 7 implementation and completion check
+
+Stage 7 added [`generate_task04.py`](generate_task04.py), its 23 focused tests
+in [`test_generation.py`](test_generation.py), and the five committed artifacts
+in [`../data/task04`](../data/task04):
+
+| Artifact | Contents | Data rows |
+| --- | --- | ---: |
+| `material_cutoffs.csv` | Official work functions and analytical cut-offs | 9 |
+| `stopping_voltage_frequency.csv` | Long-form frequency curves and physical-domain flags | 18,009 |
+| `stopping_voltage_wavelength.csv` | Long-form wavelength curves and physical-domain flags | 19,809 |
+| `validation_report.json` | Complete ordered Stage 6 report | 43 checks |
+| `reproducibility_manifest.json` | Constants, configuration, sources, units, tolerances, and filenames | one manifest |
+
+Regenerate only the numerical evidence from any working directory with:
+
+```bash
+python3 -m task04_photoelectric_effect.generate_task04 --data-only
+```
+
+The default destination is resolved from the repository root, while
+`--data-dir PATH` supports a deliberate alternative location. The command
+currently requires `--data-only`; Stage 8 will activate the default combined
+data-and-figure command after the complete plotting package exists.
+
+Stage 7 is complete because:
+
+- generation validates the complete study before resolving or creating an
+  output directory;
+- all CSV headers, units, material order, grid order, row counts, lowercase
+  booleans, and empty non-emission fields match the frozen contract;
+- floating-point evidence uses 17 significant digits where round-trip
+  precision is required, while official one-decimal work functions retain
+  their source precision;
+- both JSON files are sorted, indented, finite, schema-complete, and free of
+  timestamps, user names, host names, absolute paths, or random identifiers;
+- every temporary artifact is reparsed and checked before installation;
+- pre-existing destinations are backed up, atomic replacement occurs in stable
+  order, and an injected later replacement failure restores every prior byte;
+- writer, verification, path, validation, and command-line failures leave no
+  temporary, backup, or partial scientific output;
+- repeated generation in new and existing directories is byte-identical;
+- the `--data-only` path does not import Matplotlib and works independently of
+  the caller's current directory;
+- the complete evidence set is 2,118,299 bytes and regenerates in about 0.26
+  seconds on the portable MacBook baseline; and
+- all 118 focused Task 4 tests pass.
+
+The next milestone is **Stage 8: deterministic PNG/SVG figures, required
+scientific annotations, transactional plotting, and original-resolution visual
+inspection**.

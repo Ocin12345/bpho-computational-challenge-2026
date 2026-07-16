@@ -1,0 +1,436 @@
+{
+  "checks": [
+    {
+      "comparison": "exact_equal",
+      "expected": 0.0,
+      "explanation": "Exact SI constants and derived conversions match the frozen definitions.",
+      "name": "exact_constants",
+      "observed": 0.0,
+      "passed": true,
+      "tolerance": 0.0,
+      "unit": "count"
+    },
+    {
+      "comparison": "exact_equal",
+      "expected": 0.0,
+      "explanation": "Official and stored material order, names, symbols, and work functions match the source slide.",
+      "name": "official_material_table",
+      "observed": 0.0,
+      "passed": true,
+      "tolerance": 0.0,
+      "unit": "count"
+    },
+    {
+      "comparison": "absolute_error_lte",
+      "expected": 0.0,
+      "explanation": "Stored joule values equal each electronvolt work function multiplied by the exact elementary charge.",
+      "name": "work_function_joules",
+      "observed": 0.0,
+      "passed": true,
+      "tolerance": 0.0,
+      "unit": "J"
+    },
+    {
+      "comparison": "exact_equal",
+      "expected": 0.0,
+      "explanation": "Frequency grid matches the frozen inclusive start, interval, count, and endpoint exactly.",
+      "name": "frequency_grid",
+      "observed": 0.0,
+      "passed": true,
+      "tolerance": 0.0,
+      "unit": "count"
+    },
+    {
+      "comparison": "exact_equal",
+      "expected": 0.0,
+      "explanation": "Metre and nanometre wavelength grids match the frozen inclusive specification exactly.",
+      "name": "wavelength_grid",
+      "observed": 0.0,
+      "passed": true,
+      "tolerance": 0.0,
+      "unit": "count"
+    },
+    {
+      "comparison": "exact_equal",
+      "expected": 0.0,
+      "explanation": "Frequency metadata, signed curves, and active physical values are finite.",
+      "name": "frequency_finiteness",
+      "observed": 0.0,
+      "passed": true,
+      "tolerance": 0.0,
+      "unit": "count"
+    },
+    {
+      "comparison": "exact_equal",
+      "expected": 0.0,
+      "explanation": "Wavelength metadata, signed curves, and active physical values are finite.",
+      "name": "wavelength_finiteness",
+      "observed": 0.0,
+      "passed": true,
+      "tolerance": 0.0,
+      "unit": "count"
+    },
+    {
+      "comparison": "absolute_error_lte",
+      "expected": 0.0,
+      "explanation": "Every frequency point independently satisfies eV = hf - W when numerical electronvolt and volt values are compared.",
+      "name": "frequency_energy_identity",
+      "observed": 0.0,
+      "passed": true,
+      "tolerance": 5e-12,
+      "unit": "eV"
+    },
+    {
+      "comparison": "absolute_error_lte",
+      "expected": 0.0,
+      "explanation": "Every wavelength point independently satisfies eV = hc/lambda - W.",
+      "name": "wavelength_energy_identity",
+      "observed": 1.7763568394002505e-15,
+      "passed": true,
+      "tolerance": 5e-12,
+      "unit": "eV"
+    },
+    {
+      "comparison": "absolute_error_lte",
+      "expected": 0.0,
+      "explanation": "Every numerical frequency gradient agrees with the independent Decimal value h/e.",
+      "name": "common_frequency_gradient",
+      "observed": 2.9584660897872794e-13,
+      "passed": true,
+      "tolerance": 5e-13,
+      "unit": "dimensionless"
+    },
+    {
+      "comparison": "relative_error_lte",
+      "expected": 1039735374096514.8,
+      "explanation": "Ag threshold frequency agrees with independent Decimal eW/h.",
+      "name": "cutoff_frequency_ag",
+      "observed": 1039735374096514.8,
+      "passed": true,
+      "tolerance": 5e-13,
+      "unit": "Hz"
+    },
+    {
+      "comparison": "relative_error_lte",
+      "expected": 1039735374096514.8,
+      "explanation": "Al threshold frequency agrees with independent Decimal eW/h.",
+      "name": "cutoff_frequency_al",
+      "observed": 1039735374096514.8,
+      "passed": true,
+      "tolerance": 5e-13,
+      "unit": "Hz"
+    },
+    {
+      "comparison": "relative_error_lte",
+      "expected": 1233174513463308.2,
+      "explanation": "Au threshold frequency agrees with independent Decimal eW/h.",
+      "name": "cutoff_frequency_au",
+      "observed": 1233174513463308.0,
+      "passed": true,
+      "tolerance": 5e-13,
+      "unit": "Hz"
+    },
+    {
+      "comparison": "relative_error_lte",
+      "expected": 1136454943779911.5,
+      "explanation": "Cu threshold frequency agrees with independent Decimal eW/h.",
+      "name": "cutoff_frequency_cu",
+      "observed": 1136454943779911.5,
+      "passed": true,
+      "tolerance": 5e-13,
+      "unit": "Hz"
+    },
+    {
+      "comparison": "relative_error_lte",
+      "expected": 1063915266517364.0,
+      "explanation": "Sn threshold frequency agrees with independent Decimal eW/h.",
+      "name": "cutoff_frequency_sn",
+      "observed": 1063915266517364.0,
+      "passed": true,
+      "tolerance": 5e-13,
+      "unit": "Hz"
+    },
+    {
+      "comparison": "relative_error_lte",
+      "expected": 1039735374096514.8,
+      "explanation": "Pb threshold frequency agrees with independent Decimal eW/h.",
+      "name": "cutoff_frequency_pb",
+      "observed": 1039735374096514.8,
+      "passed": true,
+      "tolerance": 5e-13,
+      "unit": "Hz"
+    },
+    {
+      "comparison": "relative_error_lte",
+      "expected": 1088095158938213.1,
+      "explanation": "W threshold frequency agrees with independent Decimal eW/h.",
+      "name": "cutoff_frequency_w",
+      "observed": 1088095158938213.1,
+      "passed": true,
+      "tolerance": 5e-13,
+      "unit": "Hz"
+    },
+    {
+      "comparison": "relative_error_lte",
+      "expected": 1112275051359062.4,
+      "explanation": "Ni threshold frequency agrees with independent Decimal eW/h.",
+      "name": "cutoff_frequency_ni",
+      "observed": 1112275051359062.2,
+      "passed": true,
+      "tolerance": 5e-13,
+      "unit": "Hz"
+    },
+    {
+      "comparison": "relative_error_lte",
+      "expected": 580317418100380.4,
+      "explanation": "Na threshold frequency agrees with independent Decimal eW/h.",
+      "name": "cutoff_frequency_na",
+      "observed": 580317418100380.2,
+      "passed": true,
+      "tolerance": 5e-13,
+      "unit": "Hz"
+    },
+    {
+      "comparison": "relative_error_lte",
+      "expected": 288.335345193489,
+      "explanation": "Ag threshold wavelength agrees with independent Decimal hc/(eW).",
+      "name": "cutoff_wavelength_ag",
+      "observed": 288.335345193489,
+      "passed": true,
+      "tolerance": 5e-13,
+      "unit": "nm"
+    },
+    {
+      "comparison": "relative_error_lte",
+      "expected": 288.335345193489,
+      "explanation": "Al threshold wavelength agrees with independent Decimal hc/(eW).",
+      "name": "cutoff_wavelength_al",
+      "observed": 288.335345193489,
+      "passed": true,
+      "tolerance": 5e-13,
+      "unit": "nm"
+    },
+    {
+      "comparison": "relative_error_lte",
+      "expected": 243.10627143764756,
+      "explanation": "Au threshold wavelength agrees with independent Decimal hc/(eW).",
+      "name": "cutoff_wavelength_au",
+      "observed": 243.10627143764762,
+      "passed": true,
+      "tolerance": 5e-13,
+      "unit": "nm"
+    },
+    {
+      "comparison": "relative_error_lte",
+      "expected": 263.7961668791495,
+      "explanation": "Cu threshold wavelength agrees with independent Decimal hc/(eW).",
+      "name": "cutoff_wavelength_cu",
+      "observed": 263.7961668791495,
+      "passed": true,
+      "tolerance": 5e-13,
+      "unit": "nm"
+    },
+    {
+      "comparison": "relative_error_lte",
+      "expected": 281.78226916636424,
+      "explanation": "Sn threshold wavelength agrees with independent Decimal hc/(eW).",
+      "name": "cutoff_wavelength_sn",
+      "observed": 281.7822691663642,
+      "passed": true,
+      "tolerance": 5e-13,
+      "unit": "nm"
+    },
+    {
+      "comparison": "relative_error_lte",
+      "expected": 288.335345193489,
+      "explanation": "Pb threshold wavelength agrees with independent Decimal hc/(eW).",
+      "name": "cutoff_wavelength_pb",
+      "observed": 288.335345193489,
+      "passed": true,
+      "tolerance": 5e-13,
+      "unit": "nm"
+    },
+    {
+      "comparison": "relative_error_lte",
+      "expected": 275.52044096266724,
+      "explanation": "W threshold wavelength agrees with independent Decimal hc/(eW).",
+      "name": "cutoff_wavelength_w",
+      "observed": 275.5204409626673,
+      "passed": true,
+      "tolerance": 5e-13,
+      "unit": "nm"
+    },
+    {
+      "comparison": "relative_error_lte",
+      "expected": 269.530866159131,
+      "explanation": "Ni threshold wavelength agrees with independent Decimal hc/(eW).",
+      "name": "cutoff_wavelength_ni",
+      "observed": 269.53086615913105,
+      "passed": true,
+      "tolerance": 5e-13,
+      "unit": "nm"
+    },
+    {
+      "comparison": "relative_error_lte",
+      "expected": 516.6008268050011,
+      "explanation": "Na threshold wavelength agrees with independent Decimal hc/(eW).",
+      "name": "cutoff_wavelength_na",
+      "observed": 516.6008268050011,
+      "passed": true,
+      "tolerance": 5e-13,
+      "unit": "nm"
+    },
+    {
+      "comparison": "absolute_error_lte",
+      "expected": 0.0,
+      "explanation": "Independent frequency equations give zero voltage at every stored frequency cut-off.",
+      "name": "threshold_frequency_voltage",
+      "observed": 1.0866116525826204e-15,
+      "passed": true,
+      "tolerance": 5e-12,
+      "unit": "V"
+    },
+    {
+      "comparison": "absolute_error_lte",
+      "expected": 0.0,
+      "explanation": "Independent wavelength equations give zero voltage at every stored wavelength cut-off.",
+      "name": "threshold_wavelength_voltage",
+      "observed": 9.856696461896093e-16,
+      "passed": true,
+      "tolerance": 5e-12,
+      "unit": "V"
+    },
+    {
+      "comparison": "exact_equal",
+      "expected": 0.0,
+      "explanation": "Frequency emission mask exactly follows f greater than or equal to each independent cut-off.",
+      "name": "frequency_emission_mask",
+      "observed": 0.0,
+      "passed": true,
+      "tolerance": 0.0,
+      "unit": "count"
+    },
+    {
+      "comparison": "exact_equal",
+      "expected": 0.0,
+      "explanation": "Wavelength emission mask exactly follows lambda less than or equal to each independent cut-off.",
+      "name": "wavelength_emission_mask",
+      "observed": 0.0,
+      "passed": true,
+      "tolerance": 0.0,
+      "unit": "count"
+    },
+    {
+      "comparison": "absolute_error_lte",
+      "expected": 0.0,
+      "explanation": "Frequency physical voltage equals the independent signed result in-domain and is NaN outside it.",
+      "name": "frequency_physical_voltage",
+      "observed": 0.0,
+      "passed": true,
+      "tolerance": 5e-12,
+      "unit": "V"
+    },
+    {
+      "comparison": "absolute_error_lte",
+      "expected": 0.0,
+      "explanation": "Wavelength physical voltage equals the independent signed result in-domain and is NaN outside it.",
+      "name": "wavelength_physical_voltage",
+      "observed": 1.7763568394002505e-15,
+      "passed": true,
+      "tolerance": 5e-12,
+      "unit": "V"
+    },
+    {
+      "comparison": "absolute_error_lte",
+      "expected": 0.0,
+      "explanation": "All active frequency-domain stopping voltages are finite and non-negative within boundary slack.",
+      "name": "frequency_physical_bounds",
+      "observed": 0.0,
+      "passed": true,
+      "tolerance": 1e-12,
+      "unit": "V"
+    },
+    {
+      "comparison": "absolute_error_lte",
+      "expected": 0.0,
+      "explanation": "All active wavelength-domain stopping voltages are finite and non-negative within boundary slack.",
+      "name": "wavelength_physical_bounds",
+      "observed": 0.0,
+      "passed": true,
+      "tolerance": 1e-12,
+      "unit": "V"
+    },
+    {
+      "comparison": "absolute_error_lte",
+      "expected": 0.0,
+      "explanation": "Signed stopping voltage never decreases as frequency rises beyond numerical slack.",
+      "name": "frequency_monotonicity",
+      "observed": 0.0,
+      "passed": true,
+      "tolerance": 1e-12,
+      "unit": "V"
+    },
+    {
+      "comparison": "absolute_error_lte",
+      "expected": 0.0,
+      "explanation": "Signed stopping voltage never increases as vacuum wavelength rises beyond numerical slack.",
+      "name": "wavelength_monotonicity",
+      "observed": 0.0,
+      "passed": true,
+      "tolerance": 1e-12,
+      "unit": "V"
+    },
+    {
+      "comparison": "exact_equal",
+      "expected": 0.0,
+      "explanation": "Ag, Al, and Pb have exactly identical ideal results because the official table gives each 4.3 eV.",
+      "name": "duplicate_materials",
+      "observed": 0.0,
+      "passed": true,
+      "tolerance": 0.0,
+      "unit": "count"
+    },
+    {
+      "comparison": "exact_equal",
+      "expected": 0.0,
+      "explanation": "Higher work function always gives higher frequency cut-off and shorter wavelength cut-off; equal work functions coincide.",
+      "name": "cutoff_ordering",
+      "observed": 0.0,
+      "passed": true,
+      "tolerance": 0.0,
+      "unit": "count"
+    },
+    {
+      "comparison": "absolute_error_lte",
+      "expected": 0.0,
+      "explanation": "Frequency and wavelength signed curves agree after independent vacuum conversion f = c/lambda.",
+      "name": "frequency_wavelength_consistency",
+      "observed": 2.220446049250313e-15,
+      "passed": true,
+      "tolerance": 1e-11,
+      "unit": "V"
+    },
+    {
+      "comparison": "absolute_error_lte",
+      "expected": 0.0,
+      "explanation": "Every metal agrees with the independent Decimal voltage at 1.5e15 Hz.",
+      "name": "frequency_anchor",
+      "observed": 6.661338147750939e-16,
+      "passed": true,
+      "tolerance": 5e-12,
+      "unit": "V"
+    },
+    {
+      "comparison": "absolute_error_lte",
+      "expected": 0.0,
+      "explanation": "Every metal agrees with the independent Decimal voltage at 200 nm.",
+      "name": "wavelength_anchor",
+      "observed": 4.440892098500626e-16,
+      "passed": true,
+      "tolerance": 5e-12,
+      "unit": "V"
+    }
+  ],
+  "passed": true,
+  "schema_version": "task04-v1"
+}

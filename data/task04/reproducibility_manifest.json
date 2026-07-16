@@ -1,0 +1,128 @@
+{
+  "configuration": {
+    "anchor_tolerance_v": 5e-12,
+    "boundary_clamp_tolerance_v": 5e-12,
+    "coordinate_consistency_tolerance_v": 1e-11,
+    "cutoff_relative_tolerance": 5e-13,
+    "energy_identity_tolerance_ev": 5e-12,
+    "evidence_size_budget_bytes": 10485760,
+    "figure_size_budget_bytes": 10485760,
+    "frequency_points": 2001,
+    "frequency_start_hz": 400000000000000.0,
+    "frequency_step_hz": 1000000000000.0,
+    "generation_runtime_budget_s": 15.0,
+    "gradient_relative_tolerance": 5e-13,
+    "monotonic_slack_v": 1e-12,
+    "physical_bound_slack_v": 1e-12,
+    "schema_version": "task04-v1",
+    "study_runtime_budget_s": 2.0,
+    "threshold_voltage_tolerance_v": 5e-12,
+    "visible_max_nm": 750.0,
+    "visible_min_nm": 380.0,
+    "wavelength_points": 2201,
+    "wavelength_start_nm": 150.0,
+    "wavelength_step_nm": 0.25
+  },
+  "constants": {
+    "electronvolt_j": 1.602176634e-19,
+    "elementary_charge_c": 1.602176634e-19,
+    "hc_over_charge_v_m": 1.2398419843320026e-06,
+    "metres_per_nanometre": 1e-09,
+    "nanometres_per_metre": 1000000000.0,
+    "planck_constant_j_s": 6.62607015e-34,
+    "planck_over_charge_v_s": 4.135667696923859e-15,
+    "speed_of_light_m_s": 299792458.0
+  },
+  "expected_data_filenames": [
+    "material_cutoffs.csv",
+    "stopping_voltage_frequency.csv",
+    "stopping_voltage_wavelength.csv",
+    "validation_report.json",
+    "reproducibility_manifest.json"
+  ],
+  "expected_figure_filenames": [
+    "stopping_voltage_frequency.png",
+    "stopping_voltage_frequency.svg",
+    "stopping_voltage_wavelength.png",
+    "stopping_voltage_wavelength.svg",
+    "copper_threshold_explanation.png",
+    "copper_threshold_explanation.svg",
+    "photoelectric_validation.png",
+    "photoelectric_validation.svg",
+    "task04_summary.png",
+    "task04_summary.svg"
+  ],
+  "material_source": "BPhO CompPhys2026 Quantum, slide 28",
+  "mathematical_specification": "task04_photoelectric_effect/MATHEMATICAL_MODEL.md",
+  "official_materials": [
+    {
+      "name": "Silver",
+      "symbol": "Ag",
+      "work_function_ev": 4.3
+    },
+    {
+      "name": "Aluminium",
+      "symbol": "Al",
+      "work_function_ev": 4.3
+    },
+    {
+      "name": "Gold",
+      "symbol": "Au",
+      "work_function_ev": 5.1
+    },
+    {
+      "name": "Copper",
+      "symbol": "Cu",
+      "work_function_ev": 4.7
+    },
+    {
+      "name": "Tin",
+      "symbol": "Sn",
+      "work_function_ev": 4.4
+    },
+    {
+      "name": "Lead",
+      "symbol": "Pb",
+      "work_function_ev": 4.3
+    },
+    {
+      "name": "Tungsten",
+      "symbol": "W",
+      "work_function_ev": 4.5
+    },
+    {
+      "name": "Nickel",
+      "symbol": "Ni",
+      "work_function_ev": 4.6
+    },
+    {
+      "name": "Sodium",
+      "symbol": "Na",
+      "work_function_ev": 2.4
+    }
+  ],
+  "output_schema_version": "task04-data-v1",
+  "schema_version": "task04-v1",
+  "tolerances": {
+    "anchor_tolerance_v": 5e-12,
+    "boundary_clamp_tolerance_v": 5e-12,
+    "coordinate_consistency_tolerance_v": 1e-11,
+    "cutoff_relative_tolerance": 5e-13,
+    "energy_identity_tolerance_ev": 5e-12,
+    "gradient_relative_tolerance": 5e-13,
+    "monotonic_slack_v": 1e-12,
+    "physical_bound_slack_v": 1e-12,
+    "threshold_voltage_tolerance_v": 5e-12
+  },
+  "units": {
+    "cutoff_frequency_hz": "Hz",
+    "cutoff_wavelength_nm": "nm",
+    "emission_possible": "boolean",
+    "frequency_hz": "Hz",
+    "linear_stopping_voltage_v": "V",
+    "physical_stopping_voltage_v": "V",
+    "wavelength_nm": "nm",
+    "work_function_ev": "eV",
+    "work_function_j": "J"
+  }
+}
