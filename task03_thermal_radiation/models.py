@@ -1,8 +1,7 @@
 """Vectorized physical models for Task 3.
 
-Stage 4 implements only the Planck-spectrum API. Einstein-model functions will
-be added in their dedicated implementation stage. This module has no plotting
-or file-system side effects.
+The Planck-spectrum and Einstein-solid APIs are deterministic, vectorized, and
+side-effect free. Plotting, validation targets, and file output live elsewhere.
 """
 
 from __future__ import annotations
@@ -13,15 +12,20 @@ import numpy as np
 from numpy.typing import ArrayLike, NDArray
 
 from task03_thermal_radiation.constants import (
+    BOLTZMANN_CONSTANT_J_K,
+    EINSTEIN_DEBYE_FACTOR,
     METRES_PER_NANOMETRE,
+    MOLAR_GAS_CONSTANT_J_MOL_K,
     PLANCK_EXPONENT_CONSTANT_M_K,
     PLANCK_RADIANCE_PREFACTOR,
+    PLANCK_CONSTANT_J_S,
 )
 
 
 FloatArray = NDArray[np.float64]
 
 _EXPONENT_BRANCH_POINT = 50.0
+_EINSTEIN_SERIES_BOUNDARY = 1.0e-3
 _LOG_MAX_FLOAT64 = float(np.log(np.finfo(np.float64).max))
 
 
@@ -187,7 +191,152 @@ def spectral_density_per_nanometre(
     return np.asarray(converted, dtype=np.float64)
 
 
+def einstein_temperature_from_debye(
+    debye_temperature_k: ArrayLike,
+) -> FloatArray:
+    """Convert positive Debye temperatures to Einstein temperatures in K."""
+
+    debye_temperature = _positive_float_array(
+        debye_temperature_k,
+        name="debye_temperature_k",
+    )
+    einstein_temperature = EINSTEIN_DEBYE_FACTOR * debye_temperature
+    if (
+        not np.all(np.isfinite(einstein_temperature))
+        or np.any(einstein_temperature <= 0.0)
+    ):
+        raise FloatingPointError(
+            "Einstein temperature is not representable for the supplied input"
+        )
+    return np.asarray(einstein_temperature, dtype=np.float64)
+
+
+def einstein_frequency_from_temperature(
+    einstein_temperature_k: ArrayLike,
+) -> FloatArray:
+    """Return Einstein oscillator frequency in Hz from temperature in K."""
+
+    einstein_temperature = _positive_float_array(
+        einstein_temperature_k,
+        name="einstein_temperature_k",
+    )
+    with np.errstate(over="ignore", under="ignore"):
+        frequency = (
+            BOLTZMANN_CONSTANT_J_K
+            * einstein_temperature
+            / PLANCK_CONSTANT_J_S
+        )
+    if not np.all(np.isfinite(frequency)) or np.any(frequency <= 0.0):
+        raise FloatingPointError(
+            "Einstein frequency is not representable for the supplied input"
+        )
+    return np.asarray(frequency, dtype=np.float64)
+
+
+def _broadcast_einstein_inputs(
+    temperature_k: ArrayLike,
+    einstein_temperature_k: ArrayLike,
+) -> tuple[FloatArray, FloatArray]:
+    """Validate and broadcast heat-capacity inputs without mutation."""
+
+    temperature = _finite_float_array(temperature_k, name="temperature_k")
+    if np.any(temperature < 0.0):
+        raise ValueError("temperature_k must be non-negative")
+    einstein_temperature = _positive_float_array(
+        einstein_temperature_k,
+        name="einstein_temperature_k",
+    )
+
+    try:
+        temperature, einstein_temperature = np.broadcast_arrays(
+            temperature,
+            einstein_temperature,
+        )
+    except ValueError as exc:
+        raise ValueError(
+            "temperature_k and einstein_temperature_k must be "
+            "broadcast-compatible"
+        ) from exc
+
+    return (
+        np.asarray(temperature, dtype=np.float64),
+        np.asarray(einstein_temperature, dtype=np.float64),
+    )
+
+
+def einstein_molar_heat_capacity(
+    temperature_k: ArrayLike,
+    einstein_temperature_k: ArrayLike,
+) -> FloatArray:
+    """Return Einstein constant-volume molar heat capacity in J mol^-1 K^-1.
+
+    ``temperature_k`` may include zero, where the continuous limiting value is
+    assigned exactly. Positive temperatures use ``x = T_E / T``. For
+    ``x < 1e-3`` a high-temperature series prevents cancellation; all other
+    finite ratios use a logarithmic version of the stable negative-exponential
+    expression. Infinite ratios caused by a representable very small
+    temperature correctly give zero heat capacity.
+    """
+
+    temperature, einstein_temperature = _broadcast_einstein_inputs(
+        temperature_k,
+        einstein_temperature_k,
+    )
+    shape = temperature.shape
+    temperature_flat = np.ravel(temperature)
+    einstein_temperature_flat = np.ravel(einstein_temperature)
+
+    ratio = np.full(temperature_flat.shape, np.inf, dtype=np.float64)
+    positive_temperature = temperature_flat > 0.0
+    with np.errstate(over="ignore", under="ignore", divide="ignore"):
+        np.divide(
+            einstein_temperature_flat,
+            temperature_flat,
+            out=ratio,
+            where=positive_temperature,
+        )
+
+    normalized_capacity = np.zeros(ratio.shape, dtype=np.float64)
+    finite_ratio = positive_temperature & np.isfinite(ratio)
+    series = finite_ratio & (ratio < _EINSTEIN_SERIES_BOUNDARY)
+    regular = finite_ratio & ~series
+
+    ratio_series = ratio[series]
+    ratio_series_squared = ratio_series * ratio_series
+    normalized_capacity[series] = (
+        1.0
+        - ratio_series_squared / 12.0
+        + ratio_series_squared * ratio_series_squared / 240.0
+    )
+
+    ratio_regular = ratio[regular]
+    with np.errstate(over="ignore", under="ignore", divide="ignore"):
+        denominator = -np.expm1(-ratio_regular)
+        log_normalized_capacity = (
+            2.0 * np.log(ratio_regular)
+            - ratio_regular
+            - 2.0 * np.log(denominator)
+        )
+        normalized_capacity[regular] = np.exp(log_normalized_capacity)
+
+    heat_capacity = 3.0 * MOLAR_GAS_CONSTANT_J_MOL_K * normalized_capacity
+    upper_bound = 3.0 * MOLAR_GAS_CONSTANT_J_MOL_K
+    if (
+        not np.all(np.isfinite(heat_capacity))
+        or np.any(heat_capacity < 0.0)
+        or np.any(heat_capacity > upper_bound)
+    ):
+        raise FloatingPointError(
+            "Einstein heat capacity calculation left its physical bounds"
+        )
+
+    return np.asarray(heat_capacity.reshape(shape), dtype=np.float64)
+
+
 __all__ = [
+    "einstein_frequency_from_temperature",
+    "einstein_molar_heat_capacity",
+    "einstein_temperature_from_debye",
     "planck_spectral_exitance",
     "planck_spectral_radiance",
     "spectral_density_per_nanometre",

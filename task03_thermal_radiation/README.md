@@ -2,7 +2,7 @@
 
 ## Status
 
-Stages 1 through 5 are complete. The official requirements, reference
+Stages 1 through 6 are complete. The official requirements, reference
 examples, project scope, planned evidence, and exclusions are recorded below.
 The complete equations, notation, units, constants, numerical conventions,
 reference targets, and pre-declared validation tolerances are frozen in the
@@ -12,9 +12,11 @@ now fixes module ownership, public APIs, output schemas, command-line
 contracts, tests, and reproducibility rules. The exact physical constants,
 vectorized Planck spectral-radiance and spectral-exitance functions, unit
 conversion, and focused Stage 4 tests are implemented. The complete in-memory
-Planck study now passes the pre-declared Wien, Stefan--Boltzmann,
-radiance-integral, finiteness, and exitance-identity checks. Einstein modelling,
-saved result files, and figures remain for later stages.
+Planck study passes the pre-declared Wien, Stefan--Boltzmann,
+radiance-integral, finiteness, and exitance-identity checks. The immutable
+seven-solid source table and all three vectorized Einstein-model functions are
+also implemented and unit-tested. Einstein study construction, full Einstein
+validation, saved result files, and figures remain for later stages.
 
 ## Official sources reviewed
 
@@ -307,6 +309,65 @@ Stage 5 is complete because:
 - a deliberately incorrect peak causes validation to fail; and
 - all 40 Task 3 tests and all 117 earlier tests pass.
 
-No CSV, JSON, figure, presentation, or Einstein-model output was created in
-this stage. The next stage is **Stage 6: Einstein heat-capacity implementation
-and unit tests for the seven official solids**.
+No CSV, JSON, figure, presentation, or Einstein-model output was created during
+Stage 5. Stage 6 implements the Einstein heat-capacity boundary below.
+
+## Stage 6 implementation and completion check
+
+Stage 6 added:
+
+- [`materials.py`](materials.py), containing immutable official source records
+  in the order Au, Cu, Ti, Al, Fe, Si, and C;
+- the exact conversion factor $(\pi/6)^{1/3}$ in [`constants.py`](constants.py);
+- `einstein_temperature_from_debye`,
+  `einstein_frequency_from_temperature`, and
+  `einstein_molar_heat_capacity` in [`models.py`](models.py);
+- the new public Einstein API in [`__init__.py`](__init__.py);
+- complete source-record tests in
+  [`test_constants_and_materials.py`](test_constants_and_materials.py); and
+- [`test_einstein_model.py`](test_einstein_model.py), covering reference
+  conversions, numerical branches, physical behaviour, broadcasting, and
+  invalid inputs.
+
+The calculated conversions are:
+
+| Solid | $T_D$ / K | Calculated $T_E$ / K | Calculated $f_E/10^{13}\,\mathrm{Hz}$ | Official display |
+| :---: | ---: | ---: | ---: | ---: |
+| Au | $170$ | $137.019316$ | $0.285501930$ | $0.2855$ |
+| Cu | $343.5$ | $276.859618$ | $0.576881841$ | $0.5769$ |
+| Ti | $420$ | $338.518310$ | $0.705357710$ | $0.7054$ |
+| Al | $428$ | $344.966278$ | $0.718793095$ | $0.7188$ |
+| Fe | $470$ | $378.818109$ | $0.789328866$ | $0.7893$ |
+| Si | $645$ | $519.867405$ | $1.083227912$ | $1.0832$ |
+| C | $2230$ | $1797.371029$ | $3.745113555$ | $3.7451$ |
+
+Every calculated frequency reproduces the official value after four-decimal
+rounding. Heat capacity is evaluated from
+
+$$
+C_V=3R\frac{x^2e^x}{(e^x-1)^2},\qquad x=\frac{T_E}{T}.
+$$
+
+The implementation assigns $C_V(0)=0$ exactly, uses the pre-declared
+high-temperature series for $x<10^{-3}$, and evaluates the remaining domain in
+logarithmic negative-exponential form. Consequently, extremely small positive
+temperatures underflow cleanly to the physical zero limit without overflow or
+`NaN`.
+
+Stage 6 is complete because:
+
+- every official material value is stored once and protected by immutable
+  source records;
+- all seven Einstein temperatures match the pre-declared reference table;
+- all seven unrounded frequencies match the pre-declared reference table;
+- the $T=0$ value, $T=T_E$ anchor, stable branches, physical bounds, and
+  monotonic behaviour are tested;
+- scalar and explicit NumPy broadcasting contracts are tested;
+- invalid domains and non-representable output fail explicitly;
+- all 66 Task 3 tests and all 117 earlier tests pass; and
+- imports remain deterministic and side-effect free.
+
+No Einstein study result, combined validation report, CSV, JSON, figure, or
+presentation output was created during this stage. The next stage is
+**Stage 7: Einstein study construction and validation against all pre-declared
+limits and official-material checks**.
