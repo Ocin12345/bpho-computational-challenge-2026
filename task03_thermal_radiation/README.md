@@ -487,6 +487,66 @@ Stage 8 is complete because:
 - all 97 Task 3 tests and all 117 earlier tests pass; and
 - the complete data-only command remains far below the time and size budgets.
 
-No figure or presentation output was created during this stage. The next stage
-is **Stage 9: publication-quality Planck, validation, Einstein, normalized, and
-summary figures in PNG and SVG formats**.
+No figure or presentation output was created during this stage. Stage 9 adds
+the complete figure set below.
+
+## Stage 9 implementation and completion check
+
+Stage 9 added:
+
+- [`plotting.py`](plotting.py), a headless Matplotlib layer that accepts only
+  validated immutable study records and never recalculates the physics;
+- [`test_plotting.py`](test_plotting.py), covering scientific content, layout,
+  formats, dimensions, deterministic serialization, validation refusal,
+  transactional safety, command-line integration, and committed outputs; and
+- five publication-quality figures in both PNG and SVG under
+  [`figures/task03`](../figures/task03).
+
+Regenerate all Task 3 data and figures from the repository root with:
+
+```bash
+python3 -m task03_thermal_radiation.generate_task03
+```
+
+The earlier data-only command remains available and still does not import
+Matplotlib:
+
+```bash
+python3 -m task03_thermal_radiation.generate_task03 --data-only
+```
+
+The ordered figure set is:
+
+| Figure pair | Purpose | PNG dimensions |
+| --- | --- | ---: |
+| `planck_spectra` | Three Planck spectral-exitance curves, numerical peaks, and the visible band | $1512\times936$ |
+| `planck_validation` | Wien and Stefan--Boltzmann errors against pre-declared tolerances | $1872\times936$ |
+| `einstein_heat_capacity` | Seven molar heat-capacity curves and the $3R$ Dulong--Petit limit | $1512\times936$ |
+| `einstein_normalized` | Universal $C_V/(3R)$ curve and numerical collapse check | $1872\times936$ |
+| `task03_summary` | Presentation-ready overview of all principal results | $2400\times1350$ |
+
+All figures use fixed dimensions, $180$ DPI for PNG, DejaVu Sans, a
+colour-blind-conscious palette, explicit SI units, centralized styling, white
+backgrounds, and uncluttered legends. The summary is exactly $16{:}9$. SVG
+files use a fixed hash salt and omit date metadata.
+
+Stage 9 is complete because:
+
+- all five PNG files were inspected at their original resolution;
+- every title, axis label, unit, legend, marker, tolerance line, and limiting
+  law is readable and scientifically consistent with the stored results;
+- figure generation refuses failed validation before creating an output
+  directory;
+- an injected writer failure preserves every existing destination and removes
+  all temporary files;
+- repeated local runs are byte-identical in both PNG and SVG formats;
+- regenerated figures exactly match the committed set;
+- the complete command writes the seven evidence files and ten figure files;
+- the figure set occupies about $1.3\ \mathrm{MiB}$, below the frozen budget;
+- all 107 Task 3 tests and all 117 earlier tests pass; and
+- complete data and figure generation finishes well within the $15$-second
+  portability budget on the MacBook Air.
+
+No presentation output was created during this stage. The next stage is
+**Stage 10: scientific interpretation, assumptions, limitations, and written
+explanation of the validated results**.

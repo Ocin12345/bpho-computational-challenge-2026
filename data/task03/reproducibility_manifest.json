@@ -39,6 +39,18 @@
     "stefan_boltzmann_constant_w_m2_k4": 5.6703744191844314e-08,
     "wien_displacement_constant_m_k": 0.0028977719551851722
   },
+  "expected_figure_filenames": [
+    "planck_spectra.png",
+    "planck_spectra.svg",
+    "planck_validation.png",
+    "planck_validation.svg",
+    "einstein_heat_capacity.png",
+    "einstein_heat_capacity.svg",
+    "einstein_normalized.png",
+    "einstein_normalized.svg",
+    "task03_summary.png",
+    "task03_summary.svg"
+  ],
   "expected_output_filenames": [
     "planck_spectra.csv",
     "planck_validation.csv",

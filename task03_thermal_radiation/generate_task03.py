@@ -45,6 +45,7 @@ from task03_thermal_radiation.validation import (
 
 
 DEFAULT_DATA_DIRECTORY = Path("data/task03")
+DEFAULT_FIGURE_DIRECTORY = Path("figures/task03")
 MATHEMATICAL_SPECIFICATION_PATH = (
     "task03_thermal_radiation/MATHEMATICAL_MODEL.md"
 )
@@ -56,6 +57,18 @@ DATA_FILENAMES = (
     "einstein_normalized.csv",
     "validation_report.json",
     "reproducibility_manifest.json",
+)
+FIGURE_FILENAMES = (
+    "planck_spectra.png",
+    "planck_spectra.svg",
+    "planck_validation.png",
+    "planck_validation.svg",
+    "einstein_heat_capacity.png",
+    "einstein_heat_capacity.svg",
+    "einstein_normalized.png",
+    "einstein_normalized.svg",
+    "task03_summary.png",
+    "task03_summary.svg",
 )
 
 
@@ -306,6 +319,7 @@ def _manifest_payload(
             _material_payload(material) for material in materials
         ],
         "expected_output_filenames": list(DATA_FILENAMES),
+        "expected_figure_filenames": list(FIGURE_FILENAMES),
         "mathematical_specification": MATHEMATICAL_SPECIFICATION_PATH,
     }
 
@@ -439,7 +453,7 @@ def generate_task03_data(
 
 
 def main(argv: Sequence[str] | None = None) -> int:
-    """Run validated Stage 8 data generation and return a shell status."""
+    """Run validated data and optional figure generation."""
 
     parser = argparse.ArgumentParser(
         description="Generate validated Task 3 numerical evidence.",
@@ -455,25 +469,52 @@ def main(argv: Sequence[str] | None = None) -> int:
         default=DEFAULT_DATA_DIRECTORY,
         help="destination directory for CSV and JSON files",
     )
+    parser.add_argument(
+        "--figure-dir",
+        type=Path,
+        default=DEFAULT_FIGURE_DIRECTORY,
+        help="destination directory for PNG and SVG figures",
+    )
     arguments = parser.parse_args(argv)
-    if not arguments.data_only:
-        parser.error(
-            "figure generation begins in Stage 9; use --data-only for Stage 8"
-        )
 
-    result = generate_task03_data(arguments.data_dir)
+    planck_result = build_planck_study()
+    einstein_result = build_einstein_study()
+    result = write_task03_data(
+        planck_result,
+        einstein_result,
+        arguments.data_dir,
+    )
     print(f"Python {platform.python_version()}; NumPy {np.__version__}")
-    print("Task 3 Stage 8: validated data generation")
+    if arguments.data_only:
+        print("Task 3 Stage 8: validated data generation")
+    else:
+        print("Task 3 Stage 9: validated data and figure generation")
     for path in result.output_paths:
         print(path)
+    if not arguments.data_only:
+        # This local import is intentional: --data-only must not load Matplotlib.
+        from task03_thermal_radiation.plotting import write_task03_figures
+
+        figure_result = write_task03_figures(
+            planck_result,
+            einstein_result,
+            arguments.figure_dir,
+        )
+        for path in figure_result.output_paths:
+            print(path)
     print(f"Validation checks: {len(result.report.checks)}")
-    print("Task 3 data generation: PASS")
+    if arguments.data_only:
+        print("Task 3 data generation: PASS")
+    else:
+        print("Task 3 complete generation: PASS")
     return 0
 
 
 __all__ = [
     "DATA_FILENAMES",
     "DEFAULT_DATA_DIRECTORY",
+    "DEFAULT_FIGURE_DIRECTORY",
+    "FIGURE_FILENAMES",
     "MATHEMATICAL_SPECIFICATION_PATH",
     "Task03DataGenerationResult",
     "generate_task03_data",

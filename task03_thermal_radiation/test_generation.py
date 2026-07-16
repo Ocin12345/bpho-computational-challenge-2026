@@ -9,7 +9,7 @@ import subprocess
 import sys
 import tempfile
 import unittest
-from contextlib import redirect_stderr, redirect_stdout
+from contextlib import redirect_stdout
 from dataclasses import fields, replace
 from pathlib import Path
 from unittest import mock
@@ -265,6 +265,21 @@ class Task03DataGenerationTests(unittest.TestCase):
             self.assertEqual(payload["configuration"], expected_configuration)
             self.assertEqual(payload["expected_output_filenames"], list(DATA_FILENAMES))
             self.assertEqual(
+                payload["expected_figure_filenames"],
+                [
+                    "planck_spectra.png",
+                    "planck_spectra.svg",
+                    "planck_validation.png",
+                    "planck_validation.svg",
+                    "einstein_heat_capacity.png",
+                    "einstein_heat_capacity.svg",
+                    "einstein_normalized.png",
+                    "einstein_normalized.svg",
+                    "task03_summary.png",
+                    "task03_summary.svg",
+                ],
+            )
+            self.assertEqual(
                 payload["mathematical_specification"],
                 MATHEMATICAL_SPECIFICATION_PATH,
             )
@@ -354,7 +369,7 @@ class Task03DataGenerationTests(unittest.TestCase):
                 any(path.name.startswith(".") for path in output_directory.iterdir())
             )
 
-    def test_cli_requires_data_only_and_reports_success(self) -> None:
+    def test_data_only_cli_reports_success(self) -> None:
         with tempfile.TemporaryDirectory() as temporary_directory:
             output = io.StringIO()
             with redirect_stdout(output):
@@ -376,13 +391,6 @@ class Task03DataGenerationTests(unittest.TestCase):
                 )),
                 tuple(sorted(DATA_FILENAMES)),
             )
-
-        error = io.StringIO()
-        with redirect_stderr(error):
-            with self.assertRaises(SystemExit) as raised:
-                main([])
-        self.assertEqual(raised.exception.code, 2)
-        self.assertIn("use --data-only", error.getvalue())
 
     def test_data_only_subprocess_does_not_import_matplotlib(self) -> None:
         repository_root = Path(__file__).resolve().parent.parent
