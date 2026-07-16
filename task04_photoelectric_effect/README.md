@@ -2,11 +2,14 @@
 
 ## Status
 
-Stage 1 is complete. The two official source files have been read, and the
-mandatory model, reference inputs, baseline deliverables, optional extension,
-exclusions, staged workflow, and final acceptance boundary are frozen below.
-No Task 4 physics code has been written yet. Stage 2 will define the complete
-mathematical and numerical specification before implementation begins.
+Stages 1 and 2 are complete. The two official source files have been read, and
+the mandatory model, reference inputs, baseline deliverables, optional
+extension, exclusions, staged workflow, and final acceptance boundary are
+frozen below. The complete equations, constants, units, physical domains,
+reference cut-offs, grids, numerical conventions, serialization rules, and
+pre-declared tolerances are fixed in the
+[mathematical and numerical specification](MATHEMATICAL_MODEL.md). No Task 4
+physics code has been written yet.
 
 ## Official sources reviewed
 
@@ -202,5 +205,23 @@ the optional animation, all nine official material inputs have been recorded,
 the below-threshold physical domain has been clarified, and the complete
 delivery and acceptance structure has been fixed before coding.
 
-The next milestone is **Stage 2: the mathematical and numerical
-specification**.
+## Stage 2 completion check
+
+Stage 2 is complete because:
+
+- the frequency and wavelength forms of Einstein's equation are defined with
+  dimensionally consistent units;
+- exact SI values of $h$, $e$, and $c$ and all derived conversions are fixed;
+- all nine official work functions and their analytical cut-offs are recorded;
+- the physical emission domain is separated explicitly from the signed
+  mathematical extrapolation;
+- inclusive frequency and wavelength grids are fixed before implementation;
+- scalar anchors and independent analytical targets are recorded;
+- validation tolerances, failure checks, output conventions, visual
+  requirements, and portability budgets are pre-declared; and
+- the assumptions and real-surface limitations are explicit.
+
+The complete details are in
+[`MATHEMATICAL_MODEL.md`](MATHEMATICAL_MODEL.md). The next milestone is
+**Stage 3: deterministic software architecture, APIs, output schemas, tests,
+and reproducibility rules**.
