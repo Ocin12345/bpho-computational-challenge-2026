@@ -2,7 +2,7 @@
 
 ## Status
 
-Stages 1 through 8 are complete. The official requirements, reference
+Stages 1 through 10 are complete. The official requirements, reference
 examples, project scope, planned evidence, and exclusions are recorded below.
 The complete equations, notation, units, constants, numerical conventions,
 reference targets, and pre-declared validation tolerances are frozen in the
@@ -16,8 +16,10 @@ Planck study passes the pre-declared Wien, Stefan--Boltzmann,
 radiance-integral, finiteness, and exitance-identity checks. The immutable
 seven-solid source table and all three vectorized Einstein-model functions are
 also implemented and unit-tested. Both complete in-memory studies pass one
-combined 27-check validation report, and their deterministic CSV and JSON
-evidence is committed under `data/task03/`. Figures remain for later stages.
+combined 27-check validation report. Their deterministic CSV and JSON evidence,
+five publication-quality PNG/SVG figure pairs, and complete
+[scientific results and interpretation](RESULTS_AND_INTERPRETATION.md) are
+committed. The presentation package remains for the next stage.
 
 ## Official sources reviewed
 
@@ -550,3 +552,40 @@ Stage 9 is complete because:
 No presentation output was created during this stage. The next stage is
 **Stage 10: scientific interpretation, assumptions, limitations, and written
 explanation of the validated results**.
+
+## Stage 10 implementation and completion check
+
+Stage 10 added
+[`RESULTS_AND_INTERPRETATION.md`](RESULTS_AND_INTERPRETATION.md), a complete
+evidence-based scientific report written for later conversion into concise
+presentation narration.
+
+The report:
+
+- explains why the Planck peak moves as $1/T$, why the integrated exitance
+  scales as $T^4$, and why the wavelength-spectrum peak height scales as
+  $T^5$;
+- records the numerical and analytical Planck peaks, total exitances, and
+  relative errors for all three official temperatures;
+- explains how $T_E$ controls each Einstein heat-capacity curve and why all
+  curves approach $3R$ at sufficiently high temperature;
+- records representative $C_V$ values for every official material and explains
+  why carbon remains below $3R$ over the displayed range;
+- interprets the normalized collapse as a consequence of the dimensionless
+  ratio $T/T_E$, without claiming that real materials are identical;
+- distinguishes spectral radiance from spectral exitance and $C_V$ from
+  $C_P$;
+- separates numerical validation from experimental validation;
+- states the ideal-black-body and one-frequency Einstein assumptions; and
+- identifies the Einstein model's incorrect exponential low-temperature
+  behaviour, compared with the Debye model's more realistic $T^3$ law, as the
+  most important physical limitation.
+
+Every reported value was checked against the committed CSV and JSON evidence.
+All relative Markdown links resolve to tracked files, the document contains no
+machine-specific path or unsupported dependency, and the existing 107 Task 3
+tests remain passing.
+
+No PowerPoint or speaker script was created during this stage. The next stage
+is **Stage 11: the final Task 3 slide package, supporting-slide guidance,
+speaker script, and editable PowerPoint**.
