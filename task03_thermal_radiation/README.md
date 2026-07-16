@@ -2,7 +2,7 @@
 
 ## Status
 
-Stages 1 through 10 are complete. The official requirements, reference
+Stages 1 through 11 are complete. The official requirements, reference
 examples, project scope, planned evidence, and exclusions are recorded below.
 The complete equations, notation, units, constants, numerical conventions,
 reference targets, and pre-declared validation tolerances are frozen in the
@@ -19,7 +19,9 @@ also implemented and unit-tested. Both complete in-memory studies pass one
 combined 27-check validation report. Their deterministic CSV and JSON evidence,
 five publication-quality PNG/SVG figure pairs, and complete
 [scientific results and interpretation](RESULTS_AND_INTERPRETATION.md) are
-committed. The presentation package remains for the next stage.
+committed. The editable one-slide PowerPoint, timed narration, supporting
+assets, preview, and regeneration tools are complete under `presentation/task03/`.
+Only final cross-computer and clean-rebuild quality assurance remains.
 
 ## Official sources reviewed
 
@@ -589,3 +591,47 @@ tests remain passing.
 No PowerPoint or speaker script was created during this stage. The next stage
 is **Stage 11: the final Task 3 slide package, supporting-slide guidance,
 speaker script, and editable PowerPoint**.
+
+## Stage 11 implementation and completion check
+
+Stage 11 added the complete package under
+[`presentation/task03`](../presentation/task03):
+
+- `Task03_Planck_Einstein.pptx`, an editable one-slide 16:9 PowerPoint;
+- `SPEAKER_SCRIPT.md`, containing 18-second, 35-second, and rehearsal versions,
+  timed cues, pronunciation guidance, and answers to likely questions;
+- `SLIDE_CONTENT.md`, recording the exact visible text and accessible image
+  descriptions;
+- five ordered image assets, including three optional supporting visuals;
+- a high-resolution rendered preview;
+- a pinned PptxGenJS build with speaker-note and alternative-text embedding;
+- a reproducible LibreOffice/Poppler preview command; and
+- a standard-library validation script for the complete package.
+
+The main slide deliberately uses the two outputs required by the official
+task: Planck spectra at several temperatures and Einstein heat capacities for
+several solids. Supporting validation and normalized-collapse figures remain
+available without overcrowding the three-minute competition slide.
+
+Stage 11 is complete because:
+
+- the slide was rendered through LibreOffice and inspected at its full
+  $2401\times1350$ preview resolution;
+- both source figures remain uncropped, readable, and byte-identical to their
+  validated Stage 9 assets;
+- the slide contains one claim, two quantitative captions, and one compact
+  validation band rather than report-length prose;
+- all slide-level titles, captions, equations, and validation text remain
+  editable, while the plots remain faithful generated image assets;
+- both embedded figures have meaningful alternative text;
+- the 47-word final narration is embedded in the PowerPoint notes and remains
+  within the intended 17--18-second delivery range at competition pace;
+- the `.pptx` archive contains exactly one slide, one notes page, and two
+  embedded main figures;
+- the preview is high resolution and within the 16:9 aspect-ratio tolerance;
+- all presentation-local Markdown links resolve; and
+- a clean build, preview render, and package validation pass from their
+  documented commands.
+
+The next and final milestone is **Stage 12: clean regeneration, full tests,
+repository hygiene, synchronization, and final Task 3 acceptance review**.
