@@ -2,7 +2,7 @@
 
 ## Status
 
-Stages 1 through 8 are complete. The two official source files have been read,
+Stages 1 through 9 are complete. The two official source files have been read,
 and the mandatory model, reference inputs, baseline deliverables, optional
 extension, exclusions, staged workflow, and final acceptance boundary are
 frozen below. The complete equations, constants, units, physical domains,
@@ -18,6 +18,10 @@ now implemented. The accepted
 now fixes module ownership, immutable records, public APIs, output schemas,
 command-line contracts, tests, transaction rules, and cross-computer
 reproducibility before implementation.
+
+The evidence-based
+[results and scientific interpretation](RESULTS_AND_INTERPRETATION.md) now
+provide the approved explanation boundary for the later presentation.
 
 ## Official sources reviewed
 
@@ -491,3 +495,45 @@ Stage 8 is complete because:
 
 The next milestone is **Stage 9: concise scientific results, interpretation,
 assumptions, limitations, and presentation-facing explanation**.
+
+## Stage 9 implementation and completion check
+
+Stage 9 added
+[`RESULTS_AND_INTERPRETATION.md`](RESULTS_AND_INTERPRETATION.md), a complete
+evidence-based explanation for later conversion into concise slide narration.
+
+The report:
+
+- derives the shared frequency gradient $h/e$ and both analytical threshold
+  relations from Einstein's photoelectric equation;
+- records all nine official work functions, cut-off frequencies, and cut-off
+  wavelengths with units and source-appropriate precision;
+- explains why frequency curves are parallel, why wavelength curves vary as
+  $1/\lambda$, and why higher work function moves both thresholds;
+- records the stopping potentials for all metals at the frozen frequency and
+  wavelength anchors;
+- explains the exact Ag/Al/Pb overlap without implying that more precise real
+  surface values must coincide;
+- states precisely that sodium emits only for the shorter-wavelength part of
+  the visible range, up to $516.6\ \mathrm{nm}$ in this ideal table;
+- distinguishes a dashed negative energy deficit from a physical stopping
+  potential and explains why no photoemission is not the same as zero voltage;
+- distinguishes maximum electron energy from photocurrent and light intensity;
+- summarizes the largest observed numerical errors against every important
+  pre-declared tolerance;
+- states the one-photon, uniform-work-function, vacuum-wavelength, and ideal
+  apparatus assumptions;
+- identifies surface orientation, cleanliness, oxidation, contact potential,
+  energy distributions, and measurement uncertainty as omitted real effects;
+- separates internal numerical validation from experimental validation; and
+- supplies supported presentation claims, explicit overclaims to avoid, and a
+  one-sentence final takeaway.
+
+Every numerical statement was checked against the committed CSV/JSON evidence
+and immutable study arrays. All Markdown links resolve to tracked artifacts,
+the report contains no machine-specific path, and all 137 Task 4 tests remain
+passing.
+
+No animation, PowerPoint, or speaker script was created during this stage. The
+next milestone is **Stage 10: decide whether the optional PhET-style animation
+adds enough explanatory value to justify its implementation and validation**.
