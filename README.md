@@ -40,7 +40,7 @@ allowed by the competition if they are useful for a particular task.
 | [`task01_random_walk`](task01_random_walk/README.md) | Random walk |
 | [`task02_brownian_motion`](task02_brownian_motion/README.md) | Brownian motion |
 | [`task03_thermal_radiation`](task03_thermal_radiation/README.md) | Black-body radiation and heat capacity |
-| `task04_photoelectric_effect` | Photoelectric effect |
+| [`task04_photoelectric_effect`](task04_photoelectric_effect/README.md) | Photoelectric effect |
 | `task05_hydrogen_spectrum` | Hydrogen spectrum and Bohr model |
 | `task06_electron_diffraction` | Electron diffraction |
 | `task07_particle_in_box` | Particle in a box and the uncertainty principle |
