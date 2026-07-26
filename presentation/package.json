@@ -1,0 +1,16 @@
+{
+  "name": "bpho-master-presentation",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Reproducible Tasks 1–10 BPhO presentation pipeline",
+  "scripts": {
+    "build:tasks1-6": "node build_task_presentations.js",
+    "build:master": "node master/create_master_presentation.js",
+    "build": "npm run build:tasks1-6 && npm run build:master",
+    "validate": "python3 validate_task_presentations.py && python3 validate_typography.py && python3 master/validate_master_presentation.py"
+  },
+  "dependencies": {
+    "jszip": "3.10.1",
+    "pptxgenjs": "4.0.1"
+  }
+}

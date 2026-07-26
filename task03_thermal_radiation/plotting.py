@@ -32,10 +32,10 @@ from task03_thermal_radiation.validation import (
 )
 
 
-FIGURE_DPI = 180
-REGULAR_FIGURE_SIZE_IN = (8.4, 5.2)
-WIDE_FIGURE_SIZE_IN = (10.4, 5.2)
-SUMMARY_FIGURE_SIZE_IN = (2400 / FIGURE_DPI, 1350 / FIGURE_DPI)
+FIGURE_DPI = 300
+REGULAR_FIGURE_SIZE_IN = (2400 / FIGURE_DPI, 1500 / FIGURE_DPI)
+WIDE_FIGURE_SIZE_IN = (3000 / FIGURE_DPI, 1500 / FIGURE_DPI)
+SUMMARY_FIGURE_SIZE_IN = (3840 / FIGURE_DPI, 2160 / FIGURE_DPI)
 
 PLANCK_COLOURS = ("#3B4CC0", "#E68613", "#B40426")
 MATERIAL_COLOURS = (
@@ -53,7 +53,8 @@ GRID_COLOUR = "#CBD5E1"
 TEXT_COLOUR = "#172033"
 
 PLOT_STYLE: dict[str, object] = {
-    "font.family": "DejaVu Sans",
+    "font.family": "Times New Roman",
+    "mathtext.fontset": "stix",
     "font.size": 10.0,
     "axes.titlesize": 13.0,
     "axes.titleweight": "bold",

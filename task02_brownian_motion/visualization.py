@@ -38,7 +38,8 @@ def apply_figure_style() -> None:
 
     plt.rcParams.update(
         {
-            "font.family": "DejaVu Sans",
+            "font.family": "Times New Roman",
+            "mathtext.fontset": "stix",
             "font.size": 10,
             "axes.titlesize": 12,
             "axes.labelsize": 10,
@@ -268,7 +269,7 @@ def create_baseline_statistics_figure(
         0.06,
         (
             f"D = {baseline_summary['diffusion_coefficient_nm2_per_ps']:.3e} "
-            "nm² ps⁻¹\n"
+            r"$\mathrm{nm^2\,ps^{-1}}$" "\n"
             "64 trajectories"
         ),
         transform=msd_axis.transAxes,
@@ -414,7 +415,7 @@ def create_parameter_experiments_figure(
         )
         axis.set(
             xlabel=x_label,
-            ylabel="effective D (nm² ps⁻¹)",
+            ylabel=r"effective $D$ (nm$^2$ ps$^{-1}$)",
             title=title,
             ylim=(0.0, None),
         )

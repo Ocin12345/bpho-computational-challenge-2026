@@ -1,0 +1,14 @@
+{
+  "name": "bpho-task07-presentation",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Reproducible one-slide Task 7 PowerPoint generator",
+  "scripts": {
+    "build": "node create_task07_presentation.js",
+    "preview": "bash render_preview.sh",
+    "validate": "python3 validate_task07_presentation.py"
+  },
+  "dependencies": {
+    "pptxgenjs": "4.0.1"
+  }
+}

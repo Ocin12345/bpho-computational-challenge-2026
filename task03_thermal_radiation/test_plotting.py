@@ -35,11 +35,11 @@ from task03_thermal_radiation.plotting import (
 
 
 EXPECTED_PNG_DIMENSIONS = {
-    "planck_spectra.png": (1512, 936),
-    "planck_validation.png": (1872, 936),
-    "einstein_heat_capacity.png": (1512, 936),
-    "einstein_normalized.png": (1872, 936),
-    "task03_summary.png": (2400, 1350),
+    "planck_spectra.png": (2400, 1500),
+    "planck_validation.png": (3000, 1500),
+    "einstein_heat_capacity.png": (2400, 1500),
+    "einstein_normalized.png": (3000, 1500),
+    "task03_summary.png": (3840, 2160),
 }
 
 
@@ -58,31 +58,31 @@ class Task03PlottingTests(unittest.TestCase):
         specifications = (
             (
                 create_planck_spectra_figure,
-                (8.4, 5.2),
+                (2400 / 300, 1500 / 300),
                 1,
                 "Planck black-body spectra",
             ),
             (
                 create_planck_validation_figure,
-                (10.4, 5.2),
+                (3000 / 300, 1500 / 300),
                 2,
                 "Wien displacement law",
             ),
             (
                 create_einstein_heat_capacity_figure,
-                (8.4, 5.2),
+                (2400 / 300, 1500 / 300),
                 1,
                 "Einstein heat-capacity model",
             ),
             (
                 create_einstein_normalized_figure,
-                (10.4, 5.2),
+                (3000 / 300, 1500 / 300),
                 2,
                 "Universal Einstein curve",
             ),
             (
                 create_task03_summary_figure,
-                (2400 / 180, 1350 / 180),
+                (3840 / 300, 2160 / 300),
                 4,
                 "Planck black-body spectra",
             ),

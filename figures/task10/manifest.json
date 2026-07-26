@@ -1,0 +1,178 @@
+{
+  "figures": [
+    {
+      "bytes": 385190,
+      "dpi": [
+        300,
+        300
+      ],
+      "format": "png",
+      "height_px": 1875,
+      "path": "figures/task10/coloured_glass_density.png",
+      "sha256": "fd7afe3266d980f5787c3e2091622404c6dcb171936d704de4b6c0db4480c85e",
+      "width_px": 3000
+    },
+    {
+      "bytes": 63260,
+      "contains_raster_density_layers": true,
+      "editable_text": true,
+      "font_embedded": true,
+      "font_family": "Times New Roman",
+      "font_type": 42,
+      "format": "pdf",
+      "path": "figures/task10/radial_and_nodal_structure.pdf",
+      "sha256": "a391797f508835e8b90c87a92a6b484e68245ad4d8000648539412e74ed767bb",
+      "vector_shell": true
+    },
+    {
+      "bytes": 363021,
+      "dpi": [
+        300,
+        300
+      ],
+      "format": "png",
+      "height_px": 1500,
+      "path": "figures/task10/radial_and_nodal_structure.png",
+      "sha256": "13d2d1397223b00f32d8ed1774e5c9ffad2f845d49a87e8b1f3283d3a9577d70",
+      "width_px": 2400
+    },
+    {
+      "bytes": 55313,
+      "contains_raster_density_layers": true,
+      "editable_text": true,
+      "font_families": [
+        "Times New Roman"
+      ],
+      "format": "svg",
+      "path": "figures/task10/radial_and_nodal_structure.svg",
+      "sha256": "64ec7c9aed6918205a4d8a10108ec8b54e5288609a5e48c07c93c1a7b5bde526",
+      "vector_shell": true
+    },
+    {
+      "bytes": 135367,
+      "contains_raster_density_layers": true,
+      "editable_text": true,
+      "font_embedded": true,
+      "font_family": "Times New Roman",
+      "font_type": 42,
+      "format": "pdf",
+      "path": "figures/task10/rendering_comparison.pdf",
+      "sha256": "4679db85e71e22d32227e9f1d2e0c6ed9dfdc9cb17cd183b23969a3d542327b2",
+      "vector_shell": true
+    },
+    {
+      "bytes": 796697,
+      "dpi": [
+        300,
+        300
+      ],
+      "format": "png",
+      "height_px": 1800,
+      "path": "figures/task10/rendering_comparison.png",
+      "sha256": "b09b50982c3f866defacca141d242a1ebd636bfe946296d888b81265f6f7063c",
+      "width_px": 3000
+    },
+    {
+      "bytes": 188284,
+      "contains_raster_density_layers": true,
+      "editable_text": true,
+      "font_families": [
+        "Times New Roman"
+      ],
+      "format": "svg",
+      "path": "figures/task10/rendering_comparison.svg",
+      "sha256": "bad2c740e2cbfd531508be765c3313faa65ea23bcfaf52e92340955f8b1ebe02",
+      "vector_shell": true
+    },
+    {
+      "bytes": 231406,
+      "contains_raster_density_layers": true,
+      "editable_text": true,
+      "font_embedded": true,
+      "font_family": "Times New Roman",
+      "font_type": 42,
+      "format": "pdf",
+      "path": "figures/task10/required_orbital_gallery.pdf",
+      "sha256": "7240872a2883c8cae3fcbb4e48322872f76a19cb0a678a11d4f142b7475be415",
+      "vector_shell": true
+    },
+    {
+      "bytes": 879160,
+      "dpi": [
+        300,
+        300
+      ],
+      "format": "png",
+      "height_px": 2400,
+      "path": "figures/task10/required_orbital_gallery.png",
+      "sha256": "5333b3fb236e9d58a287587fe986323769d3063ba1402e84c8bf9b58ba4e59a9",
+      "width_px": 3840
+    },
+    {
+      "bytes": 240596,
+      "contains_raster_density_layers": true,
+      "editable_text": true,
+      "font_families": [
+        "Times New Roman"
+      ],
+      "format": "svg",
+      "path": "figures/task10/required_orbital_gallery.svg",
+      "sha256": "0fdfaca9ec0a125ab0193ee7111401637088e05bc96f1d21bb5bbb456a63feeb",
+      "vector_shell": true
+    },
+    {
+      "bytes": 149389,
+      "contains_raster_density_layers": true,
+      "editable_text": true,
+      "font_embedded": true,
+      "font_family": "Times New Roman",
+      "font_type": 42,
+      "format": "pdf",
+      "path": "figures/task10/task10_summary.pdf",
+      "sha256": "b6921f3e9dff2a4b67950087c52da9a4b465efd78a62500e48a179d3c72ba7d8",
+      "vector_shell": true
+    },
+    {
+      "bytes": 636027,
+      "dpi": [
+        300,
+        300
+      ],
+      "format": "png",
+      "height_px": 2160,
+      "path": "figures/task10/task10_summary.png",
+      "sha256": "5593b7c2f69a841bfda125d5f27cac78ed088d9680cffa373065af6fa43964c4",
+      "width_px": 3840
+    },
+    {
+      "bytes": 119590,
+      "contains_raster_density_layers": true,
+      "editable_text": true,
+      "font_families": [
+        "Times New Roman"
+      ],
+      "format": "svg",
+      "path": "figures/task10/task10_summary.svg",
+      "sha256": "452b337332644f8eec53306ba20c107830b523daeea17265bf6c79632b9251fe",
+      "vector_shell": true
+    }
+  ],
+  "notes": {
+    "coloured_glass_density": "PNG only by design: layered transparency is rasterized to preserve the accepted visual appearance.",
+    "normalization": "The 0.15 cutoff affects renderer opacity only; physical fields and normalization remain unchanged."
+  },
+  "renderer": {
+    "default_dpi": 300,
+    "font_family": "Times New Roman",
+    "matplotlib": "3.9.4",
+    "software": "BPhO Computational Challenge 2026 Task 10"
+  },
+  "schema_version": "task10-figure-manifest-v2",
+  "science_gate": {
+    "checks_passed": 22,
+    "checks_total": 22,
+    "data_manifest_sha256": "1ca2a38653d12e5132215ae90c9c8d77b97288c064d1dd202909ad853d334eed",
+    "state_digest": "d298695290395956560641493fc603e5970a4ea01609eca677b3b4b683fa085e"
+  },
+  "task": "BPhO Computational Challenge 2026 Task 10"
+}

@@ -23,9 +23,18 @@ from task01_random_walk.random_walk import (
 DEFAULT_OUTPUT_STEM = Path("figures/task01/fifty_walks")
 
 
+def _apply_figure_style() -> None:
+    """Use the competition-wide serif typography for every Task 1 figure."""
+
+    plt.rcParams.update(
+        {"font.family": "Times New Roman", "mathtext.fontset": "stix"}
+    )
+
+
 def create_ensemble_figure(result: RandomWalkEnsembleResult) -> Figure:
     """Build an equal-scale overlay of all trajectories in an ensemble."""
 
+    _apply_figure_style()
     report = validate_ensemble(result)
     if not report.passed:
         details = "; ".join(report.failures)

@@ -1,0 +1,284 @@
+{
+  "cases": [
+    {
+      "classical": {
+        "expected_mismatches": 374.9999999999998,
+        "matches": 637,
+        "mismatches": 363,
+        "model": "classical",
+        "observed_probability": 0.363,
+        "photon_pairs": 1000,
+        "standard_deviation_count": 15.309310892394862,
+        "standardized_residual": -0.7838367176906021,
+        "stream_seed": 608136546,
+        "theoretical_probability": 0.3749999999999998,
+        "wilson_interval": {
+          "lower": 0.3337729626449257,
+          "upper": 0.39327556918011636
+        }
+      },
+      "identifier": "official_default",
+      "label": "Official -30/+30 degrees",
+      "phi_deg": 30.0,
+      "photon_pairs": 1000,
+      "quantum": {
+        "expected_mismatches": 749.9999999999999,
+        "matches": 230,
+        "mismatches": 770,
+        "model": "quantum",
+        "observed_probability": 0.77,
+        "photon_pairs": 1000,
+        "standard_deviation_count": 13.693063937629155,
+        "standardized_residual": 1.460593486680451,
+        "stream_seed": 3084998280,
+        "theoretical_probability": 0.7499999999999999,
+        "wilson_interval": {
+          "lower": 0.7429132441380307,
+          "upper": 0.7950203062797695
+        }
+      },
+      "seed": 2026,
+      "theta_deg": -30.0
+    },
+    {
+      "classical": {
+        "expected_mismatches": 0.0,
+        "matches": 1000,
+        "mismatches": 0,
+        "model": "classical",
+        "observed_probability": 0.0,
+        "photon_pairs": 1000,
+        "standard_deviation_count": 0.0,
+        "standardized_residual": null,
+        "stream_seed": 608135811,
+        "theoretical_probability": 0.0,
+        "wilson_interval": {
+          "lower": 0.0,
+          "upper": 0.0038267584855551234
+        }
+      },
+      "identifier": "aligned_zero",
+      "label": "Aligned at zero degrees",
+      "phi_deg": 0.0,
+      "photon_pairs": 1000,
+      "quantum": {
+        "expected_mismatches": 0.0,
+        "matches": 1000,
+        "mismatches": 0,
+        "model": "quantum",
+        "observed_probability": 0.0,
+        "photon_pairs": 1000,
+        "standard_deviation_count": 0.0,
+        "standardized_residual": null,
+        "stream_seed": 3084996969,
+        "theoretical_probability": 0.0,
+        "wilson_interval": {
+          "lower": 0.0,
+          "upper": 0.0038267584855551234
+        }
+      },
+      "seed": 11,
+      "theta_deg": 0.0
+    },
+    {
+      "classical": {
+        "expected_mismatches": 500.0,
+        "matches": 500,
+        "mismatches": 500,
+        "model": "classical",
+        "observed_probability": 0.5,
+        "photon_pairs": 1000,
+        "standard_deviation_count": 15.811388300841896,
+        "standardized_residual": 0.0,
+        "stream_seed": 608135842,
+        "theoretical_probability": 0.5,
+        "wilson_interval": {
+          "lower": 0.4690696003681042,
+          "upper": 0.5309303996318958
+        }
+      },
+      "identifier": "aligned_45",
+      "label": "Aligned at 45 degrees",
+      "phi_deg": 45.0,
+      "photon_pairs": 1000,
+      "quantum": {
+        "expected_mismatches": 0.0,
+        "matches": 1000,
+        "mismatches": 0,
+        "model": "quantum",
+        "observed_probability": 0.0,
+        "photon_pairs": 1000,
+        "standard_deviation_count": 0.0,
+        "standardized_residual": null,
+        "stream_seed": 3084996936,
+        "theoretical_probability": 0.0,
+        "wilson_interval": {
+          "lower": 0.0,
+          "upper": 0.0038267584855551234
+        }
+      },
+      "seed": 42,
+      "theta_deg": 45.0
+    },
+    {
+      "classical": {
+        "expected_mismatches": 500.0,
+        "matches": 526,
+        "mismatches": 474,
+        "model": "classical",
+        "observed_probability": 0.474,
+        "photon_pairs": 1000,
+        "standard_deviation_count": 15.811388300841896,
+        "standardized_residual": -1.6443843832875573,
+        "stream_seed": 608135915,
+        "theoretical_probability": 0.5,
+        "wilson_interval": {
+          "lower": 0.4432107820528304,
+          "upper": 0.5049882093884185
+        }
+      },
+      "identifier": "maximum_positive_contrast",
+      "label": "Maximum positive contrast",
+      "phi_deg": 45.0,
+      "photon_pairs": 1000,
+      "quantum": {
+        "expected_mismatches": 1000.0,
+        "matches": 0,
+        "mismatches": 1000,
+        "model": "quantum",
+        "observed_probability": 1.0,
+        "photon_pairs": 1000,
+        "standard_deviation_count": 0.0,
+        "standardized_residual": null,
+        "stream_seed": 3084996865,
+        "theoretical_probability": 1.0,
+        "wilson_interval": {
+          "lower": 0.996173241514445,
+          "upper": 1.0
+        }
+      },
+      "seed": 99,
+      "theta_deg": -45.0
+    },
+    {
+      "classical": {
+        "expected_mismatches": 1000.0,
+        "matches": 0,
+        "mismatches": 1000,
+        "model": "classical",
+        "observed_probability": 1.0,
+        "photon_pairs": 1000,
+        "standard_deviation_count": 0.0,
+        "standardized_residual": null,
+        "stream_seed": 608135923,
+        "theoretical_probability": 1.0,
+        "wilson_interval": {
+          "lower": 0.996173241514445,
+          "upper": 1.0
+        }
+      },
+      "identifier": "perpendicular",
+      "label": "Perpendicular axes",
+      "phi_deg": 90.0,
+      "photon_pairs": 1000,
+      "quantum": {
+        "expected_mismatches": 1000.0,
+        "matches": 0,
+        "mismatches": 1000,
+        "model": "quantum",
+        "observed_probability": 1.0,
+        "photon_pairs": 1000,
+        "standard_deviation_count": 0.0,
+        "standardized_residual": null,
+        "stream_seed": 3084996889,
+        "theoretical_probability": 1.0,
+        "wilson_interval": {
+          "lower": 0.996173241514445,
+          "upper": 1.0
+        }
+      },
+      "seed": 123,
+      "theta_deg": 0.0
+    },
+    {
+      "classical": {
+        "expected_mismatches": 37499.99999999998,
+        "matches": 62546,
+        "mismatches": 37454,
+        "model": "classical",
+        "observed_probability": 0.37454,
+        "photon_pairs": 100000,
+        "standard_deviation_count": 153.09310892394862,
+        "standardized_residual": -0.3004707417812606,
+        "stream_seed": 608136546,
+        "theoretical_probability": 0.3749999999999998,
+        "wilson_interval": {
+          "lower": 0.37154504084207945,
+          "upper": 0.37754459777613
+        }
+      },
+      "identifier": "official_large_sample",
+      "label": "Official angles at maximum approved N",
+      "phi_deg": 30.0,
+      "photon_pairs": 100000,
+      "quantum": {
+        "expected_mismatches": 74999.99999999999,
+        "matches": 24898,
+        "mismatches": 75102,
+        "model": "quantum",
+        "observed_probability": 0.75102,
+        "photon_pairs": 100000,
+        "standard_deviation_count": 136.93063937629154,
+        "standardized_residual": 0.7449026782071322,
+        "stream_seed": 3084998280,
+        "theoretical_probability": 0.7499999999999999,
+        "wilson_interval": {
+          "lower": 0.7483302603530764,
+          "upper": 0.7536904547278824
+        }
+      },
+      "seed": 2026,
+      "theta_deg": -30.0
+    }
+  ],
+  "configuration": {
+    "classical_stream_salt": 608135816,
+    "default_photon_pairs": 1000,
+    "default_seed": 2026,
+    "maximum_photon_pairs": 100000,
+    "maximum_seed": 4294967295,
+    "minimum_photon_pairs": 10,
+    "quantum_stream_salt": 3084996962
+  },
+  "cryptographic_security": false,
+  "generator": "Mulberry32 32-bit reproducible simulation only",
+  "prng_reference": {
+    "seed": 0,
+    "uint32": [
+      1144304738,
+      1416247,
+      958946056,
+      627933444,
+      2007157716,
+      2340967985,
+      2642484575,
+      2787370982,
+      1958536065,
+      2496316458
+    ],
+    "uniform": [
+      0.26642920868471265,
+      0.0003297457005828619,
+      0.2232720274478197,
+      0.1462021479383111,
+      0.46732782293111086,
+      0.5450490827206522,
+      0.6152513844426721,
+      0.6489853798411787,
+      0.45600721263326705,
+      0.581218967679888
+    ]
+  },
+  "schema_version": "task08-finite-photon-reference-v1",
+  "wilson_z_95": 1.959963984540054
+}

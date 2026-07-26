@@ -1,0 +1,427 @@
+{
+  "checks": [
+    {
+      "comparison": "absolute_error_lte",
+      "expected": 0.0,
+      "explanation": "The approved sweep holds detector A at -30 degrees.",
+      "name": "sweep_theta_fixed",
+      "observed": 0.0,
+      "passed": true,
+      "tolerance": 0.0,
+      "unit": "degree"
+    },
+    {
+      "comparison": "exact_equal",
+      "expected": 0.0,
+      "explanation": "The phi sweep is inclusive, ordered and samples zero.",
+      "name": "sweep_phi_sampling",
+      "observed": 0.0,
+      "passed": true,
+      "tolerance": 0.0,
+      "unit": "count"
+    },
+    {
+      "comparison": "absolute_error_lte",
+      "expected": 0.0,
+      "explanation": "Relative detector angles use the frozen 180-degree convention.",
+      "name": "sweep_relative_angle",
+      "observed": 0.0,
+      "passed": true,
+      "tolerance": 0.0,
+      "unit": "degree"
+    },
+    {
+      "comparison": "exact_equal",
+      "expected": 0.0,
+      "explanation": "Every grid row has the approved theta coordinate.",
+      "name": "grid_theta_sampling",
+      "observed": 0.0,
+      "passed": true,
+      "tolerance": 0.0,
+      "unit": "count"
+    },
+    {
+      "comparison": "exact_equal",
+      "expected": 0.0,
+      "explanation": "Every grid column has the approved phi coordinate.",
+      "name": "grid_phi_sampling",
+      "observed": 0.0,
+      "passed": true,
+      "tolerance": 0.0,
+      "unit": "count"
+    },
+    {
+      "comparison": "exact_equal",
+      "expected": 0.0,
+      "explanation": "Every stored angle and probability is finite.",
+      "name": "all_scientific_arrays_finite",
+      "observed": 0.0,
+      "passed": true,
+      "tolerance": 0.0,
+      "unit": "count"
+    },
+    {
+      "comparison": "absolute_error_lte",
+      "expected": 0.0,
+      "explanation": "Detector A X/Y outcomes sum to one.",
+      "name": "sweep_detector_a_normalized",
+      "observed": 0.0,
+      "passed": true,
+      "tolerance": 5e-13,
+      "unit": "probability"
+    },
+    {
+      "comparison": "absolute_error_lte",
+      "expected": 0.0,
+      "explanation": "Detector B X/Y outcomes sum to one.",
+      "name": "sweep_detector_b_normalized",
+      "observed": 2.220446049250313e-16,
+      "passed": true,
+      "tolerance": 5e-13,
+      "unit": "probability"
+    },
+    {
+      "comparison": "absolute_error_lte",
+      "expected": 0.0,
+      "explanation": "Classical match and mismatch complement on the sweep.",
+      "name": "sweep_classical_complement",
+      "observed": 0.0,
+      "passed": true,
+      "tolerance": 5e-13,
+      "unit": "probability"
+    },
+    {
+      "comparison": "absolute_error_lte",
+      "expected": 0.0,
+      "explanation": "Quantum match and mismatch complement on the sweep.",
+      "name": "sweep_quantum_complement",
+      "observed": 2.220446049250313e-16,
+      "passed": true,
+      "tolerance": 5e-13,
+      "unit": "probability"
+    },
+    {
+      "comparison": "absolute_error_lte",
+      "expected": 0.0,
+      "explanation": "Classical match and mismatch complement on the grid.",
+      "name": "grid_classical_complement",
+      "observed": 0.0,
+      "passed": true,
+      "tolerance": 5e-13,
+      "unit": "probability"
+    },
+    {
+      "comparison": "absolute_error_lte",
+      "expected": 0.0,
+      "explanation": "Quantum match and mismatch complement on the grid.",
+      "name": "grid_quantum_complement",
+      "observed": 2.220446049250313e-16,
+      "passed": true,
+      "tolerance": 5e-13,
+      "unit": "probability"
+    },
+    {
+      "comparison": "absolute_error_lte",
+      "expected": 0.0,
+      "explanation": "The production equation agrees with its independent double-angle form.",
+      "name": "sweep_classical_double_angle_reference",
+      "observed": 2.220446049250313e-16,
+      "passed": true,
+      "tolerance": 5e-13,
+      "unit": "probability"
+    },
+    {
+      "comparison": "absolute_error_lte",
+      "expected": 0.0,
+      "explanation": "The production equation agrees with its independent double-angle form.",
+      "name": "sweep_quantum_double_angle_reference",
+      "observed": 3.3306690738754696e-16,
+      "passed": true,
+      "tolerance": 5e-13,
+      "unit": "probability"
+    },
+    {
+      "comparison": "absolute_error_lte",
+      "expected": 0.0,
+      "explanation": "The production equation agrees with its independent double-angle form.",
+      "name": "grid_classical_double_angle_reference",
+      "observed": 3.3306690738754696e-16,
+      "passed": true,
+      "tolerance": 5e-13,
+      "unit": "probability"
+    },
+    {
+      "comparison": "absolute_error_lte",
+      "expected": 0.0,
+      "explanation": "The production equation agrees with its independent double-angle form.",
+      "name": "grid_quantum_double_angle_reference",
+      "observed": 4.996003610813204e-16,
+      "passed": true,
+      "tolerance": 5e-13,
+      "unit": "probability"
+    },
+    {
+      "comparison": "absolute_error_lte",
+      "expected": 0.0,
+      "explanation": "The official -30/+30 degree worked example is reproduced.",
+      "name": "official_classical_anchor",
+      "observed": 2.220446049250313e-16,
+      "passed": true,
+      "tolerance": 5e-13,
+      "unit": "probability"
+    },
+    {
+      "comparison": "absolute_error_lte",
+      "expected": 0.0,
+      "explanation": "The official -30/+30 degree worked example is reproduced.",
+      "name": "official_quantum_anchor",
+      "observed": 1.1102230246251565e-16,
+      "passed": true,
+      "tolerance": 5e-13,
+      "unit": "probability"
+    },
+    {
+      "comparison": "absolute_error_lte",
+      "expected": 0.0,
+      "explanation": "The official -30/+30 degree worked example is reproduced.",
+      "name": "official_difference_anchor",
+      "observed": 1.1102230246251565e-16,
+      "passed": true,
+      "tolerance": 5e-13,
+      "unit": "probability"
+    },
+    {
+      "comparison": "absolute_error_lte",
+      "expected": 0.0,
+      "explanation": "All exact rational reference cases agree with the model.",
+      "name": "exact_cases_classical",
+      "observed": 2.220446049250313e-16,
+      "passed": true,
+      "tolerance": 5e-13,
+      "unit": "probability"
+    },
+    {
+      "comparison": "absolute_error_lte",
+      "expected": 0.0,
+      "explanation": "All exact rational reference cases agree with the model.",
+      "name": "exact_cases_quantum",
+      "observed": 1.1102230246251565e-16,
+      "passed": true,
+      "tolerance": 5e-13,
+      "unit": "probability"
+    },
+    {
+      "comparison": "absolute_error_lte",
+      "expected": 0.0,
+      "explanation": "All exact rational reference cases agree with the model.",
+      "name": "exact_cases_difference",
+      "observed": 1.1102230246251565e-16,
+      "passed": true,
+      "tolerance": 5e-13,
+      "unit": "probability"
+    },
+    {
+      "comparison": "greater_than_or_equal",
+      "expected": 0.0,
+      "explanation": "Classical mismatch never falls below zero.",
+      "name": "classical_probability_lower_bound",
+      "observed": 0.0,
+      "passed": true,
+      "tolerance": 5e-13,
+      "unit": "probability"
+    },
+    {
+      "comparison": "less_than_or_equal",
+      "expected": 1.0,
+      "explanation": "Classical mismatch never exceeds one.",
+      "name": "classical_probability_upper_bound",
+      "observed": 1.0,
+      "passed": true,
+      "tolerance": 5e-13,
+      "unit": "probability"
+    },
+    {
+      "comparison": "greater_than_or_equal",
+      "expected": 0.0,
+      "explanation": "Quantum mismatch never falls below zero.",
+      "name": "quantum_probability_lower_bound",
+      "observed": 0.0,
+      "passed": true,
+      "tolerance": 5e-13,
+      "unit": "probability"
+    },
+    {
+      "comparison": "less_than_or_equal",
+      "expected": 1.0,
+      "explanation": "Quantum mismatch never exceeds one.",
+      "name": "quantum_probability_upper_bound",
+      "observed": 1.0,
+      "passed": true,
+      "tolerance": 5e-13,
+      "unit": "probability"
+    },
+    {
+      "comparison": "greater_than_or_equal",
+      "expected": -0.5,
+      "explanation": "Quantum-minus-classical contrast is no smaller than -0.5.",
+      "name": "difference_lower_bound",
+      "observed": -0.5,
+      "passed": true,
+      "tolerance": 5e-13,
+      "unit": "probability"
+    },
+    {
+      "comparison": "less_than_or_equal",
+      "expected": 0.5,
+      "explanation": "Quantum-minus-classical contrast is no larger than +0.5.",
+      "name": "difference_upper_bound",
+      "observed": 0.5,
+      "passed": true,
+      "tolerance": 5e-13,
+      "unit": "probability"
+    },
+    {
+      "comparison": "absolute_error_lte",
+      "expected": 0.0,
+      "explanation": "The approved grid reaches the -0.5 contrast configuration.",
+      "name": "difference_negative_extremum",
+      "observed": 0.0,
+      "passed": true,
+      "tolerance": 5e-13,
+      "unit": "probability"
+    },
+    {
+      "comparison": "absolute_error_lte",
+      "expected": 0.0,
+      "explanation": "The approved grid reaches the +0.5 contrast configuration.",
+      "name": "difference_positive_extremum",
+      "observed": 0.0,
+      "passed": true,
+      "tolerance": 5e-13,
+      "unit": "probability"
+    },
+    {
+      "comparison": "absolute_error_lte",
+      "expected": 0.0,
+      "explanation": "Stored sweep contrast equals quantum minus classical mismatch.",
+      "name": "sweep_signed_difference_identity",
+      "observed": 0.0,
+      "passed": true,
+      "tolerance": 0.0,
+      "unit": "probability"
+    },
+    {
+      "comparison": "absolute_error_lte",
+      "expected": 0.0,
+      "explanation": "Stored grid contrast equals quantum minus classical mismatch.",
+      "name": "grid_signed_difference_identity",
+      "observed": 0.0,
+      "passed": true,
+      "tolerance": 0.0,
+      "unit": "probability"
+    },
+    {
+      "comparison": "absolute_error_lte",
+      "expected": 0.0,
+      "explanation": "The classical result is unchanged when detectors are exchanged.",
+      "name": "classical_swap_symmetry",
+      "observed": 0.0,
+      "passed": true,
+      "tolerance": 5e-13,
+      "unit": "probability"
+    },
+    {
+      "comparison": "absolute_error_lte",
+      "expected": 0.0,
+      "explanation": "The quantum result is unchanged when detectors are exchanged.",
+      "name": "quantum_swap_symmetry",
+      "observed": 0.0,
+      "passed": true,
+      "tolerance": 5e-13,
+      "unit": "probability"
+    },
+    {
+      "comparison": "absolute_error_lte",
+      "expected": 0.0,
+      "explanation": "Classical probabilities are invariant under 180-degree axis shifts.",
+      "name": "classical_periodicity",
+      "observed": 3.3306690738754696e-16,
+      "passed": true,
+      "tolerance": 5e-13,
+      "unit": "probability"
+    },
+    {
+      "comparison": "absolute_error_lte",
+      "expected": 0.0,
+      "explanation": "Quantum probabilities are invariant under 180-degree axis shifts.",
+      "name": "quantum_periodicity",
+      "observed": 0.0,
+      "passed": true,
+      "tolerance": 5e-13,
+      "unit": "probability"
+    },
+    {
+      "comparison": "absolute_error_lte",
+      "expected": 0.0,
+      "explanation": "Equal detector settings produce zero quantum mismatch.",
+      "name": "quantum_equal_angle_zero",
+      "observed": 0.0,
+      "passed": true,
+      "tolerance": 5e-13,
+      "unit": "probability"
+    },
+    {
+      "comparison": "absolute_error_lte",
+      "expected": 0.0,
+      "explanation": "The full grid independently contains the official example.",
+      "name": "grid_official_classical",
+      "observed": 2.220446049250313e-16,
+      "passed": true,
+      "tolerance": 5e-13,
+      "unit": "probability"
+    },
+    {
+      "comparison": "absolute_error_lte",
+      "expected": 0.0,
+      "explanation": "The full grid independently contains the official example.",
+      "name": "grid_official_quantum",
+      "observed": 1.1102230246251565e-16,
+      "passed": true,
+      "tolerance": 5e-13,
+      "unit": "probability"
+    },
+    {
+      "comparison": "absolute_error_lte",
+      "expected": 0.0,
+      "explanation": "The full grid independently contains the official example.",
+      "name": "grid_official_difference",
+      "observed": 1.1102230246251565e-16,
+      "passed": true,
+      "tolerance": 5e-13,
+      "unit": "probability"
+    },
+    {
+      "comparison": "absolute_error_lte",
+      "expected": 0.0,
+      "explanation": "The one-dimensional sweep has uniform 0.5-degree spacing.",
+      "name": "sweep_spacing",
+      "observed": 0.0,
+      "passed": true,
+      "tolerance": 5e-13,
+      "unit": "degree"
+    },
+    {
+      "comparison": "absolute_error_lte",
+      "expected": 0.0,
+      "explanation": "Both heatmap axes have uniform one-degree spacing.",
+      "name": "grid_spacing",
+      "observed": 0.0,
+      "passed": true,
+      "tolerance": 5e-13,
+      "unit": "degree"
+    }
+  ],
+  "passed": true,
+  "schema_version": "task08-validation-v1",
+  "study_digest": "1baabe6ef57a3a0fce334e7addc08906ce24fcff30c3cc2e2a5ce8eb2bb630f1"
+}

@@ -1,0 +1,183 @@
+{
+  "files": [
+    {
+      "bytes": 325830,
+      "dpi": [
+        299.999,
+        299.999
+      ],
+      "filename": "required_kinematics.png",
+      "height_px": 1500,
+      "media_type": "image/png",
+      "sha256": "865a89006db71d68e4521ed975ce9a08191099c9fa0b1be035a6e6e8b6638ffd",
+      "width_px": 2400
+    },
+    {
+      "bytes": 37465,
+      "editable_text": true,
+      "filename": "required_kinematics.svg",
+      "font_families": [
+        "Times New Roman"
+      ],
+      "media_type": "image/svg+xml",
+      "scalable": true,
+      "sha256": "ff548b27040da9595dbedcee3e420ffececbb8d6d9827e3c29ee7f8413590978",
+      "view_box": "0 0 576 360"
+    },
+    {
+      "bytes": 69183,
+      "editable_text": true,
+      "filename": "required_kinematics.pdf",
+      "font_embedded": true,
+      "font_family": "Times New Roman",
+      "font_type": 42,
+      "media_type": "application/pdf",
+      "sha256": "ff23f7d6f63df863cef57c6c3cef68b0e968225c2407ba86b79fd4649ff02574"
+    },
+    {
+      "bytes": 276687,
+      "dpi": [
+        299.999,
+        299.999
+      ],
+      "filename": "energy_transfer_geometry.png",
+      "height_px": 1500,
+      "media_type": "image/png",
+      "sha256": "cb81766043be3b649205f7ea3f840928f2c78616977faed08ee11c7e34f6bc65",
+      "width_px": 2400
+    },
+    {
+      "bytes": 38357,
+      "editable_text": true,
+      "filename": "energy_transfer_geometry.svg",
+      "font_families": [
+        "Times New Roman"
+      ],
+      "media_type": "image/svg+xml",
+      "scalable": true,
+      "sha256": "40311697b924f03c5c50e8d6b48c9352b9a53a731c8a391244db201b9c2bac3f",
+      "view_box": "0 0 576 360"
+    },
+    {
+      "bytes": 74230,
+      "editable_text": true,
+      "filename": "energy_transfer_geometry.pdf",
+      "font_embedded": true,
+      "font_family": "Times New Roman",
+      "font_type": 42,
+      "media_type": "application/pdf",
+      "sha256": "7232332a2745ee4c7f448f16bc2c3eb5fadabb35af78b83e843a7524a28026bb"
+    },
+    {
+      "bytes": 395974,
+      "dpi": [
+        299.999,
+        299.999
+      ],
+      "filename": "klein_nishina_extension.png",
+      "height_px": 1500,
+      "media_type": "image/png",
+      "sha256": "737bf2488c6d323b2ff31c15f7bddfcf0c746ea93255b3a02a00b6254ee998f1",
+      "width_px": 2400
+    },
+    {
+      "bytes": 48500,
+      "editable_text": true,
+      "filename": "klein_nishina_extension.svg",
+      "font_families": [
+        "Times New Roman"
+      ],
+      "media_type": "image/svg+xml",
+      "scalable": true,
+      "sha256": "833d50d5f97851b281526ada0c54a2ef46b4a4365210a1f5655ca09a8ffd98c8",
+      "view_box": "0 0 576 360"
+    },
+    {
+      "bytes": 73558,
+      "editable_text": true,
+      "filename": "klein_nishina_extension.pdf",
+      "font_embedded": true,
+      "font_family": "Times New Roman",
+      "font_type": 42,
+      "media_type": "application/pdf",
+      "sha256": "40f1b81cd951bd84e70d68ab1ce2edd87a71cc45896d987fca7db2dfb34f5165"
+    },
+    {
+      "bytes": 496731,
+      "dpi": [
+        299.999,
+        299.999
+      ],
+      "filename": "task09_summary.png",
+      "height_px": 2160,
+      "media_type": "image/png",
+      "sha256": "b7791266bd0b361d220dc68fa101310f80ee0fb4bce0a4637acbc636fb3c1909",
+      "width_px": 3840
+    },
+    {
+      "bytes": 48197,
+      "editable_text": true,
+      "filename": "task09_summary.svg",
+      "font_families": [
+        "Times New Roman"
+      ],
+      "media_type": "image/svg+xml",
+      "scalable": true,
+      "sha256": "84cac8c5a57b601ca595a359097bd436246687ce6138545958cb8fd86f24acab",
+      "view_box": "0 0 921.6 518.4"
+    },
+    {
+      "bytes": 80353,
+      "editable_text": true,
+      "filename": "task09_summary.pdf",
+      "font_embedded": true,
+      "font_family": "Times New Roman",
+      "font_type": 42,
+      "media_type": "application/pdf",
+      "sha256": "9faff49570f3621d2ea02c4e2d3d5527ab917fa3f51eafceeaf1e8de74fd9867"
+    },
+    {
+      "bytes": 4753900,
+      "configured_frames_per_second": 18,
+      "continuous_loop": true,
+      "filename": "compton_angle_sweep.gif",
+      "frame_count": 73,
+      "height_px": 900,
+      "media_type": "image/gif",
+      "sha256": "3afac61532288ecaeae35f384b962a0ed89ead428ddddd360ac9a7e9c69f91c4",
+      "stored_frame_duration_ms": 50,
+      "width_px": 1600
+    }
+  ],
+  "rendering_contract": {
+    "animation_frame_count": 73,
+    "animation_px": [
+      1600,
+      900
+    ],
+    "figure_dpi": 300,
+    "font_family": "Times New Roman",
+    "standard_raster_px": [
+      2400,
+      1500
+    ],
+    "summary_raster_px": [
+      3840,
+      2160
+    ]
+  },
+  "schema_version": "task09-media-manifest-v2",
+  "scientific_evidence": {
+    "cross_section_checks": {
+      "passed": 30,
+      "total": 30
+    },
+    "cross_section_study_sha256": "6cd58587bae2b5b821f5fadb8ccb21ba2fe4dc42ee7a78b328732772d14ef0c5",
+    "kinematic_checks": {
+      "passed": 44,
+      "total": 44
+    },
+    "kinematic_study_sha256": "f71bbd6366edcd1d825ff9491f490084bed77263750fc21caf4b58474c4da3da"
+  },
+  "total_bytes": 6718965
+}

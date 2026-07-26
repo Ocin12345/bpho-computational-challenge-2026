@@ -11,6 +11,7 @@ env/
 
 # Local downloads and large generated files
 downloads/
+release/
 *.zip
 *.mp4
 *.mov

@@ -1,0 +1,418 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="Interactive BPhO Task 8 calculator comparing classical and quantum photon-polarisation mismatch probabilities.">
+    <meta name="color-scheme" content="light">
+    <title>Task 8 · Quantum mismatch calculator</title>
+    <link rel="icon" href="./favicon.svg" type="image/svg+xml">
+    <link rel="stylesheet" href="./styles.css">
+  </head>
+  <body>
+    <a class="skip-link" href="#calculator-main">Skip to the calculator</a>
+    <div class="page-glow page-glow--one" aria-hidden="true"></div>
+    <div class="page-glow page-glow--two" aria-hidden="true"></div>
+
+    <main class="app-shell" id="calculator-main" tabindex="-1">
+      <header class="hero">
+        <div>
+          <p class="eyebrow">BPhO Computational Challenge 2026 · Task 8</p>
+          <h1>Quantum mismatch calculator</h1>
+          <p class="hero__summary">
+            Rotate two photon detectors and compare the classical prediction with
+            the result produced by quantum measurement.
+          </p>
+        </div>
+        <div class="verification-badge" title="Backed by the Stage 3 validation report">
+          <span class="verification-badge__dot" aria-hidden="true"></span>
+          <span><strong>42/42</strong> scientific checks</span>
+        </div>
+      </header>
+
+      <section class="workspace" aria-labelledby="detector-heading">
+        <div class="section-heading">
+          <div>
+            <p class="section-kicker">Detector settings</p>
+            <h2 id="detector-heading">Choose the two measurement angles</h2>
+          </div>
+          <button class="button button--quiet" id="reset-button" type="button">
+            Reset official example
+          </button>
+        </div>
+
+        <div class="detector-layout">
+          <article class="detector-card detector-card--a" aria-labelledby="detector-a-title">
+            <div class="detector-card__heading">
+              <div>
+                <span class="detector-tag">Detector A</span>
+                <h3 id="detector-a-title">Alice · angle θ</h3>
+              </div>
+              <output class="angle-chip" id="theta-value" for="theta-range theta-number">−30°</output>
+            </div>
+
+            <svg class="detector-dial" viewBox="0 0 220 220" role="img" aria-labelledby="detector-a-svg-title detector-a-svg-description">
+              <title id="detector-a-svg-title">Detector A orientation</title>
+              <desc id="detector-a-svg-description">Orthogonal X and Y detector axes rotated to the selected theta angle.</desc>
+              <circle class="dial-ring" cx="110" cy="110" r="87"></circle>
+              <circle class="dial-ring dial-ring--inner" cx="110" cy="110" r="59"></circle>
+              <line class="dial-reference" x1="110" y1="17" x2="110" y2="203"></line>
+              <line class="dial-tick" x1="110" y1="19" x2="110" y2="29"></line>
+              <line class="dial-tick" x1="110" y1="191" x2="110" y2="201"></line>
+              <line class="dial-tick" x1="19" y1="110" x2="29" y2="110"></line>
+              <line class="dial-tick" x1="191" y1="110" x2="201" y2="110"></line>
+              <line class="detector-axis detector-axis--primary" id="a-x-axis"></line>
+              <line class="detector-axis detector-axis--secondary" id="a-y-axis"></line>
+              <circle class="dial-hub" cx="110" cy="110" r="8"></circle>
+              <text class="axis-label axis-label--primary" id="a-x-label">Xₐ</text>
+              <text class="axis-label axis-label--secondary" id="a-y-label">Yₐ</text>
+              <text class="dial-angle" x="110" y="116" text-anchor="middle" id="a-dial-angle">−30°</text>
+            </svg>
+
+            <div class="angle-control">
+              <label for="theta-range">Detector A angle, θ</label>
+              <span class="sr-only" id="theta-help">Use the arrow keys for one-degree changes. The graph and results update immediately.</span>
+              <input id="theta-range" type="range" min="-90" max="90" step="1" value="-30" aria-describedby="theta-help">
+              <div class="range-scale" aria-hidden="true"><span>−90°</span><span>0°</span><span>+90°</span></div>
+              <div class="number-field">
+                <input id="theta-number" type="number" min="-90" max="90" step="1" value="-30" inputmode="decimal" aria-label="Detector A angle theta in degrees">
+                <span aria-hidden="true">degrees</span>
+              </div>
+            </div>
+          </article>
+
+          <div class="entanglement" aria-label="Entangled photon pair travels from the source to both detectors">
+            <div class="entanglement__line" aria-hidden="true"></div>
+            <div class="photon photon--left" aria-hidden="true"></div>
+            <div class="source-mark" aria-hidden="true">
+              <span></span><span></span>
+            </div>
+            <div class="photon photon--right" aria-hidden="true"></div>
+            <div class="entanglement__copy">
+              <strong>Entangled pair</strong>
+              <span>relative angle <output id="delta-value">60°</output></span>
+            </div>
+          </div>
+
+          <article class="detector-card detector-card--b" aria-labelledby="detector-b-title">
+            <div class="detector-card__heading">
+              <div>
+                <span class="detector-tag">Detector B</span>
+                <h3 id="detector-b-title">Bob · angle φ</h3>
+              </div>
+              <output class="angle-chip" id="phi-value" for="phi-range phi-number">+30°</output>
+            </div>
+
+            <svg class="detector-dial" viewBox="0 0 220 220" role="img" aria-labelledby="detector-b-svg-title detector-b-svg-description">
+              <title id="detector-b-svg-title">Detector B orientation</title>
+              <desc id="detector-b-svg-description">Orthogonal X and Y detector axes rotated to the selected phi angle.</desc>
+              <circle class="dial-ring" cx="110" cy="110" r="87"></circle>
+              <circle class="dial-ring dial-ring--inner" cx="110" cy="110" r="59"></circle>
+              <line class="dial-reference" x1="110" y1="17" x2="110" y2="203"></line>
+              <line class="dial-tick" x1="110" y1="19" x2="110" y2="29"></line>
+              <line class="dial-tick" x1="110" y1="191" x2="110" y2="201"></line>
+              <line class="dial-tick" x1="19" y1="110" x2="29" y2="110"></line>
+              <line class="dial-tick" x1="191" y1="110" x2="201" y2="110"></line>
+              <line class="detector-axis detector-axis--primary" id="b-x-axis"></line>
+              <line class="detector-axis detector-axis--secondary" id="b-y-axis"></line>
+              <circle class="dial-hub" cx="110" cy="110" r="8"></circle>
+              <text class="axis-label axis-label--primary" id="b-x-label">Xᵦ</text>
+              <text class="axis-label axis-label--secondary" id="b-y-label">Yᵦ</text>
+              <text class="dial-angle" x="110" y="116" text-anchor="middle" id="b-dial-angle">+30°</text>
+            </svg>
+
+            <div class="angle-control">
+              <label for="phi-range">Detector B angle, φ</label>
+              <span class="sr-only" id="phi-help">Use the arrow keys for one-degree changes. The graph marker and results update immediately.</span>
+              <input id="phi-range" type="range" min="-90" max="90" step="1" value="30" aria-describedby="phi-help">
+              <div class="range-scale" aria-hidden="true"><span>−90°</span><span>0°</span><span>+90°</span></div>
+              <div class="number-field">
+                <input id="phi-number" type="number" min="-90" max="90" step="1" value="30" inputmode="decimal" aria-label="Detector B angle phi in degrees">
+                <span aria-hidden="true">degrees</span>
+              </div>
+            </div>
+          </article>
+        </div>
+
+        <nav class="presets" aria-label="Angle presets">
+          <span class="presets__label">Try a reference case</span>
+          <button class="preset is-active" type="button" data-preset="official" aria-pressed="true">Official −30° / +30°</button>
+          <button class="preset" type="button" data-preset="zero" aria-pressed="false">Aligned 0°</button>
+          <button class="preset" type="button" data-preset="aligned" aria-pressed="false">Aligned 45°</button>
+          <button class="preset" type="button" data-preset="contrast" aria-pressed="false">Maximum contrast</button>
+          <button class="preset" type="button" data-preset="perpendicular" aria-pressed="false">Perpendicular</button>
+        </nav>
+      </section>
+
+      <section class="results" aria-labelledby="results-heading">
+        <div class="section-heading section-heading--results">
+          <div>
+            <p class="section-kicker">Live comparison</p>
+            <h2 id="results-heading">Probability of different detector outcomes</h2>
+          </div>
+          <p class="results__scale">Common scale · 0% to 100%</p>
+        </div>
+
+        <div class="result-grid">
+          <article class="result-card result-card--classical">
+            <div class="result-card__topline">
+              <span class="model-pill">Classical</span>
+              <span class="result-card__descriptor">independent Malus probabilities</span>
+            </div>
+            <div class="result-card__value-row">
+              <output class="result-card__percent" id="classical-percent">37.5%</output>
+              <output class="result-card__decimal" id="classical-decimal">P = 0.375</output>
+            </div>
+            <div class="probability-track" role="meter" aria-label="Classical mismatch probability" aria-valuemin="0" aria-valuemax="100" aria-valuenow="37.5" aria-valuetext="37.5 percent" id="classical-meter">
+              <span id="classical-fill" style="width: 37.5%"></span>
+            </div>
+          </article>
+
+          <article class="result-card result-card--quantum">
+            <div class="result-card__topline">
+              <span class="model-pill">Quantum</span>
+              <span class="result-card__descriptor">measurement changes the state</span>
+            </div>
+            <div class="result-card__value-row">
+              <output class="result-card__percent" id="quantum-percent">75.0%</output>
+              <output class="result-card__decimal" id="quantum-decimal">P = 0.750</output>
+            </div>
+            <div class="probability-track" role="meter" aria-label="Quantum mismatch probability" aria-valuemin="0" aria-valuemax="100" aria-valuenow="75" aria-valuetext="75.0 percent" id="quantum-meter">
+              <span id="quantum-fill" style="width: 75%"></span>
+            </div>
+          </article>
+
+          <article class="difference-card">
+            <div>
+              <span class="difference-card__label">Quantum − classical</span>
+              <output class="difference-card__value" id="difference-value">+37.5 pp</output>
+            </div>
+            <p id="difference-summary">The quantum model predicts 37.5 percentage points more mismatch.</p>
+          </article>
+        </div>
+        <p class="sr-only" id="live-results" role="status" aria-live="polite" aria-atomic="true"></p>
+      </section>
+
+      <section class="chart-panel" aria-labelledby="comparison-chart-heading">
+        <div class="chart-panel__heading">
+          <div>
+            <p class="section-kicker">Full-angle behaviour</p>
+            <h2 id="comparison-chart-heading">How mismatch changes as detector B rotates</h2>
+            <p class="chart-panel__summary">
+              Detector A is held at <output id="chart-theta">−30°</output>. The vertical marker follows
+              detector B at <output id="chart-phi">+30°</output>.
+            </p>
+          </div>
+          <div class="chart-legend" aria-label="Graph legend">
+            <span><i class="legend-line legend-line--classical" aria-hidden="true"></i>Classical · solid</span>
+            <span><i class="legend-line legend-line--quantum" aria-hidden="true"></i>Quantum · dashed</span>
+            <span><i class="legend-line legend-line--marker" aria-hidden="true"></i>Selected φ</span>
+          </div>
+        </div>
+
+        <figure class="comparison-figure">
+          <div class="chart-frame" role="region" aria-label="Scrollable probability comparison graph" tabindex="0">
+            <svg class="comparison-chart" id="comparison-chart" viewBox="0 0 1080 440" role="img" aria-labelledby="comparison-chart-title comparison-chart-description">
+              <title id="comparison-chart-title">Classical and quantum mismatch probability curves</title>
+              <desc id="comparison-chart-description">For detector A at minus 30 degrees, the graph compares classical and quantum mismatch from minus 90 to plus 90 degrees for detector B. The selected detector B angle is plus 30 degrees.</desc>
+
+              <g class="chart-grid" aria-hidden="true">
+                <line x1="88" y1="30" x2="1048" y2="30"></line>
+                <line x1="88" y1="114" x2="1048" y2="114"></line>
+                <line x1="88" y1="198" x2="1048" y2="198"></line>
+                <line x1="88" y1="282" x2="1048" y2="282"></line>
+                <line x1="88" y1="366" x2="1048" y2="366"></line>
+                <line x1="88" y1="30" x2="88" y2="366"></line>
+                <line x1="328" y1="30" x2="328" y2="366"></line>
+                <line x1="568" y1="30" x2="568" y2="366"></line>
+                <line x1="808" y1="30" x2="808" y2="366"></line>
+                <line x1="1048" y1="30" x2="1048" y2="366"></line>
+              </g>
+
+              <g class="chart-axes" aria-hidden="true">
+                <line x1="88" y1="30" x2="88" y2="366"></line>
+                <line x1="88" y1="366" x2="1048" y2="366"></line>
+                <text x="72" y="35" text-anchor="end">100</text>
+                <text x="72" y="119" text-anchor="end">75</text>
+                <text x="72" y="203" text-anchor="end">50</text>
+                <text x="72" y="287" text-anchor="end">25</text>
+                <text x="72" y="371" text-anchor="end">0</text>
+                <text x="88" y="394" text-anchor="middle">−90°</text>
+                <text x="328" y="394" text-anchor="middle">−45°</text>
+                <text x="568" y="394" text-anchor="middle">0°</text>
+                <text x="808" y="394" text-anchor="middle">+45°</text>
+                <text x="1048" y="394" text-anchor="middle">+90°</text>
+                <text class="chart-axis-title" x="568" y="427" text-anchor="middle">Detector B angle, φ</text>
+                <text class="chart-axis-title" transform="translate(22 198) rotate(-90)" text-anchor="middle">Mismatch probability (%)</text>
+              </g>
+
+              <path class="chart-curve chart-curve--classical" id="classical-curve"></path>
+              <path class="chart-curve chart-curve--quantum" id="quantum-curve"></path>
+              <line class="chart-current-line" id="chart-current-line" y1="30" y2="366"></line>
+              <circle class="chart-marker chart-marker--classical" id="classical-marker" r="7"></circle>
+              <circle class="chart-marker chart-marker--quantum" id="quantum-marker" r="7"></circle>
+            </svg>
+          </div>
+          <p class="chart-scroll-hint">On a narrow screen, scroll the graph horizontally to inspect every angle.</p>
+          <figcaption>
+            Both curves use the same fixed 0–100% scale. The quantum curve is controlled by the
+            relative angle φ − θ; the classical curve retains separate dependence on θ and φ.
+          </figcaption>
+        </figure>
+      </section>
+
+      <section class="simulation-panel" aria-labelledby="simulation-heading">
+        <div class="simulation-panel__heading">
+          <div>
+            <div class="simulation-title-row">
+              <p class="section-kicker">Finite-photon extension</p>
+              <span class="extension-label">Optional sampling model</span>
+            </div>
+            <h2 id="simulation-heading">Turn each probability into one reproducible experiment</h2>
+            <p class="simulation-panel__summary">
+              The equations give exact ideal probabilities. A finite run gives integer counts that
+              fluctuate around them, so the theoretical and observed values are shown separately.
+            </p>
+          </div>
+          <div class="simulation-badge" title="Backed by the separate statistical validation report">
+            <span class="verification-badge__dot" aria-hidden="true"></span>
+            <span><strong>24/24</strong> statistical checks</span>
+          </div>
+        </div>
+
+        <div class="simulation-controls" aria-labelledby="simulation-controls-heading">
+          <h3 class="sr-only" id="simulation-controls-heading">Finite-photon experiment controls</h3>
+          <div class="simulation-control simulation-control--count">
+            <label for="photon-count">Detected photon pairs, N</label>
+            <input id="photon-count" type="number" min="10" max="100000" step="10" value="1000" inputmode="numeric" aria-describedby="photon-count-help">
+            <span class="control-help" id="photon-count-help">10 to 100,000 pairs</span>
+            <div class="count-presets" aria-label="Photon-pair count presets">
+              <button type="button" data-photon-pairs="100" aria-pressed="false">100</button>
+              <button type="button" data-photon-pairs="1000" aria-pressed="true" class="is-active">1,000</button>
+              <button type="button" data-photon-pairs="10000" aria-pressed="false">10,000</button>
+              <button type="button" data-photon-pairs="100000" aria-pressed="false">100,000</button>
+            </div>
+          </div>
+
+          <div class="simulation-control simulation-control--seed">
+            <label for="simulation-seed">Reproducible sample seed</label>
+            <input id="simulation-seed" type="number" min="0" max="4294967295" step="1" value="2026" inputmode="numeric" aria-describedby="simulation-seed-help">
+            <span class="control-help" id="simulation-seed-help">Unsigned 32-bit simulation seed</span>
+          </div>
+
+          <div class="simulation-actions">
+            <button class="button button--primary" id="next-sample-button" type="button">Draw next sample</button>
+            <button class="button button--quiet" id="reset-simulation-button" type="button">Reset experiment</button>
+          </div>
+        </div>
+
+        <div class="simulation-context">
+          <span>Detector A <output id="simulation-theta">−30°</output></span>
+          <span>Detector B <output id="simulation-phi">+30°</output></span>
+          <span><output id="simulation-pairs">1,000</output> photon pairs</span>
+          <span>seed <output id="simulation-seed-output">2,026</output></span>
+        </div>
+
+        <div class="simulation-grid">
+          <article class="sample-card sample-card--classical" aria-labelledby="classical-sample-heading">
+            <div class="sample-card__topline">
+              <div>
+                <span class="model-pill">Classical sample</span>
+                <h3 id="classical-sample-heading">Observed mismatch</h3>
+              </div>
+              <span class="theory-chip">theory <output id="classical-sample-theory">37.5%</output></span>
+            </div>
+            <div class="sample-card__result">
+              <output id="classical-sample-percent">36.3%</output>
+              <p><strong id="classical-sample-count">363</strong> mismatches from <span id="classical-sample-total">1,000</span> pairs</p>
+            </div>
+            <div class="interval-track" aria-hidden="true">
+              <span class="interval-band" id="classical-interval-band" style="left: 33.377%; width: 5.950%"></span>
+              <i class="interval-theory" id="classical-theory-marker" style="left: 37.5%"></i>
+              <b class="interval-observed" id="classical-observed-marker" style="left: 36.3%"></b>
+            </div>
+            <dl class="sample-statistics">
+              <div><dt>Expected count</dt><dd id="classical-expected-count">375.0</dd></div>
+              <div><dt>Count spread, σ</dt><dd id="classical-count-sigma">15.31</dd></div>
+              <div><dt>95% Wilson interval</dt><dd id="classical-wilson-interval">33.4–39.3%</dd></div>
+              <div><dt>Sample residual</dt><dd id="classical-sample-residual">−0.78σ</dd></div>
+            </dl>
+          </article>
+
+          <article class="sample-card sample-card--quantum" aria-labelledby="quantum-sample-heading">
+            <div class="sample-card__topline">
+              <div>
+                <span class="model-pill">Quantum sample</span>
+                <h3 id="quantum-sample-heading">Observed mismatch</h3>
+              </div>
+              <span class="theory-chip">theory <output id="quantum-sample-theory">75.0%</output></span>
+            </div>
+            <div class="sample-card__result">
+              <output id="quantum-sample-percent">77.0%</output>
+              <p><strong id="quantum-sample-count">770</strong> mismatches from <span id="quantum-sample-total">1,000</span> pairs</p>
+            </div>
+            <div class="interval-track" aria-hidden="true">
+              <span class="interval-band" id="quantum-interval-band" style="left: 74.291%; width: 5.211%"></span>
+              <i class="interval-theory" id="quantum-theory-marker" style="left: 75%"></i>
+              <b class="interval-observed" id="quantum-observed-marker" style="left: 77%"></b>
+            </div>
+            <dl class="sample-statistics">
+              <div><dt>Expected count</dt><dd id="quantum-expected-count">750.0</dd></div>
+              <div><dt>Count spread, σ</dt><dd id="quantum-count-sigma">13.69</dd></div>
+              <div><dt>95% Wilson interval</dt><dd id="quantum-wilson-interval">74.3–79.5%</dd></div>
+              <div><dt>Sample residual</dt><dd id="quantum-sample-residual">+1.46σ</dd></div>
+            </dl>
+          </article>
+        </div>
+
+        <div class="sampling-summary">
+          <div>
+            <span>Observed quantum − classical</span>
+            <output id="observed-sample-difference">+40.7 pp</output>
+          </div>
+          <p id="sampling-summary-text">This sample differs from the theoretical +37.5 pp because finite counts fluctuate.</p>
+        </div>
+
+        <div class="interval-key" aria-label="Finite-photon interval graphic key">
+          <span><i class="key-band" aria-hidden="true"></i>95% Wilson interval</span>
+          <span><i class="key-line" aria-hidden="true"></i>exact theory</span>
+          <span><i class="key-dot" aria-hidden="true"></i>observed sample</span>
+        </div>
+        <p class="simulation-warning">
+          Reproducible pseudo-random sampling for demonstration only—not cryptographic randomness.
+        </p>
+        <p class="sr-only" id="simulation-live" role="status" aria-live="polite" aria-atomic="true"></p>
+      </section>
+
+      <section class="formula-panel" aria-labelledby="formula-heading">
+        <div class="formula-panel__intro">
+          <p class="section-kicker">What the calculator evaluates</p>
+          <h2 id="formula-heading">Same angles, different physical models</h2>
+          <p>
+            In the quantum model, detector A's measurement prepares the state seen
+            by detector B. Only the relative angle remains.
+          </p>
+        </div>
+        <div class="formula-list">
+          <article class="formula formula--classical">
+            <span>Classical mismatch</span>
+            <strong>P<sub>C</sub> = 1 − cos²θ cos²φ − sin²θ sin²φ</strong>
+            <output id="classical-substitution">θ = −30°, φ = +30° → P<sub>C</sub> = 0.375</output>
+          </article>
+          <article class="formula formula--quantum">
+            <span>Quantum mismatch</span>
+            <strong>P<sub>Q</sub> = sin²(φ − θ)</strong>
+            <output id="quantum-substitution">sin²(+30° − (−30°)) = sin²(60°) = 0.750</output>
+          </article>
+        </div>
+      </section>
+
+      <footer>
+        <span>Ideal entangled photons · perfect two-outcome detectors</span>
+        <span>Runs locally · no network connection required</span>
+      </footer>
+    </main>
+
+    <script type="module" src="./app.js"></script>
+  </body>
+</html>

@@ -1,0 +1,34 @@
+{
+  "accessibility": {
+    "alternative_required_for_handoff": true,
+    "figure_descriptions_present": true,
+    "pdf_structurally_tagged": false,
+    "semantic_alternative": "particle_in_box_uncertainty_accessible.md"
+  },
+  "files": [
+    {
+      "bytes": 7063,
+      "filename": "particle_in_box_uncertainty.tex",
+      "sha256": "33c014d62ada5e8241d3a02877f9ff8d00253b10a38c1e3612e0bbf776a1b403"
+    },
+    {
+      "bytes": 590083,
+      "filename": "particle_in_box_uncertainty.pdf",
+      "sha256": "e6c52c717b276cf43043682a1e45ccc95a978c817cfedef5b0c583b7c892aa46"
+    },
+    {
+      "bytes": 6282,
+      "filename": "particle_in_box_uncertainty_accessible.md",
+      "sha256": "20d1319d30b89fcd77f97b046c710c6a5b603d7a5ff0681915864169d0cdc284"
+    }
+  ],
+  "pdf": {
+    "page_size": "595.28 x 841.89 pts (A4)",
+    "pages": 4,
+    "pdf_version": "1.5",
+    "tagged": false
+  },
+  "report_title": "Particle in a One-Dimensional Box",
+  "reproducible_build_timestamp_utc": "2026-01-01T00:00:00Z",
+  "schema_version": "task07-report-manifest-v1"
+}

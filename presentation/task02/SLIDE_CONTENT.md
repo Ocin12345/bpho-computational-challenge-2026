@@ -1,49 +1,31 @@
-# Text to Put on the Task 2 Slide
+# Final Task 2 Slide Content
 
-## Title
+## Composition
 
-**Task 2 — Collision-Driven Brownian Motion**
+The competition deck uses one validated 3840 × 2160 summary visual, placed as
+a single near-full-slide image. The animation remains optional supporting
+material and is not embedded in the timed master deck.
 
-## One-line claim
+**Source:** `../../task02_brownian_motion/figures/task02_summary.png`
 
-**Random molecular impacts produce unbiased diffusive tracer motion.**
+## Visible evidence
 
-## Reference-run caption
+- the reference 1,000-particle collision scene and tracer path;
+- ensemble mean-squared displacement with its fitted diffusive region;
+- the final-displacement cloud and lack-of-drift evidence;
+- 64 trajectories over 200 ps with seed 2026;
+- $R^2=0.983$ and $D=0.00225\ \mathrm{nm^2\,ps^{-1}}$; and
+- the statement that both mean displacement components include zero.
 
-```text
-Reference simulation
-N = 1,000  •  200 ps  •  3,721 collision impulses
-```
+## Accessibility text
 
-## Result box
+Task 2 summary. A large tracer moves through one thousand small particles.
+Sixty-four trajectories give a linear intermediate mean-squared displacement
+with $R^2=0.983$ and diffusion coefficient $0.00225$ square nanometres per
+picosecond. The endpoint cloud and confidence intervals show no drift.
 
-Use only these three lines on the visible slide:
+## Presentation rule
 
-```text
-64-run ensemble: ⟨Δx⟩ and ⟨Δy⟩ 95% CIs include 0
-MSD ∝ t: R² = 0.983; D = 2.25 × 10⁻³ nm² ps⁻¹
-Time-step halving: ΔD = 5.7%; all 224 runs numerically valid
-```
-
-The first line establishes that there is no statistically significant drift.
-The second provides the main Brownian-motion result. The third shows that the
-result is not an obvious time-step artefact and that every ensemble run passed
-the numerical checks.
-
-## Image alternative text
-
-**Reference animation:** One thousand blue small particles move inside a square
-container. A large translucent yellow tracer begins at the centre, while an
-orange trail accumulates as collisions make its centre follow an irregular
-path.
-
-**Baseline statistics:** The left panel shows mean-squared displacement from 64
-simulations with a 95% confidence band and a linear fit between 20 and 100
-picoseconds. The right panel shows a roughly circular cloud of final horizontal
-and vertical displacements centred close to the origin.
-
-## Content rule
-
-Do not add the collision derivation, parameter table, code screenshots, or all
-four parameter experiments to this slide. They are useful supporting evidence,
-but they would weaken the single main claim at competition-video size.
+Keep the collision derivation, parameter table, time-step study and optional
+animation in the notes or supporting material. The visible slide should remain
+the single clean summary visual.

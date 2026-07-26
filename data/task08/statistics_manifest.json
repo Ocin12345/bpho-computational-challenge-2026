@@ -1,0 +1,18 @@
+{
+  "expected_data_filenames": [
+    "finite_photon_reference.json",
+    "statistical_validation_report.json",
+    "statistics_manifest.json"
+  ],
+  "output_schema_version": "task08-statistics-data-v1",
+  "reproducible_build_timestamp_utc": "2026-01-01T00:00:00Z",
+  "schema_version": "task08-statistics-manifest-v1",
+  "sha256": {
+    "finite_photon_reference.json": "9c83dd5ac82c5457ece43d5fb9479ccfa6532b4e40dc3efb37382227f04168f3",
+    "statistical_validation_report.json": "05ad912be2148afd42a482c327792ba4ed89333f2aff228bdd96c557c66a7051"
+  },
+  "statistical_specification": "task08_quantum_cryptography/STATISTICAL_EXTENSION.md",
+  "validation_check_count": 24,
+  "validation_passed": true,
+  "warning": "The seeded generator is reproducible, not cryptographically secure."
+}

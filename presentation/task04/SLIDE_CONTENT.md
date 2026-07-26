@@ -1,65 +1,31 @@
-# Text to Put on the Task 4 Slide
+# Final Task 4 Slide Content
 
-## Title
+## Composition
 
-**Task 4 — Photoelectric Effect**
+The competition deck uses one validated 3840 × 2160 summary visual, placed as
+a single near-full-slide image. The optional schematic animation is supporting
+material, not part of the timed master deck.
 
-## One-line claim
+**Source:** `../../figures/task04/task04_summary.png`
 
-**Work function sets the emission threshold; photon energy above it sets the
-stopping potential.**
+## Visible evidence
 
-## Main graph caption
+- stopping potential against frequency for the official metals;
+- stopping potential against wavelength;
+- the copper threshold and separation of mathematical and physical regions;
+- the common $h/e$ gradient of the physical frequency curves;
+- sodium's visible cut-off at 516.6 nm; and
+- 43/43 checks passing.
 
-```text
-All physical curves share gradient h/e; W shifts the threshold
-```
+## Accessibility text
 
-This summarizes the required frequency graph without pretending that the
-coincident Ag, Al, and Pb curves are separately visible.
+Task 4 summary for nine metals. Stopping potential is plotted against
+frequency and wavelength, the copper threshold separates a mathematical
+extrapolation from the physical solution, and result text states the common
+$h/e$ gradient and forty-three passing checks.
 
-## Extension caption
+## Presentation rule
 
-```text
-Intensity changes count, not maximum energy
-```
-
-The GIF is supporting explanation, not a replacement for the required graph.
-Its photons, electrons, trajectories, and scale are deliberately schematic.
-
-## Evidence panel
-
-Use only these compact elements:
-
-```text
-eVₛ = hf − W
-Vₛ = (h/e)f − W/e
-Na visible cut-off: 516.6 nm
-43/43 CHECKS PASS
-```
-
-The first equation states the energy balance. The second explains the shared
-frequency gradient. The sodium result is the most concise physical comparison
-from the wavelength study.
-
-## Image alternative text
-
-**Required frequency graph:** Stopping-potential magnitude against photon
-frequency for all nine official metals. Seven physical curves are visible
-because silver, aluminium, and lead coincide at the supplied 4.3-electronvolt
-work function. Analytical threshold markers show where each physical curve
-begins, and the absent region is labelled no photoemission.
-
-**Optional animation:** Four-scene schematic sodium photoelectric
-demonstration. At 550 nanometres there is no emission; at 450 nanometres
-photoelectrons reach the collector; higher intensity adds illustrative
-electrons without changing maximum energy; and the calculated reverse stopping
-potential reduces the photocurrent to zero.
-
-## Content rule
-
-Do not add the full nine-row work-function table, code screenshots, detailed
-derivations, or all supporting figures to the competition slide. The required
-frequency graph must remain the main visual. Use the wavelength, copper,
-validation, summary, and storyboard images only as optional supporting slides
-for a longer explanation.
+Keep the full work-function table, derivation and optional animation in the
+notes or supporting material. The visible slide should remain the single clean
+summary visual.

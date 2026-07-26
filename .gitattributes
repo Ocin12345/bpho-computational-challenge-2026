@@ -1,0 +1,6 @@
+*.gif binary
+*.pdf binary
+*.png binary
+*.pptx binary
+*.webp binary
+*.svg -whitespace

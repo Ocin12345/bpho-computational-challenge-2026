@@ -1,0 +1,447 @@
+{
+  "checks": [
+    {
+      "comparison": "exact_equal",
+      "expected": 0.0,
+      "explanation": "The study uses the five energies shown by the official brief.",
+      "name": "official_energy_axis",
+      "observed": 0.0,
+      "passed": true,
+      "tolerance": 0.0,
+      "unit": "count"
+    },
+    {
+      "comparison": "exact_equal",
+      "expected": 0.0,
+      "explanation": "The inclusive 0\u2013180 degree axis has the frozen spacing.",
+      "name": "full_angle_axis",
+      "observed": 0.0,
+      "passed": true,
+      "tolerance": 0.0,
+      "unit": "count"
+    },
+    {
+      "comparison": "exact_equal",
+      "expected": 0.0,
+      "explanation": "Every study row carries the correct incident energy.",
+      "name": "broadcast_energy_grid",
+      "observed": 0.0,
+      "passed": true,
+      "tolerance": 0.0,
+      "unit": "count"
+    },
+    {
+      "comparison": "exact_equal",
+      "expected": 0.0,
+      "explanation": "Every study column carries the correct scattering angle.",
+      "name": "broadcast_angle_grid",
+      "observed": 0.0,
+      "passed": true,
+      "tolerance": 0.0,
+      "unit": "count"
+    },
+    {
+      "comparison": "exact_equal",
+      "expected": 0.0,
+      "explanation": "Every stored numerical kinematic value is finite.",
+      "name": "all_scientific_arrays_finite",
+      "observed": 0.0,
+      "passed": true,
+      "tolerance": 0.0,
+      "unit": "count"
+    },
+    {
+      "comparison": "exact_equal",
+      "expected": 0.0,
+      "explanation": "Only the zero-momentum forward endpoint has undefined direction.",
+      "name": "recoil_direction_validity",
+      "observed": 0.0,
+      "passed": true,
+      "tolerance": 0.0,
+      "unit": "count"
+    },
+    {
+      "comparison": "absolute_error_lte",
+      "expected": 0.0,
+      "explanation": "The analytical endpoint convention is reproduced exactly.",
+      "name": "forward_fractional_shift",
+      "observed": 0.0,
+      "passed": true,
+      "tolerance": 5e-13,
+      "unit": "mixed"
+    },
+    {
+      "comparison": "absolute_error_lte",
+      "expected": 0.0,
+      "explanation": "The analytical endpoint convention is reproduced exactly.",
+      "name": "forward_scattered_energy",
+      "observed": 0.0,
+      "passed": true,
+      "tolerance": 5e-13,
+      "unit": "mixed"
+    },
+    {
+      "comparison": "absolute_error_lte",
+      "expected": 0.0,
+      "explanation": "The analytical endpoint convention is reproduced exactly.",
+      "name": "forward_kinetic_energy",
+      "observed": 0.0,
+      "passed": true,
+      "tolerance": 5e-13,
+      "unit": "mixed"
+    },
+    {
+      "comparison": "absolute_error_lte",
+      "expected": 0.0,
+      "explanation": "The analytical endpoint convention is reproduced exactly.",
+      "name": "forward_beta",
+      "observed": 0.0,
+      "passed": true,
+      "tolerance": 5e-13,
+      "unit": "mixed"
+    },
+    {
+      "comparison": "absolute_error_lte",
+      "expected": 0.0,
+      "explanation": "The analytical endpoint convention is reproduced exactly.",
+      "name": "forward_momentum",
+      "observed": 0.0,
+      "passed": true,
+      "tolerance": 5e-13,
+      "unit": "mixed"
+    },
+    {
+      "comparison": "absolute_error_lte",
+      "expected": 0.0,
+      "explanation": "The analytical endpoint convention is reproduced exactly.",
+      "name": "forward_angle_plot_limit",
+      "observed": 0.0,
+      "passed": true,
+      "tolerance": 5e-13,
+      "unit": "mixed"
+    },
+    {
+      "comparison": "absolute_error_lte",
+      "expected": 0.0,
+      "explanation": "The analytical endpoint convention is reproduced exactly.",
+      "name": "backscatter_recoil_angle",
+      "observed": 0.0,
+      "passed": true,
+      "tolerance": 5e-13,
+      "unit": "mixed"
+    },
+    {
+      "comparison": "greater_than_or_equal",
+      "expected": 0.0,
+      "explanation": "Compton wavelength shift is non-negative.",
+      "name": "fractional_shift_lower_bound",
+      "observed": 0.0,
+      "passed": true,
+      "tolerance": 5e-13,
+      "unit": "dimensionless"
+    },
+    {
+      "comparison": "greater_than_or_equal",
+      "expected": 0.0,
+      "explanation": "Electron recoil speed is non-negative.",
+      "name": "electron_beta_lower_bound",
+      "observed": 0.0,
+      "passed": true,
+      "tolerance": 5e-13,
+      "unit": "v/c"
+    },
+    {
+      "comparison": "less_than_or_equal",
+      "expected": 1.0,
+      "explanation": "Every massive-electron recoil remains subluminal.",
+      "name": "electron_beta_upper_bound",
+      "observed": 0.9204658677485612,
+      "passed": true,
+      "tolerance": 0.0,
+      "unit": "v/c"
+    },
+    {
+      "comparison": "greater_than_or_equal",
+      "expected": 0.0,
+      "explanation": "The recoil-angle magnitude is non-negative.",
+      "name": "recoil_angle_lower_bound",
+      "observed": 0.0,
+      "passed": true,
+      "tolerance": 5e-13,
+      "unit": "degree"
+    },
+    {
+      "comparison": "less_than_or_equal",
+      "expected": 90.0,
+      "explanation": "The recoil-angle magnitude does not exceed its forward limit.",
+      "name": "recoil_angle_upper_bound",
+      "observed": 90.0,
+      "passed": true,
+      "tolerance": 5e-13,
+      "unit": "degree"
+    },
+    {
+      "comparison": "greater_than_or_equal",
+      "expected": 0.0,
+      "explanation": "The scattered photon retains positive energy.",
+      "name": "scattered_energy_positive",
+      "observed": 41.81667989062966,
+      "passed": true,
+      "tolerance": 0.0,
+      "unit": "keV"
+    },
+    {
+      "comparison": "greater_than_or_equal",
+      "expected": 0.0,
+      "explanation": "Wavelength shift never decreases as scattering angle increases.",
+      "name": "fractional_shift_angle_monotonic",
+      "observed": 9.314382399816523e-07,
+      "passed": true,
+      "tolerance": 2e-13,
+      "unit": "dimensionless"
+    },
+    {
+      "comparison": "greater_than_or_equal",
+      "expected": 0.0,
+      "explanation": "Recoil speed never decreases as scattering angle increases.",
+      "name": "electron_speed_angle_monotonic",
+      "observed": 9.79141775436787e-08,
+      "passed": true,
+      "tolerance": 2e-13,
+      "unit": "v/c"
+    },
+    {
+      "comparison": "greater_than_or_equal",
+      "expected": 0.0,
+      "explanation": "Recoil angle never increases as photon scattering angle increases.",
+      "name": "recoil_angle_monotonic_decrease",
+      "observed": 0.04227333087006085,
+      "passed": true,
+      "tolerance": 2e-13,
+      "unit": "degree"
+    },
+    {
+      "comparison": "absolute_error_lte",
+      "expected": 0.0,
+      "explanation": "Photon energy loss equals electron kinetic energy.",
+      "name": "energy_conservation",
+      "observed": 7.105427357601002e-17,
+      "passed": true,
+      "tolerance": 2e-12,
+      "unit": "relative residual"
+    },
+    {
+      "comparison": "absolute_error_lte",
+      "expected": 0.0,
+      "explanation": "Scattered wavelength equals incident wavelength plus shift.",
+      "name": "wavelength_shift_identity",
+      "observed": 0.0,
+      "passed": true,
+      "tolerance": 5e-12,
+      "unit": "relative error"
+    },
+    {
+      "comparison": "absolute_error_lte",
+      "expected": 0.0,
+      "explanation": "Stored fractional shift is the wavelength ratio.",
+      "name": "fractional_shift_identity",
+      "observed": 0.0,
+      "passed": true,
+      "tolerance": 5e-13,
+      "unit": "dimensionless"
+    },
+    {
+      "comparison": "absolute_error_lte",
+      "expected": 0.0,
+      "explanation": "Dimensionless energy is E divided by electron rest energy.",
+      "name": "alpha_energy_identity",
+      "observed": 0.0,
+      "passed": true,
+      "tolerance": 5e-13,
+      "unit": "dimensionless"
+    },
+    {
+      "comparison": "absolute_error_lte",
+      "expected": 0.0,
+      "explanation": "Lorentz factor follows the electron kinetic energy.",
+      "name": "gamma_kinetic_identity",
+      "observed": 2.220446049250313e-16,
+      "passed": true,
+      "tolerance": 5e-13,
+      "unit": "dimensionless"
+    },
+    {
+      "comparison": "absolute_error_lte",
+      "expected": 0.0,
+      "explanation": "Recoil speed agrees with its Lorentz-factor identity.",
+      "name": "beta_gamma_identity",
+      "observed": 9.703387182299905e-14,
+      "passed": true,
+      "tolerance": 5e-13,
+      "unit": "v/c"
+    },
+    {
+      "comparison": "absolute_error_lte",
+      "expected": 0.0,
+      "explanation": "SI speed is beta times the exact speed of light.",
+      "name": "speed_beta_identity",
+      "observed": 0.0,
+      "passed": true,
+      "tolerance": 5e-12,
+      "unit": "relative error"
+    },
+    {
+      "comparison": "absolute_error_lte",
+      "expected": 0.0,
+      "explanation": "Electron momentum is the vector difference of photon momenta.",
+      "name": "momentum_magnitude_identity",
+      "observed": 0.0,
+      "passed": true,
+      "tolerance": 5e-12,
+      "unit": "relative error"
+    },
+    {
+      "comparison": "absolute_error_lte",
+      "expected": 0.0,
+      "explanation": "The x component of photon plus electron momentum is conserved.",
+      "name": "x_momentum_conservation",
+      "observed": 2.842170943040401e-16,
+      "passed": true,
+      "tolerance": 2e-12,
+      "unit": "relative residual"
+    },
+    {
+      "comparison": "absolute_error_lte",
+      "expected": 0.0,
+      "explanation": "Opposite photon/electron y momenta cancel.",
+      "name": "y_momentum_conservation",
+      "observed": 2.842170943040401e-16,
+      "passed": true,
+      "tolerance": 2e-12,
+      "unit": "relative residual"
+    },
+    {
+      "comparison": "absolute_error_lte",
+      "expected": 0.0,
+      "explanation": "The recoiling electron remains on its relativistic mass shell.",
+      "name": "electron_mass_shell",
+      "observed": 4.569766312577636e-15,
+      "passed": true,
+      "tolerance": 2e-12,
+      "unit": "relative residual"
+    },
+    {
+      "comparison": "absolute_error_lte",
+      "expected": 0.0,
+      "explanation": "Production arrays agree with scalar energy\u2013momentum references.",
+      "name": "fractional_shift_reference",
+      "observed": 3.6992529395730933e-16,
+      "passed": true,
+      "tolerance": 1e-10,
+      "unit": "relative error"
+    },
+    {
+      "comparison": "absolute_error_lte",
+      "expected": 0.0,
+      "explanation": "Production arrays agree with scalar energy\u2013momentum references.",
+      "name": "scattered_energy_reference",
+      "observed": 6.979872623548691e-16,
+      "passed": true,
+      "tolerance": 1e-10,
+      "unit": "relative error"
+    },
+    {
+      "comparison": "absolute_error_lte",
+      "expected": 0.0,
+      "explanation": "Production arrays agree with scalar energy\u2013momentum references.",
+      "name": "kinetic_energy_reference",
+      "observed": 5.075713114585419e-16,
+      "passed": true,
+      "tolerance": 1e-10,
+      "unit": "relative error"
+    },
+    {
+      "comparison": "absolute_error_lte",
+      "expected": 0.0,
+      "explanation": "Production arrays agree with scalar energy\u2013momentum references.",
+      "name": "electron_beta_reference",
+      "observed": 2.750266815018496e-13,
+      "passed": true,
+      "tolerance": 1e-10,
+      "unit": "relative error"
+    },
+    {
+      "comparison": "absolute_error_lte",
+      "expected": 0.0,
+      "explanation": "Production arrays agree with scalar energy\u2013momentum references.",
+      "name": "electron_momentum_reference",
+      "observed": 4.071174896967889e-16,
+      "passed": true,
+      "tolerance": 1e-10,
+      "unit": "relative error"
+    },
+    {
+      "comparison": "absolute_error_lte",
+      "expected": 0.0,
+      "explanation": "Production arrays agree with scalar energy\u2013momentum references.",
+      "name": "recoil_angle_reference",
+      "observed": 2.2142545829065384e-14,
+      "passed": true,
+      "tolerance": 1e-10,
+      "unit": "relative error"
+    },
+    {
+      "comparison": "absolute_error_lte",
+      "expected": 0.0,
+      "explanation": "Backscatter produces the exact maximum shift 2E/(m_ec^2).",
+      "name": "backscatter_fractional_shift",
+      "observed": 4.440892098500626e-16,
+      "passed": true,
+      "tolerance": 5e-13,
+      "unit": "dimensionless"
+    },
+    {
+      "comparison": "absolute_error_lte",
+      "expected": 0.0,
+      "explanation": "All five independently calculated 90-degree anchors agree.",
+      "name": "right_angle_recoil_anchors",
+      "observed": 4.547473508864641e-13,
+      "passed": true,
+      "tolerance": 2e-11,
+      "unit": "degree"
+    },
+    {
+      "comparison": "greater_than_or_equal",
+      "expected": 0.0,
+      "explanation": "At fixed non-zero angle, higher incident energy gives larger fractional shift.",
+      "name": "fractional_shift_energy_ordering",
+      "observed": 9.31438240002889e-07,
+      "passed": true,
+      "tolerance": 2e-13,
+      "unit": "mixed"
+    },
+    {
+      "comparison": "greater_than_or_equal",
+      "expected": 0.0,
+      "explanation": "At fixed non-zero angle, higher incident energy gives faster recoil.",
+      "name": "electron_speed_energy_ordering",
+      "observed": 0.0004269393781317574,
+      "passed": true,
+      "tolerance": 2e-13,
+      "unit": "mixed"
+    },
+    {
+      "comparison": "greater_than_or_equal",
+      "expected": 0.0,
+      "explanation": "At fixed interior angle, higher incident energy gives a more forward recoil.",
+      "name": "recoil_angle_energy_ordering",
+      "observed": 0.009317440387535347,
+      "passed": true,
+      "tolerance": 2e-13,
+      "unit": "mixed"
+    }
+  ],
+  "passed": true,
+  "schema_version": "task09-validation-v1",
+  "study_digest": "f71bbd6366edcd1d825ff9491f490084bed77263750fc21caf4b58474c4da3da"
+}

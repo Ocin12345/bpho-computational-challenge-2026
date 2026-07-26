@@ -1,0 +1,44 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="color-scheme" content="light">
+    <title>Task 10 · Stationary orbital view rotation</title>
+    <link rel="icon" href="../../task10_hydrogenic_orbitals/app/favicon.svg" type="image/svg+xml">
+    <style>
+      :root { font-family: "Times New Roman", Times, serif; color: #202124; background: #f2f4f5; }
+      * { box-sizing: border-box; }
+      body { min-width: 320px; margin: 0; padding: clamp(14px, 3vw, 42px); }
+      main { width: min(1500px, 100%); margin: auto; }
+      h1 { margin: 0 0 8px; font-size: clamp(1.8rem, 5vw, 4rem); line-height: 1; letter-spacing: -.015em; }
+      p { color: #5f6368; line-height: 1.55; }
+      figure { margin: 24px 0 0; overflow: hidden; border: 1px solid #74879e; border-radius: 18px; background: white; box-shadow: 0 18px 52px rgba(28,52,82,.12); }
+      img { display: block; width: 100%; height: auto; background: white; }
+      figcaption { padding: 15px 18px; color: #45494d; font-size: .92rem; }
+      .inspection { margin-top: 28px; }
+      .inspection h2 { margin-bottom: 8px; }
+      .inspection img { border: 1px solid #74879e; border-radius: 14px; }
+      strong { color: #007a5e; }
+      @media (prefers-reduced-motion: reduce) { .motion-note::after { content: " A static 4K poster is shown because reduced motion is enabled."; } }
+    </style>
+  </head>
+  <body>
+    <main>
+      <h1>Stationary orbital · view rotation</h1>
+      <p class="motion-note">This is a camera orbit around one normalized hydrogen 3d state. It is not electron motion or time evolution.</p>
+      <figure>
+        <picture>
+          <source media="(prefers-reduced-motion: reduce)" srcset="./orbital_view_rotation_poster.png">
+          <img id="motion-artifact" src="./orbital_view_rotation.webp" width="3840" height="2160" alt="A continuously rotating camera view of the stationary normalized hydrogen 3d, m equals zero probability density, accompanied by fixed orthogonal slices and radial probability.">
+        </picture>
+        <figcaption><strong>4K animated WebP · seamless loop.</strong> Threshold 0.15 changes visibility only; the unthresholded state remains normalized.</figcaption>
+      </figure>
+      <section class="inspection" aria-labelledby="inspection-heading">
+        <h2 id="inspection-heading">Decoded frame inspection</h2>
+        <p>Beginning, quarter-turn, half-turn, three-quarter-turn and final loop frames.</p>
+        <img id="inspection-sheet" src="../../reports/task10/orbital_view_rotation_contact_sheet.png" width="2400" height="2300" alt="Five decoded frames from the Task 10 orbital view rotation at camera azimuths zero, ninety, one hundred eighty, two hundred seventy and three hundred fifty-five point five degrees.">
+      </section>
+    </main>
+  </body>
+</html>

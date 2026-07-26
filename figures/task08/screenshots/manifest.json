@@ -1,0 +1,60 @@
+{
+  "schema_version": "task08-browser-evidence-v1",
+  "source": "validated local Task 8 application",
+  "font_family": "Times New Roman",
+  "external_network_requests": 0,
+  "captures": [
+    {
+      "file": "detector_workspace_4k.png",
+      "css_viewport": {
+        "width": 1920,
+        "height": 1080
+      },
+      "device_scale_factor": 2,
+      "pixel_dimensions": {
+        "width": 3840,
+        "height": 2160
+      },
+      "sha256": "d735b646e1057503d1fbd54c571306427ec94d82029cf78b01bab4c19c605cd8"
+    },
+    {
+      "file": "probability_chart_4k.png",
+      "css_viewport": {
+        "width": 1920,
+        "height": 1080
+      },
+      "device_scale_factor": 2,
+      "pixel_dimensions": {
+        "width": 3840,
+        "height": 2160
+      },
+      "sha256": "5c9fd20b24687ac3d8c2dc1e31735faec1694a964fda20522e52d1adc377365f"
+    },
+    {
+      "file": "finite_photon_extension_4k.png",
+      "css_viewport": {
+        "width": 1920,
+        "height": 1080
+      },
+      "device_scale_factor": 2,
+      "pixel_dimensions": {
+        "width": 3840,
+        "height": 2160
+      },
+      "sha256": "c29edbe3452eeb91e9489066e77f9117da486776324d66d7c1aa471a31a37664"
+    },
+    {
+      "file": "finite_photon_mobile_2x.png",
+      "css_viewport": {
+        "width": 430,
+        "height": 932
+      },
+      "device_scale_factor": 2,
+      "pixel_dimensions": {
+        "width": 860,
+        "height": 1864
+      },
+      "sha256": "fe92df4b18d364672f0379b8e2c01692a90d2576834af745f2a8fd0d40b0cdb7"
+    }
+  ]
+}

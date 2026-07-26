@@ -24,6 +24,14 @@ DEFAULT_ENDPOINT_STEM = Path("figures/task01/endpoint_distribution")
 DEFAULT_CSV_PATH = Path("data/task01/statistical_results.csv")
 
 
+def _apply_figure_style() -> None:
+    """Use the competition-wide serif typography for every Task 1 figure."""
+
+    plt.rcParams.update(
+        {"font.family": "Times New Roman", "mathtext.fontset": "stix"}
+    )
+
+
 @dataclass(frozen=True)
 class StepStatistics:
     """Measured and theoretical quantities for one value of N."""
@@ -304,6 +312,7 @@ def create_validation_figure(result: StatisticalAnalysisResult) -> Figure:
         [item.variance_ratio_y for item in statistics], dtype=np.float64
     )
 
+    _apply_figure_style()
     figure, axes = plt.subplots(2, 2, figsize=(13.0, 9.5))
     figure.patch.set_facecolor("white")
     figure.subplots_adjust(
@@ -520,6 +529,7 @@ def create_endpoint_distribution_figure(
     measured_50 = float(np.mean(radii <= radius_50))
     measured_95 = float(np.mean(radii <= radius_95))
 
+    _apply_figure_style()
     figure, axis = plt.subplots(figsize=(10.5, 8.0), layout="constrained")
     figure.patch.set_facecolor("white")
     axis.set_facecolor("#f8fafc")

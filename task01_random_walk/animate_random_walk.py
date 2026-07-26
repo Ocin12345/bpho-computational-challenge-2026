@@ -27,6 +27,14 @@ IntegerArray = NDArray[np.int64]
 DEFAULT_OUTPUT_PATH = Path("figures/task01/random_walk_animation.gif")
 
 
+def _apply_figure_style() -> None:
+    """Use the competition-wide serif typography for every Task 1 frame."""
+
+    plt.rcParams.update(
+        {"font.family": "Times New Roman", "mathtext.fontset": "stix"}
+    )
+
+
 @dataclass
 class AnimationScene:
     """Figure, animation, schedule, and frame renderer for one walk."""
@@ -85,6 +93,7 @@ def create_random_walk_animation(
 ) -> AnimationScene:
     """Build a fixed-scale animation of one validated random walk."""
 
+    _apply_figure_style()
     report = validate_walk(result)
     if not report.passed:
         details = "; ".join(report.failures)

@@ -1,0 +1,122 @@
+{
+  "cases": [
+    {
+      "classical_mismatch": {
+        "decimal": 0.375,
+        "denominator": 8,
+        "numerator": 3
+      },
+      "double_angle_classical_reference": 0.37499999999999994,
+      "double_angle_quantum_reference": 0.7499999999999999,
+      "identifier": "official_example",
+      "label": "Official BPhO example",
+      "phi_deg": 30,
+      "quantum_mismatch": {
+        "decimal": 0.75,
+        "denominator": 4,
+        "numerator": 3
+      },
+      "signed_difference": {
+        "decimal": 0.375,
+        "denominator": 8,
+        "numerator": 3
+      },
+      "theta_deg": -30
+    },
+    {
+      "classical_mismatch": {
+        "decimal": 0.0,
+        "denominator": 1,
+        "numerator": 0
+      },
+      "double_angle_classical_reference": 0.0,
+      "double_angle_quantum_reference": 0.0,
+      "identifier": "common_reference_axis",
+      "label": "Common reference axis",
+      "phi_deg": 0,
+      "quantum_mismatch": {
+        "decimal": 0.0,
+        "denominator": 1,
+        "numerator": 0
+      },
+      "signed_difference": {
+        "decimal": 0.0,
+        "denominator": 1,
+        "numerator": 0
+      },
+      "theta_deg": 0
+    },
+    {
+      "classical_mismatch": {
+        "decimal": 0.5,
+        "denominator": 2,
+        "numerator": 1
+      },
+      "double_angle_classical_reference": 0.5,
+      "double_angle_quantum_reference": 0.0,
+      "identifier": "aligned_diagonal_axes",
+      "label": "Aligned diagonal axes",
+      "phi_deg": 45,
+      "quantum_mismatch": {
+        "decimal": 0.0,
+        "denominator": 1,
+        "numerator": 0
+      },
+      "signed_difference": {
+        "decimal": -0.5,
+        "denominator": 2,
+        "numerator": -1
+      },
+      "theta_deg": 45
+    },
+    {
+      "classical_mismatch": {
+        "decimal": 0.5,
+        "denominator": 2,
+        "numerator": 1
+      },
+      "double_angle_classical_reference": 0.5,
+      "double_angle_quantum_reference": 1.0,
+      "identifier": "maximum_positive_contrast",
+      "label": "Maximum positive contrast",
+      "phi_deg": 45,
+      "quantum_mismatch": {
+        "decimal": 1.0,
+        "denominator": 1,
+        "numerator": 1
+      },
+      "signed_difference": {
+        "decimal": 0.5,
+        "denominator": 2,
+        "numerator": 1
+      },
+      "theta_deg": -45
+    },
+    {
+      "classical_mismatch": {
+        "decimal": 1.0,
+        "denominator": 1,
+        "numerator": 1
+      },
+      "double_angle_classical_reference": 1.0,
+      "double_angle_quantum_reference": 1.0,
+      "identifier": "perpendicular_reference_axes",
+      "label": "Perpendicular reference axes",
+      "phi_deg": 90,
+      "quantum_mismatch": {
+        "decimal": 1.0,
+        "denominator": 1,
+        "numerator": 1
+      },
+      "signed_difference": {
+        "decimal": 0.0,
+        "denominator": 1,
+        "numerator": 0
+      },
+      "theta_deg": 0
+    }
+  ],
+  "classical_reference_equation": "P_C(mismatch) = (1 - cos(2 theta) cos(2 phi))/2",
+  "quantum_reference_equation": "P_Q(mismatch) = (1 - cos(2(phi - theta)))/2",
+  "schema_version": "task08-reference-v1"
+}

@@ -1,0 +1,59 @@
+{
+  "configuration": {
+    "angle_maximum_deg": 90.0,
+    "angle_minimum_deg": -90.0,
+    "angle_step_deg": 1.0,
+    "evidence_size_budget_bytes": 26214400,
+    "heatmap_point_count": 181,
+    "heatmap_spacing_deg": 1.0,
+    "official_phi_deg": 30.0,
+    "official_theta_deg": -30.0,
+    "reference_absolute_tolerance": 5e-13,
+    "schema_version": "task08-v1",
+    "sweep_point_count": 361,
+    "sweep_spacing_deg": 0.5
+  },
+  "constants": {
+    "polarisation_period_deg": 180.0
+  },
+  "equations": {
+    "classical_mismatch": "1 - cos(theta)^2 cos(phi)^2 - sin(theta)^2 sin(phi)^2",
+    "quantum_mismatch": "sin(phi - theta)^2",
+    "signed_difference": "quantum mismatch - classical mismatch"
+  },
+  "expected_data_filenames": [
+    "angle_sweep.csv",
+    "mismatch_grid.csv",
+    "reference_cases.json",
+    "validation_report.json",
+    "manifest.json"
+  ],
+  "mathematical_specification": "task08_quantum_cryptography/MATHEMATICAL_MODEL.md",
+  "model": "classical and quantum entangled-photon detector mismatch",
+  "official_pages": [
+    53,
+    54,
+    55,
+    56,
+    57,
+    58
+  ],
+  "official_requirements": "task08_quantum_cryptography/OFFICIAL_REQUIREMENTS.md",
+  "official_source": "https://www.bpho.org.uk/bpho/computational-challenge/BPhO_ComPhys_Challenge_2026.zip",
+  "official_source_sha256": {
+    "BPhO CompPhys2026 Quantum.pdf": "7948f13c88d09a7ec2d94a564fcd7b085419090320c011575c851edb6db151c6",
+    "BPhO_ComPhys_Challenge_2026.zip": "330bffb2b7424cf0faada630aed39515cca32fcfee2dcf2096c218144498c667"
+  },
+  "output_schema_version": "task08-data-v1",
+  "reproducible_build_timestamp_utc": "2026-01-01T00:00:00Z",
+  "schema_version": "task08-manifest-v1",
+  "sha256": {
+    "data/task08/angle_sweep.csv": "002aa79003dd5503868017cfd883280b43edd387a8405db1d3707d7cd7cfffc5",
+    "data/task08/mismatch_grid.csv": "1f8caee13bca66c7f879c518999e985b8b1bc0723d40a4ae5a24cfcbe2bf6091",
+    "data/task08/reference_cases.json": "2379d35e7210fc86df908c83ed2dc3c75e669708549adb95fda5c460a881d264",
+    "data/task08/validation_report.json": "d8ed89ce9de95589d2c8f90b019c5d864c3832eb4b5abadf590068b6785e4df3"
+  },
+  "study_digest": "1baabe6ef57a3a0fce334e7addc08906ce24fcff30c3cc2e2a5ce8eb2bb630f1",
+  "validation_check_count": 42,
+  "validation_passed": true
+}

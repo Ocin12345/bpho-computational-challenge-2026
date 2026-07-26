@@ -1,41 +1,32 @@
-# Text to Put on the Task 1 Slide
+# Final Task 1 Slide Content
 
-## Title
+## Composition
 
-**Task 1 — Two-Dimensional Random Walk**
+The competition deck uses one validated 3840 × 2160 summary visual, placed as
+a single near-full-slide image. Do not rebuild the charts or result cards as
+separate PowerPoint objects; the summary is the authoritative visible slide.
 
-## Result box
+**Source:** `../../figures/task01/task01_summary.png`
 
-Use only these three lines on the slide:
+## Visible evidence
 
-```text
-Direction: θ uniformly sampled from 0 to 2π
-Theory: ⟨r²⟩ = Ns²
-Simulation: MSD slope = 0.9992 ± 0.0031 (95% CI)
-```
+- fifty representative 1,000-step trajectories;
+- a 50,000-walk endpoint-density comparison with theoretical containment
+  radii;
+- the model, $\theta\sim\mathrm{Uniform}(0,2\pi)$;
+- the theoretical law, $\langle r^2\rangle=Ns^2$;
+- fitted MSD slope $0.9992\pm0.0031$; and
+- 37/37 checks passing.
 
-If PowerPoint's equation editor is available, the mathematical versions are:
+## Accessibility text
 
-```text
-\theta \sim \mathrm{Uniform}(0,2\pi)
-\langle r^2\rangle = Ns^2
-\text{MSD slope}=0.9992\pm0.0031
-```
+Task 1 summary. Fifty fixed-step random walks spread from a common origin
+without a preferred direction. A fifty-thousand-walk endpoint cloud is
+circular and agrees with theoretical containment radii. Result cards show
+uniform angular sampling, mean squared displacement equal to $Ns^2$, a fitted
+slope of $0.9992\pm0.0031$, and thirty-seven passing checks.
 
-## Optional small caption
+## Presentation rule
 
-```text
-50,000 independent walks at each of eight step counts
-```
-
-Do not add the full method or conclusion to the visible slide. Those details
-belong in the narration and speaker notes.
-
-## Accessibility text for the images
-
-**50-walk image:** Fifty independent 1,000-step random walks begin at the
-origin and spread in all directions without a preferred axis.
-
-**Endpoint image:** Fifty thousand simulated endpoints form an approximately
-circular density cloud around the origin and closely match the theoretical 50%
-and 95% containment circles.
+Keep the full method, statistical interpretation and reproducibility details
+in the notes. The visible slide should remain the single clean summary visual.

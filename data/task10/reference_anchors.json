@@ -1,0 +1,41 @@
+{
+  "analytic_densities": {
+    "one_s_r_over_a_2": 0.005830048930056387,
+    "two_pz_r_over_a_2_axis": 0.005384819825462158,
+    "two_pz_r_over_a_2_equator": 2.0189840527770973e-35,
+    "two_s_r_over_a_2_node": 0.0
+  },
+  "carbon12_3d": {
+    "atomic_number": 6,
+    "effective_bohr_radius_angstrom": 0.08820023364602815,
+    "energy_ev": -54.42028466906084,
+    "mass_number": 12
+  },
+  "coordinate_convention": {
+    "azimuth": "varphi in (-pi, pi]",
+    "cartesian": [
+      "x = r sin(vartheta) cos(varphi)",
+      "y = r sin(vartheta) sin(varphi)",
+      "z = r cos(vartheta)"
+    ],
+    "polar": "vartheta in [0, pi]"
+  },
+  "hydrogen_1s": {
+    "analytic_scaled_density_at_origin": 0.3183098861837907,
+    "effective_bohr_radius_angstrom": 0.5294675065300278,
+    "energy_ev": -13.598233405345852,
+    "reduced_mass_ratio": 0.9994517208658746,
+    "scaled_density_at_origin": 0.3183098861837908
+  },
+  "hydrogen_3d": {
+    "angular_nodes": 2,
+    "energy_ev": -1.5109148228162057,
+    "radial_nodes": 0
+  },
+  "real_harmonic_orientation": {
+    "p_x_on_x_axis": 0.48860251190292,
+    "p_y_on_y_axis": 0.48860251190292,
+    "p_z_on_z_axis": 0.48860251190292
+  },
+  "schema_version": "task10-reference-anchors-v1"
+}

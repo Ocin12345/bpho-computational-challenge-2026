@@ -1,0 +1,377 @@
+{
+  "checks": [
+    {
+      "comparison": "exact_equal",
+      "expected": 0.0,
+      "explanation": "The energy catalogue contains n=1 through n=10 exactly once.",
+      "name": "quantum_number_enumeration",
+      "observed": 0.0,
+      "passed": true,
+      "tolerance": 0.0,
+      "unit": "count"
+    },
+    {
+      "comparison": "exact_equal",
+      "expected": 0.0,
+      "explanation": "The approved n=1 to n=4 probability states are present.",
+      "name": "density_state_enumeration",
+      "observed": 0.0,
+      "passed": true,
+      "tolerance": 0.0,
+      "unit": "count"
+    },
+    {
+      "comparison": "exact_equal",
+      "expected": 0.0,
+      "explanation": "The analytical grid includes both boundaries and the midpoint.",
+      "name": "analytical_position_grid",
+      "observed": 0.0,
+      "passed": true,
+      "tolerance": 0.0,
+      "unit": "count"
+    },
+    {
+      "comparison": "relative_error_lte",
+      "expected": 0.0,
+      "explanation": "All energies agree with the independent Decimal h-squared path.",
+      "name": "energy_decimal_reference",
+      "observed": 1.278696278764589e-16,
+      "passed": true,
+      "tolerance": 5e-11,
+      "unit": "relative error"
+    },
+    {
+      "comparison": "exact_equal",
+      "expected": 0.0,
+      "explanation": "Every energy is positive and strictly increases with n.",
+      "name": "energy_positive_and_increasing",
+      "observed": 0.0,
+      "passed": true,
+      "tolerance": 0.0,
+      "unit": "count"
+    },
+    {
+      "comparison": "relative_error_lte",
+      "expected": 0.0,
+      "explanation": "The discrete spectrum satisfies E_n/E_1=n squared.",
+      "name": "energy_n_squared_scaling",
+      "observed": 1.4210854715202004e-16,
+      "passed": true,
+      "tolerance": 5e-12,
+      "unit": "relative error"
+    },
+    {
+      "comparison": "relative_error_lte",
+      "expected": 0.0,
+      "explanation": "Joule and electronvolt columns use the exact charge conversion.",
+      "name": "electronvolt_conversion",
+      "observed": 0.0,
+      "passed": true,
+      "tolerance": 5e-12,
+      "unit": "relative error"
+    },
+    {
+      "comparison": "absolute_error_lte",
+      "expected": 0.0,
+      "explanation": "Every stored eigenfunction is exactly zero at x=0.",
+      "name": "left_boundary_condition",
+      "observed": 0.0,
+      "passed": true,
+      "tolerance": 0.0,
+      "unit": "m^-1/2"
+    },
+    {
+      "comparison": "less_than_or_equal",
+      "expected": 2e-15,
+      "explanation": "Floating-point sin(n*pi) remains negligible at x=a.",
+      "name": "right_boundary_condition",
+      "observed": 4.898587196589413e-16,
+      "passed": true,
+      "tolerance": 0.0,
+      "unit": "relative amplitude"
+    },
+    {
+      "comparison": "absolute_error_lte",
+      "expected": 0.0,
+      "explanation": "Every density is exactly the squared real spatial eigenfunction.",
+      "name": "born_density_identity",
+      "observed": 0.0,
+      "passed": true,
+      "tolerance": 5e-12,
+      "unit": "dimensionless density"
+    },
+    {
+      "comparison": "exact_equal",
+      "expected": 0.0,
+      "explanation": "Born probabilities are never negative.",
+      "name": "probability_density_non_negative",
+      "observed": 0.0,
+      "passed": true,
+      "tolerance": 0.0,
+      "unit": "count"
+    },
+    {
+      "comparison": "absolute_error_lte",
+      "expected": 0.0,
+      "explanation": "Each analytical probability density integrates to one.",
+      "name": "analytical_normalization",
+      "observed": 1.3322676295501878e-15,
+      "passed": true,
+      "tolerance": 5e-12,
+      "unit": "probability"
+    },
+    {
+      "comparison": "absolute_error_lte",
+      "expected": 0.0,
+      "explanation": "The stored spatial eigenfunctions are mutually orthonormal.",
+      "name": "analytical_orthonormality",
+      "observed": 2.220446049250313e-16,
+      "passed": true,
+      "tolerance": 5e-12,
+      "unit": "overlap"
+    },
+    {
+      "comparison": "less_than_or_equal",
+      "expected": 2e-15,
+      "explanation": "State n has its n-1 interior nodes at x=ka/n.",
+      "name": "analytical_node_locations",
+      "observed": 6.432490598706546e-16,
+      "passed": true,
+      "tolerance": 0.0,
+      "unit": "relative amplitude"
+    },
+    {
+      "comparison": "absolute_error_lte",
+      "expected": 0.0,
+      "explanation": "Every stationary density is symmetric about the box midpoint.",
+      "name": "density_reflection_symmetry",
+      "observed": 7.390975952148437e-15,
+      "passed": true,
+      "tolerance": 5e-14,
+      "unit": "dimensionless density"
+    },
+    {
+      "comparison": "relative_error_lte",
+      "expected": 0.0,
+      "explanation": "Every energy eigenstate has mean position a/2.",
+      "name": "expected_position",
+      "observed": 0.0,
+      "passed": true,
+      "tolerance": 5e-12,
+      "unit": "relative error"
+    },
+    {
+      "comparison": "relative_error_lte",
+      "expected": 0.0,
+      "explanation": "Position second moments agree with a high-precision reference.",
+      "name": "expected_position_squared_decimal_reference",
+      "observed": 1.5014975231458688e-16,
+      "passed": true,
+      "tolerance": 5e-11,
+      "unit": "relative error"
+    },
+    {
+      "comparison": "relative_error_lte",
+      "expected": 0.0,
+      "explanation": "Delta x squared equals the second central moment.",
+      "name": "position_variance_identity",
+      "observed": 9.210324566687109e-16,
+      "passed": true,
+      "tolerance": 5e-12,
+      "unit": "relative error"
+    },
+    {
+      "comparison": "absolute_error_lte",
+      "expected": 0.0,
+      "explanation": "Every real standing wave has zero mean momentum.",
+      "name": "expected_momentum_zero",
+      "observed": 0.0,
+      "passed": true,
+      "tolerance": 0.0,
+      "unit": "kg m s^-1"
+    },
+    {
+      "comparison": "relative_error_lte",
+      "expected": 0.0,
+      "explanation": "Inside the zero-potential well, p squared equals 2mE.",
+      "name": "momentum_energy_identity",
+      "observed": 3.3897995501340565e-16,
+      "passed": true,
+      "tolerance": 5e-12,
+      "unit": "relative error"
+    },
+    {
+      "comparison": "relative_error_lte",
+      "expected": 0.0,
+      "explanation": "Delta p squared equals <p^2> because <p>=0.",
+      "name": "momentum_uncertainty_identity",
+      "observed": 0.0,
+      "passed": true,
+      "tolerance": 5e-12,
+      "unit": "relative error"
+    },
+    {
+      "comparison": "relative_error_lte",
+      "expected": 0.0,
+      "explanation": "The stored uncertainty product equals Delta x times Delta p.",
+      "name": "uncertainty_product_factorization",
+      "observed": 0.0,
+      "passed": true,
+      "tolerance": 5e-12,
+      "unit": "relative error"
+    },
+    {
+      "comparison": "relative_error_lte",
+      "expected": 0.0,
+      "explanation": "Dimensionless products agree with a 60-digit pi reference.",
+      "name": "uncertainty_decimal_reference",
+      "observed": 1.4078417956034955e-16,
+      "passed": true,
+      "tolerance": 5e-11,
+      "unit": "relative error"
+    },
+    {
+      "comparison": "greater_than_or_equal",
+      "expected": 0.5,
+      "explanation": "Every modelled state satisfies Delta x Delta p >= hbar/2.",
+      "name": "heisenberg_uncertainty_bound",
+      "observed": 0.5678618083866119,
+      "passed": true,
+      "tolerance": 5e-12,
+      "unit": "hbar"
+    },
+    {
+      "comparison": "relative_error_lte",
+      "expected": 0.0,
+      "explanation": "The ground-state product is the declared 0.567862 hbar anchor.",
+      "name": "ground_state_uncertainty_anchor",
+      "observed": 0.0,
+      "passed": true,
+      "tolerance": 5e-11,
+      "unit": "relative error"
+    },
+    {
+      "comparison": "exact_equal",
+      "expected": 0.0,
+      "explanation": "The uncertainty product increases strictly over n=1 to 10.",
+      "name": "uncertainty_product_monotonicity",
+      "observed": 0.0,
+      "passed": true,
+      "tolerance": 0.0,
+      "unit": "count"
+    },
+    {
+      "comparison": "exact_equal",
+      "expected": 0.0,
+      "explanation": "The complete approved grid-refinement sequence is present.",
+      "name": "numerical_grid_enumeration",
+      "observed": 0.0,
+      "passed": true,
+      "tolerance": 0.0,
+      "unit": "count"
+    },
+    {
+      "comparison": "relative_error_lte",
+      "expected": 0.0,
+      "explanation": "Each Dirichlet grid spacing is a/(N+1).",
+      "name": "numerical_grid_spacing_identity",
+      "observed": 0.0,
+      "passed": true,
+      "tolerance": 5e-12,
+      "unit": "relative error"
+    },
+    {
+      "comparison": "exact_equal",
+      "expected": 0.0,
+      "explanation": "Every numerical spectrum is positive and ordered.",
+      "name": "numerical_energy_ordering",
+      "observed": 0.0,
+      "passed": true,
+      "tolerance": 0.0,
+      "unit": "count"
+    },
+    {
+      "comparison": "absolute_error_lte",
+      "expected": 0.0,
+      "explanation": "Stored numerical errors are derived from the analytical spectrum.",
+      "name": "numerical_error_record_identity",
+      "observed": 0.0,
+      "passed": true,
+      "tolerance": 5e-12,
+      "unit": "relative error"
+    },
+    {
+      "comparison": "less_than_or_equal",
+      "expected": 4e-05,
+      "explanation": "The 1600-point grid resolves the first ten energies to target accuracy.",
+      "name": "finest_grid_energy_accuracy",
+      "observed": 3.208708508002172e-05,
+      "passed": true,
+      "tolerance": 0.0,
+      "unit": "relative error"
+    },
+    {
+      "comparison": "exact_equal",
+      "expected": 0.0,
+      "explanation": "Every state becomes more accurate whenever the grid is refined.",
+      "name": "numerical_error_refinement",
+      "observed": 0.0,
+      "passed": true,
+      "tolerance": 0.0,
+      "unit": "count"
+    },
+    {
+      "comparison": "greater_than_or_equal",
+      "expected": 1.9,
+      "explanation": "Observed energy convergence is at least approximately second order.",
+      "name": "finite_difference_convergence_lower",
+      "observed": 1.9989606591194458,
+      "passed": true,
+      "tolerance": 0.0,
+      "unit": "order"
+    },
+    {
+      "comparison": "less_than_or_equal",
+      "expected": 2.05,
+      "explanation": "Convergence remains consistent with the central-difference model.",
+      "name": "finite_difference_convergence_upper",
+      "observed": 1.9999555491455128,
+      "passed": true,
+      "tolerance": 0.0,
+      "unit": "order"
+    },
+    {
+      "comparison": "greater_than_or_equal",
+      "expected": 0.999999,
+      "explanation": "Every finest-grid eigenvector matches its analytical state.",
+      "name": "numerical_eigenfunction_overlap",
+      "observed": 0.9999999999999977,
+      "passed": true,
+      "tolerance": 0.0,
+      "unit": "absolute overlap"
+    },
+    {
+      "comparison": "absolute_error_lte",
+      "expected": 0.0,
+      "explanation": "The finest-grid numerical eigenvectors are physically normalized.",
+      "name": "numerical_orthonormality",
+      "observed": 1.7763568394002505e-15,
+      "passed": true,
+      "tolerance": 5e-12,
+      "unit": "overlap"
+    },
+    {
+      "comparison": "exact_equal",
+      "expected": 0.0,
+      "explanation": "The nth numerical eigenstate has n-1 interior sign changes.",
+      "name": "numerical_node_counts",
+      "observed": 0.0,
+      "passed": true,
+      "tolerance": 0.0,
+      "unit": "count"
+    }
+  ],
+  "passed": true,
+  "schema_version": "task07-validation-v1",
+  "study_digest": "67a3fd50191ff04c57d989b3b0cf5b49567b7f507653c861bf8b7bc3241bd09d"
+}

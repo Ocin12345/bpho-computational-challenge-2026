@@ -1,0 +1,222 @@
+{
+  "checks": [
+    {
+      "comparison": "exact_equal",
+      "expected": 0.0,
+      "explanation": "The first five unsigned outputs match the frozen Mulberry32 vector.",
+      "name": "mulberry32_golden_sequence",
+      "observed": 0.0,
+      "passed": true,
+      "tolerance": 0.0
+    },
+    {
+      "comparison": "exact_equal",
+      "expected": 0.0,
+      "explanation": "Every generated uniform lies in the half-open interval [0, 1).",
+      "name": "uniform_half_open_bounds",
+      "observed": 0.0,
+      "passed": true,
+      "tolerance": 0.0
+    },
+    {
+      "comparison": "exact_equal",
+      "expected": 0.0,
+      "explanation": "Classical and quantum draws use distinct salted streams.",
+      "name": "model_streams_distinct",
+      "observed": 0.0,
+      "passed": true,
+      "tolerance": 0.0
+    },
+    {
+      "comparison": "exact_equal",
+      "expected": 0.0,
+      "explanation": "Advancing the largest unsigned seed wraps to zero.",
+      "name": "seed_wraparound",
+      "observed": 0.0,
+      "passed": true,
+      "tolerance": 0.0
+    },
+    {
+      "comparison": "exact_equal",
+      "expected": 0.0,
+      "explanation": "A zero mismatch probability produces no mismatches.",
+      "name": "zero_probability_is_deterministic",
+      "observed": 0.0,
+      "passed": true,
+      "tolerance": 0.0
+    },
+    {
+      "comparison": "exact_equal",
+      "expected": 1000.0,
+      "explanation": "A unit mismatch probability produces one mismatch per pair.",
+      "name": "unit_probability_is_deterministic",
+      "observed": 1000.0,
+      "passed": true,
+      "tolerance": 0.0
+    },
+    {
+      "comparison": "absolute_error_lte",
+      "expected": 0.0,
+      "explanation": "The finite experiment retains the official classical probability.",
+      "name": "official_classical_theory",
+      "observed": 2.220446049250313e-16,
+      "passed": true,
+      "tolerance": 5e-12
+    },
+    {
+      "comparison": "absolute_error_lte",
+      "expected": 0.0,
+      "explanation": "The finite experiment retains the official quantum probability.",
+      "name": "official_quantum_theory",
+      "observed": 1.1102230246251565e-16,
+      "passed": true,
+      "tolerance": 5e-12
+    },
+    {
+      "comparison": "exact_equal",
+      "expected": 363.0,
+      "explanation": "The default classical count is frozen for cross-language comparison.",
+      "name": "official_classical_seeded_count",
+      "observed": 363.0,
+      "passed": true,
+      "tolerance": 0.0
+    },
+    {
+      "comparison": "exact_equal",
+      "expected": 770.0,
+      "explanation": "The default quantum count is frozen for cross-language comparison.",
+      "name": "official_quantum_seeded_count",
+      "observed": 770.0,
+      "passed": true,
+      "tolerance": 0.0
+    },
+    {
+      "comparison": "exact_equal",
+      "expected": 1000.0,
+      "explanation": "Classical matches and mismatches conserve the pair count.",
+      "name": "classical_count_conservation",
+      "observed": 1000.0,
+      "passed": true,
+      "tolerance": 0.0
+    },
+    {
+      "comparison": "exact_equal",
+      "expected": 1000.0,
+      "explanation": "Quantum matches and mismatches conserve the pair count.",
+      "name": "quantum_count_conservation",
+      "observed": 1000.0,
+      "passed": true,
+      "tolerance": 0.0
+    },
+    {
+      "comparison": "absolute_error_lte",
+      "expected": 0.0,
+      "explanation": "Observed probability is exactly the mismatch fraction.",
+      "name": "observed_rate_identity",
+      "observed": 0.0,
+      "passed": true,
+      "tolerance": 5e-12
+    },
+    {
+      "comparison": "absolute_error_lte",
+      "expected": 0.0,
+      "explanation": "Expected mismatch count is N times the theoretical probability.",
+      "name": "expected_count_identity",
+      "observed": 0.0,
+      "passed": true,
+      "tolerance": 5e-12
+    },
+    {
+      "comparison": "absolute_error_lte",
+      "expected": 0.0,
+      "explanation": "Count spread uses the exact binomial standard deviation.",
+      "name": "binomial_standard_deviation_identity",
+      "observed": 0.0,
+      "passed": true,
+      "tolerance": 5e-12
+    },
+    {
+      "comparison": "absolute_error_lte",
+      "expected": 0.0,
+      "explanation": "Each non-degenerate residual is measured in binomial standard deviations.",
+      "name": "standardized_residual_identity",
+      "observed": 0.0,
+      "passed": true,
+      "tolerance": 5e-12
+    },
+    {
+      "comparison": "absolute_error_lte",
+      "expected": 0.0,
+      "explanation": "The zero-count Wilson upper limit matches its independent reference.",
+      "name": "wilson_zero_count_reference",
+      "observed": 0.0,
+      "passed": true,
+      "tolerance": 5e-12
+    },
+    {
+      "comparison": "absolute_error_lte",
+      "expected": 0.0,
+      "explanation": "The full-count Wilson lower limit matches its independent reference.",
+      "name": "wilson_full_count_reference",
+      "observed": 0.0,
+      "passed": true,
+      "tolerance": 5e-12
+    },
+    {
+      "comparison": "exact_equal",
+      "expected": 0.0,
+      "explanation": "Wilson bounds remain ordered inside the probability range for every count.",
+      "name": "wilson_intervals_bounded_and_ordered",
+      "observed": 0.0,
+      "passed": true,
+      "tolerance": 0.0
+    },
+    {
+      "comparison": "exact_equal",
+      "expected": 0.0,
+      "explanation": "Every tested Wilson interval contains its observed fraction.",
+      "name": "wilson_intervals_contain_observed_fraction",
+      "observed": 0.0,
+      "passed": true,
+      "tolerance": 0.0
+    },
+    {
+      "comparison": "less_than_or_equal",
+      "expected": 0.19233693926800877,
+      "explanation": "At the same observed fraction, the interval narrows as N increases.",
+      "name": "wilson_width_shrinks_with_sample_size",
+      "observed": 0.06186079926379162,
+      "passed": true,
+      "tolerance": 0.0
+    },
+    {
+      "comparison": "exact_equal",
+      "expected": 0.0,
+      "explanation": "Repeating all inputs reproduces every sample field exactly.",
+      "name": "same_seed_reproducible",
+      "observed": 0.0,
+      "passed": true,
+      "tolerance": 0.0
+    },
+    {
+      "comparison": "exact_equal",
+      "expected": 0.0,
+      "explanation": "Advancing the displayed seed selects a new pair of samples.",
+      "name": "next_seed_changes_sample",
+      "observed": 0.0,
+      "passed": true,
+      "tolerance": 0.0
+    },
+    {
+      "comparison": "less_than_or_equal",
+      "expected": 5.0,
+      "explanation": "The frozen large reference sample is not an extreme five-sigma outlier.",
+      "name": "large_reference_sample_within_five_sigma",
+      "observed": 0.7449026782071322,
+      "passed": true,
+      "tolerance": 0.0
+    }
+  ],
+  "passed": true,
+  "schema_version": "task08-statistical-validation-v1"
+}

@@ -1,0 +1,61 @@
+{
+  "configuration": {
+    "angle_maximum_deg": 180.0,
+    "angle_minimum_deg": 0.0,
+    "angle_point_count": 721,
+    "angle_spacing_deg": 0.25,
+    "conservation_relative_tolerance": 2e-12,
+    "evidence_size_budget_bytes": 26214400,
+    "incident_energies_kev": [
+      50.0,
+      100.0,
+      200.0,
+      500.0,
+      1000.0
+    ],
+    "numerical_absolute_tolerance": 5e-13,
+    "numerical_relative_tolerance": 5e-12,
+    "schema_version": "task09-v1"
+  },
+  "constant_sources": [
+    "https://www.bipm.org/en/measurement-units/si-defining-constants",
+    "https://physics.nist.gov/cuu/pdf/wall_2022.pdf"
+  ],
+  "constants": {
+    "electron_compton_wavelength_m": 2.426310235380317e-12,
+    "electron_mass_kg": 9.1093837139e-31,
+    "electron_rest_energy_kev": 510.9989506917531,
+    "elementary_charge_c": 1.602176634e-19,
+    "planck_constant_j_s": 6.62607015e-34,
+    "speed_of_light_m_s": 299792458.0
+  },
+  "equations": {
+    "electron_recoil_angle": "phi = atan2(E' sin theta, E - E' cos theta)",
+    "electron_speed": "beta = sqrt(1 - gamma^-2)",
+    "fractional_wavelength_shift": "Delta lambda/lambda = E/(m_e c^2) (1 - cos theta)",
+    "scattered_energy": "E' = E/[1 + E/(m_e c^2) (1 - cos theta)]"
+  },
+  "expected_data_filenames": [
+    "compton_angle_study.csv",
+    "energy_summary.csv",
+    "reference_anchors.json",
+    "validation_report.json",
+    "manifest.json"
+  ],
+  "mathematical_specification": "task09_compton_scattering/MATHEMATICAL_MODEL.md",
+  "model": "relativistic free-electron Compton-scattering kinematics",
+  "official_requirements": "task09_compton_scattering/OFFICIAL_REQUIREMENTS.md",
+  "official_source": "https://www.bpho.org.uk/bpho/computational-challenge/BPhO_ComPhys_Challenge_2026.zip",
+  "output_schema_version": "task09-output-v1",
+  "reproducible_build_timestamp_utc": "2026-01-01T00:00:00Z",
+  "schema_version": "task09-manifest-v1",
+  "sha256": {
+    "data/task09/compton_angle_study.csv": "9af547df2a9be869b5afbd90abf66e0fa9109bfacc23d35d2dafab617d5cd9b2",
+    "data/task09/energy_summary.csv": "d993eaf40106d29de646f121646704c377148eea7140fbda3a7974ea9fb4b068",
+    "data/task09/reference_anchors.json": "643b5b79619b7b8a619dc74b9b69cb01e475b1eac66b2150fff22934e08cb2e4",
+    "data/task09/validation_report.json": "c75b6e3c2a4a083381f300e7ce0c1366c26fc3f10f89b5c1fe01feed58fdc84e"
+  },
+  "study_digest": "f71bbd6366edcd1d825ff9491f490084bed77263750fc21caf4b58474c4da3da",
+  "validation_check_count": 44,
+  "validation_passed": true
+}

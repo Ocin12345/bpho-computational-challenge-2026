@@ -22,6 +22,14 @@ from task01_random_walk.random_walk import (
 DEFAULT_OUTPUT_STEM = Path("figures/task01/single_walk")
 
 
+def _apply_figure_style() -> None:
+    """Use the competition-wide serif typography for every Task 1 figure."""
+
+    plt.rcParams.update(
+        {"font.family": "Times New Roman", "mathtext.fontset": "stix"}
+    )
+
+
 def create_single_walk_figure(result: RandomWalkResult) -> Figure:
     """Build a polished, scientifically labelled figure for one walk.
 
@@ -29,6 +37,7 @@ def create_single_walk_figure(result: RandomWalkResult) -> Figure:
     ensure that distances and angles are not visually distorted.
     """
 
+    _apply_figure_style()
     report = validate_walk(result)
     if not report.passed:
         details = "; ".join(report.failures)

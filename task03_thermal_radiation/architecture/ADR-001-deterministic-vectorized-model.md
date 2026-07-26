@@ -449,7 +449,7 @@ The following rules apply to all later stages:
 6. Calculations remain `float64`; display rounding never feeds back into a
    model.
 7. JSON contains no `NaN`, infinity, timestamps, or absolute paths.
-8. Matplotlib uses fixed dimensions, DPI, colours, DejaVu Sans, and centralized
+8. Matplotlib uses fixed dimensions, DPI, colours, Times New Roman, and centralized
    style settings.
 9. SVG generation sets a fixed hash salt and omits date metadata where the
    backend permits it.

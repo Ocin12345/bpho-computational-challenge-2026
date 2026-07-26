@@ -1,0 +1,161 @@
+{
+  "checks": [
+    {
+      "detail": "all n<=8 real basis states",
+      "maximum_error": 0.0,
+      "name": "supported_state_count",
+      "passed": true,
+      "tolerance": 0.0
+    },
+    {
+      "detail": "complete 1s/2p/3d/4f/5g gallery",
+      "maximum_error": 0.0,
+      "name": "official_gallery",
+      "passed": true,
+      "tolerance": 0.0
+    },
+    {
+      "detail": "recurrence versus official factorial sum",
+      "maximum_error": 3.7366410700406034e-12,
+      "name": "laguerre_reference",
+      "passed": true,
+      "tolerance": 5e-12
+    },
+    {
+      "detail": "recurrence versus explicit differentiated Legendre polynomial",
+      "maximum_error": 3.0147036639043704e-15,
+      "name": "ferrers_reference",
+      "passed": true,
+      "tolerance": 5e-13
+    },
+    {
+      "detail": "all n,l radial functions at seven radii",
+      "maximum_error": 2.220446049250313e-16,
+      "name": "radial_reference",
+      "passed": true,
+      "tolerance": 5e-13
+    },
+    {
+      "detail": "all l,m real harmonics at five nonsymmetric angles",
+      "maximum_error": 2.1094237467877974e-15,
+      "name": "angular_reference",
+      "passed": true,
+      "tolerance": 5e-13
+    },
+    {
+      "detail": "all 204 states at five Cartesian points",
+      "maximum_error": 5.551115123125783e-17,
+      "name": "wavefunction_reference",
+      "passed": true,
+      "tolerance": 5e-13
+    },
+    {
+      "detail": "36 distinct n,l radial functions",
+      "maximum_error": 7.260858581048524e-14,
+      "name": "radial_normalization",
+      "passed": true,
+      "tolerance": 2e-12
+    },
+    {
+      "detail": "64 real harmonics through l=7",
+      "maximum_error": 2.7883470584206866e-14,
+      "name": "angular_normalization_and_orthogonality",
+      "passed": true,
+      "tolerance": 2e-12
+    },
+    {
+      "detail": "same-l states through n=8",
+      "maximum_error": 6.321609902215641e-13,
+      "name": "radial_orthogonality",
+      "passed": true,
+      "tolerance": 2e-11
+    },
+    {
+      "detail": "analytic <r>/a for all 36 n,l functions",
+      "maximum_error": 7.385168592152222e-14,
+      "name": "mean_radius",
+      "passed": true,
+      "tolerance": 5e-11
+    },
+    {
+      "detail": "analytic <r^2>/a^2 for all 36 n,l functions",
+      "maximum_error": 7.464362924359779e-14,
+      "name": "mean_square_radius",
+      "passed": true,
+      "tolerance": 5e-11
+    },
+    {
+      "detail": "n-l-1 positive Laguerre roots for all radial states",
+      "maximum_error": 0.0,
+      "name": "radial_node_count",
+      "passed": true,
+      "tolerance": 0.0
+    },
+    {
+      "detail": "production radial function at independent polynomial roots",
+      "maximum_error": 5.57663195526071e-16,
+      "name": "radial_node_values",
+      "passed": true,
+      "tolerance": 2e-12
+    },
+    {
+      "detail": "Y(-r)=(-1)^l Y(r) for all real harmonics",
+      "maximum_error": 7.771561172376096e-16,
+      "name": "angular_parity",
+      "passed": true,
+      "tolerance": 5e-13
+    },
+    {
+      "detail": "closed-form 1s, 2s and 2p_z densities",
+      "maximum_error": 1.1102230246251565e-16,
+      "name": "analytic_low_state_densities",
+      "passed": true,
+      "tolerance": 5e-13
+    },
+    {
+      "detail": "reduced-mass-corrected Z^2/n^2 invariant",
+      "maximum_error": 0.0,
+      "name": "energy_scaling",
+      "passed": true,
+      "tolerance": 5e-14
+    },
+    {
+      "detail": "reduced-mass-corrected 1/Z invariant",
+      "maximum_error": 1.2212068862389526e-16,
+      "name": "length_scaling",
+      "passed": true,
+      "tolerance": 5e-14
+    },
+    {
+      "detail": "sampled density is finite and non-negative",
+      "maximum_error": 0.0,
+      "name": "density_bounds",
+      "passed": true,
+      "tolerance": 0.0
+    },
+    {
+      "detail": "relative display density is a separate immutable result",
+      "maximum_error": 0.0,
+      "name": "display_normalization_separation",
+      "passed": true,
+      "tolerance": 0.0
+    },
+    {
+      "detail": "Z=A=1 ground-state anchor",
+      "maximum_error": 0.0,
+      "name": "official_hydrogen_energy",
+      "passed": true,
+      "tolerance": 0.0
+    },
+    {
+      "detail": "Z=A=1 effective Bohr length anchor",
+      "maximum_error": 0.0,
+      "name": "official_hydrogen_radius",
+      "passed": true,
+      "tolerance": 0.0
+    }
+  ],
+  "passed": true,
+  "schema_version": "task10-validation-v1",
+  "state_digest": "d298695290395956560641493fc603e5970a4ea01609eca677b3b4b683fa085e"
+}

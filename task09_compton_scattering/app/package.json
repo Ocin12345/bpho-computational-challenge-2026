@@ -1,0 +1,10 @@
+{
+  "name": "bpho-task09-compton-scattering-explorer",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "test": "node --test tests/*.test.js",
+    "test:ui": "node tests/ui-smoke.mjs",
+    "test:a11y": "node tests/accessibility-audit.mjs"
+  }
+}

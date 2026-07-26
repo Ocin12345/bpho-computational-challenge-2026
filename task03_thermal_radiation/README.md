@@ -526,13 +526,13 @@ The ordered figure set is:
 
 | Figure pair | Purpose | PNG dimensions |
 | --- | --- | ---: |
-| `planck_spectra` | Three Planck spectral-exitance curves, numerical peaks, and the visible band | $1512\times936$ |
-| `planck_validation` | Wien and Stefan--Boltzmann errors against pre-declared tolerances | $1872\times936$ |
-| `einstein_heat_capacity` | Seven molar heat-capacity curves and the $3R$ Dulong--Petit limit | $1512\times936$ |
-| `einstein_normalized` | Universal $C_V/(3R)$ curve and numerical collapse check | $1872\times936$ |
-| `task03_summary` | Presentation-ready overview of all principal results | $2400\times1350$ |
+| `planck_spectra` | Three Planck spectral-exitance curves, numerical peaks, and the visible band | $2400\times1500$ |
+| `planck_validation` | Wien and Stefan--Boltzmann errors against pre-declared tolerances | $3000\times1500$ |
+| `einstein_heat_capacity` | Seven molar heat-capacity curves and the $3R$ Dulong--Petit limit | $2400\times1500$ |
+| `einstein_normalized` | Universal $C_V/(3R)$ curve and numerical collapse check | $3000\times1500$ |
+| `task03_summary` | Presentation-ready overview of all principal results | $3840\times2160$ |
 
-All figures use fixed dimensions, $180$ DPI for PNG, DejaVu Sans, a
+All figures use fixed dimensions, $300$ DPI for PNG, Times New Roman, a
 colour-blind-conscious palette, explicit SI units, centralized styling, white
 backgrounds, and uncluttered legends. The summary is exactly $16{:}9$. SVG
 files use a fixed hash salt and omit date metadata.

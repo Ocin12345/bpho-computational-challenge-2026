@@ -41,11 +41,11 @@ allowed by the competition if they are useful for a particular task.
 | [`task02_brownian_motion`](task02_brownian_motion/README.md) | Brownian motion |
 | [`task03_thermal_radiation`](task03_thermal_radiation/README.md) | Black-body radiation and heat capacity |
 | [`task04_photoelectric_effect`](task04_photoelectric_effect/README.md) | Photoelectric effect |
-| `task05_hydrogen_spectrum` | Hydrogen spectrum and Bohr model |
-| `task06_electron_diffraction` | Electron diffraction |
-| `task07_particle_in_box` | Particle in a box and the uncertainty principle |
-| `task08_quantum_cryptography` | Quantum cryptography |
-| `task09_compton_scattering` | Compton scattering |
+| [`task05_hydrogen_spectrum`](task05_hydrogen_spectrum/README.md) | Hydrogen spectrum and Bohr model |
+| [`task06_electron_diffraction`](task06_electron_diffraction/README.md) | Electron diffraction |
+| [`task07_particle_in_box`](task07_particle_in_box/README.md) | Particle in a box and the uncertainty principle |
+| [`task08_quantum_cryptography`](task08_quantum_cryptography/OFFICIAL_REQUIREMENTS.md) | Quantum cryptography |
+| [`task09_compton_scattering`](task09_compton_scattering/README.md) | Compton scattering |
 | `task10_hydrogenic_orbitals` | Hydrogenic orbitals |
 
 ## Project layout
@@ -66,6 +66,28 @@ Current presentation material:
 - [Task 2 PowerPoint pack](presentation/task02/README.md)
 - [Task 3 PowerPoint pack](presentation/task03/README.md)
 - [Task 4 PowerPoint pack](presentation/task04/README.md)
+- [Task 5 PowerPoint pack](presentation/task05/README.md)
+- [Task 6 PowerPoint pack](presentation/task06/README.md)
+- [Task 7 PowerPoint pack](presentation/task07/README.md)
+- [Task 8 PowerPoint pack](presentation/task08/README.md)
+- [Task 9 PowerPoint pack](presentation/task09/README.md)
+
+## Final verification and release archive
+
+The completed Tasks 1–10 project now has one repository-wide verification and
+release route:
+
+```bash
+python3 -m submission.verify_project
+python3 -m submission.build_release_archive
+```
+
+The first command checks the scientific tests, final artifact gates,
+presentations, typography, timing, links and portability. The second builds a
+clean evidence archive with per-file and whole-archive SHA-256 digests. Full
+regeneration, accepted dependencies, scientific assumptions and the final
+handoff checklist are documented in
+[`submission/README.md`](submission/README.md).
 
 Large downloads, videos, and local Python environments should stay outside GitHub.
 Never commit passwords, access tokens, or other private information.

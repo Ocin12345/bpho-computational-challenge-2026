@@ -1,0 +1,135 @@
+{
+  "figure_font_family": "Times New Roman",
+  "files": [
+    {
+      "bytes": 268519,
+      "dpi": [
+        299.999,
+        299.999
+      ],
+      "filename": "probability_sweep.png",
+      "format": "PNG",
+      "height_px": 1500,
+      "sha256": "81748999693f48bef355f5d55596040cc15247e8519cd7651a9d63161a7bcf1d",
+      "width_px": 2400
+    },
+    {
+      "bytes": 40348,
+      "editable_text": true,
+      "filename": "probability_sweep.svg",
+      "font_families": [
+        "Times New Roman"
+      ],
+      "format": "SVG",
+      "sha256": "96c2e13100dc5ea5dcaf3d8b7d495e5276447c8036c5654ef164cc346c3bd1d2"
+    },
+    {
+      "bytes": 57960,
+      "editable_text": true,
+      "filename": "probability_sweep.pdf",
+      "font_embedded": true,
+      "font_family": "Times New Roman",
+      "font_type": 42,
+      "format": "PDF",
+      "sha256": "32dab5b1d8fd5900df4dda83bf86f44ea19b7082ec82d158f9d31f43efca8842"
+    },
+    {
+      "bytes": 350916,
+      "dpi": [
+        299.999,
+        299.999
+      ],
+      "filename": "mismatch_landscape.png",
+      "format": "PNG",
+      "height_px": 1500,
+      "sha256": "68f23fad0396cb23a8617e4177e3e64780c0c0b4d198da3d83ce4d7e8dfc8ea5",
+      "width_px": 2400
+    },
+    {
+      "bytes": 155182,
+      "editable_text": true,
+      "filename": "mismatch_landscape.svg",
+      "font_families": [
+        "Times New Roman"
+      ],
+      "format": "SVG",
+      "sha256": "4bc9c96d61b34397eae99316316e1d4dd7d02312d71288430fe3303051d5e200"
+    },
+    {
+      "bytes": 167865,
+      "editable_text": true,
+      "filename": "mismatch_landscape.pdf",
+      "font_embedded": true,
+      "font_family": "Times New Roman",
+      "font_type": 42,
+      "format": "PDF",
+      "sha256": "c8de2284e87f885650e98d47bdabc1649aba614352d6a74a5906538ccb63a0db"
+    },
+    {
+      "bytes": 254456,
+      "dpi": [
+        299.999,
+        299.999
+      ],
+      "filename": "finite_photon_sampling.png",
+      "format": "PNG",
+      "height_px": 1500,
+      "sha256": "94ab9d78dbeb6b559df9312be7f1db7578afd61b4a18b7ec7a90ac29da0715e0",
+      "width_px": 2400
+    },
+    {
+      "bytes": 37302,
+      "editable_text": true,
+      "filename": "finite_photon_sampling.svg",
+      "font_families": [
+        "Times New Roman"
+      ],
+      "format": "SVG",
+      "sha256": "83eeac8c66f7618bb83e0f12fd7adfa3ffb50ff31a9a81975dced4ede39ec0ce"
+    },
+    {
+      "bytes": 61079,
+      "editable_text": true,
+      "filename": "finite_photon_sampling.pdf",
+      "font_embedded": true,
+      "font_family": "Times New Roman",
+      "font_type": 42,
+      "format": "PDF",
+      "sha256": "4baef3684fbacb5bb8bc0115724a380d477e4685c6263884bfc66102dc22f501"
+    },
+    {
+      "bytes": 495288,
+      "dpi": [
+        299.999,
+        299.999
+      ],
+      "filename": "task08_summary.png",
+      "format": "PNG",
+      "height_px": 2160,
+      "sha256": "f5c528bf8397d9dac54210afabcf88f237069fbb1826339f4bccbc91b2791436",
+      "width_px": 3840
+    },
+    {
+      "bytes": 89938,
+      "editable_text": true,
+      "filename": "task08_summary.svg",
+      "font_families": [
+        "Times New Roman"
+      ],
+      "format": "SVG",
+      "sha256": "838543f88b33cf4f4f3a9e2009d26e04d280cc7290acba9ddca58455d77d60b9"
+    },
+    {
+      "bytes": 107241,
+      "editable_text": true,
+      "filename": "task08_summary.pdf",
+      "font_embedded": true,
+      "font_family": "Times New Roman",
+      "font_type": 42,
+      "format": "PDF",
+      "sha256": "fc482a05da2483e018f4f5baf1d6d4d6513a57d853ff8817cfcb4e53123bae82"
+    }
+  ],
+  "reproducible_build_timestamp_utc": "2026-01-01T00:00:00Z",
+  "schema_version": "task08-figure-manifest-v2"
+}

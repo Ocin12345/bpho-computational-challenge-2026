@@ -52,7 +52,8 @@ TEXT_COLOUR = "#172033"
 VISIBLE_COLOUR = "#FDE68A"
 
 PLOT_STYLE: dict[str, object] = {
-    "font.family": "DejaVu Sans",
+    "font.family": "Times New Roman",
+    "mathtext.fontset": "stix",
     "font.size": 12.0,
     "axes.titlesize": 15.5,
     "axes.titleweight": "bold",
@@ -211,7 +212,7 @@ def _threshold_guide(
             va="center",
             fontsize=10.5,
             color=TEXT_COLOUR,
-            family="DejaVu Sans Mono",
+            family="Times New Roman",
         )
     axis.text(
         0.02,

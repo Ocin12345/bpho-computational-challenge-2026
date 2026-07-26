@@ -1,0 +1,186 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="Offline interactive BPhO Task 10 explorer for normalized hydrogenic orbital probability densities, coloured-glass slices, nodes and radial structure.">
+    <meta name="color-scheme" content="light">
+    <title>Task 10 · Hydrogenic orbital explorer</title>
+    <link rel="icon" href="./favicon.svg" type="image/svg+xml">
+    <link rel="stylesheet" href="./styles.css">
+  </head>
+  <body>
+    <a class="skip-link" href="#explorer-main">Skip to the orbital explorer</a>
+    <div class="page-ring page-ring--one" aria-hidden="true"></div>
+    <div class="page-ring page-ring--two" aria-hidden="true"></div>
+
+    <main class="app-shell" id="explorer-main" tabindex="-1">
+      <header class="hero">
+        <div>
+          <p class="eyebrow">BPhO Computational Challenge 2026 · Task 10</p>
+          <h1>Hydrogenic orbital explorer</h1>
+          <p class="hero__summary">
+            Build any validated one-electron state, orbit a semi-transparent
+            stack of probability-density slices, and separate radial structure
+            from angular shape.
+          </p>
+        </div>
+        <div class="verification-badge" aria-label="Scientific validation status">
+          <span class="verification-dot" aria-hidden="true"></span>
+          <span><strong>22/22</strong> checks · <strong>204</strong> states</span>
+        </div>
+      </header>
+
+      <section class="panel controls-panel" aria-labelledby="controls-heading">
+        <div class="section-heading">
+          <div>
+            <p class="section-kicker">State and renderer</p>
+            <h2 id="controls-heading">Choose a normalized hydrogenic state</h2>
+            <p class="section-summary">Invalid (l,m) combinations are removed automatically. The isotope convention is A=1 for H and A=2Z otherwise.</p>
+          </div>
+          <button class="button button--quiet" id="reset-all" type="button">Reset hydrogen 3d</button>
+        </div>
+
+        <div class="control-columns">
+          <fieldset class="control-group">
+            <legend>Quantum state</legend>
+            <div class="select-grid">
+              <label>Atomic number, Z<select id="z-select" aria-describedby="z-help"></select></label>
+              <label>Principal number, n<select id="n-select"></select></label>
+              <label>Angular number, l<select id="l-select"></select></label>
+              <label>Magnetic number, m<select id="m-select"></select></label>
+            </div>
+            <p class="control-help" id="z-help">Hydrogenic means one electron bound to a nucleus of charge +Ze.</p>
+            <label class="wide-select">Official S–G gallery preset<select id="gallery-preset" aria-label="Official S through G orbital preset"></select></label>
+          </fieldset>
+
+          <fieldset class="control-group">
+            <legend>Coloured-glass display</legend>
+            <div class="range-control">
+              <div><label for="extent-range">Half-extent</label><output id="extent-output" for="extent-range">3.2 n²a</output></div>
+              <input id="extent-range" type="range" min="1.2" max="6" step="0.1" value="3.2">
+            </div>
+            <div class="range-control">
+              <div><label for="slice-range">x-y planes</label><output id="slice-output" for="slice-range">17</output></div>
+              <input id="slice-range" type="range" min="7" max="25" step="2" value="17">
+            </div>
+            <div class="range-control">
+              <div><label for="threshold-range">Relative cutoff</label><output id="threshold-output" for="threshold-range">0.15</output></div>
+              <input id="threshold-range" type="range" min="0" max="0.45" step="0.01" value="0.15">
+            </div>
+            <div class="range-control">
+              <div><label for="opacity-range">Maximum opacity</label><output id="opacity-output" for="opacity-range">72%</output></div>
+              <input id="opacity-range" type="range" min="0.2" max="0.95" step="0.01" value="0.72">
+            </div>
+            <p class="control-help">Cutoff and opacity affect visibility only. They never alter ∫|ψ|²dV=1.</p>
+          </fieldset>
+        </div>
+        <p class="sr-only" id="live-status" role="status" aria-live="polite" aria-atomic="true"></p>
+      </section>
+
+      <section class="explorer-grid" aria-labelledby="glass-heading">
+        <article class="panel glass-panel">
+          <div class="section-heading section-heading--compact">
+            <div>
+              <p class="section-kicker">Required 3D construction</p>
+              <h2 id="glass-heading">Semi-transparent coloured glass</h2>
+            </div>
+            <span class="stationary-pill">stationary density · view rotation only</span>
+          </div>
+          <figure class="glass-figure">
+            <canvas id="glass-canvas" width="960" height="680" role="img" aria-labelledby="glass-canvas-title glass-canvas-description" tabindex="0">The interactive coloured-glass view is unavailable because this browser does not support Canvas. The selected state's numerical results and interpretation remain available below.</canvas>
+            <figcaption>
+              <strong id="glass-canvas-title">Hydrogen 3d, m=0 probability-density slice stack.</strong>
+              <span id="glass-canvas-description">Seventeen x-y planes are projected in three dimensions. Colour and opacity encode relative probability density above the 0.15 display cutoff.</span>
+            </figcaption>
+          </figure>
+          <div class="camera-controls" aria-label="Three-dimensional view controls">
+            <button type="button" id="orbit-left" aria-label="Orbit view left">↶ Orbit</button>
+            <button type="button" id="orbit-right" aria-label="Orbit view right">Orbit ↷</button>
+            <button type="button" id="zoom-out" aria-label="Zoom out">− Zoom</button>
+            <button type="button" id="zoom-in" aria-label="Zoom in">+ Zoom</button>
+            <button type="button" id="reset-camera">Reset view</button>
+          </div>
+          <p class="interaction-hint">Drag to orbit · use the mouse wheel or zoom buttons · arrow keys orbit when the canvas is focused.</p>
+        </article>
+
+        <aside class="result-column" aria-label="Selected-state results">
+          <article class="result-card result-card--state">
+            <span class="result-label">Selected real state</span>
+            <output class="result-primary" id="state-label">3d (m=+0)</output>
+            <p id="isotope-label">H-1 · Z=1 · A=1</p>
+          </article>
+          <article class="result-card result-card--energy">
+            <span class="result-label">Bound-state energy</span>
+            <output class="result-primary" id="energy-value">−1.510915 eV</output>
+            <p>Eₙ ∝ −Z²/n² · independent of l and m</p>
+          </article>
+          <article class="result-card result-card--length">
+            <span class="result-label">Effective Bohr length</span>
+            <output class="result-primary" id="bohr-value">0.529468 Å</output>
+            <p id="physical-extent">display half-extent 15.25 Å</p>
+          </article>
+          <article class="result-card result-card--nodes">
+            <span class="result-label">Nodes and symmetry</span>
+            <output class="result-primary" id="node-value">0 radial · 2 angular</output>
+            <p id="symmetry-value">even parity · fivefold m degeneracy</p>
+          </article>
+          <article class="normalization-card">
+            <div><span>Scientific field</span><strong>normalized</strong></div>
+            <div><span>Displayed maximum</span><strong>relative 1.00</strong></div>
+            <div><span>Canvas renderer</span><strong>offline Canvas 2D</strong></div>
+          </article>
+        </aside>
+      </section>
+
+      <section class="panel evidence-panel" aria-labelledby="evidence-heading">
+        <div class="section-heading">
+          <div>
+            <p class="section-kicker">Numerical interpretation</p>
+            <h2 id="evidence-heading">The same state in slices and radial probability</h2>
+            <p class="section-summary">All three planes share one colour scale. The radial graph is independent of m; angular shape is not.</p>
+          </div>
+          <div class="density-legend" aria-label="Relative density colour scale"><span>0</span><i></i><span>1</span></div>
+        </div>
+
+        <div class="evidence-grid">
+          <article class="slice-card">
+            <h3>(a) x-y at z=0</h3>
+            <canvas id="slice-xy" width="420" height="420" role="img" aria-label="Relative density on the x-y plane at z equals zero">The x-y probability-density slice requires Canvas support.</canvas>
+          </article>
+          <article class="slice-card">
+            <h3>(b) x-z at y=0</h3>
+            <canvas id="slice-xz" width="420" height="420" role="img" aria-label="Relative density on the x-z plane at y equals zero">The x-z probability-density slice requires Canvas support.</canvas>
+          </article>
+          <article class="slice-card">
+            <h3>(c) y-z at x=0</h3>
+            <canvas id="slice-yz" width="420" height="420" role="img" aria-label="Relative density on the y-z plane at x equals zero">The y-z probability-density slice requires Canvas support.</canvas>
+          </article>
+          <article class="radial-card">
+            <h3>(d) Radial probability</h3>
+            <div class="chart-scroll" role="region" aria-label="Scrollable radial probability graph" tabindex="0">
+              <svg id="radial-chart" viewBox="0 0 760 420" role="img" aria-labelledby="radial-title radial-description">
+                <title id="radial-title">Radial probability versus scaled radius</title>
+                <desc id="radial-description">The selected state's normalized radial probability per unit r divided by n squared a.</desc>
+              </svg>
+            </div>
+          </article>
+        </div>
+      </section>
+
+      <section class="panel interpretation-panel" aria-labelledby="interpretation-heading">
+        <div class="section-heading section-heading--compact">
+          <div><p class="section-kicker">Model audit</p><h2 id="interpretation-heading">What the visualization means</h2></div>
+        </div>
+        <div class="interpretation-grid">
+          <article><strong>Probability density</strong><p>|ψ|² gives probability per unit volume. Bright regions are more likely, not electron trajectories.</p></article>
+          <article><strong>Real orbital basis</strong><p>Positive and negative m select normalized sine/cosine tesseral orientations. Density does not show wavefunction sign.</p></article>
+          <article><strong>Standard coordinates</strong><p>ϑ is polar colatitude and φ is azimuth: x=r sinϑ cosφ, y=r sinϑ sinφ, z=r cosϑ.</p></article>
+          <article><strong>Scope</strong><p>One non-relativistic electron in a point-Coulomb field. No screening, spin-orbit coupling, radiative effects or external fields.</p></article>
+        </div>
+        <p class="model-note">Reduced mass uses M=A·u · density is normalized before any display transform · all assets and calculations run offline.</p>
+      </section>
+    </main>
+    <script type="module" src="./app.js"></script>
+  </body>
+</html>

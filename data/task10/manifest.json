@@ -1,0 +1,64 @@
+{
+  "constant_sources": [
+    "https://physics.nist.gov/cuu/pdf/wall_2022.pdf",
+    "https://www.bipm.org/en/measurement-units/si-defining-constants"
+  ],
+  "constants": {
+    "atomic_mass_constant_kg": 1.66053906892e-27,
+    "bohr_radius_m": 5.29177210544e-11,
+    "electron_mass_kg": 9.1093837139e-31,
+    "elementary_charge_c": 1.602176634e-19,
+    "hartree_energy_ev": 27.211386245981
+  },
+  "domain": {
+    "atomic_number": [
+      1,
+      20
+    ],
+    "l": "0 <= l < n",
+    "m": "-l <= m <= l",
+    "mass_number": "Z <= A <= 3Z",
+    "n": [
+      1,
+      8
+    ],
+    "official_gallery": "1s, 2p, 3d, 4f, 5g; every m"
+  },
+  "expected_data_filenames": [
+    "orbital_state_catalog.csv",
+    "official_gallery.csv",
+    "radial_profiles.csv",
+    "radial_nodes.csv",
+    "reference_anchors.json",
+    "validation_report.json",
+    "manifest.json"
+  ],
+  "model": "normalized real hydrogenic Coulomb eigenstates",
+  "official_pages": [
+    62,
+    76
+  ],
+  "official_source": "https://www.bpho.org.uk/bpho/computational-challenge/BPhO_ComPhys_Challenge_2026.zip",
+  "output_schema_version": "task10-output-v1",
+  "reproducible_build_timestamp_utc": "2026-01-01T00:00:00Z",
+  "schema_version": "task10-manifest-v1",
+  "sha256": {
+    "data/task10/official_gallery.csv": "8c5153eec6084821f7a896840500306d128064023ede25ac0245b856c9e74bc4",
+    "data/task10/orbital_state_catalog.csv": "8311c81c437798566dfbe3d1e18b394faf78361ee7f070aacc3ea5ac8134370f",
+    "data/task10/radial_nodes.csv": "9519024d46f19d927514d8f3f084d2bde28ac0e721e7493267bcf5b7f4dd8b33",
+    "data/task10/radial_profiles.csv": "8c37902f9bbccb566f3698292f61138ee5d6b2f587b3ab1b48d7878977610804",
+    "data/task10/reference_anchors.json": "da4c217c572509a8fd7e2093c764dd049d61f27e8407e6296ab096b2bfd26c52",
+    "data/task10/validation_report.json": "b966bc05ee0bcc05b7685a1467677f2447242c217f56a957f948670fa3967b93"
+  },
+  "validation": {
+    "check_count": 22,
+    "passed": true,
+    "state_digest": "d298695290395956560641493fc603e5970a4ea01609eca677b3b4b683fa085e"
+  },
+  "visualization_contract": {
+    "default_display_threshold": 0.15,
+    "radial_profile_containment": 0.9995,
+    "radial_profile_points": 1201,
+    "threshold_affects_normalization": false
+  }
+}

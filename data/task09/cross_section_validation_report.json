@@ -1,0 +1,307 @@
+{
+  "checks": [
+    {
+      "comparison": "absolute_error_lte",
+      "expected": 0.0,
+      "explanation": "The extension uses the same five official energies.",
+      "name": "official_energy_grid",
+      "observed": 0.0,
+      "passed": true,
+      "tolerance": 0.0,
+      "unit": "keV"
+    },
+    {
+      "comparison": "absolute_error_lte",
+      "expected": 0.0,
+      "explanation": "The extension uses the same inclusive angle grid.",
+      "name": "full_angle_grid",
+      "observed": 0.0,
+      "passed": true,
+      "tolerance": 0.0,
+      "unit": "degree"
+    },
+    {
+      "comparison": "exact_equal",
+      "expected": 0.0,
+      "explanation": "Every extension value is finite.",
+      "name": "all_cross_section_arrays_finite",
+      "observed": 0.0,
+      "passed": true,
+      "tolerance": 0.0,
+      "unit": "count"
+    },
+    {
+      "comparison": "greater_than_or_equal",
+      "expected": 0.0,
+      "explanation": "A scattering cross-section or density cannot be negative.",
+      "name": "differential_cross_section_nonnegative",
+      "observed": 8.414541692514976e-31,
+      "passed": true,
+      "tolerance": 0.0,
+      "unit": "m^2 sr^-1"
+    },
+    {
+      "comparison": "greater_than_or_equal",
+      "expected": 0.0,
+      "explanation": "A scattering cross-section or density cannot be negative.",
+      "name": "relative_cross_section_nonnegative",
+      "observed": 0.1059660837627527,
+      "passed": true,
+      "tolerance": 0.0,
+      "unit": "dimensionless"
+    },
+    {
+      "comparison": "greater_than_or_equal",
+      "expected": 0.0,
+      "explanation": "A scattering cross-section or density cannot be negative.",
+      "name": "theta_pdf_nonnegative",
+      "observed": 0.0,
+      "passed": true,
+      "tolerance": 0.0,
+      "unit": "rad^-1"
+    },
+    {
+      "comparison": "absolute_error_lte",
+      "expected": 0.0,
+      "explanation": "All energies share the Klein\u2013Nishina forward value r_e^2.",
+      "name": "forward_differential_cross_section",
+      "observed": 0.0,
+      "passed": true,
+      "tolerance": 1e-44,
+      "unit": "m^2 sr^-1"
+    },
+    {
+      "comparison": "absolute_error_lte",
+      "expected": 0.0,
+      "explanation": "Every relative differential curve begins at one.",
+      "name": "forward_relative_cross_section",
+      "observed": 0.0,
+      "passed": true,
+      "tolerance": 2e-15,
+      "unit": "dimensionless"
+    },
+    {
+      "comparison": "absolute_error_lte",
+      "expected": 0.0,
+      "explanation": "The forward polar ring has zero solid-angle area.",
+      "name": "forward_theta_density_zero",
+      "observed": 0.0,
+      "passed": true,
+      "tolerance": 0.0,
+      "unit": "m^2 rad^-1"
+    },
+    {
+      "comparison": "absolute_error_lte",
+      "expected": 0.0,
+      "explanation": "The backscatter polar ring has zero solid-angle area.",
+      "name": "backscatter_theta_density_zero",
+      "observed": 0.0,
+      "passed": true,
+      "tolerance": 0.0,
+      "unit": "m^2 rad^-1"
+    },
+    {
+      "comparison": "greater_than_or_equal",
+      "expected": 0.0,
+      "explanation": "Every total free-electron cross-section is positive.",
+      "name": "total_cross_section_positive",
+      "observed": 2.1120788254426124e-29,
+      "passed": true,
+      "tolerance": 0.0,
+      "unit": "m^2"
+    },
+    {
+      "comparison": "less_than_or_equal",
+      "expected": 6.652458705237673e-29,
+      "explanation": "Nonzero-energy Klein\u2013Nishina totals lie below Thomson.",
+      "name": "total_cross_section_below_thomson",
+      "observed": 5.615069437064338e-29,
+      "passed": true,
+      "tolerance": 0.0,
+      "unit": "m^2"
+    },
+    {
+      "comparison": "greater_than_or_equal",
+      "expected": 0.0,
+      "explanation": "Total cross-section decreases over the official energies.",
+      "name": "total_cross_section_energy_decrease",
+      "observed": 6.875845606673021e-30,
+      "passed": true,
+      "tolerance": 0.0,
+      "unit": "m^2"
+    },
+    {
+      "comparison": "greater_than_or_equal",
+      "expected": 0.0,
+      "explanation": "High-energy backscatter is increasingly suppressed.",
+      "name": "backscatter_differential_energy_decrease",
+      "observed": 6.548462586173449e-31,
+      "passed": true,
+      "tolerance": 0.0,
+      "unit": "m^2 sr^-1"
+    },
+    {
+      "comparison": "less_than_or_equal",
+      "expected": 1.0,
+      "explanation": "The forward direction is the differential maximum here.",
+      "name": "differential_not_above_forward",
+      "observed": 1.0,
+      "passed": true,
+      "tolerance": 2e-15,
+      "unit": "dimensionless"
+    },
+    {
+      "comparison": "absolute_error_lte",
+      "expected": 0.0,
+      "explanation": "Closed-form totals agree with independent solid-angle quadrature.",
+      "name": "analytical_total_vs_quadrature",
+      "observed": 2.3558493178924182e-14,
+      "passed": true,
+      "tolerance": 5e-11,
+      "unit": "relative error"
+    },
+    {
+      "comparison": "absolute_error_lte",
+      "expected": 0.0,
+      "explanation": "The plotted polar-angle density integrates to unity.",
+      "name": "theta_pdf_normalization",
+      "observed": 4.145058045801342e-06,
+      "passed": true,
+      "tolerance": 5e-06,
+      "unit": "probability"
+    },
+    {
+      "comparison": "greater_than_or_equal",
+      "expected": 0.0,
+      "explanation": "Higher-energy scattering becomes more forward weighted.",
+      "name": "forward_hemisphere_probability_ordering",
+      "observed": 0.03461348435440348,
+      "passed": true,
+      "tolerance": 2e-07,
+      "unit": "probability"
+    },
+    {
+      "comparison": "greater_than_or_equal",
+      "expected": 0.7,
+      "explanation": "At 1 MeV most free-electron scattering lies in the forward hemisphere.",
+      "name": "one_mev_forward_bias",
+      "observed": 0.7320943884242852,
+      "passed": true,
+      "tolerance": 0.0,
+      "unit": "probability"
+    },
+    {
+      "comparison": "absolute_error_lte",
+      "expected": 0.0,
+      "explanation": "Independent quadrature approaches Thomson at negligible photon energy.",
+      "name": "independent_thomson_limit",
+      "observed": 3.91390508891476e-09,
+      "passed": true,
+      "tolerance": 1e-08,
+      "unit": "relative error"
+    },
+    {
+      "comparison": "absolute_error_lte",
+      "expected": 0.0,
+      "explanation": "Differential values use the exact barn conversion.",
+      "name": "differential_barn_conversion",
+      "observed": 0.0,
+      "passed": true,
+      "tolerance": 2e-15,
+      "unit": "relative error"
+    },
+    {
+      "comparison": "absolute_error_lte",
+      "expected": 0.0,
+      "explanation": "Total values use the exact barn conversion.",
+      "name": "total_barn_conversion",
+      "observed": 0.0,
+      "passed": true,
+      "tolerance": 2e-15,
+      "unit": "relative error"
+    },
+    {
+      "comparison": "absolute_error_lte",
+      "expected": 0.0,
+      "explanation": "Each total is broadcast unchanged over its angle row.",
+      "name": "total_constant_across_angle",
+      "observed": 0.0,
+      "passed": true,
+      "tolerance": 0.0,
+      "unit": "m^2"
+    },
+    {
+      "comparison": "absolute_error_lte",
+      "expected": 0.0,
+      "explanation": "Relative curves are normalized to the common forward value.",
+      "name": "relative_differential_identity",
+      "observed": 0.0,
+      "passed": true,
+      "tolerance": 2e-15,
+      "unit": "relative error"
+    },
+    {
+      "comparison": "absolute_error_lte",
+      "expected": 0.0,
+      "explanation": "Polar density includes the complete azimuthal Jacobian.",
+      "name": "theta_density_identity",
+      "observed": 0.0,
+      "passed": true,
+      "tolerance": 2e-15,
+      "unit": "relative error"
+    },
+    {
+      "comparison": "absolute_error_lte",
+      "expected": 0.0,
+      "explanation": "The polar PDF is density divided by total cross-section.",
+      "name": "theta_pdf_identity",
+      "observed": 0.0,
+      "passed": true,
+      "tolerance": 2e-15,
+      "unit": "relative error"
+    },
+    {
+      "comparison": "absolute_error_lte",
+      "expected": 0.0,
+      "explanation": "Five independently frozen total cross-sections agree.",
+      "name": "official_energy_total_anchors",
+      "observed": 1.5357570484037954e-15,
+      "passed": true,
+      "tolerance": 5e-13,
+      "unit": "relative error"
+    },
+    {
+      "comparison": "greater_than_or_equal",
+      "expected": 0.0,
+      "explanation": "A scattered photon retains positive energy.",
+      "name": "scattered_energy_ratio_lower_bound",
+      "observed": 0.20350424700535158,
+      "passed": true,
+      "tolerance": 0.0,
+      "unit": "dimensionless"
+    },
+    {
+      "comparison": "less_than_or_equal",
+      "expected": 1.0,
+      "explanation": "A free stationary electron cannot increase photon energy.",
+      "name": "scattered_energy_ratio_upper_bound",
+      "observed": 1.0,
+      "passed": true,
+      "tolerance": 0.0,
+      "unit": "dimensionless"
+    },
+    {
+      "comparison": "greater_than_or_equal",
+      "expected": 0.0,
+      "explanation": "Scattered photon energy decreases with deflection angle.",
+      "name": "scattered_ratio_angle_decrease",
+      "observed": 6.514986047312377e-07,
+      "passed": true,
+      "tolerance": 2e-15,
+      "unit": "dimensionless"
+    }
+  ],
+  "passed": true,
+  "schema_version": "task09-cross-section-validation-v1",
+  "study_digest": "6cd58587bae2b5b821f5fadb8ccb21ba2fe4dc42ee7a78b328732772d14ef0c5"
+}

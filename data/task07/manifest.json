@@ -1,0 +1,99 @@
+{
+  "configuration": {
+    "box_width_m": 1e-09,
+    "density_quantum_numbers": [
+      1,
+      2,
+      3,
+      4
+    ],
+    "maximum_quantum_number": 10,
+    "numerical_grid_sizes": [
+      100,
+      200,
+      400,
+      800,
+      1600
+    ],
+    "numerical_state_count": 10,
+    "particle_identifier": "electron",
+    "particle_label": "electron",
+    "particle_mass_kg": 9.1093837139e-31,
+    "position_point_count": 2001,
+    "schema_version": "task07-v1"
+  },
+  "constant_source": "NIST 2022 CODATA central values and exact SI constants",
+  "constants": {
+    "electron_mass_kg": 9.1093837139e-31,
+    "elementary_charge_c": 1.602176634e-19,
+    "planck_constant_j_s": 6.62607015e-34,
+    "reduced_planck_constant_j_s": 1.0545718176461565e-34
+  },
+  "equations": {
+    "energy": "E_n = n^2 pi^2 hbar^2/(2 m a^2)",
+    "uncertainty": "Delta x Delta p/hbar = sqrt(n^2 pi^2/12 - 1/2)",
+    "wavefunction": "psi_n = sqrt(2/a) sin(n pi x/a)"
+  },
+  "expected_data_filenames": [
+    "energy_levels.csv",
+    "stationary_states.csv",
+    "expectation_values.csv",
+    "numerical_eigenvalues.csv",
+    "reference_anchors.json",
+    "validation_report.json",
+    "manifest.json"
+  ],
+  "expected_figure_filenames": [
+    "energy_spectrum.png",
+    "energy_spectrum.svg",
+    "probability_densities.png",
+    "probability_densities.svg",
+    "wavefunctions_and_density.png",
+    "wavefunctions_and_density.svg",
+    "energy_level_wavefunctions.png",
+    "energy_level_wavefunctions.svg",
+    "uncertainty_principle.png",
+    "uncertainty_principle.svg",
+    "task07_summary.png",
+    "task07_summary.svg"
+  ],
+  "figure_font_family": "Times New Roman",
+  "mathematical_specification": "task07_particle_in_box/MATHEMATICAL_MODEL.md",
+  "model": "one-dimensional non-relativistic infinite square well",
+  "official_pages": [
+    48,
+    49
+  ],
+  "official_requirements": "task07_particle_in_box/OFFICIAL_REQUIREMENTS.md",
+  "official_source": "https://www.bpho.org.uk/bpho/computational-challenge/BPhO_ComPhys_Challenge_2026.zip",
+  "official_source_sha256": {
+    "BPhO CompPhys2026 Quantum.pdf": "7948f13c88d09a7ec2d94a564fcd7b085419090320c011575c851edb6db151c6",
+    "BPhO_ComPhys_Challenge_2026.zip": "330bffb2b7424cf0faada630aed39515cca32fcfee2dcf2096c218144498c667"
+  },
+  "output_schema_version": "task07-data-v1",
+  "reproducible_build_timestamp_utc": "2026-01-01T00:00:00Z",
+  "schema_version": "task07-manifest-v1",
+  "sha256": {
+    "data/task07/energy_levels.csv": "1c4d923b892ffe663af570bd040cb9258588b78ff6f01706f587a8e2786f4333",
+    "data/task07/expectation_values.csv": "3a379060eba63509eab2129663c34b43c0a6cb587d97c2a6e3c3553000ddcf38",
+    "data/task07/numerical_eigenvalues.csv": "854aa5ce3bf58d6b1e837df50d4bfbe63a33cf72932006a9b9a150ae6a0a2bd2",
+    "data/task07/reference_anchors.json": "fc3664dc25e6ca7341077e83737ce84aa66446999bc68d416feb72a60550c3bd",
+    "data/task07/stationary_states.csv": "701f7ee413ed2f91114f13f21673e79ca83d69cb3852175e9603a16dc31bbf2e",
+    "data/task07/validation_report.json": "064775f44360f7fa540d6b352f94be0260f2a89c5878fb39064c9ac6f3b972e4",
+    "figures/task07/energy_level_wavefunctions.png": "7c168e8a3b92ef99a03894febfc22fcbe5176ee62331e2b23b1eddfafec1bc17",
+    "figures/task07/energy_level_wavefunctions.svg": "71cf2e8cf35c161e711afcba3ea9aaa4d6475a613939492691cc4178e23c272b",
+    "figures/task07/energy_spectrum.png": "d98562242d2d22fe136627c3548e302e4aec49d1f9616d44ad01068f6a39a3f6",
+    "figures/task07/energy_spectrum.svg": "fb2083fa97f78aa301cd7f47667f9cb3207f205e07867b5eaabdd6d12b0d859a",
+    "figures/task07/probability_densities.png": "67ff33f3963801b926b0e0b811f4ebdc22c6bb9cf354d6de19edd2311dc59336",
+    "figures/task07/probability_densities.svg": "5e63503e4199f21e313ab8ba266cd21036cda32c740f14d1ac61b73654660ecf",
+    "figures/task07/task07_summary.png": "fc59d77af1f06bf724854c70fcde2f96130635bc57fbcfb8fab8e0e5b84bb8c4",
+    "figures/task07/task07_summary.svg": "f476152c5853fe918cedc8e4a4f3c2cad181c0b951647cecec0e11d7575a2df7",
+    "figures/task07/uncertainty_principle.png": "e32afa8728f02dc79c5e7133e0df0d563f7fb7f4fe18c1a850de622122c4b0f0",
+    "figures/task07/uncertainty_principle.svg": "a7ded7d87c70d8da9dfde883293ead68ce1f09be63cd9515f79b5add4a2488f2",
+    "figures/task07/wavefunctions_and_density.png": "81234f5026616d69b6d986caaf5412fcfcd804ccbaa470ddce7500d50934ca94",
+    "figures/task07/wavefunctions_and_density.svg": "4d0c3dd11b40822ba8f39ac7da203903a40d5ff0c09302f00d15481dec9c2b28"
+  },
+  "study_digest": "67a3fd50191ff04c57d989b3b0cf5b49567b7f507653c861bf8b7bc3241bd09d",
+  "validation_check_count": 37,
+  "validation_passed": true
+}

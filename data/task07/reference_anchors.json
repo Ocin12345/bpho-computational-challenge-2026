@@ -1,0 +1,32 @@
+{
+  "anchors": [
+    {
+      "delta_x_delta_p_over_hbar": 0.5678618083866119,
+      "energy_j": 6.024667394036591e-20,
+      "expected_x_squared_m2": 2.8267274151216443e-19,
+      "quantum_number_n": 1
+    },
+    {
+      "delta_x_delta_p_over_hbar": 1.6702898352371223,
+      "energy_j": 2.4098669576146366e-19,
+      "expected_x_squared_m2": 3.206681853780411e-19,
+      "quantum_number_n": 2
+    },
+    {
+      "delta_x_delta_p_over_hbar": 3.5580152521856636,
+      "energy_j": 9.639467830458546e-19,
+      "expected_x_squared_m2": 3.3016704634451027e-19,
+      "quantum_number_n": 4
+    },
+    {
+      "delta_x_delta_p_over_hbar": 9.041388352593385,
+      "energy_j": 6.0246673940365914e-18,
+      "expected_x_squared_m2": 3.3282672741512164e-19,
+      "quantum_number_n": 10
+    }
+  ],
+  "box_width_m": 1e-09,
+  "particle_mass_kg": 9.1093837139e-31,
+  "reference_precision_decimal_digits": 60,
+  "schema_version": "task07-reference-v1"
+}

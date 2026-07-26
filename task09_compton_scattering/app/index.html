@@ -1,0 +1,270 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="Interactive BPhO Task 9 explorer for relativistic Compton-scattering wavelength shift, electron recoil speed and recoil angle.">
+    <meta name="color-scheme" content="light">
+    <title>Task 9 · Compton scattering explorer</title>
+    <link rel="icon" href="./favicon.svg" type="image/svg+xml">
+    <link rel="stylesheet" href="./styles.css">
+  </head>
+  <body>
+    <a class="skip-link" href="#explorer-main">Skip to the Compton explorer</a>
+    <div class="page-orbit page-orbit--one" aria-hidden="true"></div>
+    <div class="page-orbit page-orbit--two" aria-hidden="true"></div>
+
+    <main class="app-shell" id="explorer-main" tabindex="-1">
+      <header class="hero">
+        <div class="hero__copy">
+          <p class="eyebrow">BPhO Computational Challenge 2026 · Task 9</p>
+          <h1>Compton scattering explorer</h1>
+          <p class="hero__summary">
+            Follow one X-ray photon through a relativistic collision, then inspect
+            the complete five-energy study requested by the challenge.
+          </p>
+        </div>
+        <div class="badge-row" aria-label="Validation status">
+          <div class="verification-badge">
+            <span class="verification-dot" aria-hidden="true"></span>
+            <span><strong>44/44</strong> kinematic checks</span>
+          </div>
+          <div class="verification-badge verification-badge--extension">
+            <span class="verification-dot" aria-hidden="true"></span>
+            <span><strong>30/30</strong> extension checks</span>
+          </div>
+        </div>
+      </header>
+
+      <section class="panel controls-panel" aria-labelledby="controls-heading">
+        <div class="section-heading">
+          <div>
+            <p class="section-kicker">Collision controls</p>
+            <h2 id="controls-heading">Choose photon energy and scattering angle</h2>
+          </div>
+          <button class="button button--quiet" id="reset-button" type="button">
+            Reset 200 keV · 90°
+          </button>
+        </div>
+
+        <div class="control-grid">
+          <div class="control-card control-card--energy">
+            <div class="control-title-row">
+              <label for="energy-range">Incident photon energy, E</label>
+              <output class="value-chip" id="energy-output" for="energy-range energy-number">200 keV</output>
+            </div>
+            <span class="sr-only" id="energy-help">Use the slider, number field or an official energy preset. All graphs update immediately.</span>
+            <input id="energy-range" type="range" min="1" max="5000" step="1" value="200" aria-describedby="energy-help energy-domain">
+            <div class="range-scale" id="energy-domain" aria-hidden="true"><span>1 keV</span><span>2.5 MeV</span><span>5 MeV</span></div>
+            <div class="number-field">
+              <input id="energy-number" type="number" min="1" max="5000" step="1" value="200" inputmode="decimal" aria-label="Incident photon energy in kiloelectronvolts">
+              <span>keV</span>
+            </div>
+            <div class="preset-row" aria-label="Official photon-energy presets">
+              <button type="button" data-energy="50" aria-pressed="false">50</button>
+              <button type="button" data-energy="100" aria-pressed="false">100</button>
+              <button type="button" data-energy="200" aria-pressed="true" class="is-active">200</button>
+              <button type="button" data-energy="500" aria-pressed="false">500</button>
+              <button type="button" data-energy="1000" aria-pressed="false">1000 keV</button>
+            </div>
+          </div>
+
+          <div class="control-card control-card--angle">
+            <div class="control-title-row">
+              <label for="theta-range">Photon scattering angle, θ</label>
+              <output class="value-chip" id="theta-output" for="theta-range theta-number">90°</output>
+            </div>
+            <span class="sr-only" id="theta-help">Use the slider, number field or an angle preset. Arrow keys change the slider by half a degree.</span>
+            <input id="theta-range" type="range" min="0" max="180" step="0.5" value="90" aria-describedby="theta-help">
+            <div class="range-scale" aria-hidden="true"><span>0° forward</span><span>90°</span><span>180° back</span></div>
+            <div class="number-field">
+              <input id="theta-number" type="number" min="0" max="180" step="0.5" value="90" inputmode="decimal" aria-label="Photon scattering angle theta in degrees">
+              <span>degrees</span>
+            </div>
+            <div class="preset-row" aria-label="Scattering-angle presets">
+              <button type="button" data-theta="0" aria-pressed="false">0°</button>
+              <button type="button" data-theta="45" aria-pressed="false">45°</button>
+              <button type="button" data-theta="90" aria-pressed="true" class="is-active">90°</button>
+              <button type="button" data-theta="135" aria-pressed="false">135°</button>
+              <button type="button" data-theta="180" aria-pressed="false">180°</button>
+            </div>
+          </div>
+        </div>
+        <p class="sr-only" id="live-results" role="status" aria-live="polite" aria-atomic="true"></p>
+      </section>
+
+      <section class="collision-layout" aria-labelledby="collision-heading">
+        <article class="panel geometry-panel">
+          <div class="section-heading section-heading--compact">
+            <div>
+              <p class="section-kicker">Momentum geometry</p>
+              <h2 id="collision-heading">One exact photon–electron collision</h2>
+            </div>
+          </div>
+          <figure class="collision-figure">
+            <svg id="collision-geometry" class="collision-svg" viewBox="0 0 700 390" role="img" aria-labelledby="collision-title collision-description">
+              <title id="collision-title">Compton-scattering momentum diagram</title>
+              <desc id="collision-description">A 200 kiloelectronvolt photon scatters through 90 degrees. The recoil electron travels below the incident axis.</desc>
+              <defs>
+                <marker id="arrow-photon" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto" markerUnits="strokeWidth"><path d="M0 0 L8 4 L0 8 Z"></path></marker>
+                <marker id="arrow-electron" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto" markerUnits="strokeWidth"><path d="M0 0 L8 4 L0 8 Z"></path></marker>
+              </defs>
+              <line class="geometry-axis" x1="42" y1="190" x2="658" y2="190"></line>
+              <line class="incoming-photon" x1="100" y1="190" x2="260" y2="190" marker-end="url(#arrow-photon)"></line>
+              <line class="scattered-photon" id="scattered-photon" x1="260" y1="190" x2="260" y2="30" marker-end="url(#arrow-photon)"></line>
+              <line class="electron-vector" id="electron-vector" x1="260" y1="190" x2="380" y2="290" marker-end="url(#arrow-electron)"></line>
+              <path class="angle-arc angle-arc--theta" id="theta-arc"></path>
+              <path class="angle-arc angle-arc--phi" id="phi-arc"></path>
+              <circle class="collision-electron" cx="260" cy="190" r="13"></circle>
+              <text class="collision-electron-label" x="260" y="196" text-anchor="middle">e⁻</text>
+              <text class="geometry-label geometry-label--incoming" x="103" y="166">incident photon · E</text>
+              <text class="geometry-label geometry-label--scattered" id="scattered-label" x="270" y="40">scattered photon · E′</text>
+              <text class="geometry-label geometry-label--electron" id="electron-label" x="390" y="307">recoil electron · pₑ</text>
+              <text class="geometry-angle-label geometry-angle-label--theta" id="theta-arc-label" x="318" y="156">θ = 90°</text>
+              <text class="geometry-angle-label geometry-angle-label--phi" id="phi-arc-label" x="320" y="227">φ = 35.7°</text>
+            </svg>
+            <figcaption>
+              Arrow lengths share one momentum scale. The vertical placement is a
+              diagram convention: the photon is drawn above and the electron below
+              the incident axis.
+            </figcaption>
+          </figure>
+        </article>
+
+        <div class="result-column" aria-label="Current collision results">
+          <article class="result-card result-card--shift">
+            <span class="result-label">Fractional wavelength shift</span>
+            <output class="result-primary" id="fractional-shift">0.3914</output>
+            <p>Δλ = <output id="absolute-shift">2.426 pm</output></p>
+          </article>
+          <article class="result-card result-card--speed">
+            <span class="result-label">Electron recoil speed</span>
+            <output class="result-primary" id="electron-beta">0.4342 c</output>
+            <p>v = <output id="electron-speed">1.302 × 10⁸ m s⁻¹</output></p>
+          </article>
+          <article class="result-card result-card--angle">
+            <span class="result-label">Electron recoil angle</span>
+            <output class="result-primary" id="recoil-angle">35.71°</output>
+            <p id="recoil-direction-note">defined · below the incident axis</p>
+          </article>
+          <article class="energy-card">
+            <div><span>Scattered photon</span><output id="scattered-energy">143.741 keV</output></div>
+            <div><span>Electron kinetic energy</span><output id="kinetic-energy">56.259 keV</output></div>
+            <progress class="energy-track" id="photon-energy-fill" max="100" value="71.87" aria-label="Percentage of incident energy retained by the scattered photon">71.87%</progress>
+            <p>E = E′ + K · exact energy conservation</p>
+          </article>
+        </div>
+      </section>
+
+      <section class="panel charts-panel" aria-labelledby="charts-heading">
+        <div class="section-heading charts-heading">
+          <div>
+            <p class="section-kicker">Official five-energy study</p>
+            <h2 id="charts-heading">All three requested quantities versus θ</h2>
+            <p class="section-summary">Every panel uses the same colour for the same incident energy. The dotted vertical line marks the selected θ.</p>
+          </div>
+          <div class="energy-legend" aria-label="Official energy curve colours">
+            <span class="curve-colour--50"><i></i>50 keV <em>solid</em></span>
+            <span class="curve-colour--100"><i></i>100 keV <em>dashed</em></span>
+            <span class="curve-colour--200"><i></i>200 keV <em>dotted</em></span>
+            <span class="curve-colour--500"><i></i>500 keV <em>dash–dot</em></span>
+            <span class="curve-colour--1000"><i></i>1000 keV <em>long dash</em></span>
+            <span class="selected-energy-legend" id="selected-energy-legend"><i></i><span id="selected-energy-label">selected: 200 keV</span></span>
+          </div>
+        </div>
+
+        <div class="chart-stack">
+          <article class="chart-card" aria-labelledby="shift-chart-heading">
+            <h3 id="shift-chart-heading">A · Fractional wavelength shift, Δλ/λ</h3>
+            <div class="chart-scroll" role="region" aria-label="Scrollable fractional wavelength shift graph" tabindex="0">
+              <svg class="science-chart" id="shift-chart" viewBox="0 0 1080 380" role="img" aria-labelledby="shift-chart-title shift-chart-description">
+                <title id="shift-chart-title">Fractional wavelength shift versus photon scattering angle</title>
+                <desc id="shift-chart-description">Five official incident energies are plotted from zero to 180 degrees.</desc>
+              </svg>
+            </div>
+          </article>
+          <article class="chart-card" aria-labelledby="beta-chart-heading">
+            <h3 id="beta-chart-heading">B · Relativistic electron recoil speed, v/c</h3>
+            <div class="chart-scroll" role="region" aria-label="Scrollable electron recoil speed graph" tabindex="0">
+              <svg class="science-chart" id="beta-chart" viewBox="0 0 1080 380" role="img" aria-labelledby="beta-chart-title beta-chart-description">
+                <title id="beta-chart-title">Electron recoil speed versus photon scattering angle</title>
+                <desc id="beta-chart-description">Five relativistic speed curves are plotted on a fixed zero to one speed-of-light scale.</desc>
+              </svg>
+            </div>
+          </article>
+          <article class="chart-card" aria-labelledby="phi-chart-heading">
+            <h3 id="phi-chart-heading">C · Electron recoil angle, φ</h3>
+            <div class="chart-scroll" role="region" aria-label="Scrollable electron recoil angle graph" tabindex="0">
+              <svg class="science-chart" id="phi-chart" viewBox="0 0 1080 380" role="img" aria-labelledby="phi-chart-title phi-chart-description">
+                <title id="phi-chart-title">Electron recoil angle versus photon scattering angle</title>
+                <desc id="phi-chart-description">Five recoil-angle curves descend from the 90-degree forward limit to zero-degree backscatter.</desc>
+              </svg>
+            </div>
+            <p class="endpoint-note"><strong>Endpoint note:</strong> at θ = 0° the electron momentum is zero, so φ is undefined; the graph shows the continuous 90° limit.</p>
+          </article>
+        </div>
+      </section>
+
+      <section class="panel extension-panel" aria-labelledby="extension-heading">
+        <div class="section-heading extension-heading">
+          <div>
+            <div class="title-with-label"><p class="section-kicker">Klein–Nishina extension</p><span>Optional angular weighting</span></div>
+            <h2 id="extension-heading">Possible angles are not equally likely</h2>
+            <p class="section-summary">The official curves remain exact unweighted kinematics. This separate free-electron model shows differential scattering strength and the normalized polar-angle density.</p>
+          </div>
+          <div class="extension-stat">
+            <span>Total cross-section</span>
+            <output id="total-cross-section">0.4065 barn</output>
+          </div>
+        </div>
+
+        <div class="extension-results">
+          <div><span>At selected θ · dσ/dΩ</span><output id="differential-cross-section">0.0417 barn sr⁻¹</output></div>
+          <div><span>Relative to forward</span><output id="relative-cross-section">0.525</output></div>
+          <div><span>Polar density</span><output id="polar-density">0.644 rad⁻¹</output></div>
+          <div><span>Forward hemisphere</span><output id="forward-probability">65.8%</output></div>
+        </div>
+
+        <div class="extension-chart-grid">
+          <article class="chart-card" aria-labelledby="differential-heading">
+            <h3 id="differential-heading">Differential strength relative to θ = 0°</h3>
+            <div class="chart-scroll" role="region" aria-label="Scrollable relative Klein-Nishina differential graph" tabindex="0">
+              <svg class="science-chart science-chart--small" id="differential-chart" viewBox="0 0 1080 380" role="img" aria-labelledby="differential-title differential-description">
+                <title id="differential-title">Relative Klein–Nishina differential cross-section</title>
+                <desc id="differential-description">Selected-energy differential scattering strength from zero to 180 degrees, normalized to one at forward scattering.</desc>
+              </svg>
+            </div>
+          </article>
+          <article class="chart-card" aria-labelledby="density-heading">
+            <h3 id="density-heading">Normalized probability density in polar angle</h3>
+            <div class="chart-scroll" role="region" aria-label="Scrollable normalized polar-angle density graph" tabindex="0">
+              <svg class="science-chart science-chart--small" id="density-chart" viewBox="0 0 1080 380" role="img" aria-labelledby="density-title density-description">
+                <title id="density-title">Normalized Klein–Nishina polar-angle density</title>
+                <desc id="density-description">Selected-energy probability density includes the solid-angle factor and integrates to one.</desc>
+              </svg>
+            </div>
+          </article>
+        </div>
+        <p class="scope-note">Free, stationary, unpolarized electron model only · no binding, material attenuation, detector response or multiple scattering.</p>
+      </section>
+
+      <section class="panel equations-panel" aria-labelledby="equations-heading">
+        <div class="section-heading section-heading--compact">
+          <div><p class="section-kicker">Model audit</p><h2 id="equations-heading">Equations behind the selected point</h2></div>
+        </div>
+        <div class="equation-grid">
+          <article><span>Photon energy ratio</span><p>E′/E = 1 / [1 + α(1 − cos θ)]</p></article>
+          <article><span>Compton shift</span><p>Δλ/λ = α(1 − cos θ)</p></article>
+          <article><span>Relativistic speed</span><p>v/c = √(1 − γ⁻²)</p></article>
+          <article><span>Recoil direction</span><p>φ = atan2(E′ sin θ, E − E′ cos θ)</p></article>
+        </div>
+      </section>
+
+      <footer>
+        <p>Offline, deterministic and generated from the same equations as the validated Python study.</p>
+      </footer>
+    </main>
+
+    <script type="module" src="./app.js"></script>
+  </body>
+</html>

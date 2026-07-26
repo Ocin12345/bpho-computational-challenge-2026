@@ -1,0 +1,72 @@
+{
+  "animation": {
+    "bytes": 9594614,
+    "continuous_loop": true,
+    "duration_ms": 4000,
+    "filename": "orbital_view_rotation.webp",
+    "format": "WEBP",
+    "frame_count": 80,
+    "frame_duration_ms": 50,
+    "height_px": 2160,
+    "minimum_sampled_frame_difference": 0.7916898148148148,
+    "sha256": "e101402323a2ba4d187c052b314ab4a8e80eae38095dc0ab190aa7838a46058c",
+    "width_px": 3840
+  },
+  "inspection_contact_sheet": {
+    "bytes": 965231,
+    "filename": "reports/task10/orbital_view_rotation_contact_sheet.png",
+    "height_px": 2300,
+    "sampled_frames": [
+      0,
+      20,
+      40,
+      60,
+      79
+    ],
+    "sha256": "c8562fed017379beef0dd4de7cca1c43b72d0be77a2d33473aa97c82d1aec338",
+    "width_px": 2400
+  },
+  "poster": {
+    "bytes": 547862,
+    "dpi": [
+      240.005,
+      240.005
+    ],
+    "filename": "orbital_view_rotation_poster.png",
+    "height_px": 2160,
+    "sha256": "bf5a13563c090079dcad343cb9e6c0d81f5dc2fcaa6b13b871e3130ac56bbb6c",
+    "width_px": 3840
+  },
+  "rendering_contract": {
+    "camera_path": "360 degree azimuth; periodic 24 plus or minus 5 degree elevation; endpoint excluded",
+    "display_threshold": 0.15,
+    "energy_ev": "-1.5109148228162057",
+    "font_family": "Times New Roman",
+    "frame_count": 80,
+    "frames_per_second": 20,
+    "height_px": 2160,
+    "motion_interpretation": "view rotation only; normalized state is stationary",
+    "quality": 93,
+    "slice_count": 17,
+    "state": {
+      "A": 1,
+      "Z": 1,
+      "l": 2,
+      "m": 0,
+      "n": 3
+    },
+    "width_px": 3840
+  },
+  "schema_version": "task10-motion-v2",
+  "science_gate": {
+    "checks_passed": 22,
+    "checks_total": 22,
+    "state_digest": "d298695290395956560641493fc603e5970a4ea01609eca677b3b4b683fa085e"
+  },
+  "viewer": {
+    "bytes": 2896,
+    "filename": "orbital_view_rotation_viewer.html",
+    "reduced_motion_fallback": "orbital_view_rotation_poster.png",
+    "sha256": "015f418cc183428bf625620b2828e6aeb3a7efcd5eb18fd9aeb0be8456fe257b"
+  }
+}
