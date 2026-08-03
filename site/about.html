@@ -1,0 +1,315 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta
+      name="description"
+      content="About Qingxiang Liao's 2026 BPhO Computational Challenge project."
+    />
+    <meta name="theme-color" content="#050a13" />
+    <title>About | BPhO Computational Challenge</title>
+    <link
+      rel="icon"
+      href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%23050a13'/%3E%3Cpath d='M13 34c8-22 15 22 23 0s11 9 15-9' fill='none' stroke='%235ca9b4' stroke-width='5' stroke-linecap='round'/%3E%3C/svg%3E"
+    />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Ballet:opsz@16..72&family=Bodoni+Moda:ital,opsz,wght@0,6..96,600;0,6..96,700;1,6..96,700&family=Cormorant+Garamond:ital,wght@0,500;0,600;1,600;1,700&family=Inter:wght@400;500&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="./assets/single.css" />
+  </head>
+  <body class="about-page about-page--editorial">
+    <div class="loader" data-loader aria-hidden="true">
+      <div class="loader__track" aria-hidden="true">
+        <span data-loader-bar></span>
+      </div>
+    </div>
+
+    <canvas id="quantum-field" aria-hidden="true"></canvas>
+    <div class="field-fallback" aria-hidden="true"></div>
+    <div class="grain" aria-hidden="true"></div>
+    <div class="shade" aria-hidden="true"></div>
+
+    <header class="site-header">
+      <nav class="site-nav" aria-label="Primary navigation">
+        <a href="./index.html">Home</a>
+        <a href="./lab.html">Tasks</a>
+        <a href="./index.html#extensions">Extensions</a>
+        <a href="./index.html#research-paper">Research Paper</a>
+        <a href="./index.html#problem-sets">Problem Sets</a>
+        <a class="is-active" href="./about.html" aria-current="page">About</a>
+      </nav>
+    </header>
+
+    <main class="editorial-about">
+      <section class="editorial-opening" aria-labelledby="about-title">
+        <h1 id="about-title" class="about-reveal" data-reveal>About</h1>
+        <a class="editorial-scroll" href="#origin" aria-label="Continue to the project story">
+          <i aria-hidden="true"></i>
+        </a>
+      </section>
+
+      <section class="editorial-story" id="origin" aria-labelledby="origin-title">
+        <p class="story-script" aria-hidden="true">Origin</p>
+        <div class="story-copy about-reveal" data-reveal>
+          <h2 id="origin-title">It started with the code.</h2>
+          <p class="story-lead">
+            This website presents my submission for the 2026 British Physics
+            Olympiad Computational Challenge, centred on the theme of quantum
+            physics.
+          </p>
+          <p>
+            The project brings together ten computational tasks exploring how
+            mathematical models, numerical methods, and interactive simulations can
+            be used to investigate physical phenomena that are often difficult to
+            observe directly.
+          </p>
+          <p>
+            The project began with scientific models written in Python. Although
+            these programs could calculate results and produce accurate graphs, they
+            did not fully communicate how the underlying physical systems behaved.
+            Many quantum phenomena become easier to understand when their evolution
+            can be observed and their parameters adjusted in real time.
+          </p>
+          <p>
+            I therefore developed this website to make the project more accessible
+            and exploratory. A browser-based platform allows the simulations,
+            explanations, results, and supporting materials to be brought together
+            in one place without requiring visitors to install specialist software.
+          </p>
+          <p>
+            The website does not replace the mathematical work behind the project.
+            Instead, it provides a visual interface through which that work can be
+            investigated, questioned, and understood. Visitors can explore the
+            individual tasks, examine extensions of the original problems, read the
+            accompanying research paper, and attempt related problem sets.
+          </p>
+        </div>
+      </section>
+
+      <section class="editorial-story editorial-story--reverse" id="method" aria-labelledby="method-title">
+        <p class="story-script" aria-hidden="true">Method</p>
+        <div class="story-copy about-reveal" data-reveal>
+          <h2 id="method-title">The physics comes first.</h2>
+          <p>
+            Each task begins with the relevant physical principles and mathematical
+            relationships. These are translated into computational models, tested
+            against analytical results where possible, and examined across a range
+            of parameters to ensure that their behaviour remains physically
+            reasonable.
+          </p>
+          <p>
+            The project distinguishes between established physics, numerical
+            approximations, and exploratory extensions. Assumptions and limitations
+            are recorded alongside the results, while automated tests, convergence
+            checks, conservation laws, and comparisons with independent calculations
+            are used where appropriate.
+          </p>
+          <p class="story-note">
+            The aim is not simply to produce convincing animations, but to create
+            models whose behaviour can be explained, tested, and justified.
+          </p>
+        </div>
+      </section>
+
+      <section class="editorial-story editorial-story--scope" id="scope" aria-labelledby="scope-title">
+        <p class="story-script" aria-hidden="true">Ten</p>
+        <div class="story-copy story-copy--wide about-reveal" data-reveal>
+          <h2 id="scope-title">Ten problems. One thread.</h2>
+          <p>
+            The project is organised around ten computational challenges,
+            progressing from statistical motion and thermal radiation to quantum
+            systems and modern applications. Each task brings together the
+            underlying theory, computational model, numerical results, visual
+            evidence, and an explanation of the model's assumptions and limitations.
+          </p>
+          <ol class="editorial-topics" aria-label="The ten computational challenge topics">
+            <li><span>01</span>Random walks</li>
+            <li><span>02</span>Brownian motion</li>
+            <li><span>03</span>Thermal radiation</li>
+            <li><span>04</span>Photoelectric effect</li>
+            <li><span>05</span>Atomic spectra</li>
+            <li><span>06</span>Electron diffraction</li>
+            <li><span>07</span>Particles in a box</li>
+            <li><span>08</span>Quantum cryptography</li>
+            <li><span>09</span>Compton scattering</li>
+            <li><span>10</span>Hydrogenic orbitals</li>
+          </ol>
+          <p class="scope-closing">
+            Beyond the required tasks, the website also contains extended
+            investigations, an accompanying research paper, and original problem
+            sets. These sections develop selected ideas in greater depth and connect
+            the computational results to broader questions in physics.
+          </p>
+        </div>
+      </section>
+
+      <section class="editorial-story editorial-story--reverse" id="design" aria-labelledby="design-title">
+        <p class="story-script" aria-hidden="true">Seeing</p>
+        <div class="story-copy about-reveal" data-reveal>
+          <h2 id="design-title">Make the invisible move.</h2>
+          <p class="story-lead">
+            Quantum physics is frequently presented through dense notation and
+            static diagrams.
+          </p>
+          <p>
+            While these are essential, they can make it difficult to develop an
+            intuitive understanding of how a system changes or responds to different
+            conditions. The website therefore treats interaction as a form of
+            scientific explanation. Animation, responsive controls, and data
+            visualisation allow visitors to observe relationships that may be less
+            obvious from equations alone.
+          </p>
+          <p>
+            The visual design draws inspiration from wavefunctions, interference
+            patterns, probability fields, and atomic structure, giving the project a
+            consistent identity rooted in its scientific subject. Clarity remains
+            more important than spectacle. Every visual element should help
+            communicate the physics, direct attention to meaningful results, or make
+            the project easier to navigate.
+          </p>
+          <p>
+            The aim is to create an experience that feels imaginative and engaging
+            while remaining scientifically disciplined.
+          </p>
+        </div>
+      </section>
+
+      <section class="editorial-story editorial-story--creator" id="creator" aria-labelledby="creator-title">
+        <p class="story-signature" aria-hidden="true">Qingxiang</p>
+        <div class="story-copy about-reveal" data-reveal>
+          <p class="creator-line">Shenzhen College of International Education</p>
+          <h2 id="creator-title">Qingxiang Liao</h2>
+          <p>
+            I am a student with a strong interest in physics, mathematics, and
+            computational modelling. I am particularly interested in how programming
+            can be used not only to calculate scientific results, but also to make
+            complex physical ideas more intuitive and accessible.
+          </p>
+          <p>
+            I have experience with Python and JavaScript, as well as web technologies
+            including HTML, CSS, and Three.js. My previous work has involved
+            scientific simulations, numerical modelling, data analysis, interactive
+            visualisation, and the development of educational physics experiences.
+          </p>
+          <p>
+            The Computational Challenge gave me an opportunity to bring these
+            interests together in one project. Creating it required theoretical
+            research, numerical experimentation, scientific validation, interface
+            design, and web development. Through this process, I have strengthened
+            both my understanding of quantum physics and my ability to communicate
+            technical ideas through computation.
+          </p>
+        </div>
+      </section>
+
+      <section class="editorial-resources" id="resources" aria-labelledby="resources-title">
+        <div class="resource-heading about-reveal" data-reveal>
+          <p class="story-script" aria-hidden="true">Sources</p>
+          <h2 id="resources-title">Open the work.</h2>
+        </div>
+        <ul class="resource-index about-reveal" data-reveal>
+          <li>
+            <a href="./lab.html">
+              <span>Interactive tasks</span>
+              <small>Enter the laboratory</small>
+              <i aria-hidden="true">↗</i>
+            </a>
+          </li>
+          <li>
+            <a
+              href="https://github.com/Ocin12345/bpho-computational-challenge-2026"
+              target="_blank"
+              rel="noreferrer"
+            >
+              <span>Source repository</span>
+              <small>Code, tests, and documentation</small>
+              <i aria-hidden="true">↗</i>
+            </a>
+          </li>
+          <li>
+            <a
+              href="https://www.bpho.org.uk/bpho/computational-challenge/BPhO_ComPhys_Challenge_2026.pdf"
+              target="_blank"
+              rel="noreferrer"
+            >
+              <span>Competition brief</span>
+              <small>Official BPhO 2026 specification</small>
+              <i aria-hidden="true">↗</i>
+            </a>
+          </li>
+          <li class="is-pending">
+            <span>Research paper</span>
+            <small>In development</small>
+          </li>
+          <li class="is-pending">
+            <span>Problem sets</span>
+            <small>In development</small>
+          </li>
+          <li class="is-pending">
+            <span>Final film</span>
+            <small>In preparation</small>
+          </li>
+        </ul>
+      </section>
+
+      <section class="editorial-ending" aria-labelledby="ending-title">
+        <div class="ending-copy about-reveal" data-reveal>
+          <p class="story-script" aria-hidden="true">Still curious</p>
+          <h2 id="ending-title">Build it. Break it. Check it.</h2>
+          <p>
+            Although this project was created for the BPhO Computational Challenge,
+            its broader purpose extends beyond the competition. It demonstrates how
+            computation can connect mathematical theory, numerical experimentation,
+            and visual explanation within a single scientific experience.
+          </p>
+          <p>
+            Future development could include more advanced simulations, deeper
+            extensions of selected tasks, additional problem sets, and improved tools
+            for comparing theoretical predictions with numerical results. The
+            website can therefore continue to grow as both a record of the original
+            submission and a platform for further exploration.
+          </p>
+          <p>
+            Ultimately, I hope the project encourages visitors to see quantum physics
+            not as a collection of inaccessible equations, but as a subject that can
+            be investigated, visualised, and understood through careful computation.
+          </p>
+          <div class="editorial-thanks">
+            <p>
+              I would like to thank the British Physics Olympiad for creating the
+              Computational Challenge and for providing an opportunity to explore
+              physics through programming, numerical modelling, and scientific
+              communication.
+            </p>
+            <p>
+              I am also grateful to the teachers and members of the academic
+              community at Shenzhen College of International Education who have
+              supported my study of physics and encouraged my interest in
+              computational research.
+            </p>
+            <p>
+              This project makes use of open-source scientific and web-development
+              tools. All external resources and references used in the scientific
+              work will be credited in the relevant task documentation and research
+              paper.
+            </p>
+          </div>
+          <a href="./index.html">Return home <span aria-hidden="true">→</span></a>
+        </div>
+      </section>
+    </main>
+
+    <footer class="editorial-footer">
+      <span>BPhO Computational Challenge</span>
+      <span>Quantum 2026</span>
+      <span>Qingxiang Liao</span>
+    </footer>
+
+    <div class="cursor" data-cursor aria-hidden="true"></div>
+    <script type="module" src="./assets/single.js"></script>
+  </body>
+</html>

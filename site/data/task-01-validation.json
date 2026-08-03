@@ -1,0 +1,450 @@
+{
+  "angular": {
+    "bin_count": 24,
+    "bins": [
+      {
+        "count": 10346,
+        "end_radians": 0.2617993877991494,
+        "start_radians": 0.0
+      },
+      {
+        "count": 10445,
+        "end_radians": 0.5235987755982988,
+        "start_radians": 0.2617993877991494
+      },
+      {
+        "count": 10327,
+        "end_radians": 0.7853981633974483,
+        "start_radians": 0.5235987755982988
+      },
+      {
+        "count": 10588,
+        "end_radians": 1.0471975511965976,
+        "start_radians": 0.7853981633974483
+      },
+      {
+        "count": 10462,
+        "end_radians": 1.308996938995747,
+        "start_radians": 1.0471975511965976
+      },
+      {
+        "count": 10438,
+        "end_radians": 1.5707963267948966,
+        "start_radians": 1.308996938995747
+      },
+      {
+        "count": 10589,
+        "end_radians": 1.832595714594046,
+        "start_radians": 1.5707963267948966
+      },
+      {
+        "count": 10239,
+        "end_radians": 2.0943951023931953,
+        "start_radians": 1.832595714594046
+      },
+      {
+        "count": 10402,
+        "end_radians": 2.356194490192345,
+        "start_radians": 2.0943951023931953
+      },
+      {
+        "count": 10409,
+        "end_radians": 2.617993877991494,
+        "start_radians": 2.356194490192345
+      },
+      {
+        "count": 10434,
+        "end_radians": 2.8797932657906435,
+        "start_radians": 2.617993877991494
+      },
+      {
+        "count": 10327,
+        "end_radians": 3.141592653589793,
+        "start_radians": 2.8797932657906435
+      },
+      {
+        "count": 10405,
+        "end_radians": 3.4033920413889422,
+        "start_radians": 3.141592653589793
+      },
+      {
+        "count": 10484,
+        "end_radians": 3.665191429188092,
+        "start_radians": 3.4033920413889422
+      },
+      {
+        "count": 10489,
+        "end_radians": 3.926990816987241,
+        "start_radians": 3.665191429188092
+      },
+      {
+        "count": 10331,
+        "end_radians": 4.1887902047863905,
+        "start_radians": 3.926990816987241
+      },
+      {
+        "count": 10509,
+        "end_radians": 4.45058959258554,
+        "start_radians": 4.1887902047863905
+      },
+      {
+        "count": 10399,
+        "end_radians": 4.71238898038469,
+        "start_radians": 4.45058959258554
+      },
+      {
+        "count": 10276,
+        "end_radians": 4.974188368183839,
+        "start_radians": 4.71238898038469
+      },
+      {
+        "count": 10602,
+        "end_radians": 5.235987755982988,
+        "start_radians": 4.974188368183839
+      },
+      {
+        "count": 10375,
+        "end_radians": 5.497787143782138,
+        "start_radians": 5.235987755982988
+      },
+      {
+        "count": 10413,
+        "end_radians": 5.759586531581287,
+        "start_radians": 5.497787143782138
+      },
+      {
+        "count": 10337,
+        "end_radians": 6.021385919380436,
+        "start_radians": 5.759586531581287
+      },
+      {
+        "count": 10374,
+        "end_radians": 6.283185307179586,
+        "start_radians": 6.021385919380436
+      }
+    ],
+    "expected_per_bin": 10416.666666666666,
+    "maximum_relative_deviation": 0.017792000000000058,
+    "sample_count": 250000
+  },
+  "model": "Two-dimensional isotropic fixed-step random walk",
+  "msd": {
+    "maximum_absolute_ratio_error": 0.007739867225530439,
+    "rows": [
+      {
+        "ci95_half_width_msd": 0.08405879370698004,
+        "mean_squared_displacement": 9.99340589164202,
+        "mean_x": -0.004113457564415987,
+        "mean_y": 0.009201662781841495,
+        "msd_ratio": 0.999340589164202,
+        "n_steps": 10,
+        "n_walks": 50000,
+        "step_size": 1.0,
+        "theoretical_msd": 10.0
+      },
+      {
+        "ci95_half_width_msd": 0.17164683832796704,
+        "mean_squared_displacement": 20.012085164543496,
+        "mean_x": -0.005843397877284974,
+        "mean_y": -0.007655835899771539,
+        "msd_ratio": 1.0006042582271748,
+        "n_steps": 20,
+        "n_walks": 50000,
+        "step_size": 1.0,
+        "theoretical_msd": 20.0
+      },
+      {
+        "ci95_half_width_msd": 0.4345874382426248,
+        "mean_squared_displacement": 50.322042901054026,
+        "mean_x": 0.008438266797021844,
+        "mean_y": -0.025650441730085433,
+        "msd_ratio": 1.0064408580210804,
+        "n_steps": 50,
+        "n_walks": 50000,
+        "step_size": 1.0,
+        "theoretical_msd": 50.0
+      },
+      {
+        "ci95_half_width_msd": 0.8678740578220265,
+        "mean_squared_displacement": 99.54788334981517,
+        "mean_x": 0.0037772017504093766,
+        "mean_y": -0.02951463366249924,
+        "msd_ratio": 0.9954788334981517,
+        "n_steps": 100,
+        "n_walks": 50000,
+        "step_size": 1.0,
+        "theoretical_msd": 100.0
+      },
+      {
+        "ci95_half_width_msd": 1.748496436296581,
+        "mean_squared_displacement": 199.42489911654565,
+        "mean_x": -0.07267205802962858,
+        "mean_y": -0.029717018773109262,
+        "msd_ratio": 0.9971244955827282,
+        "n_steps": 200,
+        "n_walks": 50000,
+        "step_size": 1.0,
+        "theoretical_msd": 200.0
+      },
+      {
+        "ci95_half_width_msd": 4.38068607029451,
+        "mean_squared_displacement": 500.3598435715981,
+        "mean_x": -0.07614742389142463,
+        "mean_y": 0.028825788485190188,
+        "msd_ratio": 1.0007196871431963,
+        "n_steps": 500,
+        "n_walks": 50000,
+        "step_size": 1.0,
+        "theoretical_msd": 500.0
+      },
+      {
+        "ci95_half_width_msd": 8.726306893810621,
+        "mean_squared_displacement": 992.2601327744695,
+        "mean_x": -0.16873993190671238,
+        "mean_y": 0.032075784996201076,
+        "msd_ratio": 0.9922601327744696,
+        "n_steps": 1000,
+        "n_walks": 50000,
+        "step_size": 1.0,
+        "theoretical_msd": 1000.0
+      },
+      {
+        "ci95_half_width_msd": 17.467671323627354,
+        "mean_squared_displacement": 2003.18027882558,
+        "mean_x": 0.09983518656448172,
+        "mean_y": 0.16523458150296105,
+        "msd_ratio": 1.00159013941279,
+        "n_steps": 2000,
+        "n_walks": 50000,
+        "step_size": 1.0,
+        "theoretical_msd": 2000.0
+      }
+    ],
+    "theoretical_coefficient": 1.0,
+    "weighted_coefficient": 0.9992031574279147,
+    "weighted_coefficient_ci95": 0.0030628854455061892
+  },
+  "provenance": {
+    "angles_exact": true,
+    "endpoints_exact": true,
+    "simulation": "task01_random_walk.statistical_analysis",
+    "statistics_csv": "data/task01/statistical_results.csv"
+  },
+  "radial": {
+    "bins": [
+      {
+        "count": 472,
+        "end_radius": 2.9778101141453277,
+        "rayleigh_expected_count": 441.40770250268855,
+        "start_radius": 0.0
+      },
+      {
+        "count": 1335,
+        "end_radius": 5.955620228290655,
+        "rayleigh_expected_count": 1300.9795193646924,
+        "start_radius": 2.9778101141453277
+      },
+      {
+        "count": 2051,
+        "end_radius": 8.933430342435983,
+        "rayleigh_expected_count": 2092.848564326266,
+        "start_radius": 5.955620228290655
+      },
+      {
+        "count": 2742,
+        "end_radius": 11.91124045658131,
+        "rayleigh_expected_count": 2778.3933576839336,
+        "start_radius": 8.933430342435983
+      },
+      {
+        "count": 3354,
+        "end_radius": 14.889050570726639,
+        "rayleigh_expected_count": 3327.939242809397,
+        "start_radius": 11.91124045658131
+      },
+      {
+        "count": 3800,
+        "end_radius": 17.866860684871966,
+        "rayleigh_expected_count": 3722.820067337429,
+        "start_radius": 14.889050570726639
+      },
+      {
+        "count": 4015,
+        "end_radius": 20.844670799017294,
+        "rayleigh_expected_count": 3956.202266436559,
+        "start_radius": 17.866860684871966
+      },
+      {
+        "count": 4023,
+        "end_radius": 23.82248091316262,
+        "rayleigh_expected_count": 4032.6586157758193,
+        "start_radius": 20.844670799017294
+      },
+      {
+        "count": 3965,
+        "end_radius": 26.80029102730795,
+        "rayleigh_expected_count": 3966.6462628547392,
+        "start_radius": 23.82248091316262
+      },
+      {
+        "count": 3691,
+        "end_radius": 29.778101141453277,
+        "rayleigh_expected_count": 3780.17398672596,
+        "start_radius": 26.80029102730795
+      },
+      {
+        "count": 3477,
+        "end_radius": 32.755911255598605,
+        "rayleigh_expected_count": 3500.0189964866145,
+        "start_radius": 29.778101141453277
+      },
+      {
+        "count": 3148,
+        "end_radius": 35.73372136974393,
+        "rayleigh_expected_count": 3154.867610550299,
+        "start_radius": 32.755911255598605
+      },
+      {
+        "count": 2771,
+        "end_radius": 38.71153148388926,
+        "rayleigh_expected_count": 2772.712133281674,
+        "start_radius": 35.73372136974393
+      },
+      {
+        "count": 2412,
+        "end_radius": 41.68934159803459,
+        "rayleigh_expected_count": 2378.752616810892,
+        "start_radius": 38.71153148388926
+      },
+      {
+        "count": 1929,
+        "end_radius": 44.667151712179916,
+        "rayleigh_expected_count": 1993.9465791839973,
+        "start_radius": 41.68934159803459
+      },
+      {
+        "count": 1621,
+        "end_radius": 47.64496182632524,
+        "rayleigh_expected_count": 1634.2424259739307,
+        "start_radius": 44.667151712179916
+      },
+      {
+        "count": 1360,
+        "end_radius": 50.62277194047057,
+        "rayleigh_expected_count": 1310.4403227875093,
+        "start_radius": 47.64496182632524
+      },
+      {
+        "count": 998,
+        "end_radius": 53.6005820546159,
+        "rayleigh_expected_count": 1028.5587968294208,
+        "start_radius": 50.62277194047057
+      },
+      {
+        "count": 773,
+        "end_radius": 56.578392168761226,
+        "rayleigh_expected_count": 790.5508612529754,
+        "start_radius": 53.6005820546159
+      },
+      {
+        "count": 575,
+        "end_radius": 59.556202282906554,
+        "rayleigh_expected_count": 595.2082599317732,
+        "start_radius": 56.578392168761226
+      },
+      {
+        "count": 469,
+        "end_radius": 62.53401239705188,
+        "rayleigh_expected_count": 439.1103558995968,
+        "start_radius": 59.556202282906554
+      },
+      {
+        "count": 330,
+        "end_radius": 65.51182251119721,
+        "rayleigh_expected_count": 317.5067640504625,
+        "start_radius": 62.53401239705188
+      },
+      {
+        "count": 230,
+        "end_radius": 68.48963262534254,
+        "rayleigh_expected_count": 225.0613703569604,
+        "start_radius": 65.51182251119721
+      },
+      {
+        "count": 147,
+        "end_radius": 71.46744273948786,
+        "rayleigh_expected_count": 156.4225745707193,
+        "start_radius": 68.48963262534254
+      },
+      {
+        "count": 113,
+        "end_radius": 74.44525285363319,
+        "rayleigh_expected_count": 106.61540918844858,
+        "start_radius": 71.46744273948786
+      },
+      {
+        "count": 78,
+        "end_radius": 77.42306296777852,
+        "rayleigh_expected_count": 71.27309062336384,
+        "start_radius": 74.44525285363319
+      },
+      {
+        "count": 37,
+        "end_radius": 80.40087308192385,
+        "rayleigh_expected_count": 46.73820023528008,
+        "start_radius": 77.42306296777852
+      },
+      {
+        "count": 36,
+        "end_radius": 83.37868319606918,
+        "rayleigh_expected_count": 30.06828636243908,
+        "start_radius": 80.40087308192385
+      },
+      {
+        "count": 14,
+        "end_radius": 86.3564933102145,
+        "rayleigh_expected_count": 18.979286449261057,
+        "start_radius": 83.37868319606918
+      },
+      {
+        "count": 15,
+        "end_radius": 89.33430342435983,
+        "rayleigh_expected_count": 11.755070200109019,
+        "start_radius": 86.3564933102145
+      },
+      {
+        "count": 8,
+        "end_radius": 92.31211353850516,
+        "rayleigh_expected_count": 7.14464055812658,
+        "start_radius": 89.33430342435983
+      },
+      {
+        "count": 8,
+        "end_radius": 95.28992365265049,
+        "rayleigh_expected_count": 4.261647912834343,
+        "start_radius": 92.31211353850516
+      },
+      {
+        "count": 1,
+        "end_radius": 98.26773376679581,
+        "rayleigh_expected_count": 2.4948587557749313,
+        "start_radius": 95.28992365265049
+      },
+      {
+        "count": 2,
+        "end_radius": 101.24554388094114,
+        "rayleigh_expected_count": 1.433547575263594,
+        "start_radius": 98.26773376679581
+      }
+    ],
+    "n_steps": 1000,
+    "n_walks": 50000,
+    "observed_fraction_50": 0.5024,
+    "observed_fraction_95": 0.9498,
+    "radius_50": 26.327688477341592,
+    "radius_95": 54.73328305111973,
+    "step_size": 1.0
+  },
+  "schema_version": 1,
+  "seed": 2026
+}

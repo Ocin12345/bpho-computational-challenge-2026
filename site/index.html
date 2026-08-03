@@ -1,0 +1,66 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta
+      name="description"
+      content="Interactive opening page for the 2026 BPhO Computational Challenge."
+    />
+    <meta name="theme-color" content="#060715" />
+    <title>BPhO Computational Challenge — Quantum 2026</title>
+    <link
+      rel="icon"
+      href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%23060716'/%3E%3Cpath d='M13 34c8-22 15 22 23 0s11 9 15-9' fill='none' stroke='%233de7ff' stroke-width='5' stroke-linecap='round'/%3E%3C/svg%3E"
+    />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@600&family=Fredoka:wght@400;700&family=Gorditas:wght@700&family=Grandstander:ital,wght@1,600&family=Lilita+One&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="./assets/single.css" />
+  </head>
+  <body>
+    <div class="loader" data-loader aria-hidden="true">
+      <div class="loader__track" aria-hidden="true">
+        <span data-loader-bar></span>
+      </div>
+    </div>
+
+    <canvas id="quantum-field" aria-hidden="true"></canvas>
+    <div class="field-fallback" aria-hidden="true"></div>
+    <div class="grain" aria-hidden="true"></div>
+    <div class="shade" aria-hidden="true"></div>
+
+    <header class="site-header">
+      <nav class="site-nav" aria-label="Primary navigation">
+        <a class="is-active" href="./index.html" aria-current="page">Home</a>
+        <a href="./tasks.html">Tasks</a>
+        <a href="#extensions">Extensions</a>
+        <a href="#research-paper">Research Paper</a>
+        <a href="#problem-sets">Problem Sets</a>
+        <a href="./about.html">About</a>
+      </nav>
+    </header>
+
+    <main class="hero">
+      <h1 class="title">
+        <span class="title__line title__bpho"><span>BPhO</span></span>
+        <span class="title__line title__computational"><span>Computational</span></span>
+        <span class="title__line title__challenge"><span>Challenge</span></span>
+        <span class="title__line title__quantum"><span>Quantum 2026</span></span>
+      </h1>
+      <p class="credit" aria-label="Created by Qingxiang Liao">
+        <span>Created</span>
+        <span>by</span>
+        <strong>Qingxiang</strong>
+        <strong>Liao</strong>
+      </p>
+    </main>
+
+    <div class="cursor" data-cursor aria-hidden="true"></div>
+
+    <script type="module" src="./assets/single.js"></script>
+  </body>
+</html>

@@ -1,0 +1,162 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta
+      name="description"
+      content="Interactive concept laboratory for the BPhO Computational Challenge 2026."
+    />
+    <meta name="theme-color" content="#080914" />
+    <title>Interactive Laboratory | BPhO 2026</title>
+    <link
+      rel="icon"
+      href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%23060716'/%3E%3Cpath d='M13 34c8-22 15 22 23 0s11 9 15-9' fill='none' stroke='%2341ecff' stroke-width='5' stroke-linecap='round'/%3E%3C/svg%3E"
+    />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@300;400;500&family=Space+Grotesk:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="./assets/lab.css" />
+  </head>
+  <body>
+    <a class="skip-link" href="#simulation">Skip to simulation</a>
+
+    <header class="lab-header">
+      <a class="lab-brand" href="./index.html#tasks">
+        <span aria-hidden="true">←</span>
+        <strong>BPhO</strong>
+        <i></i>
+        <span>Laboratory</span>
+      </a>
+      <div class="lab-header__centre">
+        <span>Computational challenge</span>
+        <span>/</span>
+        <span>2026</span>
+      </div>
+      <button class="index-button" type="button" data-drawer-toggle aria-expanded="false">
+        <span>Tasks 01—10</span>
+        <i aria-hidden="true"></i>
+      </button>
+    </header>
+
+    <main class="lab-shell">
+      <section class="lab-copy" aria-labelledby="lab-title">
+        <div class="lab-copy__top">
+          <div class="task-identity">
+            <span class="task-identity__number" data-task-number>07</span>
+            <span class="task-identity__status">
+              <i aria-hidden="true"></i>
+              Live concept view
+            </span>
+          </div>
+
+          <p class="task-kicker" data-task-kicker>Wave mechanics</p>
+          <h1 id="lab-title" data-task-title>Particle in a box</h1>
+          <p class="task-summary" data-task-summary>
+            Explore stationary states and the time-dependent probability field.
+          </p>
+        </div>
+
+        <div class="equation-card">
+          <span>Model equation</span>
+          <div class="equation-card__formula" data-task-equation>
+            ψₙ(x,t) = √(2/L) sin(nπx/L)e⁻ⁱᴱⁿᵗ/ℏ
+          </div>
+          <p data-task-caveat>
+            Concept animation. Validated numerical results remain in the task report.
+          </p>
+        </div>
+
+        <div class="control-panel" aria-label="Simulation controls">
+          <button class="play-button" type="button" data-play-toggle aria-pressed="true">
+            <span class="play-button__icon" aria-hidden="true"></span>
+            <span data-play-label>Pause</span>
+          </button>
+          <button class="reset-button" type="button" data-reset>Reset</button>
+          <label class="speed-control">
+            <span>Evolution speed</span>
+            <output data-speed-output>1.00×</output>
+            <input
+              type="range"
+              min="0.25"
+              max="2"
+              value="1"
+              step="0.05"
+              data-speed
+            />
+          </label>
+        </div>
+
+        <a class="documentation-link" data-documentation href="../task07_particle_in_box/README.md">
+          <span>Open validated task documentation</span>
+          <span aria-hidden="true">↗</span>
+        </a>
+      </section>
+
+      <section class="simulation-stage" id="simulation" aria-label="Animated physics concept">
+        <canvas id="simulation-canvas"></canvas>
+        <div class="stage-grid" aria-hidden="true"></div>
+
+        <div class="stage-header">
+          <span data-stage-label>Probability density / ψ*ψ</span>
+          <span>Canvas 2D · Real time</span>
+        </div>
+
+        <div class="stage-readout" aria-live="polite">
+          <div>
+            <span>t</span>
+            <strong data-time>0.00 s</strong>
+          </div>
+          <div>
+            <span>Parameter</span>
+            <strong data-parameter>n = 3</strong>
+          </div>
+          <div>
+            <span>Frame</span>
+            <strong data-frame>0000</strong>
+          </div>
+        </div>
+
+        <div class="stage-instruction">
+          <span aria-hidden="true">+</span>
+          <p data-instruction>Move across the field to mix neighbouring eigenstates.</p>
+        </div>
+
+        <div class="stage-navigation">
+          <button type="button" data-previous>
+            <span aria-hidden="true">←</span>
+            <span>Previous task</span>
+          </button>
+          <button type="button" data-next>
+            <span>Next task</span>
+            <span aria-hidden="true">→</span>
+          </button>
+        </div>
+      </section>
+    </main>
+
+    <aside class="task-drawer" data-task-drawer aria-hidden="true">
+      <div class="task-drawer__header">
+        <span>Laboratory index</span>
+        <button type="button" data-drawer-close aria-label="Close task index">Close</button>
+      </div>
+      <nav class="task-drawer__list" aria-label="Laboratory tasks" data-task-list></nav>
+      <div class="task-drawer__footer">
+        <span>Use ← → keys to move between tasks</span>
+        <a href="./index.html">Return home</a>
+      </div>
+    </aside>
+    <div class="drawer-backdrop" data-drawer-backdrop></div>
+
+    <div class="lab-transition" data-lab-transition aria-hidden="true">
+      <span data-lab-transition-number>07</span>
+      <p>Loading state</p>
+    </div>
+
+    <div class="cursor" data-cursor aria-hidden="true"><i></i></div>
+    <script type="module" src="./assets/lab.js"></script>
+  </body>
+</html>

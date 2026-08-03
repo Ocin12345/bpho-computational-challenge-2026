@@ -1,0 +1,329 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta
+      name="description"
+      content="A validated interactive relativistic Compton-scattering study for BPhO Computational Challenge Task 9."
+    />
+    <meta name="theme-color" content="#07131d" />
+    <title>Task 09 — Compton Scattering | BPhO Computational Challenge 2026</title>
+    <link
+      rel="icon"
+      href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' fill='%2307131d'/%3E%3Cpath d='M8 32h20M28 32L50 14M28 32l22 18' stroke='%23f26335' stroke-width='4'/%3E%3Ccircle cx='28' cy='32' r='5' fill='%23f7ebd5'/%3E%3C/svg%3E"
+    />
+    <link rel="stylesheet" href="../assets/task-09.css?v=20260731b" />
+  </head>
+  <body>
+    <a class="skip-link" href="#collision-laboratory">Skip to collision laboratory</a>
+
+    <header class="task-header">
+      <a class="back-link" href="../tasks.html" aria-label="Return to all tasks">
+        <svg viewBox="0 0 24 24" aria-hidden="true">
+          <path d="M19 12H5M11 18l-6-6 6-6" />
+        </svg>
+        All tasks
+      </a>
+      <p>Task 09 <span>/</span> Relativistic kinematics</p>
+      <a class="method-link" href="#cross-section">Angular weighting</a>
+    </header>
+
+    <main>
+      <section class="collision-hero" aria-labelledby="page-title">
+        <header class="hero-copy">
+          <p>X-ray photon · free electron · exact conservation</p>
+          <h1 id="page-title">
+            A collision,
+            <em>resolved.</em>
+          </h1>
+          <span>
+            Choose one incident energy and one photon angle. The scattered
+            wavelength, recoil speed, and electron direction follow from a
+            single relativistic momentum triangle.
+          </span>
+        </header>
+
+        <section
+          class="collision-laboratory is-loading"
+          id="collision-laboratory"
+          aria-labelledby="collision-title"
+          data-collision-laboratory
+        >
+          <header class="laboratory-header">
+            <div>
+              <span id="collision-title">Live collision geometry</span>
+              <strong data-collision-title>E = 200 keV · θ = 90°</strong>
+            </div>
+            <p data-laboratory-status>Checking evidence</p>
+          </header>
+
+          <div class="collision-canvas-wrap">
+            <canvas
+              id="collision-canvas"
+              tabindex="0"
+              role="img"
+              aria-label="Momentum-vector diagram for a 200 kiloelectronvolt photon scattered through 90 degrees"
+            ></canvas>
+            <div class="canvas-loading" data-collision-loading>
+              Resolving energy and momentum
+            </div>
+            <p class="canvas-error" data-collision-error hidden>
+              The validated Task 9 collision evidence could not be loaded.
+            </p>
+          </div>
+
+          <div class="collision-controls" data-collision-controls>
+            <label>
+              <span>Incident photon energy, E <output for="incident-energy" data-energy-output>200 keV</output></span>
+              <input id="incident-energy" type="range" min="1" max="5000" step="1" value="200" disabled />
+              <small><span>1 keV</span><span>5 MeV</span></small>
+            </label>
+            <label>
+              <span>Photon scattering angle, θ <output for="scattering-angle" data-theta-output>90°</output></span>
+              <input id="scattering-angle" type="range" min="0" max="180" step="0.5" value="90" disabled />
+              <small><span>0° forward</span><span>180° back</span></small>
+            </label>
+          </div>
+
+          <div class="preset-deck">
+            <nav class="energy-presets" aria-label="Official incident-energy presets">
+              <button type="button" data-energy-preset="50" disabled>50</button>
+              <button type="button" data-energy-preset="100" disabled>100</button>
+              <button type="button" data-energy-preset="200" disabled>200</button>
+              <button type="button" data-energy-preset="500" disabled>500</button>
+              <button type="button" data-energy-preset="1000" disabled>1000 keV</button>
+            </nav>
+            <nav class="angle-presets" aria-label="Photon-angle presets">
+              <button type="button" data-theta-preset="0" disabled>0°</button>
+              <button type="button" data-theta-preset="45" disabled>45°</button>
+              <button type="button" data-theta-preset="90" disabled>90°</button>
+              <button type="button" data-theta-preset="135" disabled>135°</button>
+              <button type="button" data-theta-preset="180" disabled>180°</button>
+            </nav>
+          </div>
+        </section>
+
+        <section class="result-ledger" aria-labelledby="result-title">
+          <h2 class="visually-hidden" id="result-title">Selected collision results</h2>
+          <article class="result-card result-card--shift">
+            <span>Fractional wavelength shift</span>
+            <output data-fractional-shift>0.391390</output>
+            <p>Δλ = <strong data-absolute-shift>2.426 pm</strong></p>
+          </article>
+          <article class="result-card result-card--speed">
+            <span>Electron recoil speed</span>
+            <output data-electron-beta>0.434186 c</output>
+            <p>v = <strong data-electron-speed>1.302 × 10⁸ m s⁻¹</strong></p>
+          </article>
+          <article class="result-card result-card--angle">
+            <span>Electron recoil angle</span>
+            <output data-recoil-angle>35.705°</output>
+            <p data-recoil-note>defined · below incident axis</p>
+          </article>
+          <article class="energy-balance">
+            <span>Exact energy ledger</span>
+            <dl>
+              <div><dt>Scattered photon, E′</dt><dd data-scattered-energy>143.741 keV</dd></div>
+              <div><dt>Electron kinetic energy, K</dt><dd data-kinetic-energy>56.259 keV</dd></div>
+            </dl>
+            <div class="energy-track"><i data-energy-retained style="width:71.87%"></i></div>
+            <small>E = E′ + K</small>
+          </article>
+        </section>
+      </section>
+
+      <section class="equation-section" id="model" aria-labelledby="model-title">
+        <header class="section-introduction section-introduction--paper">
+          <p>One model · four equivalent statements</p>
+          <h2 id="model-title">
+            Energy bends.
+            <em>Momentum closes.</em>
+          </h2>
+          <span>
+            The production route uses the Compton shift and relativistic energy.
+            Independent momentum components recover the same speed and direction
+            at every one of the 3,605 official points.
+          </span>
+        </header>
+
+        <div class="equation-grid">
+          <article><span>Dimensionless energy</span><p>α = E / m<sub>e</sub>c²</p><small>m<sub>e</sub>c² = 510.998950692 keV</small></article>
+          <article><span>Fractional shift</span><p>Δλ / λ = α(1 − cos θ)</p><small>Δλ itself depends only on θ.</small></article>
+          <article><span>Relativistic speed</span><p>v / c = √(1 − γ<sup>−2</sup>)</p><small>γ = 1 + (E − E′)/m<sub>e</sub>c²</small></article>
+          <article><span>Recoil direction</span><p>φ = atan2(E′sin θ, E − E′cos θ)</p><small>Quadrant-safe momentum geometry.</small></article>
+        </div>
+
+        <aside class="endpoint-truth">
+          <span>Forward endpoint · θ = 0°</span>
+          <strong>v = 0, so φ is undefined.</strong>
+          <p>The 90° value on the curve is only the continuous θ → 0⁺ limit; it is shown as an open point, never as a physical direction.</p>
+        </aside>
+      </section>
+
+      <section class="kinematics-section" id="required-curves" aria-labelledby="kinematics-title">
+        <header class="section-introduction">
+          <p>Official five-energy study</p>
+          <h2 id="kinematics-title">
+            Three observables.
+            <em>One angle axis.</em>
+          </h2>
+          <span>
+            All five required energies are shown over 0°–180° with the same
+            colour and line style in every panel. The selected collision is
+            marked without hiding the accepted reference curves.
+          </span>
+        </header>
+
+        <div class="kinematics-laboratory">
+          <header class="figure-toolbar">
+            <div>
+              <span>Required kinematics</span>
+              <strong data-curve-title>200 keV selected · θ = 90°</strong>
+            </div>
+            <p>50 · 100 · 200 · 500 · 1000 keV</p>
+            <span data-kinematics-status>Evidence loading</span>
+          </header>
+          <div class="kinematics-canvas-wrap">
+            <canvas
+              id="kinematics-canvas"
+              tabindex="0"
+              role="img"
+              aria-label="Three stacked charts of fractional wavelength shift, electron recoil speed, and electron recoil angle versus photon scattering angle for five incident energies"
+            ></canvas>
+            <div class="chart-tooltip" data-kinematics-tooltip hidden></div>
+            <p class="canvas-error" data-kinematics-error hidden>
+              The validated Task 9 kinematic curves could not be loaded.
+            </p>
+          </div>
+          <div class="energy-legend" aria-label="Official energy curve legend">
+            <span data-legend-energy="50"><i></i>50 keV · solid</span>
+            <span data-legend-energy="100"><i></i>100 keV · dashed</span>
+            <span data-legend-energy="200"><i></i>200 keV · dotted</span>
+            <span data-legend-energy="500"><i></i>500 keV · dash–dot</span>
+            <span data-legend-energy="1000"><i></i>1000 keV · long dash</span>
+          </div>
+        </div>
+
+        <div class="anchor-strip">
+          <article><span>At 200 keV · 90°</span><strong>Δλ/λ = 0.391390</strong><p>Absolute shift: one electron Compton wavelength.</p></article>
+          <article><span>Relativistic recoil</span><strong>v = 0.434186 c</strong><p>The non-relativistic approximation is not used.</p></article>
+          <article><span>Momentum direction</span><strong>φ = 35.705°</strong><p>The electron recoils below the incident axis.</p></article>
+        </div>
+      </section>
+
+      <section class="cross-section-section" id="cross-section" aria-labelledby="cross-section-title">
+        <header class="section-introduction section-introduction--paper">
+          <p>Optional extension · separately validated</p>
+          <h2 id="cross-section-title">
+            Possible does not mean
+            <em>equally likely.</em>
+          </h2>
+          <span>
+            The official curves answer what happens at a chosen θ. The
+            unpolarized Klein–Nishina extension answers how strongly a free
+            electron scatters into that direction.
+          </span>
+        </header>
+
+        <div class="cross-section-layout">
+          <div class="cross-section-figure">
+            <canvas
+              id="cross-section-canvas"
+              tabindex="0"
+              role="img"
+              aria-label="Relative Klein-Nishina differential cross-section and normalized polar-angle density for the selected photon energy"
+            ></canvas>
+            <p class="canvas-error" data-cross-section-error hidden>
+              The validated Task 9 cross-section evidence could not be loaded.
+            </p>
+          </div>
+          <aside class="cross-section-reading">
+            <span>Selected free-electron state</span>
+            <strong data-cross-selected>200 keV · 90°</strong>
+            <dl>
+              <div><dt>Total cross-section</dt><dd data-total-cross-section>0.406482 barn</dd></div>
+              <div><dt>At θ · dσ/dΩ</dt><dd data-differential-cross-section>0.022766 barn sr⁻¹</dd></div>
+              <div><dt>Relative to forward</dt><dd data-relative-cross-section>0.2867</dd></div>
+              <div><dt>Polar-angle density</dt><dd data-polar-density>0.3519 rad⁻¹</dd></div>
+              <div><dt>Forward hemisphere</dt><dd data-forward-probability>62.79%</dd></div>
+            </dl>
+            <p>p(θ) includes 2πsin θ and integrates to one. It is zero at both polar endpoints because those rings have zero solid-angle area.</p>
+          </aside>
+        </div>
+      </section>
+
+      <section class="evidence-section" id="evidence" aria-labelledby="evidence-title">
+        <header class="section-introduction">
+          <p>Reproducible acceptance evidence</p>
+          <h2 id="evidence-title">
+            Every curve
+            <em>has receipts.</em>
+          </h2>
+          <span>
+            The interaction unlocks only after the full data tables, exact
+            endpoints, independent conservation checks, extension report, and
+            media manifest agree.
+          </span>
+        </header>
+
+        <div class="validation-ledger">
+          <article><span>Kinematic validation</span><strong data-core-checks>—</strong><p>Exact limits, energy–momentum conservation, mass shell, and cross-language anchors.</p></article>
+          <article><span>Extension validation</span><strong data-extension-checks>—</strong><p>Quadrature, normalization, Thomson limit, units, and energy ordering.</p></article>
+          <article><span>Evidence points</span><strong>7,210</strong><p>3,605 exact kinematic rows plus 3,605 Klein–Nishina rows.</p></article>
+          <article><span>Publication media</span><strong>4 figures + GIF</strong><p>300-DPI PNG, editable SVG, embedded-font PDF, and 73-frame animation.</p></article>
+        </div>
+
+        <div class="figure-pair">
+          <figure>
+            <img src="../../figures/task09/required_kinematics.png" width="2400" height="1500" loading="lazy" alt="Three required Compton-scattering kinematic curves for five official photon energies." />
+            <figcaption><span>Accepted figure · 2400 × 1500</span><strong>All three required curves</strong></figcaption>
+          </figure>
+          <figure>
+            <img src="../../figures/task09/energy_transfer_geometry.png" width="2400" height="1500" loading="lazy" alt="Compton energy transfer curves and exact momentum-vector geometry." />
+            <figcaption><span>Accepted figure · Times New Roman</span><strong>Energy and momentum closure</strong></figcaption>
+          </figure>
+        </div>
+
+        <div class="evidence-lock" data-evidence-lock>
+          <span>Scientific state</span>
+          <strong data-lock-title>Loading committed evidence</strong>
+          <p data-lock-detail>All controls remain disabled until both validated layers agree.</p>
+          <small data-evidence-status>Checking</small>
+        </div>
+
+        <nav class="evidence-downloads" aria-label="Task 9 evidence downloads">
+          <a href="../../data/task09/manifest.json">Kinematic manifest</a>
+          <a href="../../data/task09/validation_report.json">44-check report</a>
+          <a href="../../data/task09/cross_section_validation_report.json">30-check report</a>
+          <a href="../../data/task09/compton_angle_study.csv">Full kinematic data</a>
+          <a href="../../figures/task09/task09_summary.png">4K summary</a>
+          <a href="../../figures/task09/compton_angle_sweep.gif">73-frame animation</a>
+          <a href="../../task09_compton_scattering/app/index.html">Standalone explorer</a>
+        </nav>
+
+        <aside class="scope-boundary">
+          <strong>Scope boundary</strong>
+          <p>
+            Exact two-body kinematics assumes one photon and one free,
+            stationary electron. The extension additionally assumes unpolarized
+            radiation. Neither layer includes electron binding, material
+            attenuation, Doppler broadening, multiple scattering, detector
+            response, or a Monte Carlo apparatus.
+          </p>
+        </aside>
+      </section>
+    </main>
+
+    <footer class="task-footer">
+      <a href="./task-08.html">← Task 08 · Quantum mismatch</a>
+      <div><span>BPhO Computational Challenge 2026</span><strong>Task 09 · exact relativistic Compton scattering</strong></div>
+      <a href="../tasks.html">All tasks ↑</a>
+    </footer>
+
+    <script src="../vendor/packages/gsap/dist/gsap.min.js"></script>
+    <script src="../vendor/packages/gsap/dist/ScrollTrigger.min.js"></script>
+    <script type="module" src="../assets/task-09-calculator.js?v=20260731b"></script>
+    <script src="../assets/task-09-motion.js?v=20260731"></script>
+  </body>
+</html>

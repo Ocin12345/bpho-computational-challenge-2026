@@ -20,3 +20,8 @@ release/
 .vscode/
 .idea/
 *.swp
+
+# Static website dependency installs and package caches
+# The runtime vendor packages and lockfile under site/vendor remain tracked.
+site/vendor/node_modules/
+site/vendor/archives/

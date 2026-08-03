@@ -1,0 +1,793 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta
+      name="description"
+      content="An interactive, validated collision model of two-dimensional Brownian motion for BPhO Computational Challenge Task 2."
+    />
+    <meta name="theme-color" content="#0b1110" />
+    <title>Task 02 — Brownian Motion | BPhO Computational Challenge 2026</title>
+    <link
+      rel="icon"
+      href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%230b1110'/%3E%3Ccircle cx='32' cy='32' r='12' fill='%23c47658'/%3E%3Cg fill='%23a6b4ae'%3E%3Ccircle cx='13' cy='17' r='3'/%3E%3Ccircle cx='50' cy='16' r='2'/%3E%3Ccircle cx='49' cy='47' r='3'/%3E%3Ccircle cx='15' cy='48' r='2'/%3E%3C/g%3E%3C/svg%3E"
+    />
+    <link rel="stylesheet" href="../assets/task-02.css?v=20260731c" />
+  </head>
+  <body>
+    <a class="skip-link" href="#brownian-canvas">Skip to simulation</a>
+
+    <header class="task-header">
+      <a class="back-link" href="../tasks.html" aria-label="Return to all tasks">
+        <svg viewBox="0 0 24 24" aria-hidden="true">
+          <path d="M19 12H5M11 18l-6-6 6-6" />
+        </svg>
+        All tasks
+      </a>
+      <p>Task 02 <span>/</span> Computational Physics</p>
+      <a class="method-link" href="#method">Method</a>
+    </header>
+
+    <main>
+      <section class="observatory" aria-labelledby="page-title">
+        <canvas
+          id="brownian-canvas"
+          tabindex="0"
+          role="img"
+          aria-label="A large tracer undergoing collision-driven Brownian motion among one thousand gas particles"
+        ></canvas>
+        <div class="observatory-vignette" aria-hidden="true"></div>
+        <div class="observatory-grain" aria-hidden="true"></div>
+
+        <header class="hero-copy">
+          <p>Task 02 · Stochastic dynamics</p>
+          <h1 id="page-title">Brownian<br /><em>Motion</em></h1>
+          <span>
+            Random tracer motion produced<br />
+            by repeated particle collisions
+          </span>
+        </header>
+
+        <div class="model-status" aria-live="polite">
+          <i class="status-dot"></i>
+          <span data-run-state>Ready</span>
+        </div>
+
+        <div class="chamber-key" aria-hidden="true">
+          <span><i class="key-gas"></i>Gas particles</span>
+          <span><i class="key-tracer"></i>Tracer</span>
+          <span><i class="key-path"></i>Tracer path</span>
+        </div>
+
+        <div class="tracer-readout" data-tracer-readout hidden>
+          <span>Tracer state</span>
+          <strong data-hover-displacement>0.000 nm</strong>
+          <small data-hover-speed>0.000 nm ps⁻¹</small>
+        </div>
+
+        <div class="instrument-dock">
+          <div
+            class="simulation-progress"
+            role="progressbar"
+            aria-label="Simulation progress"
+            aria-valuemin="0"
+            aria-valuemax="200"
+            aria-valuenow="0"
+            data-progress
+          >
+            <span></span>
+          </div>
+
+          <div class="dock-actions">
+            <button class="dock-button dock-button--play" type="button" data-play>
+              <svg viewBox="0 0 24 24" aria-hidden="true">
+                <path data-play-icon d="M8 5l11 7-11 7z" />
+              </svg>
+              <span data-play-label>Run</span>
+            </button>
+            <button
+              class="dock-button"
+              type="button"
+              data-step
+              title="Advance the model by 1 ps"
+            >
+              <svg viewBox="0 0 24 24" aria-hidden="true">
+                <path d="M6 5l9 7-9 7zM18 5v14" />
+              </svg>
+              Step
+            </button>
+            <button class="dock-button" type="button" data-reset>
+              <svg viewBox="0 0 24 24" aria-hidden="true">
+                <path d="M20 11a8 8 0 10-2.34 5.66M20 4v7h-7" />
+              </svg>
+              Reset
+            </button>
+          </div>
+
+          <dl class="dock-metrics">
+            <div>
+              <dt>Simulation time</dt>
+              <dd data-time>0.00 ps</dd>
+            </div>
+            <div>
+              <dt>Tracer displacement</dt>
+              <dd data-displacement>0.000 nm</dd>
+            </div>
+            <div>
+              <dt>Collision impulses</dt>
+              <dd data-collisions>0</dd>
+            </div>
+          </dl>
+
+          <button
+            class="parameter-trigger"
+            type="button"
+            data-parameters-open
+            aria-label="Open model controls"
+            aria-expanded="false"
+            aria-controls="parameter-drawer"
+          >
+            <span>
+              Model controls
+              <small>N · T · M/m · C</small>
+            </span>
+            <svg viewBox="0 0 24 24" aria-hidden="true">
+              <path d="M5 7h14M8 12h8M11 17h2" />
+            </svg>
+            <b class="parameter-trigger__mobile" aria-hidden="true">
+              Controls
+            </b>
+          </button>
+        </div>
+
+        <button class="scroll-cue" type="button" data-scroll-method>
+          <span>Theory and validation</span>
+          <svg viewBox="0 0 24 24" aria-hidden="true">
+            <path d="M12 5v14M6 13l6 6 6-6" />
+          </svg>
+        </button>
+
+        <button
+          class="drawer-scrim"
+          type="button"
+          data-parameters-close
+          aria-label="Close parameter drawer"
+          tabindex="-1"
+        ></button>
+
+        <aside
+          class="parameter-drawer"
+          id="parameter-drawer"
+          aria-hidden="true"
+          aria-label="Brownian-motion model controls"
+          inert
+        >
+          <header>
+            <div>
+              <p>Simulation setup</p>
+              <h2>Model controls</h2>
+            </div>
+            <button
+              class="drawer-close"
+              type="button"
+              data-parameters-close
+              aria-label="Close parameter drawer"
+            >
+              <svg viewBox="0 0 24 24" aria-hidden="true">
+                <path d="M6 6l12 12M18 6L6 18" />
+              </svg>
+            </button>
+          </header>
+
+          <ol class="control-workflow" aria-label="Simulation workflow">
+            <li>
+              <b>01</b>
+              <span>Choose model</span>
+            </li>
+            <li>
+              <b>02</b>
+              <span>Run simulation</span>
+            </li>
+            <li>
+              <b>03</b>
+              <span>Read results</span>
+            </li>
+          </ol>
+
+          <section class="preset-section" aria-labelledby="preset-title">
+            <h3 id="preset-title">Preset models</h3>
+            <div class="preset-grid">
+              <button type="button" data-preset="reference">
+                <strong>Reference</strong>
+                <small>N=1000 · T=373 K</small>
+              </button>
+              <button type="button" data-preset="heavy">
+                <strong>Heavy tracer</strong>
+                <small>M/m=50</small>
+              </button>
+              <button type="button" data-preset="inelastic">
+                <strong>Inelastic</strong>
+                <small>C=0.5</small>
+              </button>
+              <button type="button" data-preset="long-path">
+                <strong>Long mean path</strong>
+                <small>K<sub>n</sub>=30</small>
+              </button>
+            </div>
+          </section>
+
+          <section class="parameter-fields" aria-label="Numerical parameters">
+            <label>
+              <span>
+                Particle count
+                <small>N · gas particles</small>
+              </span>
+              <input
+                id="particle-count"
+                type="number"
+                min="100"
+                max="1000"
+                step="50"
+                value="1000"
+              />
+            </label>
+            <label>
+              <span>
+                Temperature
+                <small>T · kelvin</small>
+              </span>
+              <input
+                id="gas-temperature"
+                type="number"
+                min="200"
+                max="1000"
+                step="1"
+                value="373"
+              />
+            </label>
+            <label>
+              <span>
+                Tracer mass ratio
+                <small>M/m</small>
+              </span>
+              <input
+                id="mass-ratio"
+                type="number"
+                min="2"
+                max="100"
+                step="1"
+                value="10"
+              />
+            </label>
+            <label>
+              <span>
+                Restitution
+                <small>C · 1 is elastic</small>
+              </span>
+              <input
+                id="restitution"
+                type="number"
+                min="0"
+                max="1"
+                step="0.05"
+                value="1"
+              />
+            </label>
+            <label>
+              <span>
+                Reset factor
+                <small>K<sub>n</sub> · mean path</small>
+              </span>
+              <input
+                id="knudsen-parameter"
+                type="number"
+                min="2"
+                max="60"
+                step="0.5"
+                value="15"
+              />
+            </label>
+            <label>
+              <span>
+                Playback rate
+                <small>simulated ps s⁻¹</small>
+              </span>
+              <input
+                id="playback-rate"
+                type="number"
+                min="1"
+                max="100"
+                step="1"
+                value="20"
+              />
+            </label>
+            <label class="seed-field">
+              <span>
+                Random seed
+                <small>reproducible trajectory</small>
+              </span>
+              <input
+                id="simulation-seed"
+                type="number"
+                min="0"
+                max="4294967295"
+                step="1"
+                value="2026"
+                inputmode="numeric"
+              />
+            </label>
+          </section>
+
+          <section class="display-section" aria-labelledby="display-title">
+            <h3 id="display-title">Display</h3>
+            <div class="display-options">
+              <button
+                type="button"
+                data-view-toggle="trail"
+                aria-pressed="true"
+              >
+                <span>Trajectory</span>
+                <i aria-hidden="true"></i>
+              </button>
+              <button
+                type="button"
+                data-view-toggle="impacts"
+                aria-pressed="true"
+              >
+                <span>Impact signals</span>
+                <i aria-hidden="true"></i>
+              </button>
+              <button
+                type="button"
+                data-view-toggle="streaks"
+                aria-pressed="true"
+              >
+                <span>Velocity traces</span>
+                <i aria-hidden="true"></i>
+              </button>
+            </div>
+          </section>
+
+          <div
+            class="result-actions"
+            role="group"
+            aria-label="Simulation output"
+          >
+            <button type="button" data-export>
+              <svg viewBox="0 0 24 24" aria-hidden="true">
+                <path d="M12 3v12M7 10l5 5 5-5M5 20h14" />
+              </svg>
+              Export trajectory
+            </button>
+            <button type="button" data-snapshot>
+              <svg viewBox="0 0 24 24" aria-hidden="true">
+                <path d="M4 8h3l2-3h6l2 3h3v11H4z" />
+                <circle cx="12" cy="13" r="3.5" />
+              </svg>
+              Save image
+            </button>
+          </div>
+
+          <div class="drawer-actions">
+            <button type="button" data-new-seed>New random seed</button>
+            <span>
+              Thermal speed
+              <strong>
+                v<sub>s</sub> =
+                <span data-thermal-speed>0.567 nm ps⁻¹</span>
+              </strong>
+            </span>
+          </div>
+
+          <p class="drawer-note">
+            <strong>Model scope.</strong> Gas particles collide with the tracer
+            and reflective walls; gas–gas collisions are omitted. The numerical
+            timestep matches the validated Python model. Particle colours are
+            identifiers only.
+          </p>
+        </aside>
+      </section>
+
+      <section class="method-section" id="method" aria-labelledby="method-title">
+        <header class="section-introduction">
+          <p>Collision model</p>
+          <h2 id="method-title">
+            Microscopic collisions generate<br />
+            <em>stochastic tracer motion.</em>
+          </h2>
+          <span>
+            At contact, an impulse acts along the normal. Repeated impacts
+            change the tracer velocity; ensemble averaging reveals diffusion.
+          </span>
+        </header>
+
+        <div class="collision-stage">
+          <div class="collision-visual">
+            <svg viewBox="0 0 920 470" role="img">
+              <title>
+                A small gas particle approaches a large tracer and transfers
+                momentum along the contact normal
+              </title>
+              <defs>
+                <marker
+                  id="arrow-gas"
+                  markerWidth="9"
+                  markerHeight="9"
+                  refX="7"
+                  refY="4.5"
+                  orient="auto"
+                >
+                  <path d="M0 0l9 4.5L0 9z" fill="#a6b4ae" />
+                </marker>
+                <marker
+                  id="arrow-accent"
+                  markerWidth="9"
+                  markerHeight="9"
+                  refX="7"
+                  refY="4.5"
+                  orient="auto"
+                >
+                  <path d="M0 0l9 4.5L0 9z" fill="#c47658" />
+                </marker>
+              </defs>
+
+              <g class="diagram-grid" aria-hidden="true">
+                <path d="M60 90H860M60 235H860M60 380H860" />
+                <path d="M175 45V425M460 45V425M745 45V425" />
+              </g>
+
+              <circle
+                class="diagram-tracer-glow"
+                cx="548"
+                cy="235"
+                r="124"
+              />
+              <circle
+                class="diagram-tracer"
+                cx="548"
+                cy="235"
+                r="93"
+                fill="#c47658"
+              />
+
+              <g class="incoming-particle">
+                <circle cx="175" cy="235" r="17" />
+                <circle class="particle-halo" cx="175" cy="235" r="27" />
+              </g>
+              <path
+                class="incoming-arrow"
+                d="M102 235H375"
+                marker-end="url(#arrow-gas)"
+              />
+              <text x="104" y="211">incoming velocity, v</text>
+
+              <path
+                class="contact-normal"
+                d="M438 235H625"
+                marker-end="url(#arrow-accent)"
+              />
+              <text x="489" y="214">contact normal, n</text>
+
+              <g class="impulse-wave">
+                <circle cx="455" cy="235" r="12" />
+                <circle cx="455" cy="235" r="28" />
+                <circle cx="455" cy="235" r="46" />
+              </g>
+
+              <path
+                class="outgoing-arrow"
+                d="M435 275L300 355"
+                marker-end="url(#arrow-gas)"
+              />
+              <text x="219" y="389">outgoing velocity, v′</text>
+
+              <path
+                class="tracer-arrow"
+                d="M548 235H769"
+                marker-end="url(#arrow-accent)"
+              />
+              <text x="665" y="214">tracer response, V′</text>
+            </svg>
+          </div>
+
+          <div class="collision-equations">
+            <article>
+              <span>Thermal speed</span>
+              <p>
+                v<sub>s</sub> =
+                √<span class="radical">(3k<sub>B</sub>T / m)</span>
+              </p>
+              <small>
+                Reset interval:
+                τ<sub>r</sub> = K<sub>n</sub>r/v<sub>s</sub>.
+              </small>
+            </article>
+            <article>
+              <span>Contact impulse</span>
+              <p>
+                J =
+                <span class="fraction">
+                  <span>−(1 + C)g<sub>n</sub></span>
+                  <span>1/m + 1/M</span>
+                </span>
+              </p>
+              <small>
+                Applied when the relative normal velocity g<sub>n</sub> &lt; 0.
+              </small>
+            </article>
+            <article>
+              <span>Diffusive limit</span>
+              <p>⟨|X(t) − X(0)|²⟩ ≈ 4Dt</p>
+              <small>
+                In two dimensions, the MSD slope equals 4D.
+              </small>
+            </article>
+          </div>
+        </div>
+
+        <div
+          class="model-ledger"
+          role="group"
+          aria-label="Task 2 model specification"
+        >
+          <div>
+            <span>Small particles</span>
+            <strong>N; m=4.81×10⁻²⁶ kg; r=0.16 nm</strong>
+          </div>
+          <div>
+            <span>Large tracer</span>
+            <strong>M=(M/m)m; R=1.60 nm</strong>
+          </div>
+          <div>
+            <span>Random walk</span>
+            <strong>Uniform random direction resets</strong>
+          </div>
+          <div>
+            <span>Collision law</span>
+            <strong>Normal impulse; Σp conserved</strong>
+          </div>
+          <div>
+            <span>Animation</span>
+            <strong>0 ≤ t ≤ 200 ps; tracer path recorded</strong>
+          </div>
+          <div>
+            <span>Model scope</span>
+            <strong>Reflective walls; gas–gas contacts omitted</strong>
+          </div>
+        </div>
+
+        <div
+          class="physics-ribbon"
+          role="region"
+          aria-label="Reference model constants"
+          tabindex="0"
+        >
+          <div class="physics-ribbon__track">
+            <span><b>N</b> 1000</span>
+            <span><b>T</b> 373 K</span>
+            <span><b>v<sub>s</sub></b> 0.56657 nm ps⁻¹</span>
+            <span><b>τ<sub>r</sub></b> 4.236 ps</span>
+            <span><b>Δt</b> 0.005648 ps</span>
+            <span><b>t<sub>max</sub></b> 200 ps</span>
+            <span aria-hidden="true"><b>N</b> 1000</span>
+            <span aria-hidden="true"><b>T</b> 373 K</span>
+            <span aria-hidden="true"><b>v<sub>s</sub></b> 0.56657 nm ps⁻¹</span>
+            <span aria-hidden="true"><b>τ<sub>r</sub></b> 4.236 ps</span>
+            <span aria-hidden="true"><b>Δt</b> 0.005648 ps</span>
+            <span aria-hidden="true"><b>t<sub>max</sub></b> 200 ps</span>
+          </div>
+        </div>
+      </section>
+
+      <section
+        class="evidence-section is-loading"
+        aria-labelledby="evidence-title"
+      >
+        <header class="evidence-heading">
+          <div>
+            <p>Validation</p>
+            <h2 id="evidence-title">
+              Ensemble statistics verify<br />
+              <em>diffusive behaviour.</em>
+            </h2>
+          </div>
+          <span data-evidence-provenance>
+            Loading the verified 64-trajectory dataset…
+          </span>
+        </header>
+
+        <div class="evidence-metrics">
+          <article>
+            <span>Diffusion coefficient, D</span>
+            <strong data-diffusion>—</strong>
+            <small data-diffusion-ci>—</small>
+          </article>
+          <article>
+            <span>Linear-fit R²</span>
+            <strong data-r-squared>—</strong>
+            <small>20–100 ps fit window</small>
+          </article>
+          <article>
+            <span>Independent trajectories</span>
+            <strong data-run-count>—</strong>
+            <small>reproducible seeded trajectories</small>
+          </article>
+          <article>
+            <span>Collision solver error</span>
+            <strong data-collision-error>—</strong>
+            <small>largest normalized discrepancy</small>
+          </article>
+        </div>
+
+        <div class="evidence-content" data-evidence-content hidden>
+          <article class="chart-card chart-card--hero">
+            <header>
+              <div>
+                <h3>Mean-squared displacement</h3>
+                <p id="msd-chart-description">
+                  Ensemble MSD with a linear fit over 20–100 ps.
+                </p>
+              </div>
+              <button
+                class="figure-export"
+                type="button"
+                data-export-figure="msd"
+                aria-label="Export the mean-squared displacement figure as a 3200 by 1800 pixel PNG"
+              >
+                <svg viewBox="0 0 24 24" aria-hidden="true">
+                  <path d="M12 3v12M7 10l5 5 5-5M5 20h14" />
+                </svg>
+                <span>Export 3K PNG</span>
+              </button>
+            </header>
+            <canvas
+              id="msd-chart"
+              role="img"
+              aria-label="Mean-squared displacement against time for 64 Brownian trajectories"
+              aria-describedby="msd-chart-description"
+            ></canvas>
+          </article>
+
+          <div class="secondary-evidence">
+            <article class="chart-card">
+              <header>
+                <div>
+                  <h3>Endpoint distribution</h3>
+                  <p id="endpoint-chart-description">
+                    Final displacements cluster around the origin, indicating
+                    no systematic drift.
+                  </p>
+                </div>
+                <button
+                  class="figure-export"
+                  type="button"
+                  data-export-figure="endpoints"
+                  aria-label="Export the endpoint distribution figure as a 2400 by 2400 pixel PNG"
+                >
+                  <svg viewBox="0 0 24 24" aria-hidden="true">
+                    <path d="M12 3v12M7 10l5 5 5-5M5 20h14" />
+                  </svg>
+                  <span>Export 2K PNG</span>
+                </button>
+              </header>
+              <canvas
+                id="endpoint-chart"
+                role="img"
+                aria-label="Final horizontal and vertical displacements for 64 independent trajectories"
+                aria-describedby="endpoint-chart-description"
+              ></canvas>
+            </article>
+
+            <article class="chart-card">
+              <header>
+                <div>
+                  <h3>Time-step convergence</h3>
+                  <p id="convergence-chart-description">
+                    Collision endpoint error decreases with the timestep.
+                  </p>
+                </div>
+                <button
+                  class="figure-export"
+                  type="button"
+                  data-export-figure="convergence"
+                  aria-label="Export the time-step convergence figure as a 2400 by 2400 pixel PNG"
+                >
+                  <svg viewBox="0 0 24 24" aria-hidden="true">
+                    <path d="M12 3v12M7 10l5 5 5-5M5 20h14" />
+                  </svg>
+                  <span>Export 2K PNG</span>
+                </button>
+              </header>
+              <canvas
+                id="convergence-chart"
+                role="img"
+                aria-label="Controlled collision endpoint error against numerical time step"
+                aria-describedby="convergence-chart-description"
+              ></canvas>
+            </article>
+          </div>
+        </div>
+
+        <p class="evidence-error" data-evidence-error hidden>
+          Verified evidence could not be loaded. Numerical claims have
+          therefore been withheld.
+        </p>
+        <p class="evidence-empty" data-evidence-empty hidden>
+          No verified trajectories are available for this configuration.
+          Generate an ensemble before interpreting diffusion.
+        </p>
+
+        <footer class="scope-note">
+          <p>
+            <strong>Scope.</strong>
+            D applies to this finite two-dimensional heat-bath model; it is not
+            a quantitative prediction for a real three-dimensional fluid.
+          </p>
+          <div>
+            <a href="../data/task-02-evidence.json" download>
+              Web evidence
+            </a>
+            <a
+              href="../../task02_brownian_motion/analysis/baseline_msd.csv"
+              download
+            >
+              MSD data
+            </a>
+          </div>
+        </footer>
+      </section>
+
+      <section class="task02-action" aria-labelledby="task02-action-title">
+        <div class="task02-action__copy">
+          <p>From trajectory to evidence</p>
+          <h2 id="task02-action-title">
+            Run one path.<br />
+            <em>Trust the ensemble.</em>
+          </h2>
+          <span>
+            A single Brownian path is irreducibly noisy. The reproducible result
+            appears only after independent trajectories are averaged and the
+            mean-squared displacement is tested.
+          </span>
+          <div class="task02-action__links">
+            <a href="#brownian-canvas">Return to simulation</a>
+            <a
+              href="../../task02_brownian_motion/analysis/baseline_msd.csv"
+              download
+            >
+              Download MSD data
+            </a>
+          </div>
+        </div>
+        <div class="task02-action__path" aria-hidden="true">
+          <svg viewBox="0 0 620 460">
+            <path
+              class="action-grid"
+              d="M70 70H550M70 180H550M70 290H550M70 400H550M90 45V420M235 45V420M380 45V420M525 45V420"
+            />
+            <path
+              class="action-trajectory"
+              d="M98 332C137 276 142 220 194 246C244 271 218 348 278 355C334 362 335 278 384 288C429 297 399 205 454 194C493 187 509 137 526 91"
+            />
+            <circle class="action-origin" cx="98" cy="332" r="8" />
+            <circle class="action-endpoint" cx="526" cy="91" r="16" />
+          </svg>
+          <p><span>0 ps</span><span>200 ps</span></p>
+        </div>
+      </section>
+    </main>
+
+    <footer class="page-footer">
+      <span>BPhO Computational Challenge 2026</span>
+      <a href="../tasks.html">Task index</a>
+    </footer>
+
+    <script src="../data/task-02-evidence.js"></script>
+    <script src="../vendor/packages/gsap/dist/gsap.min.js"></script>
+    <script src="../vendor/packages/gsap/dist/ScrollTrigger.min.js"></script>
+    <script src="../assets/task-02-simulation.js?v=20260731c"></script>
+    <script src="../assets/task-02-evidence.js?v=20260731c"></script>
+    <script src="../assets/task-02-motion.js?v=20260731c"></script>
+  </body>
+</html>

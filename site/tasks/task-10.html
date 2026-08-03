@@ -1,0 +1,370 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta
+      name="description"
+      content="A validated interactive hydrogenic-orbital probability-density explorer for BPhO Computational Challenge Task 10."
+    />
+    <meta name="theme-color" content="#08070e" />
+    <title>Task 10 — Hydrogenic Orbitals | BPhO Computational Challenge 2026</title>
+    <link
+      rel="icon"
+      href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' fill='%2308070e'/%3E%3Cellipse cx='32' cy='32' rx='22' ry='9' fill='none' stroke='%23f64ccc' stroke-width='3' transform='rotate(32 32 32)'/%3E%3Cellipse cx='32' cy='32' rx='22' ry='9' fill='none' stroke='%2364e7dc' stroke-width='3' transform='rotate(-32 32 32)'/%3E%3Ccircle cx='32' cy='32' r='5' fill='%23fff0d7'/%3E%3C/svg%3E"
+    />
+    <link rel="stylesheet" href="../assets/task-10.css?v=20260731b" />
+  </head>
+  <body>
+    <a class="skip-link" href="#orbital-laboratory">Skip to orbital laboratory</a>
+
+    <header class="task-header">
+      <a class="back-link" href="../tasks.html" aria-label="Return to all tasks">
+        <svg viewBox="0 0 24 24" aria-hidden="true">
+          <path d="M19 12H5M11 18l-6-6 6-6" />
+        </svg>
+        All tasks
+      </a>
+      <p>Task 10 <span>/</span> Hydrogenic eigenstates</p>
+      <a class="method-link" href="#official-gallery">S–G gallery</a>
+    </header>
+
+    <main>
+      <section class="orbital-hero" aria-labelledby="page-title">
+        <header class="hero-copy">
+          <p>Normalized wavefunctions · real basis · probability density</p>
+          <h1 id="page-title">
+            Orbitals are
+            <em>not orbits.</em>
+          </h1>
+          <span>
+            Build one stationary Coulomb eigenstate, separate its radial and
+            angular structure, then look through the probability field as a
+            stack of semitransparent planes.
+          </span>
+        </header>
+
+        <section
+          class="orbital-laboratory is-loading"
+          id="orbital-laboratory"
+          aria-labelledby="laboratory-title"
+          data-orbital-laboratory
+        >
+          <header class="laboratory-header">
+            <div>
+              <span id="laboratory-title">Live coloured-glass density</span>
+              <strong data-state-title>Hydrogen-1 · 3d (m=+0)</strong>
+            </div>
+            <p data-laboratory-status>Checking evidence</p>
+          </header>
+
+          <div class="glass-canvas-wrap">
+            <canvas
+              id="glass-canvas"
+              tabindex="0"
+              role="img"
+              aria-label="Seventeen semitransparent probability-density planes for the hydrogen 3d m equals zero state"
+            ></canvas>
+            <div class="canvas-loading" data-glass-loading>
+              Sampling normalized density
+            </div>
+            <p class="canvas-error" data-glass-error hidden>
+              The validated Task 10 orbital evidence could not be loaded.
+            </p>
+          </div>
+
+          <div class="camera-controls" aria-label="Three-dimensional view controls">
+            <button type="button" data-camera-action="left" disabled>↶ Orbit</button>
+            <button type="button" data-camera-action="right" disabled>Orbit ↷</button>
+            <button type="button" data-camera-action="out" disabled>− Zoom</button>
+            <button type="button" data-camera-action="in" disabled>+ Zoom</button>
+            <button type="button" data-camera-action="reset" disabled>Reset view</button>
+          </div>
+          <p class="interaction-hint">
+            Drag to orbit · wheel or buttons to zoom · arrow keys when the
+            canvas is focused · camera motion is not electron motion
+          </p>
+        </section>
+
+        <aside class="state-control-rail" data-state-controls aria-label="Orbital state controls">
+          <header>
+            <span>Validated state</span>
+            <strong data-state-label>3d (m=+0)</strong>
+          </header>
+          <label>Atomic number, Z<select id="atomic-number" disabled></select></label>
+          <div class="quantum-selects">
+            <label>n<select id="principal-number" disabled></select></label>
+            <label>l<select id="angular-number" disabled></select></label>
+            <label>m<select id="magnetic-number" disabled></select></label>
+          </div>
+          <label class="gallery-select">Official S–G preset<select id="gallery-preset" disabled></select></label>
+          <dl class="state-summary">
+            <div><dt>Energy</dt><dd data-energy>−1.510915 eV</dd></div>
+            <div><dt>Effective a</dt><dd data-bohr-radius>0.529468 Å</dd></div>
+            <div><dt>Nodes</dt><dd data-node-counts>0 radial · 2 angular</dd></div>
+            <div><dt>Symmetry</dt><dd data-symmetry>even · 5-fold m</dd></div>
+          </dl>
+        </aside>
+
+        <section class="display-controls" data-display-controls aria-labelledby="display-title">
+          <h2 class="visually-hidden" id="display-title">Density display controls</h2>
+          <label>
+            <span>Half-extent <output for="extent-range" data-extent-output>3.2 n²a</output></span>
+            <input id="extent-range" type="range" min="1.2" max="6" step="0.1" value="3.2" disabled />
+          </label>
+          <label>
+            <span>x-y planes <output for="slice-count" data-slice-output>17</output></span>
+            <input id="slice-count" type="range" min="7" max="25" step="2" value="17" disabled />
+          </label>
+          <label>
+            <span>Relative cutoff <output for="density-threshold" data-threshold-output>0.15</output></span>
+            <input id="density-threshold" type="range" min="0" max="0.45" step="0.01" value="0.15" disabled />
+          </label>
+          <label>
+            <span>Maximum opacity <output for="density-opacity" data-opacity-output>72%</output></span>
+            <input id="density-opacity" type="range" min="0.2" max="0.95" step="0.01" value="0.72" disabled />
+          </label>
+          <p><strong>Display only.</strong> Cutoff and opacity never alter ∫|ψ|²dV = 1.</p>
+        </section>
+      </section>
+
+      <section class="model-section" id="model" aria-labelledby="model-title">
+        <header class="section-introduction section-introduction--paper">
+          <p>One state · two separable structures</p>
+          <h2 id="model-title">
+            Radius sets scale.
+            <em>Angles carve nodes.</em>
+          </h2>
+          <span>
+            A normalized radial function multiplies a normalized real tesseral
+            harmonic. Squaring removes phase sign but preserves the nodal
+            surfaces that organize every S-through-G density.
+          </span>
+        </header>
+
+        <div class="equation-grid">
+          <article>
+            <span>Stationary eigenstate</span>
+            <p>ψ<sub>nlm</sub> = R<sub>nl</sub> 𝒴<sub>lm</sub></p>
+            <small>n ≥ 1 · 0 ≤ l &lt; n · −l ≤ m ≤ +l</small>
+          </article>
+          <article>
+            <span>Required probability field</span>
+            <p>ρ<sub>nlm</sub>(r) = |ψ<sub>nlm</sub>(r)|²</p>
+            <small>∫ρ d³r = 1 · density is non-negative</small>
+          </article>
+          <article>
+            <span>Effective length</span>
+            <p>a = (m<sub>e</sub>/μ) a₀/Z</p>
+            <small>Length contracts approximately as 1/Z.</small>
+          </article>
+          <article>
+            <span>Coulomb energy</span>
+            <p>E<sub>n</sub> = −½E<sub>h</sub>(μ/m<sub>e</sub>)Z²/n²</p>
+            <small>Independent of l and m in this point-Coulomb model.</small>
+          </article>
+        </div>
+
+        <aside class="normalization-boundary">
+          <span>Three quantities, never conflated</span>
+          <dl>
+            <div><dt>Physical density</dt><dd>ρ · unit m⁻³</dd></div>
+            <div><dt>Scaled density</dt><dd>a³ρ · dimensionless</dd></div>
+            <div><dt>Display density</dt><dd>ρ/max ρ · contrast only</dd></div>
+          </dl>
+          <p>The adjustable 0.15 cutoff changes visibility, not the wavefunction, probability, normalization, or an atom’s physical boundary.</p>
+        </aside>
+      </section>
+
+      <section class="structure-section" id="structure" aria-labelledby="structure-title">
+        <header class="section-introduction">
+          <p>Quantitative views of the same state</p>
+          <h2 id="structure-title">
+            See the field.
+            <em>Read the nodes.</em>
+          </h2>
+          <span>
+            Orthogonal slices preserve quantitative cross-sections while radial
+            probability isolates shell structure. Both update with the
+            coloured-glass view.
+          </span>
+        </header>
+
+        <div class="structure-layout">
+          <div class="slice-figure">
+            <header>
+              <span>Orthogonal density slices</span>
+              <strong data-slice-title>3d (m=+0) · shared relative scale</strong>
+            </header>
+            <canvas
+              id="slice-canvas"
+              tabindex="0"
+              role="img"
+              aria-label="Orthogonal x-y, x-z, and y-z relative probability-density slices"
+            ></canvas>
+            <p class="canvas-error" data-slice-error hidden>
+              The validated Task 10 slice view could not be rendered.
+            </p>
+          </div>
+          <div class="radial-figure">
+            <header>
+              <span>Normalized radial probability</span>
+              <strong data-radial-title>Pᵣ(r) · 0 radial nodes</strong>
+            </header>
+            <canvas
+              id="radial-canvas"
+              tabindex="0"
+              role="img"
+              aria-label="Normalized radial probability versus radius divided by n squared effective Bohr lengths"
+            ></canvas>
+            <p class="canvas-error" data-radial-error hidden>
+              The validated Task 10 radial profile could not be rendered.
+            </p>
+          </div>
+        </div>
+
+        <div class="node-ledger">
+          <article><span>Radial nodes</span><strong data-radial-nodes>n − l − 1 = 0</strong><p>Positive finite zeros of the associated Laguerre factor.</p></article>
+          <article><span>Angular nodes</span><strong data-angular-nodes>l = 2</strong><p>Planes or cones fixed by the real angular basis.</p></article>
+          <article><span>Parity</span><strong data-parity>(−1)<sup>l</sup> = even</strong><p>Density remains even even when ψ changes sign.</p></article>
+        </div>
+      </section>
+
+      <section class="gallery-section" id="official-gallery" aria-labelledby="gallery-title">
+        <header class="section-introduction section-introduction--paper">
+          <p>Complete official answer · 25 real states</p>
+          <h2 id="gallery-title">
+            S through G.
+            <em>Nothing omitted.</em>
+          </h2>
+          <span>
+            The representative sequence uses n = l + 1, so every family has
+            zero radial nodes and exposes its full angular structure across all
+            allowed magnetic states.
+          </span>
+        </header>
+
+        <div class="family-ledger">
+          <article><span>S · 1s</span><strong>1 state</strong><p>m = 0 · 0 angular nodes</p></article>
+          <article><span>P · 2p</span><strong>3 states</strong><p>m = −1…+1 · 1 angular node</p></article>
+          <article><span>D · 3d</span><strong>5 states</strong><p>m = −2…+2 · 2 angular nodes</p></article>
+          <article><span>F · 4f</span><strong>7 states</strong><p>m = −3…+3 · 3 angular nodes</p></article>
+          <article><span>G · 5g</span><strong>9 states</strong><p>m = −4…+4 · 4 angular nodes</p></article>
+        </div>
+
+        <figure class="gallery-figure">
+          <img
+            src="../../figures/task10/required_orbital_gallery.png"
+            width="3840"
+            height="2400"
+            loading="lazy"
+            alt="Complete 25-state gallery of normalized real hydrogenic 1s, 2p, 3d, 4f and 5g probability densities."
+          />
+          <figcaption><span>Accepted direct answer · 3840 × 2400 · 300 DPI</span><strong>Complete S–G real-orbital gallery</strong></figcaption>
+        </figure>
+      </section>
+
+      <section class="motion-section" id="motion" aria-labelledby="motion-title">
+        <header class="section-introduction">
+          <p>4K view rotation · stationary state</p>
+          <h2 id="motion-title">
+            The camera moves.
+            <em>The density does not.</em>
+          </h2>
+          <span>
+            Eighty deterministic frames orbit the hydrogen 3d, m = 0 density.
+            This is a change of viewpoint—not an orbital period, electron
+            trajectory, probability flow, or time evolution.
+          </span>
+        </header>
+
+        <figure class="motion-figure">
+          <img
+            data-motion-image
+            src="../../figures/task10/orbital_view_rotation.webp"
+            width="3840"
+            height="2160"
+            loading="lazy"
+            alt="Camera rotating around a stationary hydrogen 3d m equals zero probability density with fixed slices and radial probability."
+          />
+          <figcaption>
+            <span data-motion-caption>4K WebP · 80 frames · 20 fps · exact 4-second loop</span>
+            <a href="../../figures/task10/orbital_view_rotation_viewer.html">Open validated viewer ↗</a>
+          </figcaption>
+        </figure>
+      </section>
+
+      <section class="evidence-section" id="evidence" aria-labelledby="evidence-title">
+        <header class="section-introduction section-introduction--paper">
+          <p>Reproducible acceptance evidence</p>
+          <h2 id="evidence-title">
+            Exact states.
+            <em>Declared rendering.</em>
+          </h2>
+          <span>
+            The laboratory unlocks only after the complete state catalog,
+            official gallery, radial profiles, node table, independent science
+            report, static-media manifest, and motion manifest agree.
+          </span>
+        </header>
+
+        <div class="validation-ledger">
+          <article><span>Scientific validation</span><strong data-core-checks>—</strong><p>Normalization, orthogonality, analytic anchors, nodes, parity, and Z scaling.</p></article>
+          <article><span>Validated state domain</span><strong>204 states</strong><p>Every valid real basis state through n = 8.</p></article>
+          <article><span>Official gallery</span><strong>25 / 25</strong><p>Every magnetic state for 1s, 2p, 3d, 4f, and 5g.</p></article>
+          <article><span>Publication media</span><strong>13 static + 4 motion</strong><p>300-DPI figures, editable vectors, embedded PDFs, and inspected 4K animation.</p></article>
+        </div>
+
+        <div class="figure-pair">
+          <figure>
+            <img src="../../figures/task10/radial_and_nodal_structure.png" width="2400" height="1500" loading="lazy" alt="Hydrogenic radial probabilities, containment scales, and radial-node structure." />
+            <figcaption><span>Accepted figure · 2400 × 1500</span><strong>Radial and nodal structure</strong></figcaption>
+          </figure>
+          <figure>
+            <img src="../../figures/task10/coloured_glass_density.png" width="3000" height="1875" loading="lazy" alt="Required semitransparent coloured-glass construction for hydrogen 3d m equals zero density." />
+            <figcaption><span>Accepted figure · 3000 × 1875</span><strong>Required coloured-glass density</strong></figcaption>
+          </figure>
+        </div>
+
+        <div class="evidence-lock" data-evidence-lock>
+          <span>Scientific state</span>
+          <strong data-lock-title>Loading committed evidence</strong>
+          <p data-lock-detail>All controls remain disabled until every validated data and media layer agrees.</p>
+          <small data-evidence-status>Checking</small>
+        </div>
+
+        <nav class="evidence-downloads" aria-label="Task 10 evidence downloads">
+          <a href="../../data/task10/manifest.json">Scientific manifest</a>
+          <a href="../../data/task10/validation_report.json">22-check report</a>
+          <a href="../../data/task10/orbital_state_catalog.csv">204-state catalog</a>
+          <a href="../../data/task10/official_gallery.csv">25-state gallery data</a>
+          <a href="../../figures/task10/manifest.json">Static-media manifest</a>
+          <a href="../../figures/task10/motion_manifest.json">Motion manifest</a>
+          <a href="../../task10_hydrogenic_orbitals/app/index.html">Standalone explorer</a>
+        </nav>
+
+        <aside class="scope-boundary">
+          <strong>Scope boundary</strong>
+          <p>
+            This is the stationary, non-relativistic, one-electron point-Coulomb
+            problem. It omits screening, electron–electron correlation, spin,
+            fine and hyperfine structure, radiative corrections, finite nuclear
+            size, external fields, molecular bonding, transitions, measurement,
+            and detector response.
+          </p>
+        </aside>
+      </section>
+    </main>
+
+    <footer class="task-footer">
+      <a href="./task-09.html">← Task 09 · Compton scattering</a>
+      <div><span>BPhO Computational Challenge 2026</span><strong>Task 10 · normalized hydrogenic orbitals</strong></div>
+      <a href="../tasks.html">All tasks ↑</a>
+    </footer>
+
+    <script src="../vendor/packages/gsap/dist/gsap.min.js"></script>
+    <script src="../vendor/packages/gsap/dist/ScrollTrigger.min.js"></script>
+    <script type="module" src="../assets/task-10-explorer.js?v=20260731b"></script>
+    <script src="../assets/task-10-motion.js?v=20260731b"></script>
+  </body>
+</html>

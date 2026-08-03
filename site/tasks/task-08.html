@@ -1,0 +1,422 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta
+      name="description"
+      content="A validated two-angle classical-versus-quantum photon-polarisation mismatch calculator for BPhO Computational Challenge Task 8."
+    />
+    <meta name="theme-color" content="#130f17" />
+    <title>Task 08 — Quantum Mismatch | BPhO Computational Challenge 2026</title>
+    <link
+      rel="icon"
+      href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' fill='%23130f17'/%3E%3Ccircle cx='18' cy='32' r='12' fill='none' stroke='%23ff784d' stroke-width='3'/%3E%3Ccircle cx='46' cy='32' r='12' fill='none' stroke='%234fe1d1' stroke-width='3'/%3E%3Cpath d='M18 38l0-12M40 38l12-12' stroke='%23fff2dc' stroke-width='3'/%3E%3C/svg%3E"
+    />
+    <link rel="stylesheet" href="../assets/task-08.css?v=20260731c" />
+  </head>
+  <body>
+    <a class="skip-link" href="#detector-laboratory">Skip to detector calculator</a>
+
+    <header class="task-header">
+      <a class="back-link" href="../tasks.html" aria-label="Return to all tasks">
+        <svg viewBox="0 0 24 24" aria-hidden="true">
+          <path d="M19 12H5M11 18l-6-6 6-6" />
+        </svg>
+        All tasks
+      </a>
+      <p>Task 08 <span>/</span> Quantum correlation</p>
+      <a class="method-link" href="#finite-sample">Sampling extension</a>
+    </header>
+
+    <main>
+      <section class="mismatch-hero" aria-labelledby="page-title">
+        <header class="hero-copy">
+          <p>Entangled photons · two detector angles</p>
+          <h1 id="page-title">
+            Same settings.
+            <em>Different answers.</em>
+          </h1>
+          <span>
+            Rotate detector A through θ and detector B through φ. The supplied
+            classical comparison retains both absolute directions; the quantum
+            prediction depends only on their relative angle.
+          </span>
+        </header>
+
+        <section
+          class="detector-laboratory is-loading"
+          id="detector-laboratory"
+          aria-labelledby="detector-title"
+          data-detector-laboratory
+        >
+          <header class="laboratory-header">
+            <div>
+              <span id="detector-title">Live two-detector calculator</span>
+              <strong data-angle-title>θ = −30° · φ = +30°</strong>
+            </div>
+            <p data-laboratory-badge>Checking evidence</p>
+          </header>
+
+          <div class="detector-canvas-wrap">
+            <canvas
+              id="detector-canvas"
+              tabindex="0"
+              role="img"
+              aria-label="Two photon-polarisation detector dials at minus 30 and plus 30 degrees"
+            ></canvas>
+            <div class="detector-loading" data-detector-loading>
+              Reading validated angle grid
+            </div>
+            <p class="detector-error" data-detector-error hidden>
+              The validated Task 8 detector evidence could not be loaded.
+            </p>
+          </div>
+
+          <div class="angle-controls" data-angle-controls>
+            <label>
+              <span>Detector A · θ <output for="theta-angle" data-theta-output>−30°</output></span>
+              <input id="theta-angle" type="range" min="-90" max="90" step="1" value="-30" disabled />
+              <small><span>−90°</span><span>0°</span><span>+90°</span></small>
+            </label>
+            <label>
+              <span>Detector B · φ <output for="phi-angle" data-phi-output>+30°</output></span>
+              <input id="phi-angle" type="range" min="-90" max="90" step="1" value="30" disabled />
+              <small><span>−90°</span><span>0°</span><span>+90°</span></small>
+            </label>
+          </div>
+
+          <nav class="angle-presets" aria-label="Validated detector presets">
+            <button type="button" data-angle-preset="official" disabled>Official −30° / +30°</button>
+            <button type="button" data-angle-preset="zero" disabled>Aligned 0°</button>
+            <button type="button" data-angle-preset="aligned" disabled>Aligned 45°</button>
+            <button type="button" data-angle-preset="contrast" disabled>Maximum contrast</button>
+            <button type="button" data-angle-preset="perpendicular" disabled>Perpendicular</button>
+          </nav>
+        </section>
+
+        <section class="result-comparison" aria-labelledby="result-title">
+          <h2 class="visually-hidden" id="result-title">Current mismatch probabilities</h2>
+          <article class="result-card result-card--classical">
+            <header>
+              <span>Classical mismatch</span>
+              <small>Independent Malus outcomes</small>
+            </header>
+            <output data-classical-percent>37.5%</output>
+            <p data-classical-decimal>P = 0.375</p>
+            <div class="probability-track"><i data-classical-fill style="width:37.5%"></i></div>
+          </article>
+          <article class="result-card result-card--quantum">
+            <header>
+              <span>Quantum mismatch</span>
+              <small>Relative-angle correlation</small>
+            </header>
+            <output data-quantum-percent>75.0%</output>
+            <p data-quantum-decimal>P = 0.750</p>
+            <div class="probability-track"><i data-quantum-fill style="width:75%"></i></div>
+          </article>
+          <article class="difference-card">
+            <span>Quantum − classical</span>
+            <output data-difference>+37.5 pp</output>
+            <p data-difference-summary>Quantum predicts 37.5 percentage points more mismatch.</p>
+          </article>
+          <div class="official-lock">
+            <span>Official anchor</span>
+            <strong data-official-lock>3/8 versus 3/4</strong>
+            <small data-relative-angle>relative angle δ = +60°</small>
+          </div>
+        </section>
+      </section>
+
+      <section class="model-section" id="model" aria-labelledby="model-title">
+        <header class="section-introduction section-introduction--paper">
+          <p>Two equations, one common scale</p>
+          <h2 id="model-title">
+            Absolute directions meet
+            <em>relative orientation.</em>
+          </h2>
+          <span>
+            Both outputs are ideal mismatch probabilities on the fixed interval
+            0 to 1. The signed contrast is reported in percentage points, avoiding
+            an undefined ratio when the classical result is zero.
+          </span>
+        </header>
+
+        <div class="equation-comparison">
+          <article class="equation-classical">
+            <span>Supplied classical comparison</span>
+            <p>
+              P<sub>C</sub> = 1 − cos²θ cos²φ − sin²θ sin²φ
+            </p>
+            <small>
+              Independently combined detector outcomes retain θ and φ relative
+              to the fixed reference axis.
+            </small>
+          </article>
+          <article class="equation-quantum">
+            <span>Quantum prediction</span>
+            <p>P<sub>Q</sub> = sin²(φ − θ)</p>
+            <small>
+              Only the relative angle δ = φ − θ controls the ideal entangled-pair mismatch.
+            </small>
+          </article>
+          <article class="equation-difference">
+            <span>Signed contrast</span>
+            <p>ΔP = −½ sin(2θ) sin(2φ)</p>
+            <strong>−0.5 ≤ ΔP ≤ +0.5</strong>
+          </article>
+        </div>
+
+        <div class="reference-derivation">
+          <span>Official BPhO example</span>
+          <p>θ = −30° · φ = +30° · δ = 60°</p>
+          <strong>
+            P<sub>C</sub> = 3/8 = 37.5%
+            <i></i>
+            P<sub>Q</sub> = 3/4 = 75.0%
+          </strong>
+        </div>
+      </section>
+
+      <section class="sweep-section" id="sweep" aria-labelledby="sweep-title">
+        <header class="section-introduction">
+          <p>Full-angle behaviour</p>
+          <h2 id="sweep-title">
+            Hold θ.
+            <em>Rotate φ.</em>
+          </h2>
+          <span>
+            The graph recomputes all 361 detector-B positions at 0.5° spacing
+            for the selected θ. Both curves stay on the same 0–100% scale; the
+            vertical marker follows the live φ setting.
+          </span>
+        </header>
+
+        <div class="sweep-laboratory">
+          <header class="figure-toolbar">
+            <div>
+              <span>Current sweep</span>
+              <strong data-sweep-title>θ = −30° fixed · φ = +30° selected</strong>
+            </div>
+            <p>Classical · solid orange / Quantum · dashed teal</p>
+            <span data-sweep-status>Evidence loading</span>
+          </header>
+          <div class="sweep-canvas-wrap">
+            <canvas
+              id="sweep-canvas"
+              tabindex="0"
+              role="img"
+              aria-label="Classical and quantum mismatch probabilities as detector B rotates from minus 90 to plus 90 degrees"
+            ></canvas>
+            <div class="chart-tooltip" data-sweep-tooltip hidden></div>
+            <p class="chart-error" data-sweep-error hidden>
+              The validated Task 8 sweep could not be loaded.
+            </p>
+          </div>
+        </div>
+
+        <div class="sweep-anchors">
+          <article><span>Aligned to θ</span><strong>P<sub>Q</sub> = 0</strong><p>Equal detector axes always give zero quantum mismatch.</p></article>
+          <article><span>90° from θ</span><strong>P<sub>Q</sub> = 1</strong><p>Perpendicular measurement axes give unit quantum mismatch.</p></article>
+          <article><span>Classical range at θ = −30°</span><strong>25% → 75%</strong><p>The absolute detector orientation remains visible.</p></article>
+        </div>
+      </section>
+
+      <section class="landscape-section" id="landscape" aria-labelledby="landscape-title">
+        <header class="section-introduction section-introduction--paper">
+          <p>All 32,761 angle pairs</p>
+          <h2 id="landscape-title">
+            Contrast forms
+            <em>four signed lobes.</em>
+          </h2>
+          <span>
+            The exact 181×181 evidence grid reveals where the quantum model
+            predicts more or fewer mismatches than the supplied classical
+            comparison. White means agreement; orange and teal mark opposite signs.
+          </span>
+        </header>
+
+        <div class="landscape-layout">
+          <div class="landscape-figure">
+            <canvas
+              id="landscape-canvas"
+              tabindex="0"
+              role="img"
+              aria-label="Heatmap of quantum minus classical mismatch for all detector angle pairs"
+            ></canvas>
+            <p class="chart-error" data-landscape-error hidden>
+              The validated Task 8 angle grid could not be loaded.
+            </p>
+          </div>
+          <aside class="landscape-reading">
+            <span>Selected grid point</span>
+            <strong data-landscape-selected>−30° / +30°</strong>
+            <p data-landscape-difference>ΔP = +0.375</p>
+            <div class="diverging-key" aria-label="Contrast colour scale">
+              <i></i>
+              <small><span>−0.5</span><span>0</span><span>+0.5</span></small>
+            </div>
+            <dl>
+              <div><dt>Maximum positive</dt><dd>−45° / +45° · +0.5</dd></div>
+              <div><dt>Maximum negative</dt><dd>+45° / +45° · −0.5</dd></div>
+              <div><dt>Agreement lines</dt><dd>θ or φ at 0° or ±90°</dd></div>
+            </dl>
+          </aside>
+        </div>
+      </section>
+
+      <section class="sampling-section" id="finite-sample" aria-labelledby="sampling-title">
+        <header class="section-introduction">
+          <p>Optional extension · exact theory remains primary</p>
+          <h2 id="sampling-title">
+            Probabilities become
+            <em>integer counts.</em>
+          </h2>
+          <span>
+            Choose N and a reproducible seed to draw one independent binomial
+            sample for each model. Observed counts fluctuate; they never replace
+            the exact probabilities above.
+          </span>
+        </header>
+
+        <div class="sampling-controls" data-sampling-controls>
+          <label>
+            <span>Detected photon pairs, N</span>
+            <input id="photon-pairs" type="number" min="10" max="100000" step="10" value="1000" disabled />
+            <small>10 to 100,000</small>
+          </label>
+          <div class="sample-presets" role="group" aria-label="Photon count presets">
+            <button type="button" data-photon-preset="100" disabled>100</button>
+            <button type="button" data-photon-preset="1000" disabled>1,000</button>
+            <button type="button" data-photon-preset="10000" disabled>10,000</button>
+            <button type="button" data-photon-preset="100000" disabled>100,000</button>
+          </div>
+          <label>
+            <span>Reproducible seed</span>
+            <input id="sample-seed" type="number" min="0" max="4294967295" step="1" value="2026" disabled />
+            <small>Unsigned 32-bit simulation seed</small>
+          </label>
+          <button class="next-sample" type="button" data-next-sample disabled>Draw next sample</button>
+        </div>
+
+        <div class="sample-context">
+          <span data-sample-context>θ = −30° · φ = +30° · N = 1,000 · seed 2,026</span>
+          <strong>24/24 statistical checks pass</strong>
+        </div>
+
+        <div class="sample-grid">
+          <article class="sample-card sample-card--classical">
+            <header><span>Classical sample</span><small data-classical-theory>theory 37.5%</small></header>
+            <output data-classical-observed>36.3%</output>
+            <p><strong data-classical-count>363</strong> mismatches from <span data-classical-total>1,000</span></p>
+            <div class="interval-track">
+              <i data-classical-interval></i>
+              <b data-classical-theory-marker></b>
+              <em data-classical-observed-marker></em>
+            </div>
+            <dl>
+              <div><dt>Expected count</dt><dd data-classical-expected>375.0</dd></div>
+              <div><dt>95% Wilson interval</dt><dd data-classical-wilson>33.4–39.3%</dd></div>
+              <div><dt>Sample residual</dt><dd data-classical-residual>−0.78σ</dd></div>
+            </dl>
+          </article>
+          <article class="sample-card sample-card--quantum">
+            <header><span>Quantum sample</span><small data-quantum-theory>theory 75.0%</small></header>
+            <output data-quantum-observed>77.0%</output>
+            <p><strong data-quantum-count>770</strong> mismatches from <span data-quantum-total>1,000</span></p>
+            <div class="interval-track">
+              <i data-quantum-interval></i>
+              <b data-quantum-theory-marker></b>
+              <em data-quantum-observed-marker></em>
+            </div>
+            <dl>
+              <div><dt>Expected count</dt><dd data-quantum-expected>750.0</dd></div>
+              <div><dt>95% Wilson interval</dt><dd data-quantum-wilson>74.3–79.5%</dd></div>
+              <div><dt>Sample residual</dt><dd data-quantum-residual>+1.46σ</dd></div>
+            </dl>
+          </article>
+        </div>
+
+        <aside class="sampling-boundary">
+          <span>Simulation boundary</span>
+          <p>
+            Mulberry32 is deterministic and reproducible, not cryptographically
+            secure. This educational binomial sample must never generate a real
+            key or security token.
+          </p>
+        </aside>
+      </section>
+
+      <section class="evidence-section" id="evidence" aria-labelledby="evidence-title">
+        <header class="section-introduction section-introduction--paper">
+          <p>Reproducible evidence</p>
+          <h2 id="evidence-title">
+            Exact theory.
+            <em>Separate sampling.</em>
+          </h2>
+          <span>
+            The interaction unlocks only after the core and statistical reports,
+            reference cases, full sweep, and full two-dimensional grid agree with
+            their independent double-angle forms.
+          </span>
+        </header>
+
+        <div class="validation-ledger">
+          <article><span>Core validation</span><strong data-core-checks>—</strong><p>Equations, bounds, symmetry, periodicity, grid, and cross-language anchors.</p></article>
+          <article><span>Statistical validation</span><strong data-statistical-checks>—</strong><p>PRNG vector, stream separation, counts, Wilson intervals, and fixtures.</p></article>
+          <article><span>Evidence rows</span><strong>33,122</strong><p>361-point sweep plus all 181×181 angle pairs.</p></article>
+          <article><span>Publication figures</span><strong>4 × PNG/SVG/PDF</strong><p>2400×1500 figures and a 3840×2160 summary, all Times New Roman.</p></article>
+        </div>
+
+        <div class="figure-pair">
+          <figure>
+            <img src="../../figures/task08/probability_sweep.png" width="2400" height="1500" loading="lazy" alt="Classical and quantum mismatch probability sweep with signed difference for detector A fixed at minus 30 degrees." />
+            <figcaption><span>Accepted figure · 2400 × 1500</span><strong>Fixed-θ probability sweep</strong></figcaption>
+          </figure>
+          <figure>
+            <img src="../../figures/task08/mismatch_landscape.png" width="2400" height="1500" loading="lazy" alt="Classical, quantum, and difference landscapes over both detector angles." />
+            <figcaption><span>Accepted figure · Times New Roman</span><strong>Complete mismatch landscape</strong></figcaption>
+          </figure>
+        </div>
+
+        <div class="evidence-lock" data-evidence-lock>
+          <span>Scientific state</span>
+          <strong data-lock-title>Loading committed evidence</strong>
+          <p data-lock-detail>All controls remain disabled until both validated layers agree.</p>
+          <small data-evidence-status>Checking</small>
+        </div>
+
+        <nav class="evidence-downloads" aria-label="Task 8 evidence downloads">
+          <a href="../../data/task08/manifest.json">Core manifest</a>
+          <a href="../../data/task08/validation_report.json">42-check report</a>
+          <a href="../../data/task08/statistical_validation_report.json">24-check report</a>
+          <a href="../../data/task08/mismatch_grid.csv">Angle grid</a>
+          <a href="../../data/task08/finite_photon_reference.json">Sample fixtures</a>
+          <a href="../../figures/task08/task08_summary.png">4K summary</a>
+          <a href="../../task08_quantum_cryptography/app/index.html">Standalone calculator</a>
+        </nav>
+
+        <aside class="scope-boundary">
+          <strong>Scope boundary</strong>
+          <p>
+            This is the official mismatch calculator, not a complete QKD
+            protocol. It assumes ideal entangled pairs and perfect two-outcome
+            detectors, with no loss, dark counts, decoherence, eavesdropper, key
+            sifting, error correction, privacy amplification, or security proof.
+          </p>
+        </aside>
+      </section>
+    </main>
+
+    <footer class="task-footer">
+      <a href="./task-07.html">← Task 07 · Particle in a box</a>
+      <div><span>BPhO Computational Challenge 2026</span><strong>Task 08 · accepted comparison calculator</strong></div>
+      <a href="../tasks.html">All tasks ↑</a>
+    </footer>
+
+    <script src="../vendor/packages/gsap/dist/gsap.min.js"></script>
+    <script src="../vendor/packages/gsap/dist/ScrollTrigger.min.js"></script>
+    <script type="module" src="../assets/task-08-calculator.js?v=20260731"></script>
+    <script src="../assets/task-08-motion.js?v=20260731"></script>
+  </body>
+</html>

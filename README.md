@@ -57,8 +57,22 @@ figures/            Saved graphs and visual results
 reports/            Written explanations and final write-up material
 presentation/       Curated slide assets and timed narration scripts
 data/               Small input data files
+site/               Static website for the landing page and Tasks 1–10
 requirements.txt    Python packages used by the project
 ```
+
+## Interactive website
+
+The integrated website is in [`site/`](site/). It contains the landing page,
+the ten-task index, and browser-based views for Tasks 1–10. Preview it from
+the repository root with:
+
+```bash
+python3 -m http.server 8080
+```
+
+Then open [`http://localhost:8080/site/`](http://localhost:8080/site/). The
+site README documents its local vendor dependencies and serving requirements.
 
 Current presentation material:
 
