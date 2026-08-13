@@ -934,11 +934,8 @@
       ) {
         throw new Error("The evidence bundle is not fully validated.");
       }
-      populateBenchmarks();
-      revealEvidence();
       updateMaterialReadouts();
       drawAll();
-      observeEvidenceReveal();
 
       if ("ResizeObserver" in window) {
         const observer = new ResizeObserver(scheduleResize);
