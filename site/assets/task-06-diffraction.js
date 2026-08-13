@@ -28,7 +28,9 @@ const chartContext = chartCanvas.getContext("2d");
 const chartTooltip = document.querySelector("[data-validation-tooltip]");
 const voltageControl = document.querySelector("#accelerating-voltage");
 const controls = document.querySelector("[data-diffraction-controls]");
-const evidenceLock = document.querySelector("[data-evidence-lock]");
+const sweepToggle = document.querySelector("[data-sweep-toggle]");
+const resetButton = document.querySelector("[data-reset-model]");
+const exportButton = document.querySelector("[data-export-csv]");
 
 const outputs = {
   voltageTitle: document.querySelector("[data-voltage-title]"),
@@ -47,10 +49,38 @@ const outputs = {
   braggOrders: document.querySelector("[data-bragg-orders]"),
   screenOrders: document.querySelector("[data-screen-orders]"),
   selectedBranch: document.querySelector("[data-selected-branch]"),
-  validationCount: document.querySelector("[data-validation-count]"),
-  evidenceStatus: document.querySelector("[data-evidence-status]"),
-  lockTitle: document.querySelector("[data-lock-title]"),
-  lockDetail: document.querySelector("[data-lock-detail]"),
+  diagnosticVoltage: document.querySelector("[data-diagnostic-voltage]"),
+  diagnosticWavelength: document.querySelector("[data-diagnostic-wavelength]"),
+  diagnosticScaling: document.querySelector("[data-diagnostic-scaling]"),
+  d1LiveSpacing: document.querySelector("[data-d1-live-spacing]"),
+  d1Q: document.querySelector("[data-d1-q]"),
+  d1Theta: document.querySelector("[data-d1-theta]"),
+  d1Phi: document.querySelector("[data-d1-phi]"),
+  d1LiveRadius: document.querySelector("[data-d1-live-radius]"),
+  d2Q: document.querySelector("[data-d2-q]"),
+  d2Theta: document.querySelector("[data-d2-theta]"),
+  d2Phi: document.querySelector("[data-d2-phi]"),
+  d2LiveRadius: document.querySelector("[data-d2-live-radius]"),
+  d2LiveSpacing: document.querySelector("[data-d2-live-spacing]"),
+  scalingConstant: document.querySelector("[data-scaling-constant]"),
+  lambda1Kv: document.querySelector("[data-lambda-1kv]"),
+  lambda3Kv: document.querySelector("[data-lambda-3kv]"),
+  lambda5Kv: document.querySelector("[data-lambda-5kv]"),
+  scalingCheck: document.querySelector("[data-scaling-check]"),
+  braggCheck: document.querySelector("[data-bragg-check]"),
+  geometryCheck: document.querySelector("[data-geometry-check]"),
+  d1ValidationGradient: document.querySelector("[data-d1-validation-gradient]"),
+  d2ValidationGradient: document.querySelector("[data-d2-validation-gradient]"),
+  d1TheoreticalGradient: document.querySelector("[data-d1-theoretical-gradient]"),
+  d2TheoreticalGradient: document.querySelector("[data-d2-theoretical-gradient]"),
+  d1Intercept: document.querySelector("[data-d1-intercept]"),
+  d2Intercept: document.querySelector("[data-d2-intercept]"),
+  d1RSquared: document.querySelector("[data-d1-r-squared]"),
+  d2RSquared: document.querySelector("[data-d2-r-squared]"),
+  d1ValidationSpacing: document.querySelector("[data-d1-validation-spacing]"),
+  d2ValidationSpacing: document.querySelector("[data-d2-validation-spacing]"),
+  d1RecoveredH: document.querySelector("[data-d1-recovered-h]"),
+  d2RecoveredH: document.querySelector("[data-d2-recovered-h]"),
 };
 
 const state = {
@@ -58,7 +88,14 @@ const state = {
   voltageIndex: 200,
   visibleFamilies: new Set(["d1", "d2"]),
   chartPoints: [],
+  sweepFrame: null,
+  sweepRunning: false,
+  sweepPaused: false,
+  sweepStartedAt: 0,
+  sweepStartVoltage: 1000,
 };
+
+const SWEEP_DURATION_MS = 8000;
 
 function canvasSize(canvas, context) {
   const width = Math.max(1, canvas.clientWidth);
@@ -196,7 +233,7 @@ function drawScreen() {
   screenContext.font = `${compact ? 9 : 11}px "Times New Roman"`;
   screenContext.textAlign = "left";
   screenContext.fillText(
-    "EXACT FORWARD-SCREEN GEOMETRY",
+    "FORWARD-SCREEN GEOMETRY",
     compact ? 14 : 22,
     compact ? 24 : 27,
   );
@@ -385,7 +422,7 @@ function drawValidationChart() {
 function updateOutputs() {
   const record = currentRecord();
   const kv = record.voltageKv.toFixed(2);
-  outputs.voltageTitle.textContent = `${kv} kV · exact geometry`;
+  outputs.voltageTitle.textContent = `${kv} kV`;
   outputs.screenBadge.textContent = `${
     record.d1.maximumScreenOrder + record.d2.maximumScreenOrder
   } forward orders`;
@@ -398,6 +435,7 @@ function updateOutputs() {
   outputs.braggOrders.textContent = `d₁ ${record.d1.maximumBraggOrder} · d₂ ${record.d2.maximumBraggOrder}`;
   outputs.screenOrders.textContent = `d₁ ${record.d1.maximumScreenOrder} · d₂ ${record.d2.maximumScreenOrder}`;
   outputs.selectedBranch.textContent = `${kv} kV`;
+  updateDiagnostics(record);
 
   document.querySelectorAll("[data-voltage-preset]").forEach((button) => {
     button.classList.toggle(
@@ -426,6 +464,35 @@ function updateOutputs() {
   );
 }
 
+function updateDiagnostics(record) {
+  outputs.diagnosticVoltage.textContent = `${record.voltageV.toFixed(0)} V`;
+  outputs.diagnosticWavelength.textContent = `${record.wavelengthPm.toFixed(6)} pm`;
+  outputs.diagnosticScaling.textContent = `${(
+    record.wavelengthPm * Math.sqrt(record.voltageV)
+  ).toFixed(6)} pm·V¹ᐟ²`;
+
+  for (const familyId of ["d1", "d2"]) {
+    const family = record[familyId];
+    const spacingM = state.evidence.manifest.configuration.spacings.find(
+      (spacing) => spacing.identifier === familyId,
+    ).spacing_m;
+    const thetaRad = family.phiRad / 2;
+    const thetaDeg = family.phiDeg / 2;
+    outputs[`${familyId}Q`].textContent = family.q.toFixed(9);
+    outputs[`${familyId}Theta`].textContent = `${thetaDeg.toFixed(6)}°`;
+    outputs[`${familyId}Phi`].textContent = `${family.phiDeg.toFixed(6)}°`;
+    outputs[`${familyId}LiveRadius`].textContent = `${family.photoRadiusMm.toFixed(6)} mm`;
+    outputs[`${familyId}LiveSpacing`].textContent = (spacingM * 1e9).toFixed(3);
+    document
+      .querySelector(`[data-diagnostic-family="${familyId}"]`)
+      .classList.toggle("is-disabled", !state.visibleFamilies.has(familyId));
+
+    if (Math.abs(Math.sin(thetaRad) - family.q) > 5e-12) {
+      throw new Error(`Live ${familyId} Bragg diagnostic is inconsistent`);
+    }
+  }
+}
+
 function setVoltage(voltageV) {
   const bounded = Math.min(5000, Math.max(1000, Number(voltageV)));
   const snapped = Math.round((bounded - 1000) / 10) * 10 + 1000;
@@ -434,10 +501,137 @@ function setVoltage(voltageV) {
   updateOutputs();
   drawScreen();
   drawValidationChart();
+  window.dispatchEvent(
+    new CustomEvent("task06:voltage", { detail: { voltageV: snapped } }),
+  );
 }
 
 function stepVoltage(step) {
   setVoltage(currentRecord().voltageV + step);
+}
+
+function updateSweepButton() {
+  if (state.sweepRunning) sweepToggle.textContent = "Pause sweep";
+  else if (state.sweepPaused) sweepToggle.textContent = "Resume sweep";
+  else sweepToggle.textContent = "Sweep 1 → 5 kV";
+  sweepToggle.setAttribute("aria-pressed", String(state.sweepRunning));
+}
+
+function pauseSweep(allowResume = true) {
+  if (state.sweepFrame !== null) cancelAnimationFrame(state.sweepFrame);
+  state.sweepFrame = null;
+  state.sweepPaused = allowResume && state.sweepRunning;
+  state.sweepRunning = false;
+  updateSweepButton();
+}
+
+function sweepTick(timestamp) {
+  if (!state.sweepRunning) return;
+  const elapsed = timestamp - state.sweepStartedAt;
+  const remainingRange = 5000 - state.sweepStartVoltage;
+  const remainingDuration = SWEEP_DURATION_MS * (remainingRange / 4000);
+  const progress = Math.min(1, elapsed / Math.max(1, remainingDuration));
+  const voltage = state.sweepStartVoltage + remainingRange * progress;
+  setVoltage(voltage);
+  if (progress >= 1) {
+    state.sweepRunning = false;
+    state.sweepPaused = false;
+    state.sweepFrame = null;
+    updateSweepButton();
+    return;
+  }
+  state.sweepFrame = requestAnimationFrame(sweepTick);
+}
+
+function startSweep(resume = false) {
+  if (state.sweepRunning) return;
+  if (!resume || currentRecord().voltageV >= 5000) setVoltage(1000);
+  state.sweepStartVoltage = currentRecord().voltageV;
+  state.sweepStartedAt = performance.now();
+  state.sweepRunning = true;
+  state.sweepPaused = false;
+  updateSweepButton();
+  state.sweepFrame = requestAnimationFrame(sweepTick);
+}
+
+function resetModel() {
+  pauseSweep(false);
+  state.visibleFamilies = new Set(["d1", "d2"]);
+  controls.querySelectorAll("[data-family]").forEach((checkbox) => {
+    checkbox.checked = true;
+  });
+  setVoltage(3000);
+}
+
+function csvCell(value) {
+  const text = String(value);
+  return /[",\n]/.test(text) ? `"${text.replaceAll('"', '""')}"` : text;
+}
+
+function buildExportCsv() {
+  const { manifest } = state.evidence;
+  const spacingById = Object.fromEntries(
+    manifest.configuration.spacings.map((spacing) => [
+      spacing.identifier,
+      spacing.spacing_m,
+    ]),
+  );
+  const lines = [
+    "# BPhO Computational Challenge 2026 — Official Task 06 of 10",
+    `# model,${manifest.model}`,
+    `# constants,${manifest.constant_source}`,
+    `# schema_version,${manifest.output_schema_version}`,
+    `# tube_radius_mm,${manifest.configuration.tube_radius_m * 1000}`,
+    "# angle_definition,theta is Bragg glancing angle; phi=2theta is total beam deflection",
+    "# geometry,x=r sin(2phi) photographic radius; y=2r sin(phi) caliper chord",
+    [
+      "voltage_V",
+      "wavelength_pm",
+      "family",
+      "spacing_nm",
+      "order_n",
+      "q_sin_theta",
+      "theta_deg",
+      "phi_deg",
+      "photographic_radius_x_mm",
+      "caliper_chord_y_mm",
+      "inverse_sqrt_voltage_V_neg_half",
+    ].join(","),
+  ];
+
+  for (const record of state.evidence.sweep) {
+    for (const familyId of ["d1", "d2"]) {
+      const family = record[familyId];
+      lines.push(
+        [
+          record.voltageV,
+          record.wavelengthPm.toPrecision(16),
+          familyId,
+          spacingById[familyId] * 1e9,
+          1,
+          family.q.toPrecision(16),
+          (family.phiDeg / 2).toPrecision(16),
+          family.phiDeg.toPrecision(16),
+          family.photoRadiusMm.toPrecision(16),
+          (family.caliperDiameterM * 1000).toPrecision(16),
+          (1 / Math.sqrt(record.voltageV)).toPrecision(16),
+        ].map(csvCell).join(","),
+      );
+    }
+  }
+  return `${lines.join("\n")}\n`;
+}
+
+function exportCsv() {
+  const blob = new Blob([buildExportCsv()], { type: "text/csv;charset=utf-8" });
+  const url = URL.createObjectURL(blob);
+  const anchor = document.createElement("a");
+  anchor.href = url;
+  anchor.download = "task06_first_order_electron_diffraction.csv";
+  document.body.append(anchor);
+  anchor.click();
+  anchor.remove();
+  setTimeout(() => URL.revokeObjectURL(url), 0);
 }
 
 function nearestChartPoint(event) {
@@ -537,27 +731,73 @@ function populateFits() {
   outputs.validationStatus.textContent = "Both 401-point fits locked";
 }
 
-function populateEvidence() {
-  const checkCount = state.evidence.validation.checks.length;
-  outputs.validationCount.textContent = `${checkCount} / ${checkCount}`;
-  outputs.evidenceStatus.textContent =
-    "Independent 60-digit reference path passes";
+function populateValidationEvidence() {
+  const { manifest, validation, sweep, fits } = state.evidence;
+  const constants = manifest.constants;
+  const firstOrder = Object.fromEntries(
+    fits
+      .filter((fit) => fit.fitKind === "first_order")
+      .map((fit) => [fit.spacingId, fit]),
+  );
+  const checks = Object.fromEntries(
+    validation.checks.map((check) => [check.name, check]),
+  );
+  const spacingById = Object.fromEntries(
+    manifest.configuration.spacings.map((spacing) => [
+      spacing.identifier,
+      spacing.spacing_m,
+    ]),
+  );
+  const scalingPm = sweep[0].wavelengthPm * Math.sqrt(sweep[0].voltageV);
+  outputs.scalingConstant.textContent = `${scalingPm.toFixed(9)} pm·V¹ᐟ²`;
+  outputs.lambda1Kv.textContent = `${sweep[0].wavelengthPm.toFixed(6)} pm`;
+  outputs.lambda3Kv.textContent = `${sweep[200].wavelengthPm.toFixed(6)} pm`;
+  outputs.lambda5Kv.textContent = `${sweep[400].wavelengthPm.toFixed(6)} pm`;
+  outputs.scalingCheck.textContent = `PASS — full-sweep relative variation ${checks.inverse_sqrt_voltage_scaling.observed.toExponential(3)} (limit ${checks.inverse_sqrt_voltage_scaling.tolerance.toExponential(1)}).`;
+  outputs.braggCheck.textContent =
+    checks.bragg_ratio_identity.passed && checks.bragg_angle_identity.passed
+    ? "PASS — q = nλ/(2d) = sin θ"
+    : "FAIL";
+  outputs.geometryCheck.textContent =
+    checks.photographic_geometry.passed && checks.caliper_geometry.passed
+      ? "PASS — x and y independently"
+      : "FAIL";
+
+  for (const familyId of ["d1", "d2"]) {
+    const fit = firstOrder[familyId];
+    const spacingM = spacingById[familyId];
+    const theoreticalGradient =
+      (2 * spacingM * Math.sqrt(2 * constants.electron_mass_kg * constants.elementary_charge_c)) /
+      constants.planck_constant_j_s;
+    const recoveredH =
+      (2 * spacingM * Math.sqrt(2 * constants.electron_mass_kg * constants.elementary_charge_c)) /
+      fit.gradient;
+    outputs[`${familyId}ValidationGradient`].textContent = fit.gradient.toFixed(17);
+    outputs[`${familyId}TheoreticalGradient`].textContent = theoreticalGradient.toFixed(17);
+    outputs[`${familyId}Intercept`].textContent = `${fit.intercept.toExponential(3)} V⁻¹ᐟ²`;
+    outputs[`${familyId}RSquared`].textContent = fit.rSquared.toFixed(12);
+    outputs[`${familyId}ValidationSpacing`].textContent = `${fit.recoveredSpacingNm.toFixed(6)} nm`;
+    outputs[`${familyId}RecoveredH`].textContent = `${(recoveredH / 1e-34).toFixed(8)} × 10⁻³⁴ J s`;
+  }
 }
 
 function enableControls() {
   controls
     .querySelectorAll("button, input")
     .forEach((control) => (control.disabled = false));
+  exportButton.disabled = false;
 }
 
 function disableControls() {
   controls
     .querySelectorAll("button, input")
     .forEach((control) => (control.disabled = true));
+  exportButton.disabled = true;
 }
 
 function bindEvents() {
   voltageControl.addEventListener("input", () => {
+    pauseSweep(false);
     setVoltage(Number(voltageControl.value));
   });
 
@@ -565,6 +805,7 @@ function bindEvents() {
     .querySelectorAll("[data-voltage-preset]")
     .forEach((button) => {
       button.addEventListener("click", () => {
+        pauseSweep(false);
         setVoltage(Number(button.dataset.voltagePreset));
       });
     });
@@ -573,6 +814,7 @@ function bindEvents() {
     checkbox.addEventListener("change", () => {
       if (checkbox.checked) state.visibleFamilies.add(checkbox.dataset.family);
       else state.visibleFamilies.delete(checkbox.dataset.family);
+      updateDiagnostics(currentRecord());
       drawScreen();
     });
   });
@@ -587,6 +829,12 @@ function bindEvents() {
     chartCanvas.style.cursor = "crosshair";
   });
   chartCanvas.addEventListener("click", handleChartClick);
+  sweepToggle.addEventListener("click", () => {
+    if (state.sweepRunning) pauseSweep(true);
+    else startSweep(state.sweepPaused);
+  });
+  resetButton.addEventListener("click", resetModel);
+  exportButton.addEventListener("click", exportCsv);
 
   const resizeObserver = new ResizeObserver(() => {
     drawScreen();
@@ -599,16 +847,10 @@ function bindEvents() {
     "pagehide",
     () => {
       resizeObserver.disconnect();
+      pauseSweep(false);
     },
     { once: true },
   );
-}
-
-function lockEvidence() {
-  evidenceLock.dataset.locked = "true";
-  outputs.lockTitle.textContent = "Task 6 evidence locked";
-  outputs.lockDetail.textContent =
-    "39/39 checks, 401 voltages, both graphite spacings and exact screen geometry agree.";
 }
 
 function showFailure(error) {
@@ -618,13 +860,8 @@ function showFailure(error) {
   document.querySelector("[data-screen-loading]").hidden = true;
   document.querySelector("[data-screen-error]").hidden = false;
   document.querySelector("[data-validation-error]").hidden = false;
-  outputs.screenBadge.textContent = "Evidence unavailable";
-  outputs.validationStatus.textContent = "Validation could not be confirmed";
-  outputs.evidenceStatus.textContent = "Validation could not be confirmed";
-  evidenceLock.dataset.locked = "false";
-  outputs.lockTitle.textContent = "Task 6 evidence not locked";
-  outputs.lockDetail.textContent =
-    "Interactive controls remain disabled because committed evidence could not be verified.";
+  outputs.screenBadge.textContent = "Data unavailable";
+  outputs.validationStatus.textContent = "Spacing data unavailable";
   disableControls();
   console.error("Task 6 evidence load failed", error);
 }
@@ -633,10 +870,9 @@ async function initialise() {
   try {
     state.evidence = await loadTask06Evidence();
     populateFits();
-    populateEvidence();
+    populateValidationEvidence();
     bindEvents();
     enableControls();
-    lockEvidence();
     screenInstrument.classList.remove("is-loading");
     validationLaboratory.classList.remove("is-loading");
     document.querySelector("[data-screen-loading]").hidden = true;

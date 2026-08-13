@@ -12,9 +12,11 @@ const readJson = async (path) => JSON.parse(await readText(path));
 const [
   html,
   css,
+  minimalCss,
   explorer,
   evidenceLoader,
   motion,
+  navigation,
   taskIndex,
   catalogText,
   galleryText,
@@ -34,9 +36,11 @@ const [
 ] = await Promise.all([
   readText("site/tasks/task-10.html"),
   readText("site/assets/task-10.css"),
+  readText("site/assets/task-10-minimal.css"),
   readText("site/assets/task-10-explorer.js"),
   readText("site/assets/task-10-evidence.js"),
   readText("site/assets/task-10-motion.js"),
+  readText("site/assets/task-10-navigation.js"),
   readText("site/tasks.html"),
   readText("data/task10/orbital_state_catalog.csv"),
   readText("data/task10/official_gallery.csv"),
@@ -222,12 +226,47 @@ check(
   "The 1s origin, 2s node, 2p angular node, hydrogen energy, and carbon Z-scaling anchors agree independently.",
 );
 
+const ionScalingStates = [
+  [1, 1],
+  [2, 4],
+  [3, 6],
+].map(([Z, A]) => {
+  const nuclearMass = A * manifest.constants.atomic_mass_constant_kg;
+  const reducedMassRatio =
+    nuclearMass / (manifest.constants.electron_mass_kg + nuclearMass);
+  return {
+    Z,
+    energyEv:
+      (-0.5 *
+        manifest.constants.hartree_energy_ev *
+        reducedMassRatio *
+        Z ** 2) /
+      3 ** 2,
+    radiusAngstrom:
+      manifest.constants.bohr_radius_m /
+      (reducedMassRatio * Z * 1e-10),
+  };
+});
+check(
+  "Hydrogenic-ion scaling comparison",
+  ionScalingStates.every(
+    ({ energyEv, radiusAngstrom }) =>
+      normalizedHtml.includes(Math.abs(energyEv).toFixed(6)) &&
+      normalizedHtml.includes(radiusAngstrom.toFixed(6)),
+  ) &&
+    explorer.includes("const SCALING_IONS") &&
+    explorer.includes("probabilityPerScaledRadius / radialScaleAngstrom") &&
+    explorer.includes("state.n ** 2 * summary.effectiveBohrRadiusAngstrom"),
+  "The H, He+, and Li2+ 3d anchors independently reproduce finite-mass energies and radii, while the plotted density is converted from scaled radius to angstroms.",
+);
+
 check(
   "Complete required website content",
   [
     'id="glass-canvas"',
     'id="slice-canvas"',
     'id="radial-canvas"',
+    'id="z-scaling-canvas"',
     'id="atomic-number"',
     'id="principal-number"',
     'id="angular-number"',
@@ -235,12 +274,10 @@ check(
     'id="gallery-preset"',
     "required_orbital_gallery.png",
     "orbital_view_rotation.webp",
-    "22-check report",
-    "204-state catalog",
-    "25-state gallery data",
     "∫|ψ|²dV = 1",
-  ].every((marker) => html.includes(marker)),
-  "The required coloured-glass visualization, two quantitative figures, full controls, gallery, motion, and evidence downloads are present.",
+  ].every((marker) => html.includes(marker)) &&
+    !html.includes('id="evidence"'),
+  "The coloured-glass visualization, quantitative views, controls, gallery, and ion-scaling comparison remain without evidence downloads.",
 );
 
 check(
@@ -248,6 +285,7 @@ check(
   explorer.includes("sampleSliceStack") &&
     explorer.includes("sampleOrthogonalSlices") &&
     explorer.includes("radialProfile") &&
+    explorer.includes("renderIonScaling") &&
     explorer.includes("stateSummary") &&
     explorer.includes("officialGalleryStates") &&
     explorer.includes("pointerdown") &&
@@ -263,19 +301,24 @@ check(
   html.includes("data-glass-error") &&
     html.includes("data-slice-error") &&
     html.includes("data-radial-error") &&
+    html.includes("data-scaling-error") &&
     evidenceLoader.includes("throw new Error") &&
     explorer.includes("failClosed") &&
     explorer.includes('dataset.task10Status = "error"') &&
     explorer.includes("control.disabled = !enabled"),
-  "Controls remain locked until every data, science, static-media, and motion layer agrees; all three figures expose explicit failure states.",
+  "Controls remain locked until every data, science, static-media, and motion layer agrees; all four live figures expose explicit failure states.",
 );
 
 check(
   "Local typography and high-DPI figures",
   !/<(?:script|link)\b[^>]+(?:src|href)=["']https?:\/\//i.test(html) &&
-    css.includes('"Geist"') &&
-    css.includes('"Bodoni Moda Variable"') &&
-    css.includes('--figure: "Times New Roman"') &&
+    html.includes("task-10-minimal.css") &&
+    html.includes("task-10-navigation.js") &&
+    !html.includes("gsap.min.js") &&
+    !html.includes("task-10-motion.js") &&
+    minimalCss.includes('--serif: "Times New Roman"') &&
+    minimalCss.includes("color-scheme: light") &&
+    navigation.includes("IntersectionObserver") &&
     explorer.includes('"Times New Roman", Times, serif') &&
     explorer.includes("Math.min(window.devicePixelRatio || 1, 2)") &&
     !explorer.includes("setInterval(") &&
@@ -322,28 +365,32 @@ check(
 
 check(
   "Responsive and reduced-motion safeguards",
-  css.includes("100svh") &&
-    css.includes("@media (max-width: 1180px)") &&
-    css.includes("@media (max-width: 820px)") &&
-    css.includes("@media (max-width: 520px)") &&
-    css.includes("@media (prefers-reduced-motion: reduce)") &&
-    motion.includes("prefers-reduced-motion: reduce") &&
-    motion.includes("pagehide"),
-  "Desktop, tablet, and phone layouts, reduced-motion replacement, and animation cleanup paths are present.",
+  minimalCss.includes("100dvh") &&
+    minimalCss.includes("@media (max-width: 1120px)") &&
+    minimalCss.includes("@media (max-width: 620px)") &&
+    minimalCss.includes("@media (prefers-reduced-motion: reduce)") &&
+    explorer.includes("pagehide"),
+  "Desktop, tablet, and phone layouts, reduced-motion handling, and cleanup paths are present.",
 );
 
 check(
   "Honest normalization and physical scope",
-  normalizedHtml.includes("cutoff and opacity never alter") &&
-    normalizedHtml.includes("changes visibility, not the wavefunction") &&
-    normalizedHtml.includes("camera motion is not electron motion") &&
+  normalizedHtml.includes("display settings do not alter the normalized state") &&
+    normalizedHtml.includes("cutoff changes visibility only") &&
+    normalizedHtml.includes("stationary coulomb state") &&
     normalizedHtml.includes("stationary, non-relativistic") &&
-    normalizedHtml.includes("screening") &&
-    normalizedHtml.includes("electron–electron correlation") &&
-    normalizedHtml.includes("fine and hyperfine structure") &&
-    normalizedHtml.includes("molecular bonding") &&
-    normalizedHtml.includes("detector response"),
-  "Renderer controls are separated from normalization, camera motion is separated from dynamics, and all excluded physics is stated explicitly.",
+    normalizedHtml.includes("one-electron coulomb state"),
+  "Display controls remain separate from normalization and the stationary one-electron scope is stated clearly.",
+);
+
+check(
+  "Clean competition presentation",
+  !normalizedHtml.includes("accepted direct answer") &&
+    !normalizedHtml.includes("optional extension") &&
+    !normalizedHtml.includes("validation ledger") &&
+    !normalizedHtml.includes("validated before interaction") &&
+    !normalizedHtml.includes("ai generated"),
+  "No validation-dashboard or AI-sounding labels appear in the visible Task 10 presentation.",
 );
 
 check(

@@ -25,11 +25,13 @@ const laboratory = document.querySelector("[data-validation-laboratory]");
 const errorOutput = document.querySelector("[data-validation-error]");
 
 const NATURAL_PALETTE = [
-  [120, 48, 34],
-  [141, 53, 38],
-  [164, 67, 47],
-  [183, 91, 70],
-  [198, 122, 103],
+  [67, 56, 134],
+  [47, 103, 178],
+  [28, 150, 143],
+  [112, 167, 73],
+  [226, 163, 54],
+  [220, 91, 72],
+  [181, 55, 118],
 ];
 
 let validationData = null;
@@ -185,7 +187,7 @@ function drawMsdChart(payload) {
   context.rect(frame.left, frame.top, frame.width, frame.height);
   context.clip();
 
-  context.strokeStyle = "#a4432f";
+  context.strokeStyle = "#3f64b2";
   context.lineWidth = 2;
   context.beginPath();
   rows.forEach((row, index) => {
@@ -208,7 +210,7 @@ function drawMsdChart(payload) {
     const yHigh = yMap(
       row.mean_squared_displacement + row.ci95_half_width_msd,
     );
-    context.strokeStyle = "rgba(50, 46, 40, 0.72)";
+    context.strokeStyle = "rgba(21, 112, 109, 0.7)";
     context.lineWidth = 1.1;
     context.beginPath();
     context.moveTo(x, yLow);
@@ -297,7 +299,7 @@ function drawAngularChart(payload) {
 
   context.save();
   context.setLineDash([7, 6]);
-  context.strokeStyle = "#38342d";
+  context.strokeStyle = "#3f64b2";
   context.lineWidth = 1.3;
   const expectedY = yMap(evidence.expected_per_bin);
   context.beginPath();
@@ -378,7 +380,7 @@ function drawRadialChart(payload) {
   bins.forEach((bin, index) => {
     const x = frame.left + index * barWidth + 1;
     const y = yMap(bin.count);
-    context.fillStyle = "rgba(50, 46, 40, 0.36)";
+    context.fillStyle = "rgba(28, 150, 143, 0.34)";
     context.fillRect(
       x,
       y,
@@ -387,7 +389,7 @@ function drawRadialChart(payload) {
     );
   });
 
-  context.strokeStyle = "#a4432f";
+  context.strokeStyle = "#c94f70";
   context.lineWidth = 2;
   context.lineJoin = "round";
   context.beginPath();
@@ -401,8 +403,8 @@ function drawRadialChart(payload) {
   context.stroke();
 
   [
-    [evidence.radius_50, "r₅₀", "#a4432f", [5, 6]],
-    [evidence.radius_95, "r₉₅", "#38342d", [2, 6]],
+    [evidence.radius_50, "r₅₀", "#d68e25", [5, 6]],
+    [evidence.radius_95, "r₉₅", "#43578f", [2, 6]],
   ].forEach(([radius, label, colour, dash]) => {
     const x = xMap(radius);
     context.save();

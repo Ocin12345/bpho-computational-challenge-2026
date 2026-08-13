@@ -5,18 +5,23 @@
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta
       name="description"
-      content="An interactive, validated photoelectric-effect laboratory for BPhO Computational Challenge Task 4."
+      content="An interactive photoelectric-effect laboratory for BPhO Computational Challenge Task 4."
     />
     <meta name="theme-color" content="#141411" />
+    <script>
+      window.location.replace("../apps/task-04/index.html?lab=experiment");
+    </script>
     <title>Task 04 — Photoelectric Effect | BPhO Computational Challenge 2026</title>
     <link
       rel="icon"
       href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' fill='%23141411'/%3E%3Ccircle cx='19' cy='24' r='7' fill='%23d1a24f'/%3E%3Cpath d='M24 26h15m-6-7 8 7-8 7' fill='none' stroke='%23f4eddf' stroke-width='4' stroke-linecap='round' stroke-linejoin='round'/%3E%3Crect x='44' y='13' width='5' height='28' fill='%23d1a24f'/%3E%3C/svg%3E"
     />
-    <link rel="stylesheet" href="../assets/task-04.css?v=20260731" />
+    <link rel="stylesheet" href="../assets/task-04.css?v=20260804c" />
+    <link rel="stylesheet" href="../assets/task-clean.css?v=20260809" />
+    <link rel="stylesheet" href="../assets/task-video.css?v=20260809" />
   </head>
-  <body>
-    <a class="skip-link" href="#photoelectric-stage">Skip to threshold chamber</a>
+  <body class="video-cut" data-task="04">
+    <a class="skip-link" href="#photoelectric-animation">Skip to animation</a>
 
     <header class="task-header">
       <a class="back-link" href="../tasks.html" aria-label="Return to all tasks">
@@ -25,166 +30,73 @@
         </svg>
         All tasks
       </a>
-      <p>Task 04 <span>/</span> Quantum evidence</p>
+      <p>Task 04 <span>/</span> Photoelectric effect</p>
       <a class="method-link" href="#model">Equation</a>
     </header>
 
     <main>
       <section class="threshold-hero" aria-labelledby="page-title">
         <header class="hero-copy">
-          <p>Einstein’s photoelectric equation</p>
+          <p>Threshold experiment</p>
           <h1 id="page-title">
-            The threshold
-            <em>decides<br />everything.</em>
+            Photoelectric
+            <em>Effect</em>
           </h1>
           <span>
-            Light can be bright and still fail. A single photon must first pay
-            the metal’s work-function toll.
+            Emission starts only when one photon carries enough energy to
+            overcome the metal’s work function. Test the threshold directly.
           </span>
+          <div class="hero-law" aria-label="Photoelectric threshold law">
+            <div>
+              <small>Threshold test</small>
+              <strong>hf ≥ W</strong>
+            </div>
+            <div>
+              <small>Energy after emission</small>
+              <strong>K<sub>max</sub> = hf − W</strong>
+            </div>
+          </div>
         </header>
 
         <section
-          class="threshold-chamber is-loading"
-          aria-labelledby="chamber-title"
-          data-threshold-chamber
+          class="task4-3d-embed"
+          id="photoelectric-apparatus"
+          aria-labelledby="apparatus-title"
+          data-task4-3d-app
         >
-          <header class="chamber-header">
+          <header class="task4-3d-embed__header">
             <div>
-              <span id="chamber-title">Live threshold chamber</span>
-              <strong data-chamber-material>Loading official metals</strong>
+              <span>Apparatus</span>
+              <h2 id="apparatus-title">3D photoelectric apparatus</h2>
+              <p>
+                Rotate the bench, focus individual instruments, and change the
+                metal, wavelength, intensity, and reverse bias in the connected
+                model.
+              </p>
             </div>
-            <p class="state-badge" data-emission-state>Checking evidence</p>
+            <a
+              href="../apps/task-04/index.html?lab=experiment"
+              target="_blank"
+              rel="noopener"
+            >
+              Open full Task 4 app
+            </a>
           </header>
-
-          <div class="chamber-canvas-wrap">
-            <canvas
-              id="photoelectric-stage"
-              tabindex="0"
-              role="img"
-              aria-label="Animated photoelectric-effect chamber"
-            ></canvas>
-            <div class="chamber-loading" data-chamber-loading>
-              Reading validated Task 4 evidence
-            </div>
-            <p class="chamber-error" data-chamber-error hidden>
-              The validated Task 4 evidence could not be loaded.
-            </p>
+          <div class="task4-3d-embed__frame">
+            <iframe
+              src="../apps/task-04/index.html?lab=experiment&amp;embed=apparatus"
+              title="Interactive 3D photoelectric-effect apparatus"
+              loading="eager"
+              allow="fullscreen"
+              data-task4-3d-frame
+            ></iframe>
           </div>
-
-          <dl class="chamber-readouts" aria-live="polite">
-            <div>
-              <dt>Photon energy</dt>
-              <dd data-photon-energy>—</dd>
-            </div>
-            <div>
-              <dt>Work function</dt>
-              <dd data-work-function>—</dd>
-            </div>
-            <div>
-              <dt>Maximum K.E.</dt>
-              <dd data-kinetic-energy>—</dd>
-            </div>
-            <div>
-              <dt>Stopping potential</dt>
-              <dd data-stopping-potential>—</dd>
-            </div>
-          </dl>
+          <p class="task4-3d-embed__note">
+            The 3D trajectories are illustrative. Photon energy, emission
+            threshold, stopping voltage, and photocurrent state come from the
+            numerical model.
+          </p>
         </section>
-
-        <form class="hero-controls" data-photoelectric-controls>
-          <label class="control control--material">
-            <span>Target metal</span>
-            <select id="target-material" disabled>
-              <option>Loading…</option>
-            </select>
-          </label>
-
-          <label class="control control--frequency">
-            <span>
-              Photon frequency
-              <output for="photon-frequency" data-frequency-output>
-                1.200 PHz
-              </output>
-            </span>
-            <input
-              id="photon-frequency"
-              type="range"
-              min="0.4"
-              max="2.4"
-              step="0.000001"
-              value="1.2"
-              disabled
-            />
-            <small>
-              <span>0.4 PHz</span>
-              <span data-wavelength-output>249.8 nm</span>
-              <span>2.4 PHz</span>
-            </small>
-          </label>
-
-          <label class="control">
-            <span>
-              Light intensity
-              <output for="light-intensity" data-intensity-output>6 / 10</output>
-            </span>
-            <input
-              id="light-intensity"
-              type="range"
-              min="1"
-              max="10"
-              step="1"
-              value="6"
-              disabled
-            />
-            <small>Changes illustrative count, not K<sub>max</sub></small>
-          </label>
-
-          <label class="control">
-            <span>
-              Reverse potential
-              <output for="reverse-potential" data-reverse-output>0.00 V</output>
-            </span>
-            <input
-              id="reverse-potential"
-              type="range"
-              min="0"
-              max="7"
-              step="0.01"
-              value="0"
-              disabled
-            />
-            <small data-collector-state>Collector field is inactive</small>
-          </label>
-
-          <button class="play-button" type="button" data-toggle-chamber disabled>
-            <svg viewBox="0 0 24 24" aria-hidden="true">
-              <path data-play-icon d="M8 5l11 7-11 7z" />
-            </svg>
-            <span data-play-label>Pause chamber</span>
-          </button>
-        </form>
-
-        <div class="threshold-strip">
-          <div class="threshold-strip__copy">
-            <span data-threshold-comparison>Frequency / threshold</span>
-            <strong data-threshold-ratio>—</strong>
-          </div>
-          <div class="threshold-ruler" aria-hidden="true">
-            <span class="threshold-ruler__fill" data-threshold-fill></span>
-            <i class="threshold-ruler__marker"></i>
-          </div>
-          <div class="threshold-presets" aria-label="Threshold presets">
-            <button type="button" data-threshold-preset="below" disabled>
-              Below
-            </button>
-            <button type="button" data-threshold-preset="at" disabled>
-              At threshold
-            </button>
-            <button type="button" data-threshold-preset="above" disabled>
-              Above
-            </button>
-          </div>
-        </div>
       </section>
 
       <section class="model-section" id="model" aria-labelledby="model-title">
@@ -332,7 +244,7 @@
             >
               Show mathematical extrapolation
             </button>
-            <p data-chart-status>Preparing validated comparison</p>
+            <p data-chart-status>Preparing comparison</p>
           </header>
 
           <div class="comparison-chart-wrap">
@@ -344,7 +256,7 @@
             ></canvas>
             <div class="chart-tooltip" data-chart-tooltip hidden></div>
             <p class="chart-error" data-chart-error hidden>
-              The validated comparison data could not be loaded.
+              The comparison data could not be loaded.
             </p>
           </div>
 
@@ -372,169 +284,18 @@
           <div
             class="material-ledger"
             data-material-ledger
-            aria-label="Official metal work functions"
+            aria-label="Metal work functions"
           ></div>
         </div>
       </section>
 
-      <section class="evidence-section" id="evidence" aria-labelledby="evidence-title">
-        <header class="section-introduction section-introduction--paper">
-          <p>Accepted numerical evidence</p>
-          <h2 id="evidence-title">
-            The threshold is not
-            <em>just drawn. It is checked.</em>
-          </h2>
-          <span>
-            Deterministic arrays, 43 independent checks, Decimal references,
-            analytical cut-offs, energy identities, and failure-injection
-            tests all sit behind the displayed result.
-          </span>
-        </header>
-
-        <div class="evidence-metrics" aria-live="polite">
-          <div>
-            <span>Independent checks</span>
-            <strong data-validation-count>—</strong>
-            <small data-validation-status>Loading validation report</small>
-          </div>
-          <div>
-            <span>Official metals</span>
-            <strong data-material-count>—</strong>
-            <small>One immutable source table</small>
-          </div>
-          <div>
-            <span>Frequency gradient</span>
-            <strong data-gradient>—</strong>
-            <small>Common h/e for every metal</small>
-          </div>
-          <div>
-            <span>Exact overlap</span>
-            <strong>Ag · Al · Pb</strong>
-            <small>Shared W = 4.3 eV</small>
-          </div>
-        </div>
-
-        <div class="evidence-figures">
-          <figure>
-            <figcaption>
-              <strong>Stopping potential vs frequency</strong>
-              <span>Required comparison · validated SVG</span>
-            </figcaption>
-            <img
-              src="../../figures/task04/stopping_voltage_frequency.svg"
-              loading="lazy"
-              alt="Validated stopping-potential curves versus photon frequency for the nine official metals"
-            />
-          </figure>
-          <figure>
-            <figcaption>
-              <strong>Stopping potential vs wavelength</strong>
-              <span>Vacuum-wavelength form · validated SVG</span>
-            </figcaption>
-            <img
-              src="../../figures/task04/stopping_voltage_wavelength.svg"
-              loading="lazy"
-              alt="Validated stopping-potential curves versus vacuum wavelength for the nine official metals"
-            />
-          </figure>
-        </div>
-
-        <div class="evidence-lock" data-evidence-lock data-locked="false">
-          <div>
-            <span class="lock-index" aria-hidden="true">04</span>
-            <p>
-              <strong data-lock-title>Evidence verification pending</strong>
-              <small data-lock-detail>
-                The page remains unlocked until all committed evidence agrees.
-              </small>
-            </p>
-          </div>
-          <div class="download-actions">
-            <a href="../../data/task04/validation_report.json" download>
-              Validation JSON
-            </a>
-            <a href="../../data/task04/material_cutoffs.csv" download>
-              Material cut-offs
-            </a>
-          </div>
-        </div>
-      </section>
-
-      <section
-        class="extension-section"
-        id="extension"
-        aria-labelledby="extension-title"
-      >
-        <header class="section-introduction">
-          <p>Official optional extension</p>
-          <h2 id="extension-title">
-            A schematic chamber,
-            <em>kept honest.</em>
-          </h2>
-          <span>
-            The animation communicates threshold, intensity, and stopping
-            potential. Its particle counts and trajectories are illustrative;
-            every energy state still comes from the validated model.
-          </span>
-        </header>
-
-        <figure class="extension-figure">
-          <div class="extension-media">
-            <img
-              src="../../figures/task04/photoelectric_demo_storyboard.png"
-              data-extension-image
-              data-storyboard-src="../../figures/task04/photoelectric_demo_storyboard.png"
-              data-gif-src="../../figures/task04/photoelectric_demo.gif"
-              loading="lazy"
-              alt="Validated four-panel storyboard of the photoelectric-effect extension"
-            />
-            <button
-              type="button"
-              data-toggle-extension
-              aria-pressed="false"
-            >
-              Play 6-second loop
-            </button>
-          </div>
-          <figcaption>
-            <div>
-              <span>Validated extension</span>
-              <strong>60 frames · 1920 × 1080 · deterministic loop</strong>
-            </div>
-            <p>
-              Four scenes: below threshold, above threshold, intensity change,
-              and current suppression at the stopping potential.
-            </p>
-          </figcaption>
-        </figure>
-
-        <div class="assumption-ledger">
-          <div>
-            <span>Included</span>
-            <p>
-              One-photon energy transfer, ideal uniform work functions, maximum
-              electron kinetic energy, and reverse stopping potential.
-            </p>
-          </div>
-          <div>
-            <span>Not claimed</span>
-            <p>
-              Microscopic trajectories, a complete I–V characteristic,
-              surface chemistry, temperature effects, or experimental fitting.
-            </p>
-          </div>
-        </div>
-      </section>
 
       <footer class="task-footer">
         <div>
           <span>Task 04</span>
           <strong>Photoelectric effect</strong>
         </div>
-        <p>
-          Required model, independent validation, original-resolution figures,
-          and optional animation complete.
-        </p>
+        <p>Photoelectric model and measurements.</p>
         <a href="../tasks.html">Return to all tasks</a>
       </footer>
     </main>
@@ -543,8 +304,7 @@
     <script src="../vendor/packages/gsap/dist/ScrollTrigger.min.js"></script>
     <script
       type="module"
-      src="../assets/task-04-simulation.js?v=20260731"
+      src="../assets/task-04-simulation.js?v=20260804c"
     ></script>
-    <script src="../assets/task-04-motion.js?v=20260731"></script>
   </body>
 </html>

@@ -5,17 +5,23 @@
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta
       name="description"
-      content="A validated interactive atlas of hydrogen emission energies, wavelengths, Bohr levels, and spectral series for BPhO Computational Challenge Task 5."
+      content="An interactive atlas of hydrogen emission energies, wavelengths, Bohr levels and spectral series for BPhO Computational Challenge Task 5."
     />
-    <meta name="theme-color" content="#100d16" />
+    <meta name="theme-color" content="#ffffff" />
     <title>Task 05 — Hydrogen Spectrum | BPhO Computational Challenge 2026</title>
     <link
       rel="icon"
       href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' fill='%23100d16'/%3E%3Cpath d='M13 13v38M25 13v38M37 13v38M51 13v38' stroke='%23e85d9f' stroke-width='4'/%3E%3Ccircle cx='32' cy='32' r='4' fill='%23f6efe4'/%3E%3C/svg%3E"
     />
+    <link rel="stylesheet" href="../vendor/packages/katex/katex.min.css" />
     <link rel="stylesheet" href="../assets/task-05.css?v=20260731b" />
+    <link rel="stylesheet" href="../assets/task-05-minimal.css?v=20260808" />
+    <link rel="stylesheet" href="../assets/proof-math.css?v=20260808" />
+    <link rel="stylesheet" href="../assets/task-clean.css?v=20260809" />
+    <link rel="stylesheet" href="../assets/task-video.css?v=20260809" />
+    <link rel="stylesheet" href="../assets/task-05-gold.css?v=20260813" />
   </head>
-  <body>
+  <body data-task="05">
     <a class="skip-link" href="#emission-atlas">Skip to emission atlas</a>
 
     <header class="task-header">
@@ -25,22 +31,27 @@
         </svg>
         All tasks
       </a>
-      <p>Task 05 <span>/</span> Quantum structure</p>
-      <a class="method-link" href="#model">Bohr model</a>
+      <nav class="section-nav" aria-label="Task 5 sections">
+        <a href="#spectrum" aria-current="page">Transition</a>
+        <a href="#atlas">Energy graph</a>
+        <a href="#balmer">Spectrum</a>
+        <a href="#model">Method</a>
+        <a href="#validation">Validation</a>
+      </nav>
+      <div class="task-identity">
+        <span>Official Task 05 of 10</span>
+        <strong>Hydrogen spectrum</strong>
+      </div>
     </header>
 
     <main>
-      <section class="spectrum-hero" aria-labelledby="page-title">
+      <section class="spectrum-hero" id="spectrum" aria-labelledby="page-title">
         <header class="hero-copy">
-          <p>Hydrogen emission atlas</p>
-          <h1 id="page-title">
-            The atom chooses
-            <em>only certain notes.</em>
-          </h1>
+          <p>Bohr transition</p>
+          <h1 id="page-title">Hydrogen spectrum</h1>
           <span>
-            Ten ideal Bohr levels create forty-five allowed energy differences.
-            The result is not a continuous glow, but a precise catalogue of
-            photon energies and wavelengths.
+            Select a downward transition and connect its level difference to
+            the emitted photon energy and vacuum wavelength.
           </span>
         </header>
 
@@ -51,10 +62,10 @@
         >
           <header class="instrument-header">
             <div>
-              <span id="instrument-title">Selected emission</span>
+              <span id="instrument-title">Emission</span>
               <strong data-transition-title>Loading transition catalogue</strong>
             </div>
-            <p class="region-badge" data-region-badge>Checking evidence</p>
+            <p class="region-badge" data-region-badge>Loading model</p>
           </header>
 
           <div class="energy-stage-wrap">
@@ -65,10 +76,10 @@
               aria-label="Interactive ideal Bohr energy-level diagram for the selected hydrogen emission"
             ></canvas>
             <div class="instrument-loading" data-instrument-loading>
-              Reading validated Task 5 evidence
+              Loading hydrogen transitions
             </div>
             <p class="instrument-error" data-instrument-error hidden>
-              The validated Task 5 evidence could not be loaded.
+              The Task 5 transition data could not be loaded.
             </p>
           </div>
 
@@ -96,6 +107,10 @@
               <dd data-photon-wavelength-readout>—</dd>
             </div>
           </dl>
+          <p class="colour-disclosure">
+            Visible-band colour is an approximate screen colour. UV and IR
+            transitions use labelled neutral pseudocolours, not literal human vision.
+          </p>
         </section>
 
         <form class="hero-controls" data-transition-controls>
@@ -124,8 +139,17 @@
           <div class="hero-claim">
             <span>Catalogue rule</span>
             <strong>1 ≤ n<sub>f</sub> &lt; n<sub>i</sub> ≤ 10</strong>
-            <small>Every declared downward pair appears exactly once.</small>
+            <small>45 downward transitions.</small>
           </div>
+
+          <a
+            class="catalogue-download"
+            href="../../data/task05/emission_transitions.csv"
+            download
+            data-download-transition-csv
+          >
+            Download transition CSV
+          </a>
         </form>
 
         <div class="catalogue-strip" aria-label="Task 5 catalogue summary">
@@ -150,24 +174,22 @@
 
       <section class="model-section" id="model" aria-labelledby="model-title">
         <header class="section-introduction section-introduction--paper">
-          <p>The stationary-nucleus Bohr model</p>
-          <h2 id="model-title">
-            Bound energy rises
-            <em>in unequal steps.</em>
-          </h2>
+          <p>Method</p>
+          <h2 id="model-title">From stationary states to one photon</h2>
           <span>
-            Integer quantum numbers select the bound states. A downward change
-            releases the positive energy difference as one photon.
+            These are ideal calculated vacuum wavelengths, not measured line
+            centres. Integer quantum numbers select the states and a downward
+            change releases the positive energy difference as one photon.
           </span>
         </header>
 
         <div class="equation-architecture">
           <article class="equation-primary">
             <span>Ideal hydrogen level</span>
-            <p>
+            <p data-proof-latex="E_n=-\dfrac{hcR_{\infty}}{n^2}">
               E<sub>n</sub> = −
               <span class="fraction">
-                <span>E<sub>R</sub></span>
+                <span>hcR<sub>∞</sub></span>
                 <span>n²</span>
               </span>
             </p>
@@ -179,14 +201,14 @@
 
           <article>
             <span>Emission energy</span>
-            <p>
+            <p data-proof-latex="E_{\gamma}=E_{n_i}-E_{n_f}&gt;0">
               E<sub>γ</sub> = E<sub>nᵢ</sub> − E<sub>n_f</sub> &gt; 0
             </p>
           </article>
 
           <article>
             <span>Photon relation</span>
-            <p>
+            <p data-proof-latex="E_{\gamma}=hf=\dfrac{hc}{\lambda}">
               E<sub>γ</sub> = hf =
               <span class="fraction">
                 <span>hc</span>
@@ -197,7 +219,7 @@
 
           <article>
             <span>Rydberg form</span>
-            <p>
+            <p data-proof-latex="\dfrac{1}{\lambda}=R_{\infty}\!\left(\dfrac{1}{n_f^2}-\dfrac{1}{n_i^2}\right)">
               <span class="fraction">
                 <span>1</span>
                 <span>λ</span>
@@ -220,20 +242,37 @@
           </article>
         </div>
 
+        <div class="method-ledger" aria-label="Hydrogen series names and model anchor">
+          <article>
+            <span>Series map</span>
+            <p>
+              n<sub>f</sub> = 1 Lyman · 2 Balmer · 3 Paschen ·
+              4 Brackett · 5 Pfund
+            </p>
+          </article>
+          <article>
+            <span>Worked model anchor</span>
+            <p>
+              H-α is 3→2: E<sub>γ</sub> = 1.889 eV and
+              λ = <strong>656.112 nm</strong> in this infinite-nucleus model.
+            </p>
+          </article>
+        </div>
+
         <div class="energy-story">
           <div>
             <span>Before</span>
-            <strong>n<sub>i</sub> &gt; n<sub>f</sub></strong>
+            <strong data-proof-latex="n_i&gt;n_f">n<sub>i</sub> &gt; n<sub>f</sub></strong>
             <p>The atom begins in the less tightly bound, higher level.</p>
           </div>
           <div class="energy-story__change">
             <span>Difference</span>
-            <strong>ΔE<sub>atom</sub> = −E<sub>γ</sub></strong>
+            <strong data-proof-latex="\Delta E_{\mathrm{atom}}=-E_{\gamma}">ΔE<sub>atom</sub> = −E<sub>γ</sub></strong>
             <p>The atom loses energy; the emitted photon carries a positive amount.</p>
           </div>
           <div>
             <span>After</span>
-            <strong>λ = hc / E<sub>γ</sub></strong>
+            <strong data-proof-latex="\lambda=\dfrac{hc}{E_{\gamma}}">λ = hc / E<sub>γ</sub></strong>
             <p>A larger level gap means a higher-energy, shorter-wavelength photon.</p>
           </div>
         </div>
@@ -256,11 +295,8 @@
         aria-labelledby="atlas-title"
       >
         <header class="section-introduction">
-          <p>The required graph, made explorable</p>
-          <h2 id="atlas-title">
-            Forty-five emissions.
-            <em>One inverse law.</em>
-          </h2>
+          <p>Required graph</p>
+          <h2 id="atlas-title">Photon energy against wavelength</h2>
           <span>
             Every marker is a discrete integer-level difference. The restrained
             E<sub>γ</sub> = hc/λ curve is a photon guide—not a continuous
@@ -308,7 +344,7 @@
               <input type="checkbox" data-visible-only disabled />
               <span>Visible window only</span>
             </label>
-            <p data-atlas-status>Preparing validated catalogue</p>
+            <p data-atlas-status>Preparing catalogue</p>
           </header>
 
           <div class="atlas-chart-wrap">
@@ -320,7 +356,7 @@
             ></canvas>
             <div class="atlas-tooltip" data-atlas-tooltip hidden></div>
             <p class="atlas-error" data-atlas-error hidden>
-              The validated emission catalogue could not be loaded.
+              The emission catalogue could not be loaded.
             </p>
           </div>
 
@@ -333,7 +369,7 @@
             </p>
             <dl aria-live="polite">
               <div>
-                <dt>Selected emission</dt>
+                <dt>Emission</dt>
                 <dd data-atlas-transition>—</dd>
               </div>
               <div>
@@ -361,11 +397,8 @@
         aria-labelledby="balmer-title"
       >
         <header class="section-introduction section-introduction--paper">
-          <p>The declared 380–750 nm window</p>
-          <h2 id="balmer-title">
-            Seven lines enter
-            <em>the visible room.</em>
-          </h2>
+          <p>Visible spectrum</p>
+          <h2 id="balmer-title">The seven Balmer lines</h2>
           <span>
             All seven visible transitions in this finite catalogue belong to
             the Balmer series. Equal line heights show wavelength position
@@ -402,6 +435,80 @@
             </p>
           </figcaption>
         </figure>
+        <div class="spectrum-note" aria-live="polite">
+          <strong>Selected transition</strong>
+          <span data-spectrum-selection>Waiting for the transition catalogue.</span>
+          <p>
+            Equal line heights are schematic: this model does not calculate
+            intensity, transition probability, or linewidth. Display colour is
+            approximate; UV and IR are marked with neutral pseudocolours elsewhere.
+          </p>
+        </div>
+      </section>
+
+      <section class="validation-section" id="validation" aria-labelledby="validation-title">
+        <header class="section-introduction section-introduction--paper">
+          <p>Validation</p>
+          <h2 id="validation-title">Two formula routes, one locked catalogue</h2>
+          <span>
+            The generated values are checked against invariants and an
+            independently evaluated Rydberg expression. This demonstrates
+            formula consistency, not experimental agreement.
+          </span>
+        </header>
+
+        <div class="validation-metrics">
+          <article>
+            <span>Energy-scale invariant</span>
+            <strong data-energy-scale>—</strong>
+            <small>|E<sub>n</sub>|n² should remain hcR<sub>∞</sub>.</small>
+          </article>
+          <article>
+            <span>Independent Rydberg route</span>
+            <strong data-rydberg-residual>—</strong>
+            <small>Maximum stored relative wavelength residual.</small>
+          </article>
+          <article>
+            <span>Committed data checks</span>
+            <strong data-validation-summary>—</strong>
+            <small>All checks in validation_report.json.</small>
+          </article>
+          <article>
+            <span>Python regression suite</span>
+            <strong>58/58</strong>
+            <small>Model, generation, plotting, and extension tests.</small>
+          </article>
+        </div>
+
+        <div class="validation-route">
+          <div>
+            <span>Independent calculation</span>
+            <p data-proof-latex="\dfrac{1}{\lambda_R}=R_{\infty}\!\left(\dfrac{1}{n_f^2}-\dfrac{1}{n_i^2}\right)">
+              1/λ<sub>R</sub> = R<sub>∞</sub>(1/n<sub>f</sub>² − 1/n<sub>i</sub>²)
+            </p>
+          </div>
+          <p>
+            <strong>Formula consistency, not experiment.</strong> The residual
+            compares two computational routes built from the same declared
+            ideal constants; it is not a comparison with a spectrometer.
+          </p>
+        </div>
+
+        <div class="validation-table-wrap">
+          <table class="validation-table">
+            <caption>Representative transitions from the validated 45-line catalogue</caption>
+            <thead>
+              <tr>
+                <th scope="col">Transition</th>
+                <th scope="col">Series</th>
+                <th scope="col">E<sub>γ</sub> / eV</th>
+                <th scope="col">λ / nm</th>
+                <th scope="col">Rydberg relative residual</th>
+              </tr>
+            </thead>
+            <tbody data-validation-transitions></tbody>
+          </table>
+        </div>
       </section>
 
       <section class="convergence-section" id="convergence" aria-labelledby="convergence-title">
@@ -409,7 +516,7 @@
           <p>Series convergence</p>
           <h2 id="convergence-title">
             Higher levels crowd
-            <em>toward exact limits.</em>
+            <em>toward the series limits.</em>
           </h2>
           <span>
             For fixed n<sub>f</sub>, increasing n<sub>i</sub> raises photon
@@ -422,156 +529,141 @@
           <figure class="limit-figure">
             <figcaption>
               <strong>Hydrogen series convergence</strong>
-              <span>Validated SVG · n<sub>i</sub> = n<sub>f</sub> + 1 … 10</span>
+              <span>Series convergence · n<sub>i</sub> = n<sub>f</sub> + 1 … 10</span>
             </figcaption>
             <img
               src="../../figures/task05/hydrogen_series_convergence.svg"
               loading="lazy"
-              alt="Validated graph of finite hydrogen series wavelengths converging monotonically toward five analytical limits"
+              alt="Graph of finite hydrogen series wavelengths converging monotonically toward five analytical limits"
             />
           </figure>
           <div class="limit-ledger" data-limit-ledger aria-label="Analytical hydrogen series limits"></div>
         </div>
       </section>
 
-      <section class="evidence-section" id="evidence" aria-labelledby="evidence-title">
-        <header class="section-introduction section-introduction--paper">
-          <p>Accepted numerical evidence</p>
-          <h2 id="evidence-title">
-            Every line is generated.
-            <em>Every identity is checked.</em>
-          </h2>
-          <span>
-            An independent Decimal and Rydberg reference path verifies the
-            levels, transition energies, wavelengths, frequencies, named lines,
-            series limits, ordering, labels, and spectral classification. All
-            30/30 independent checks pass.
-          </span>
-        </header>
 
-        <div class="evidence-metrics" aria-live="polite">
-          <div>
-            <span>Independent checks</span>
-            <strong data-validation-count>—</strong>
-            <small data-validation-status>Loading validation report</small>
-          </div>
-          <div>
-            <span>Finite transitions</span>
-            <strong data-transition-count>—</strong>
-            <small>All unique pairs through n = 10</small>
-          </div>
-          <div>
-            <span>Largest normalized error</span>
-            <strong data-normalized-error>—</strong>
-            <small>Fraction of its declared tolerance</small>
-          </div>
-          <div>
-            <span>Required graph</span>
-            <strong>3840 × 2160</strong>
-            <small>300-DPI PNG plus editable SVG</small>
-          </div>
-        </div>
-
-        <div class="evidence-figures">
-          <figure class="evidence-figure evidence-figure--main">
-            <figcaption>
-              <strong>Photon energy vs wavelength</strong>
-              <span>Required graph · validated SVG</span>
-            </figcaption>
-            <img
-              src="../../figures/task05/photon_energy_vs_wavelength.svg"
-              loading="lazy"
-              alt="Required validated graph of 45 discrete ideal hydrogen photon energies against logarithmic vacuum wavelength"
-            />
-          </figure>
-          <figure>
-            <figcaption>
-              <strong>Bohr levels and emissions</strong>
-              <span>Supporting model · validated SVG</span>
-            </figcaption>
-            <img
-              src="../../figures/task05/bohr_energy_level_diagram.svg"
-              loading="lazy"
-              alt="Validated ideal Bohr energy-level diagram with representative downward hydrogen transitions"
-            />
-          </figure>
-          <figure>
-            <figcaption>
-              <strong>Visible Balmer positions</strong>
-              <span>No intensity claim · validated SVG</span>
-            </figcaption>
-            <img
-              src="../../figures/task05/balmer_visible_spectrum.svg"
-              loading="lazy"
-              alt="Validated wavelength-accurate positions of visible Balmer lines with equal illustrative heights"
-            />
-          </figure>
-        </div>
-
-        <div class="evidence-lock" data-evidence-lock data-locked="false">
-          <div>
-            <span class="lock-index" aria-hidden="true">05</span>
-            <p>
-              <strong data-lock-title>Evidence verification pending</strong>
-              <small data-lock-detail>
-                The page remains locked until all committed Task 5 evidence agrees.
-              </small>
-            </p>
-          </div>
-          <div class="download-actions">
-            <a href="../../data/task05/emission_transitions.csv" download>
-              Transition CSV
-            </a>
-            <a href="../../data/task05/validation_report.json" download>
-              Validation JSON
-            </a>
-            <a href="../../figures/task05/photon_energy_vs_wavelength.png" download>
-              4K graph
-            </a>
-          </div>
-        </div>
-      </section>
-
-      <section class="extension-decision" id="extension" aria-labelledby="extension-title">
+      <section class="extension-section" id="extension" aria-labelledby="extension-title">
         <header class="section-introduction">
-          <p>Extension decision</p>
-          <h2 id="extension-title">
-            Accuracy before
-            <em>decorative motion.</em>
-          </h2>
+          <p>Advanced extension · Finite nuclear mass</p>
+          <h2 id="extension-title">When the proton is allowed to move</h2>
           <span>
-            A classical “electron orbit” animation was intentionally deferred.
-            The Bohr equation specifies stationary energy eigenvalues, not a
-            time-resolved planetary path between circles.
+            The main graph treats the nucleus as infinitely heavy. Here the
+            leading reduced-mass correction accounts for proton motion.
           </span>
         </header>
 
-        <div class="decision-ledger">
-          <div>
-            <span>Included here</span>
-            <p>
-              Validated level differences, discrete emission markers, vacuum
-              wavelengths, exact series limits, and a wavelength-position-only
-              Balmer window.
-            </p>
+        <div class="mass-lab is-loading" data-mass-lab>
+          <header class="mass-lab__toolbar">
+            <label>
+              <span>Hydrogen transition</span>
+              <select id="mass-transition-selector" disabled>
+                <option>Loading comparison…</option>
+              </select>
+            </label>
+            <p data-mass-status>Loading reduced-mass model</p>
+          </header>
+
+          <div class="mass-lab__body">
+            <figure class="mass-comparison">
+              <canvas
+                id="mass-comparison-chart"
+                role="img"
+                aria-label="Zoomed comparison of ideal and proton reduced-mass wavelength positions"
+              ></canvas>
+              <figcaption>
+                The axis is deliberately magnified. Equal marker heights show
+                wavelength position only, not intensity or probability.
+              </figcaption>
+            </figure>
+
+            <dl class="mass-readouts" aria-live="polite">
+              <div>
+                <dt>Ideal wavelength</dt>
+                <dd data-mass-ideal-wavelength>—</dd>
+              </div>
+              <div>
+                <dt>Moving-proton wavelength</dt>
+                <dd data-mass-corrected-wavelength>—</dd>
+              </div>
+              <div>
+                <dt>Wavelength shift</dt>
+                <dd data-mass-wavelength-shift>—</dd>
+              </div>
+              <div>
+                <dt>Energy change</dt>
+                <dd data-mass-energy-shift>—</dd>
+              </div>
+            </dl>
           </div>
-          <div>
-            <span>Not implied</span>
-            <p>
-              Equal line strength, line width, transition probability,
-              selection-rule completeness, a literal electron trajectory, or
-              agreement with precision spectroscopy.
-            </p>
+
+          <div class="mass-equations" aria-label="Reduced-mass derivation">
+            <article>
+              <span>1 · Share the motion</span>
+              <p data-proof-latex="\mu=\dfrac{m_eM}{m_e+M}">μ = m<sub>e</sub>M / (m<sub>e</sub> + M)</p>
+              <small>
+                The electron and proton orbit their common centre of mass, so
+                the electron mass is replaced by the reduced mass μ.
+              </small>
+            </article>
+            <article>
+              <span>2 · Correct the Rydberg scale</span>
+              <p data-proof-latex="R_H=R_{\infty}\dfrac{\mu}{m_e}">R<sub>H</sub> = R<sub>∞</sub> μ / m<sub>e</sub></p>
+              <small>
+                μ/m<sub>e</sub> = 1/(1 + m<sub>e</sub>/m<sub>p</sub>) =
+                <strong data-mass-factor>—</strong>.
+              </small>
+            </article>
+            <article>
+              <span>3 · Read the consequence</span>
+              <p data-proof-latex="\lambda_H=\lambda_{\infty}\!\left(1+\dfrac{m_e}{m_p}\right)">λ<sub>H</sub> = λ<sub>∞</sub>(1 + m<sub>e</sub>/m<sub>p</sub>)</p>
+              <small>
+                Every line moves to a slightly longer wavelength by the same
+                relative fraction, <strong data-mass-relative-shift>—</strong>.
+              </small>
+            </article>
           </div>
-          <div>
-            <span>Preferred future extension</span>
-            <p>
-              A separately validated ideal-versus-reduced-mass wavelength
-              comparison, kept visually and conceptually outside this accepted
-              stationary-nucleus baseline.
-            </p>
+
+          <div class="mass-table-wrap">
+            <table class="mass-table">
+              <caption>Representative line positions from the 45-transition catalogue</caption>
+              <thead>
+                <tr>
+                  <th scope="col">Line</th>
+                  <th scope="col">Transition</th>
+                  <th scope="col">Ideal λ / nm</th>
+                  <th scope="col">Reduced-mass λ / nm</th>
+                  <th scope="col">Shift / pm</th>
+                </tr>
+              </thead>
+              <tbody data-mass-table-body></tbody>
+            </table>
           </div>
+
+          <div class="mass-lab__evidence">
+            <p>Reduced-mass correction only; not a precision fit to measured hydrogen.</p>
+            <div class="download-actions">
+              <a href="../../data/task05/reduced_mass_transitions.csv" download>
+                Reduced-mass CSV
+              </a>
+              <button type="button" data-download-mass-chart disabled>
+                Download figure
+              </button>
+            </div>
+          </div>
+
+          <p class="mass-lab__error" data-mass-error hidden>
+            The reduced-mass data could not be loaded.
+          </p>
         </div>
+
+        <aside class="model-boundary mass-boundary">
+          <span>Interpretation boundary</span>
+          <p>
+            Energy eigenstates are not literal planetary paths. This comparison
+            does not calculate line strength, linewidth, selection rules, fine
+            structure, hyperfine structure, or the Lamb shift.
+          </p>
+        </aside>
       </section>
 
       <footer class="task-footer">
@@ -579,18 +671,15 @@
           <span>Task 05</span>
           <strong>Hydrogen spectrum</strong>
         </div>
-        <p>
-          Required graph, complete 45-transition catalogue, independent
-          validation, original-resolution figures, and model boundaries
-          complete.
-        </p>
+        <p>Hydrogen transitions and reduced-mass comparison.</p>
         <a href="../tasks.html">Return to all tasks</a>
       </footer>
     </main>
 
-    <script src="../vendor/packages/gsap/dist/gsap.min.js"></script>
-    <script src="../vendor/packages/gsap/dist/ScrollTrigger.min.js"></script>
-    <script type="module" src="../assets/task-05-atlas.js?v=20260731b"></script>
-    <script src="../assets/task-05-motion.js?v=20260731b"></script>
+    <script src="../vendor/packages/katex/katex.min.js"></script>
+    <script src="../assets/proof-math.js?v=20260808"></script>
+    <script type="module" src="../assets/task-05-atlas.js?v=20260813"></script>
+    <script type="module" src="../assets/task-05-extension.js?v=20260813"></script>
+    <script src="../assets/task-05-navigation.js?v=20260808"></script>
   </body>
 </html>

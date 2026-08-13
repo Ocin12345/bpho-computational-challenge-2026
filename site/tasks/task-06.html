@@ -5,17 +5,21 @@
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta
       name="description"
-      content="A validated interactive model of electron-diffraction rings, exact spherical-screen geometry, and graphite-spacing recovery for BPhO Computational Challenge Task 6."
+      content="An interactive model of electron-diffraction rings, exact spherical-screen geometry, and graphite-spacing recovery for BPhO Computational Challenge Task 6."
     />
-    <meta name="theme-color" content="#0d110e" />
+    <meta name="theme-color" content="#ffffff" />
     <title>Task 06 — Electron Diffraction | BPhO Computational Challenge 2026</title>
     <link
       rel="icon"
       href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' fill='%230d110e'/%3E%3Ccircle cx='32' cy='32' r='5' fill='%23dffff0'/%3E%3Ccircle cx='32' cy='32' r='15' fill='none' stroke='%239ef26b' stroke-width='3'/%3E%3Ccircle cx='32' cy='32' r='25' fill='none' stroke='%235ce6ae' stroke-width='2' stroke-dasharray='6 4'/%3E%3C/svg%3E"
     />
+    <link rel="stylesheet" href="../vendor/packages/katex/katex.min.css" />
     <link rel="stylesheet" href="../assets/task-06.css?v=20260731b" />
+    <link rel="stylesheet" href="../assets/task-06-minimal.css?v=20260813a" />
+    <link rel="stylesheet" href="../assets/proof-math.css?v=20260808" />
+    <link rel="stylesheet" href="../assets/task-clean.css?v=20260809" />
   </head>
-  <body>
+  <body class="task06-gold" data-task="06">
     <a class="skip-link" href="#diffraction-screen">Skip to diffraction screen</a>
 
     <header class="task-header">
@@ -25,22 +29,23 @@
         </svg>
         All tasks
       </a>
-      <p>Task 06 <span>/</span> Matter waves</p>
-      <a class="method-link" href="#validation">Official check</a>
+      <nav class="section-nav" aria-label="Task 6 sections">
+        <a href="#experiment" aria-current="page">Experiment</a>
+        <a href="#plot">Plot</a>
+        <a href="#method">Method</a>
+        <a href="#validation">Validation</a>
+      </nav>
+      <p class="task-identity"><span>Official Task 06 of 10</span><strong>Electron Diffraction</strong></p>
     </header>
 
     <main>
-      <section class="diffraction-hero" aria-labelledby="page-title">
+      <section class="diffraction-hero" id="experiment" aria-labelledby="page-title">
         <header class="hero-copy">
-          <p>Electron diffraction · graphite</p>
-          <h1 id="page-title">
-            More voltage.
-            <em>Tighter rings.</em>
-          </h1>
+          <p>Official Task 06 of 10 — Electron Diffraction</p>
+          <h1 id="page-title">Electron diffraction</h1>
           <span>
-            Accelerating voltage shortens the electron’s de Broglie wavelength.
-            Bragg angles contract, additional orders become possible, and the
-            spherical screen records a changing geometry of concentric rings.
+            Test how accelerating voltage controls electron wavelength, Bragg
+            scattering, and the two graphite ring families on a spherical screen.
           </span>
         </header>
 
@@ -51,10 +56,10 @@
         >
           <header class="screen-header">
             <div>
-              <span id="screen-title">Live phosphor geometry</span>
+              <span id="screen-title">Phosphor screen</span>
               <strong data-voltage-title>Loading 1–5 kV sweep</strong>
             </div>
-            <p class="screen-badge" data-screen-badge>Checking evidence</p>
+            <p class="screen-badge" data-screen-badge>Loading model</p>
           </header>
 
           <div class="screen-canvas-wrap">
@@ -65,10 +70,10 @@
               aria-label="Interactive exact geometric model of forward-screen electron-diffraction rings"
             ></canvas>
             <div class="screen-loading" data-screen-loading>
-              Reading validated Task 6 evidence
+              Loading diffraction data
             </div>
             <p class="screen-error" data-screen-error hidden>
-              The validated Task 6 evidence could not be loaded.
+              The Task 6 diffraction data could not be loaded.
             </p>
           </div>
 
@@ -121,7 +126,7 @@
             />
             <small>
               <span>1.00 kV</span>
-              <span>10 V evidence increments</span>
+              <span>10 V increments</span>
               <span>5.00 kV</span>
             </small>
           </label>
@@ -130,6 +135,11 @@
             <button type="button" data-voltage-preset="1000" disabled>1 kV</button>
             <button type="button" data-voltage-preset="3000" disabled>3 kV</button>
             <button type="button" data-voltage-preset="5000" disabled>5 kV</button>
+          </div>
+
+          <div class="run-controls" role="group" aria-label="Experiment playback">
+            <button type="button" data-sweep-toggle disabled>Sweep 1 → 5 kV</button>
+            <button type="button" data-reset-model disabled>Reset to 3 kV</button>
           </div>
 
           <fieldset class="family-controls">
@@ -151,7 +161,44 @@
           </div>
         </form>
 
-        <div class="catalogue-strip" aria-label="Task 6 evidence summary">
+        <section class="live-diagnostics" data-live-diagnostics aria-labelledby="diagnostics-title">
+          <header>
+            <div>
+              <span>Live quantitative diagnostics</span>
+              <h2 id="diagnostics-title">First-order evidence at the selected voltage</h2>
+            </div>
+            <p>Values come from the checked 401-point evidence sweep; n = 1 for both rows.</p>
+          </header>
+          <dl class="diagnostic-summary" aria-live="polite">
+            <div><dt>Voltage V</dt><dd data-diagnostic-voltage>—</dd></div>
+            <div><dt>Wavelength λ</dt><dd data-diagnostic-wavelength>—</dd></div>
+            <div><dt>λ√V</dt><dd data-diagnostic-scaling>—</dd></div>
+            <div><dt>Screen radius r</dt><dd>65.000 mm</dd></div>
+          </dl>
+          <div class="diagnostic-table-wrap">
+            <table class="diagnostic-table">
+              <caption>Enabled graphite families — exact first-order geometry</caption>
+              <thead>
+                <tr>
+                  <th>Family</th><th>d / nm</th><th>n</th><th>q = sin θ</th>
+                  <th>θ / °</th><th>φ = 2θ / °</th><th>x / mm</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr data-diagnostic-family="d1">
+                  <th>d<sub>1</sub></th><td data-d1-live-spacing>—</td><td>1</td><td data-d1-q>—</td>
+                  <td data-d1-theta>—</td><td data-d1-phi>—</td><td data-d1-live-radius>—</td>
+                </tr>
+                <tr data-diagnostic-family="d2">
+                  <th>d<sub>2</sub></th><td data-d2-live-spacing>—</td><td>1</td><td data-d2-q>—</td>
+                  <td data-d2-theta>—</td><td data-d2-phi>—</td><td data-d2-live-radius>—</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </section>
+
+        <div class="catalogue-strip" aria-label="Task 6 model summary">
           <div>
             <span>Voltage samples</span>
             <strong>401</strong>
@@ -172,24 +219,27 @@
         </div>
       </section>
 
-      <section class="model-section" id="model" aria-labelledby="model-title">
+      <section class="model-section" id="method" aria-labelledby="method-title">
         <header class="section-introduction section-introduction--paper">
-          <p>de Broglie meets Bragg</p>
-          <h2 id="model-title">
-            Momentum sets wavelength.
-            <em>Spacing sets angle.</em>
-          </h2>
+          <p>Method</p>
+          <h2 id="method-title">From voltage to ring radius</h2>
           <span>
-            The accepted baseline follows the official non-relativistic
-            derivation exactly, then projects each allowed scattering angle
+            The baseline follows the non-relativistic derivation, then projects
+            each allowed scattering angle
             onto the spherical phosphor screen.
           </span>
         </header>
 
         <div class="equation-architecture">
+          <article>
+            <span>Acceleration from rest</span>
+            <p data-proof-latex="eV=\dfrac{p^2}{2m_e}">eV = p² / 2m<sub>e</sub></p>
+            <small>V is a positive accelerating voltage; p is electron momentum. The electron starts with negligible kinetic energy.</small>
+          </article>
+
           <article class="equation-primary">
             <span>Electron wavelength</span>
-            <p>
+            <p data-proof-latex="\lambda=\dfrac{h}{\sqrt{2m_e eV}}">
               λ =
               <span class="fraction">
                 <span>h</span>
@@ -204,38 +254,47 @@
 
           <article>
             <span>Bragg condition</span>
-            <p>2d sin θ = nλ</p>
+            <p data-proof-latex="2d\sin\theta=n\lambda">2d sin θ = nλ</p>
+            <small>d is graphite plane spacing; n is the positive integer diffraction order; θ is the Bragg glancing angle. Here q ≡ nλ/(2d) = sin θ = sin(φ/2).</small>
           </article>
 
           <article>
             <span>Scattering angle</span>
-            <p>φ = 2θ = 2 sin<sup>−1</sup>(nλ/2d)</p>
+            <p data-proof-latex="\phi=2\theta=2\sin^{-1}\!\left(\dfrac{n\lambda}{2d}\right)">φ = 2θ = 2 sin<sup>−1</sup>(nλ/2d)</p>
+            <small>φ is the total beam deflection between the incident and diffracted directions.</small>
           </article>
 
           <article>
             <span>Photographic radius</span>
-            <p>x = r sin(2φ)</p>
+            <p data-proof-latex="x=r\sin(2\phi)">x = r sin(2φ)</p>
           </article>
         </div>
 
         <div class="geometry-comparison">
           <div class="geometry-comparison__official">
             <span>Written brief · authoritative radius</span>
-            <strong>x = r sin(2φ)</strong>
+            <strong data-proof-latex="x=r\sin(2\phi)">x = r sin(2φ)</strong>
             <p>
               Distance from the image centre to a ring on the photograph.
-              This exact spherical projection drives the interactive screen.
+              Here r = 65 mm is the spherical phosphor-screen radius. This
+              spherical projection determines the photographic ring radius.
             </p>
           </div>
           <div>
             <span>Presentation derivation · separate observable</span>
-            <strong>y = 2r sin φ</strong>
+            <strong data-proof-latex="y=2r\sin\phi">y = 2r sin φ</strong>
             <p>
-              Full caliper chord across the ring. It is stored and validated,
+              Full caliper chord across the ring. It is stored,
               but never substituted for the photographic radius x.
             </p>
           </div>
         </div>
+
+        <p class="geometry-note">
+          <strong>x and y are different observables.</strong> The official photograph uses
+          x = r sin(2φ); y = 2r sin φ is a full chord. The calculation uses the
+          exact inverse sine and exact spherical projection, with no small-angle approximation.
+        </p>
 
         <aside class="model-boundary">
           <span>Model boundary</span>
@@ -243,23 +302,23 @@
             The calculation predicts ideal geometric positions and order
             domains. Ring intensity, graphite structure factors, broadening,
             beam spread, magnetic deflection, multiple scattering, phosphor
-            response, camera distortion, and relativistic momentum are not
-            determined by the supplied data.
+            response, camera distortion, and relativistic momentum are excluded
+            from the official baseline. Assumptions are single elastic scattering,
+            fixed graphite spacings, a 65 mm spherical screen, and a non-relativistic
+            electron accelerated from rest. Measurement noise is not simulated.
+            Relativity is tested separately below.
           </p>
         </aside>
       </section>
 
       <section
         class="validation-section"
-        id="validation"
-        aria-labelledby="validation-title"
+        id="plot"
+        aria-labelledby="plot-title"
       >
         <header class="section-introduction">
-          <p>The official Task 6a check</p>
-          <h2 id="validation-title">
-            Straight lines recover
-            <em>both spacings exactly.</em>
-          </h2>
+          <p>Required graph</p>
+          <h2 id="plot-title">Recovering the graphite spacings</h2>
           <span>
             For first order, plotting 1/√V vertically against sin(φ/2)
             horizontally gives a line through the origin. Its gradient returns
@@ -270,14 +329,14 @@
         <div class="validation-laboratory is-loading" data-validation-laboratory>
           <header class="validation-toolbar">
             <div>
-              <span>Selected evidence point</span>
+              <span>Voltage</span>
               <strong data-selected-voltage>3.00 kV</strong>
             </div>
             <p>
               Markers show every 0.5 kV for clarity; the fits use all 401
               voltages.
             </p>
-            <span data-validation-status>Preparing validated fits</span>
+            <span data-validation-status>Preparing spacing fits</span>
           </header>
 
           <div class="validation-chart-wrap">
@@ -285,11 +344,11 @@
               id="spacing-recovery-chart"
               tabindex="0"
               role="img"
-              aria-label="Official straight-line graph of inverse square-root voltage against sine of half the scattering angle for both graphite spacings"
+              aria-label="Straight-line graph of inverse square-root voltage against sine of half the scattering angle for both graphite spacings"
             ></canvas>
             <div class="validation-tooltip" data-validation-tooltip hidden></div>
             <p class="validation-error" data-validation-error hidden>
-              The validated fit evidence could not be loaded.
+              The spacing-fit data could not be loaded.
             </p>
           </div>
 
@@ -319,11 +378,8 @@
 
       <section class="domain-section" id="orders" aria-labelledby="orders-title">
         <header class="section-introduction section-introduction--paper">
-          <p>Two order domains, kept separate</p>
-          <h2 id="orders-title">
-            Bragg can allow it.
-            <em>The forward screen may not.</em>
-          </h2>
+          <p>Which rings appear?</p>
+          <h2 id="orders-title">Bragg orders and screen orders</h2>
           <span>
             The mathematical Bragg condition reaches q ≤ 1. The pictured
             forward hemisphere is stricter: q = sin(φ/2) ≤ 1/√2.
@@ -350,7 +406,7 @@
             <small>Only these are drawn on the interactive phosphor screen.</small>
           </article>
           <article>
-            <span>Exact branch condition</span>
+            <span>Branch condition</span>
             <p>0 &lt; φ ≤ 90°</p>
             <strong data-selected-branch>3.00 kV</strong>
             <small>Geometric classification—not an intensity threshold.</small>
@@ -359,150 +415,217 @@
 
         <figure class="radius-figure">
           <figcaption>
-            <strong>Exact projected radius across voltage</strong>
-            <span>All forward-screen orders · validated SVG</span>
+            <strong>Projected radius across voltage</strong>
+            <span>All forward-screen orders</span>
           </figcaption>
           <img
             src="../../figures/task06/ring_radius_vs_voltage.svg"
             loading="lazy"
-            alt="Validated exact photographic ring-radius tracks versus accelerating voltage for both graphite spacings and all forward-screen orders"
+            alt="Exact photographic ring-radius tracks versus accelerating voltage for both graphite spacings and all forward-screen orders"
           />
         </figure>
       </section>
 
-      <section class="evidence-section" id="evidence" aria-labelledby="evidence-title">
-        <header class="section-introduction">
-          <p>Accepted numerical evidence</p>
-          <h2 id="evidence-title">
-            Every ring position
-            <em>survives independent checks.</em>
-          </h2>
+      <section class="evidence-section task06-validation-evidence" id="validation" aria-labelledby="evidence-title">
+        <header class="section-introduction section-introduction--paper">
+          <p>Validation</p>
+          <h2 id="evidence-title">Evidence for every step</h2>
           <span>
-            A 60-digit Decimal reference path verifies wavelength, order
-            flooring, Bragg angles, both screen observables, endpoint anchors,
-            line gradients, spacing recovery, and all-order collapse.
+            The page separates mathematical checks, fitted evidence, and implementation
+            tests so a judge can see what was derived and what was independently verified.
           </span>
         </header>
 
-        <div class="evidence-metrics" aria-live="polite">
-          <div>
-            <span>Independent checks</span>
-            <strong data-validation-count>—</strong>
-            <small data-evidence-status>Loading validation report</small>
-          </div>
-          <div>
-            <span>Voltage range</span>
-            <strong>1–5 kV</strong>
-            <small>401 exact samples · 10 V spacing</small>
-          </div>
-          <div>
-            <span>Nominal spacings recovered</span>
-            <strong>0.123 · 0.213 nm</strong>
-            <small>Both first-order fits return R² = 1</small>
-          </div>
-          <div>
-            <span>Summary export</span>
-            <strong>3840 × 2160</strong>
-            <small>300-DPI PNG plus editable SVG</small>
+        <div class="validation-evidence-grid">
+          <article class="validation-card validation-card--wide">
+            <span>Inverse-square-root scaling</span>
+            <h3>λ√V remains constant</h3>
+            <strong data-scaling-constant>—</strong>
+            <div class="anchor-values">
+              <p><small>1.00 kV</small><b data-lambda-1kv>—</b></p>
+              <p><small>3.00 kV</small><b data-lambda-3kv>—</b></p>
+              <p><small>5.00 kV</small><b data-lambda-5kv>—</b></p>
+            </div>
+            <p data-scaling-check>Awaiting validated evidence.</p>
+          </article>
+
+          <article class="validation-card">
+            <span>Bragg identity</span>
+            <h3>2d sin θ = nλ</h3>
+            <strong data-bragg-check>—</strong>
+            <p>Checked across all 11,386 allowed order records.</p>
+          </article>
+
+          <article class="validation-card">
+            <span>Spherical geometry</span>
+            <h3>x = r sin(2φ)</h3>
+            <strong data-geometry-check>—</strong>
+            <p>Photographic radius and the separate chord y were checked independently.</p>
+          </article>
+        </div>
+
+        <div class="fit-evidence-panel">
+          <header>
+            <div><span>Official straight-line test</span><h3>Y = 1/√V against X = sin(φ/2)</h3></div>
+            <p>401 voltage points per family; constrained physical fit passes through (0, 0).</p>
+          </header>
+          <div class="fit-table-wrap">
+            <table class="fit-evidence-table">
+              <thead>
+                <tr><th>Family</th><th>Fitted gradient</th><th>Theory</th><th>Diagnostic intercept</th><th>R²</th><th>Recovered d</th></tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <th>d<sub>1</sub></th><td data-d1-validation-gradient>—</td><td data-d1-theoretical-gradient>—</td>
+                  <td data-d1-intercept>—</td><td data-d1-r-squared>—</td><td data-d1-validation-spacing>—</td>
+                </tr>
+                <tr>
+                  <th>d<sub>2</sub></th><td data-d2-validation-gradient>—</td><td data-d2-theoretical-gradient>—</td>
+                  <td data-d2-intercept>—</td><td data-d2-r-squared>—</td><td data-d2-validation-spacing>—</td>
+                </tr>
+              </tbody>
+            </table>
           </div>
         </div>
 
-        <div class="evidence-figures">
-          <figure class="evidence-figure evidence-figure--main">
-            <figcaption>
-              <strong>Official straight-line validation</strong>
-              <span>Required graph · validated SVG</span>
-            </figcaption>
-            <img
-              src="../../figures/task06/straight_line_validation.svg"
-              loading="lazy"
-              alt="Required validated straight-line graph recovering the two nominal graphite spacings from first-order electron diffraction"
-            />
-          </figure>
-          <figure>
-            <figcaption>
-              <strong>Forward-screen rings</strong>
-              <span>1, 3 and 5 kV · schematic brightness</span>
-            </figcaption>
-            <img
-              src="../../figures/task06/electron_diffraction_rings.svg"
-              loading="lazy"
-              alt="Validated forward-screen geometric ring positions at one, three, and five kilovolts for both graphite spacings"
-            />
-          </figure>
-          <figure>
-            <figcaption>
-              <strong>All-order collapse</strong>
-              <span>11,386 Bragg-order records · validated SVG</span>
-            </figcaption>
-            <img
-              src="../../figures/task06/normalized_order_collapse.svg"
-              loading="lazy"
-              alt="Validated normalized all-order diffraction data collapsing onto one straight line for each graphite spacing"
-            />
-          </figure>
-        </div>
-
-        <div class="evidence-lock" data-evidence-lock data-locked="false">
+        <div class="consistency-panel">
           <div>
-            <span class="lock-index" aria-hidden="true">06</span>
+            <span>Internal consistency recovery</span>
+            <h3>Planck constant recovered from the fitted gradients</h3>
             <p>
-              <strong data-lock-title>Evidence verification pending</strong>
-              <small data-lock-detail>
-                The page remains locked until all committed Task 6 evidence agrees.
-              </small>
+              This reverses the same model using the nominal graphite spacings.
+              It is an internal consistency check, not an independent measurement of h.
             </p>
           </div>
-          <div class="download-actions">
-            <a href="../../data/task06/voltage_sweep.csv" download>Voltage CSV</a>
-            <a href="../../data/task06/diffraction_orders.csv" download>All orders</a>
-            <a href="../../data/task06/validation_report.json" download>
-              Validation JSON
-            </a>
-            <a href="../../figures/task06/task06_summary.png" download>4K summary</a>
+          <dl>
+            <div><dt>From d<sub>1</sub></dt><dd data-d1-recovered-h>—</dd></div>
+            <div><dt>From d<sub>2</sub></dt><dd data-d2-recovered-h>—</dd></div>
+            <div><dt>Exact SI value</dt><dd>6.62607015 × 10<sup>−34</sup> J s</dd></div>
+          </dl>
+        </div>
+
+        <div class="test-ledger" aria-label="Task 6 verification ledger">
+          <article><strong>42/42 Python tests</strong><span>Numerical model and generated evidence</span></article>
+          <article><strong>39/39 independent physics checks</strong><span>Committed validation report</span></article>
+          <article><strong>15/15 static website checks</strong><span>Original baseline, plus 6/6 Gold checks in the 21/21 combined run</span></article>
+        </div>
+
+        <div class="validation-actions">
+          <div>
+            <strong>Export the judge-facing first-order evidence</strong>
+            <span>Metadata plus V, λ, d, n, q, θ, φ, x, y for both graphite families.</span>
           </div>
+          <button type="button" data-export-csv disabled>Export first-order CSV</button>
+          <a href="../../data/task06/validation_report.json" download>Validation report</a>
         </div>
       </section>
 
-      <section class="extension-decision" id="extension" aria-labelledby="extension-title">
+
+      <section
+        class="precision-extension is-loading"
+        id="extension"
+        aria-labelledby="extension-title"
+        data-relativity-extension
+      >
         <header class="section-introduction section-introduction--paper">
-          <p>Extension decision</p>
-          <h2 id="extension-title">
-            Interaction without
-            <em>invented dynamics.</em>
-          </h2>
+          <p>Secondary precision study</p>
+          <h2 id="extension-title">Advanced Extension — Relativistic Correction</h2>
           <span>
-            The voltage control exposes every accepted evidence state on
-            demand. Automatic ring animation and relativistic comparison remain
-            outside the authoritative competition baseline.
+            The non-relativistic result remains the baseline. This comparison
+            applies the relativistic energy-momentum relation to the same Bragg
+            and spherical-screen geometry.
           </span>
         </header>
 
-        <div class="decision-ledger">
-          <div>
-            <span>Included here</span>
-            <p>
-              Exact non-relativistic wavelength, both printed graphite
-              spacings, every forward-screen order, exact spherical projection,
-              and the official spacing-recovery fit.
-            </p>
-          </div>
-          <div>
-            <span>Not implied</span>
-            <p>
-              Calibrated brightness, reflection strength, experimental
-              visibility, linewidth, detector response, or a small-angle
-              approximation hidden inside the ring positions.
-            </p>
-          </div>
-          <div>
-            <span>Preferred future extension</span>
-            <p>
-              A separate non-relativistic-versus-relativistic radius comparison.
-              At 5 kV the wavelength correction is about −0.244%, small but
-              numerically resolvable.
-            </p>
-          </div>
+        <div class="precision-layout">
+          <article class="precision-chart-card">
+            <header>
+              <div>
+                <span>First-order radius shift</span>
+                <strong data-relativity-voltage>Loading 3.00 kV comparison</strong>
+              </div>
+              <p data-extension-status>Loading relativistic model</p>
+            </header>
+            <div class="precision-chart-wrap">
+              <canvas
+                id="relativity-chart"
+                role="img"
+                aria-label="Loading the relativistic first-order ring-radius comparison"
+              ></canvas>
+              <p class="precision-loading" data-extension-loading>
+                Loading relativistic correction
+              </p>
+              <p class="precision-error" data-extension-error hidden>
+                The relativistic comparison data could not be loaded. The official
+                non-relativistic model above remains available.
+              </p>
+            </div>
+            <div class="precision-legend" aria-label="Precision chart encoding">
+              <span><i aria-hidden="true"></i>d<sub>1</sub> = 0.123 nm · solid</span>
+              <span><i aria-hidden="true"></i>d<sub>2</sub> = 0.213 nm · dashed</span>
+              <small>Negative Δx means the relativistic ring lies slightly inward.</small>
+            </div>
+          </article>
+
+          <aside class="precision-readouts" aria-label="Relativistic comparison readouts">
+            <div class="precision-formulae">
+              <div>
+                <span>Non-relativistic</span>
+                <strong data-proof-latex="\lambda_{\mathrm{nr}}=\dfrac{h}{\sqrt{2m_e eV}}">λ = h / √(2m<sub>e</sub>eV)</strong>
+              </div>
+              <div>
+                <span>Relativistic result</span>
+                <strong data-proof-latex="\lambda_{\mathrm{rel}}=\dfrac{hc}{\sqrt{eV\left(eV+2m_ec^2\right)}}">λ = hc / √[eV(eV + 2m<sub>e</sub>c²)]</strong>
+              </div>
+            </div>
+
+            <dl class="precision-wavelengths">
+              <div>
+                <dt>Non-relativistic λ</dt>
+                <dd data-nonrel-wavelength>—</dd>
+              </div>
+              <div>
+                <dt>Relativistic λ</dt>
+                <dd data-rel-wavelength>—</dd>
+              </div>
+              <div>
+                <dt>Wavelength correction</dt>
+                <dd data-wavelength-correction>—</dd>
+              </div>
+            </dl>
+
+            <table class="precision-table">
+              <caption>First-order photographic radius</caption>
+              <thead>
+                <tr><th>Spacing</th><th>Baseline</th><th>Relativistic</th><th>Δx</th></tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <th>d<sub>1</sub></th>
+                  <td data-d1-nonrel-radius>—</td>
+                  <td data-d1-rel-radius>—</td>
+                  <td data-d1-shift>—</td>
+                </tr>
+                <tr>
+                  <th>d<sub>2</sub></th>
+                  <td data-d2-nonrel-radius>—</td>
+                  <td data-d2-rel-radius>—</td>
+                  <td data-d2-shift>—</td>
+                </tr>
+              </tbody>
+            </table>
+
+            <div class="precision-conclusion">
+              <span>Interpretation</span>
+              <p data-extension-conclusion>
+                The correction is numerically resolvable but remains secondary
+                to the spacing-recovery graph.
+              </p>
+              <a href="../../data/task06/relativistic_extension.json" download>
+                Download comparison data
+              </a>
+            </div>
+          </aside>
         </div>
       </section>
 
@@ -511,18 +634,15 @@
           <span>Task 06</span>
           <strong>Electron diffraction</strong>
         </div>
-        <p>
-          Complete 1–5 kV geometric model, two spacing families, exact
-          spherical projection, independent validation, and original-resolution
-          figures complete.
-        </p>
+        <p>Electron wavelength, Bragg angles, and projected ring radii.</p>
         <a href="../tasks.html">Return to all tasks</a>
       </footer>
     </main>
 
-    <script src="../vendor/packages/gsap/dist/gsap.min.js"></script>
-    <script src="../vendor/packages/gsap/dist/ScrollTrigger.min.js"></script>
-    <script type="module" src="../assets/task-06-diffraction.js?v=20260731b"></script>
-    <script src="../assets/task-06-motion.js?v=20260731b"></script>
+    <script src="../vendor/packages/katex/katex.min.js"></script>
+    <script src="../assets/proof-math.js?v=20260808"></script>
+    <script type="module" src="../assets/task-06-diffraction.js?v=20260813a"></script>
+    <script type="module" src="../assets/task-06-relativity.js?v=20260813a"></script>
+    <script type="module" src="../assets/task-06-navigation.js?v=20260808a"></script>
   </body>
 </html>

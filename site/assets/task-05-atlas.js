@@ -45,7 +45,9 @@ const transitionSelector = document.querySelector("#transition-selector");
 const transitionControls = document.querySelector("[data-transition-controls]");
 const visibleOnlyControl = document.querySelector("[data-visible-only]");
 const photonRibbon = document.querySelector("[data-photon-ribbon]");
-const evidenceLock = document.querySelector("[data-evidence-lock]");
+const transitionCsvDownload = document.querySelector(
+  "[data-download-transition-csv]",
+);
 
 const outputs = {
   transitionTitle: document.querySelector("[data-transition-title]"),
@@ -61,12 +63,10 @@ const outputs = {
   atlasSeries: document.querySelector("[data-atlas-series]"),
   atlasEnergy: document.querySelector("[data-atlas-energy]"),
   atlasWavelength: document.querySelector("[data-atlas-wavelength]"),
-  validationCount: document.querySelector("[data-validation-count]"),
-  validationStatus: document.querySelector("[data-validation-status]"),
-  transitionCount: document.querySelector("[data-transition-count]"),
-  normalizedError: document.querySelector("[data-normalized-error]"),
-  lockTitle: document.querySelector("[data-lock-title]"),
-  lockDetail: document.querySelector("[data-lock-detail]"),
+  spectrumSelection: document.querySelector("[data-spectrum-selection]"),
+  energyScale: document.querySelector("[data-energy-scale]"),
+  rydbergResidual: document.querySelector("[data-rydberg-residual]"),
+  validationSummary: document.querySelector("[data-validation-summary]"),
 };
 
 const state = {
@@ -119,9 +119,15 @@ function formatFrequency(value) {
   return `${value.toExponential(4)} Hz`;
 }
 
+function formatRegion(region) {
+  if (region === "ultraviolet") return "UV";
+  if (region === "infrared") return "IR";
+  return "Visible";
+}
+
 function wavelengthColour(wavelengthNm) {
-  if (wavelengthNm < 380) return "#7652d8";
-  if (wavelengthNm > 750) return "#ba5544";
+  if (wavelengthNm < 380) return "#64748b";
+  if (wavelengthNm > 750) return "#8a8178";
 
   const stops = [
     [380, [120, 0, 168]],
@@ -197,7 +203,7 @@ function drawEnergyStage() {
   stageContext.lineCap = "round";
   stageContext.lineJoin = "round";
 
-  stageContext.fillStyle = "#8e8390";
+  stageContext.fillStyle = "#6d6961";
   stageContext.font = `${compact ? 9 : 11}px "Times New Roman"`;
   stageContext.textAlign = "left";
   if (compact) {
@@ -213,14 +219,14 @@ function drawEnergyStage() {
 
   const ionizationY = compact ? 51 : Math.max(35, top - 18);
   stageContext.setLineDash([5, 5]);
-  stageContext.strokeStyle = "rgba(244,236,242,0.30)";
+  stageContext.strokeStyle = "rgba(37,35,31,0.28)";
   stageContext.lineWidth = 1;
   stageContext.beginPath();
   stageContext.moveTo(levelX0, ionizationY);
   stageContext.lineTo(levelX1, ionizationY);
   stageContext.stroke();
   stageContext.setLineDash([]);
-  stageContext.fillStyle = "#968b97";
+  stageContext.fillStyle = "#6d6961";
   stageContext.textAlign = "right";
   stageContext.fillText("ionization · 0 eV", width - 14, ionizationY + 4);
 
@@ -230,10 +236,10 @@ function drawEnergyStage() {
     const isFinal = level.n === transition.finalN;
 
     stageContext.strokeStyle = isInitial
-      ? "#e85d9f"
+      ? "#a24f39"
       : isFinal
-        ? "#f7eff4"
-        : "rgba(214,202,213,0.28)";
+        ? "#25231f"
+        : "rgba(37,35,31,0.20)";
     stageContext.lineWidth = isInitial || isFinal ? 3 : 1.15;
     stageContext.beginPath();
     stageContext.moveTo(levelX0, y);
@@ -241,10 +247,10 @@ function drawEnergyStage() {
     stageContext.stroke();
 
     stageContext.fillStyle = isInitial
-      ? "#f3a5ca"
+      ? "#a24f39"
       : isFinal
-        ? "#f7eff4"
-        : "#968b97";
+        ? "#25231f"
+        : "#6d6961";
     stageContext.font = `${isInitial || isFinal ? "bold " : ""}${
       compact ? 12 : 14
     }px "Times New Roman"`;
@@ -594,7 +600,7 @@ function updateSelection(index, { syncFilter = false, announce = true } = {}) {
   outputs.transitionTitle.textContent = named
     ? `${named} · ${transition.initialN} → ${transition.finalN}`
     : `${seriesName} · ${transition.initialN} → ${transition.finalN}`;
-  outputs.regionBadge.textContent = transition.spectralRegion;
+  outputs.regionBadge.textContent = formatRegion(transition.spectralRegion);
   outputs.regionBadge.dataset.region = transition.spectralRegion;
   outputs.photonWavelength.textContent = formatWavelength(
     transition.wavelengthNm,
@@ -612,6 +618,7 @@ function updateSelection(index, { syncFilter = false, announce = true } = {}) {
   );
 
   photonRibbon.style.setProperty("--photon-colour", colour);
+  photonRibbon.dataset.region = transition.spectralRegion;
   photonRibbon.classList.remove("is-pulsing");
   requestAnimationFrame(() => photonRibbon.classList.add("is-pulsing"));
 
@@ -628,11 +635,12 @@ function updateSelection(index, { syncFilter = false, announce = true } = {}) {
 
   drawEnergyStage();
   drawAtlasChart();
+  updateBalmerSelection(transition);
 
   if (announce) {
     outputs.atlasStatus.textContent = `${transitionLabel(
       transition,
-    )} selected · ${formatWavelength(transition.wavelengthNm)}`;
+    )} · ${formatWavelength(transition.wavelengthNm)}`;
   }
 }
 
@@ -743,6 +751,7 @@ function populateBalmerInstrument() {
     const line = document.createElement("i");
     const position = ((transition.wavelengthNm - 380) / (750 - 380)) * 100;
     line.className = "balmer-line";
+    line.setAttribute("data-transition-index", String(transition.index));
     line.dataset.label =
       formatLineName(transition.lineName) ||
       `${transition.initialN}→${transition.finalN}`;
@@ -756,6 +765,7 @@ function populateBalmerInstrument() {
 
     const card = document.createElement("div");
     card.className = "balmer-line-card";
+    card.setAttribute("data-transition-index", String(transition.index));
     card.innerHTML = `
       <span>${formatLineName(transition.lineName) || "Balmer line"}</span>
       <strong>${transition.wavelengthNm.toFixed(3)} nm</strong>
@@ -767,17 +777,115 @@ function populateBalmerInstrument() {
   list.replaceChildren(cardFragment);
 }
 
-function populateEvidenceMetrics() {
-  const checkCount = state.evidence.validation.checks.length;
-  outputs.validationCount.textContent = `${checkCount} / ${checkCount}`;
-  outputs.validationStatus.textContent =
-    "Independent Decimal and Rydberg paths pass";
-  outputs.transitionCount.textContent = String(
-    state.evidence.transitions.length,
+function updateBalmerSelection(transition) {
+  const selected = transition.spectralRegion === "visible";
+  document
+    .querySelectorAll("[data-transition-index]")
+    .forEach((element) => {
+      element.classList.toggle(
+        "is-selected",
+        selected && Number(element.dataset.transitionIndex) === transition.index,
+      );
+    });
+
+  const label = transitionLabel(transition);
+  if (selected) {
+    outputs.spectrumSelection.textContent = `${label} highlighted at ${formatWavelength(
+      transition.wavelengthNm,
+    )}.`;
+  } else {
+    outputs.spectrumSelection.textContent = `${label} is ${formatWavelength(
+      transition.wavelengthNm,
+    )}, outside 380–750 nm; no visible line is highlighted.`;
+  }
+
+  document.querySelector("[data-balmer-scale]").setAttribute(
+    "aria-label",
+    selected
+      ? `Wavelength-accurate positions of seven visible Balmer transitions. ${label} is selected at ${transition.wavelengthNm.toFixed(3)} nanometres.`
+      : `Wavelength-accurate positions of seven visible Balmer transitions. The selected ${label} transition lies outside the plotted visible convention.`,
   );
-  outputs.normalizedError.textContent = `${state.evidence.maximumNormalizedError.toPrecision(
-    3,
-  )}×`;
+}
+
+function formatScientific(value, digits = 2) {
+  if (value === 0) return "0";
+  const exponent = Math.floor(Math.log10(Math.abs(value)));
+  const coefficient = value / 10 ** exponent;
+  const superscript = String(exponent)
+    .replace("-", "−")
+    .replace(/0/g, "⁰")
+    .replace(/1/g, "¹")
+    .replace(/2/g, "²")
+    .replace(/3/g, "³")
+    .replace(/4/g, "⁴")
+    .replace(/5/g, "⁵")
+    .replace(/6/g, "⁶")
+    .replace(/7/g, "⁷")
+    .replace(/8/g, "⁸")
+    .replace(/9/g, "⁹");
+  return `${coefficient.toFixed(digits)} × 10${superscript}`;
+}
+
+function populateValidationEvidence() {
+  const constants = state.evidence.manifest.constants;
+  const invariantValues = state.evidence.levels.map(
+    (level) => Math.abs(level.energyEv) * level.n ** 2,
+  );
+  const invariant =
+    invariantValues.reduce((total, value) => total + value, 0) /
+    invariantValues.length;
+  const rydbergCheck = state.evidence.validation.checks.find(
+    (check) => check.name === "rydberg_wavelength_reference",
+  );
+  const representativePairs = new Set([
+    "2-1",
+    "3-1",
+    "3-2",
+    "4-2",
+    "5-2",
+    "4-3",
+  ]);
+  const rows = state.evidence.transitions
+    .filter((transition) =>
+      representativePairs.has(`${transition.initialN}-${transition.finalN}`),
+    )
+    .map((transition) => {
+      const rydbergWavelengthNm =
+        1e9 /
+        (constants.rydberg_constant_per_m *
+          (1 / transition.finalN ** 2 - 1 / transition.initialN ** 2));
+      const residual =
+        Math.abs(transition.wavelengthNm - rydbergWavelengthNm) /
+        rydbergWavelengthNm;
+      const row = document.createElement("tr");
+      row.innerHTML = `
+        <th scope="row">${transition.initialN}→${transition.finalN}</th>
+        <td>${transition.seriesName}</td>
+        <td>${transition.photonEnergyEv.toFixed(6)}</td>
+        <td>${transition.wavelengthNm.toFixed(6)}</td>
+        <td>${formatScientific(residual)}</td>
+      `;
+      return row;
+    });
+
+  outputs.energyScale.textContent = `≈ ${constants.rydberg_energy_ev.toPrecision(
+    17,
+  )} eV`;
+  outputs.rydbergResidual.textContent = formatScientific(
+    rydbergCheck?.observed ?? 0,
+  );
+  outputs.validationSummary.textContent = `${
+    state.evidence.validation.checks.filter((check) => check.passed).length
+  }/${state.evidence.validation.checks.length}`;
+  document
+    .querySelector("[data-validation-transitions]")
+    .replaceChildren(...rows);
+}
+
+function downloadTransitionCsv() {
+  transitionCsvDownload.dataset.catalogueState = state.evidence
+    ? "validated"
+    : "unverified";
 }
 
 function showTooltip(point, clientX, clientY) {
@@ -892,6 +1000,7 @@ function bindEvents() {
   transitionSelector.addEventListener("change", () => {
     updateSelection(Number(transitionSelector.value));
   });
+  transitionCsvDownload.addEventListener("click", downloadTransitionCsv);
 
   transitionControls
     .querySelectorAll("[data-step-transition]")
@@ -963,13 +1072,6 @@ function bindEvents() {
   );
 }
 
-function lockEvidence() {
-  evidenceLock.dataset.locked = "true";
-  outputs.lockTitle.textContent = "Task 5 evidence locked";
-  outputs.lockDetail.textContent =
-    "30/30 checks, 10 levels, 45 transitions and five analytical limits agree.";
-}
-
 function showFailure(error) {
   document.documentElement.dataset.task05Status = "error";
   instrument.classList.remove("is-loading");
@@ -977,13 +1079,8 @@ function showFailure(error) {
   document.querySelector("[data-instrument-loading]").hidden = true;
   document.querySelector("[data-instrument-error]").hidden = false;
   document.querySelector("[data-atlas-error]").hidden = false;
-  outputs.regionBadge.textContent = "Evidence unavailable";
-  outputs.validationStatus.textContent = "Validation could not be confirmed";
+  outputs.regionBadge.textContent = "Data unavailable";
   outputs.atlasStatus.textContent = "Catalogue unavailable";
-  evidenceLock.dataset.locked = "false";
-  outputs.lockTitle.textContent = "Task 5 evidence not locked";
-  outputs.lockDetail.textContent =
-    "Interactive controls remain disabled because committed evidence could not be verified.";
   disableControls();
   console.error("Task 5 evidence load failed", error);
 }
@@ -995,10 +1092,9 @@ async function initialise() {
     populateSeriesLedger();
     populateLimitLedger();
     populateBalmerInstrument();
-    populateEvidenceMetrics();
+    populateValidationEvidence();
     bindEvents();
     enableControls();
-    lockEvidence();
 
     const defaultTransition = state.evidence.transitions.find(
       (transition) => transition.initialN === 3 && transition.finalN === 2,

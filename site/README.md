@@ -19,8 +19,9 @@ http://localhost:8080/site/
 ```
 
 The opening page uses a procedural Three.js fragment shader rather than a
-background image. The task pages provide browser-based visualisations,
-calculators, evidence panels, and links back to the validated Python work.
+background image. The task pages provide browser-based visualisations and
+calculators, while `advanced.html` presents the validated optional extensions
+and links to their research reports.
 
 The opening page includes:
 
@@ -30,11 +31,11 @@ The opening page includes:
 - responsive desktop and mobile typography;
 - one minimal live/pause control.
 
-Three.js is loaded as an ES module from jsDelivr, so the landing page needs an
-internet connection for that module. The task pages use the pinned local
-runtime files under `vendor/packages`.
+Three.js and Anime.js are pinned local ES modules. The landing page, task index,
+advanced lab and task pages therefore make no runtime CDN request.
 
 The files under `vendor/packages` are tracked because the static pages load
 them directly. The `vendor/package.json` and `vendor/package-lock.json` files
-record the pinned dependency versions. Local `vendor/node_modules` installs
-and downloaded `vendor/archives` caches are intentionally excluded from Git.
+record the pinned dependency versions, including Three.js 0.164.1 and Anime.js
+4.5.0. Local `vendor/node_modules` installs and downloaded `vendor/archives`
+caches are intentionally excluded from Git.

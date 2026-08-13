@@ -9,6 +9,14 @@ const URLS = {
     "../../data/task07/numerical_eigenvalues.csv",
     import.meta.url,
   ),
+  numericalMoments: new URL(
+    "../../data/task07/numerical_moments.csv",
+    import.meta.url,
+  ),
+  uncertaintyConvergence: new URL(
+    "../../data/task07/uncertainty_convergence.csv",
+    import.meta.url,
+  ),
   anchors: new URL("../../data/task07/reference_anchors.json", import.meta.url),
   validation: new URL(
     "../../data/task07/validation_report.json",
@@ -54,7 +62,7 @@ function validateManifest(manifest) {
     manifest.schema_version !== "task07-manifest-v1" ||
     manifest.output_schema_version !== "task07-data-v1" ||
     manifest.validation_passed !== true ||
-    manifest.validation_check_count !== 37 ||
+    manifest.validation_check_count !== 50 ||
     manifest.model !== "one-dimensional non-relativistic infinite square well" ||
     manifest.figure_font_family !== "Times New Roman" ||
     !config ||
@@ -83,7 +91,7 @@ function validateReport(report, manifest) {
     report.passed !== true ||
     report.study_digest !== manifest.study_digest ||
     !Array.isArray(report.checks) ||
-    report.checks.length !== 37 ||
+    report.checks.length !== 50 ||
     !report.checks.every(
       (check) =>
         check.passed === true &&
@@ -296,6 +304,194 @@ function validateNumerical(rows, energies) {
   });
 }
 
+function validateNumericalMoments(rows, manifest) {
+  if (rows.length !== 50) {
+    throw new Error("Task 7 numerical moment catalogue is incomplete");
+  }
+  const grids = [100, 200, 400, 800, 1600];
+  const width = manifest.configuration.box_width_m;
+  const hbar = manifest.constants.reduced_planck_constant_j_s;
+  return rows.map((row, index) => {
+    const grid = finiteNumber(row.interior_point_count, "moment grid size");
+    const n = finiteNumber(row.quantum_number_n, "moment quantum number");
+    const expectedGrid = grids[Math.floor(index / 10)];
+    const expectedN = (index % 10) + 1;
+    const normalization = finiteNumber(row.normalization, "moment normalization");
+    const expectedX = finiteNumber(row.expected_x_m_numeric, "numerical expected x");
+    const expectedXSquared = finiteNumber(
+      row.expected_x_squared_m2_numeric,
+      "numerical expected x squared",
+    );
+    const pMeanReal = finiteNumber(
+      row.p_mean_real_kg_m_s_numeric,
+      "numerical p mean real part",
+    );
+    const pMeanImaginary = finiteNumber(
+      row.p_mean_imaginary_kg_m_s_numeric,
+      "numerical p mean imaginary part",
+    );
+    const pSquared = finiteNumber(
+      row.p_squared_kg2_m2_s2_numeric,
+      "numerical p squared",
+    );
+    const deltaX = finiteNumber(row.delta_x_m_numeric, "numerical delta x");
+    const deltaP = finiteNumber(row.delta_p_kg_m_s_numeric, "numerical delta p");
+    const product = finiteNumber(
+      row.uncertainty_product_over_hbar_numeric,
+      "numerical uncertainty product",
+    );
+    const ratio = finiteNumber(row.heisenberg_ratio_numeric, "numerical Heisenberg ratio");
+    const analyticalDeltaX = width * Math.sqrt(1 / 12 - 1 / (2 * n ** 2 * Math.PI ** 2));
+    const analyticalDeltaP = n * Math.PI * hbar / width;
+    const analyticalProduct = Math.sqrt(n ** 2 * Math.PI ** 2 / 12 - 0.5);
+    if (
+      grid !== expectedGrid ||
+      n !== expectedN ||
+      Math.abs(normalization - 1) > 5e-12 ||
+      Math.hypot(pMeanReal, pMeanImaginary) / analyticalDeltaP > 5e-12 ||
+      relativeError(expectedX, width / 2) > 5e-7 ||
+      relativeError(
+        expectedXSquared,
+        width ** 2 * (1 / 3 - 1 / (2 * n ** 2 * Math.PI ** 2)),
+      ) > 2e-6 ||
+      relativeError(deltaX, analyticalDeltaX) > 2e-2 ||
+      relativeError(pSquared, analyticalDeltaP ** 2) > 5e-2 ||
+      relativeError(deltaP, analyticalDeltaP) > 3e-2 ||
+      relativeError(product, analyticalProduct) > 5e-2 ||
+      Math.abs(ratio - 2 * product) > 5e-10 ||
+      product < 0.5
+    ) {
+      throw new Error(`Numerical moment row ${index} failed validation`);
+    }
+    return {
+      grid,
+      n,
+      normalization,
+      expectedX,
+      expectedXSquared,
+      pMeanReal,
+      pMeanImaginary,
+      pSquared,
+      deltaX,
+      deltaP,
+      product,
+      ratio,
+      analyticalDeltaX,
+      analyticalDeltaP,
+      analyticalProduct,
+      relativeDeltaPError: finiteNumber(
+        row.relative_delta_p_error,
+        "relative delta p error",
+      ),
+      relativeP2Error: finiteNumber(
+        row.relative_p_squared_error,
+        "relative p squared error",
+      ),
+      relativeUncertaintyError: finiteNumber(
+        row.relative_uncertainty_error,
+        "relative uncertainty error",
+      ),
+      energyError: finiteNumber(row.relative_energy_error, "relative energy error"),
+      overlap: finiteNumber(row.eigenvector_overlap, "eigenvector overlap"),
+    };
+  });
+}
+
+function validateUncertaintyConvergence(rows) {
+  if (rows.length !== 5) {
+    throw new Error("Task 7 uncertainty convergence catalogue is incomplete");
+  }
+  const grids = [100, 200, 400, 800, 1600];
+  return rows.map((row, index) => {
+    const grid = finiteNumber(row.interior_point_count, "convergence grid size");
+    const energyError = finiteNumber(
+      row.maximum_energy_relative_error,
+      "maximum energy error",
+    );
+    const deltaXError = finiteNumber(
+      row.maximum_delta_x_relative_error,
+      "maximum delta x error",
+    );
+    const pSquaredError = finiteNumber(
+      row.maximum_p_squared_relative_error,
+      "maximum p squared error",
+    );
+    const deltaPError = finiteNumber(
+      row.maximum_delta_p_relative_error,
+      "maximum delta p error",
+    );
+    const uncertaintyError = finiteNumber(
+      row.maximum_uncertainty_relative_error,
+      "maximum uncertainty error",
+    );
+    const normalizationError = finiteNumber(
+      row.maximum_normalization_error,
+      "maximum normalization error",
+    );
+    const pMeanScaleRatio = finiteNumber(
+      row.maximum_p_mean_scale_ratio,
+      "maximum p mean scale ratio",
+    );
+    const minimumProduct = finiteNumber(
+      row.minimum_uncertainty_product_over_hbar,
+      "minimum uncertainty product",
+    );
+    const minimumOverlap = finiteNumber(
+      row.minimum_eigenvector_overlap,
+      "minimum eigenvector overlap",
+    );
+    const minimumDeltaPOrder = finiteNumber(
+      row.minimum_delta_p_convergence_order,
+      "minimum delta p order",
+    );
+    const maximumDeltaPOrder = finiteNumber(
+      row.maximum_delta_p_convergence_order,
+      "maximum delta p order",
+    );
+    const minimumProductOrder = finiteNumber(
+      row.minimum_uncertainty_product_convergence_order,
+      "minimum uncertainty product order",
+    );
+    const maximumProductOrder = finiteNumber(
+      row.maximum_uncertainty_product_convergence_order,
+      "maximum uncertainty product order",
+    );
+    if (
+      grid !== grids[index] ||
+      energyError < 0 ||
+      deltaXError < 0 ||
+      pSquaredError < 0 ||
+      deltaPError < 0 ||
+      uncertaintyError < 0 ||
+      normalizationError > 5e-12 ||
+      pMeanScaleRatio > 5e-12 ||
+      minimumProduct < 0.5 ||
+      minimumOverlap < 0.999999 ||
+      minimumDeltaPOrder < 1.9 ||
+      maximumDeltaPOrder > 2.05 ||
+      minimumProductOrder < 1.9 ||
+      maximumProductOrder > 2.05
+    ) {
+      throw new Error(`Uncertainty convergence row ${index} failed validation`);
+    }
+    return {
+      grid,
+      energyError,
+      deltaXError,
+      pSquaredError,
+      deltaPError,
+      uncertaintyError,
+      normalizationError,
+      pMeanScaleRatio,
+      minimumOverlap,
+      minimumDeltaPOrder,
+      maximumDeltaPOrder,
+      minimumProductOrder,
+      maximumProductOrder,
+    };
+  });
+}
+
 function validateAnchors(anchors, expectations, manifest) {
   if (
     anchors.schema_version !== "task07-reference-v1" ||
@@ -335,6 +531,8 @@ export async function loadTask07Evidence() {
     stateText,
     expectationText,
     numericalText,
+    numericalMomentsText,
+    uncertaintyConvergenceText,
     anchors,
     validation,
     manifest,
@@ -343,9 +541,11 @@ export async function loadTask07Evidence() {
     responses[1].text(),
     responses[2].text(),
     responses[3].text(),
-    responses[4].json(),
-    responses[5].json(),
+    responses[4].text(),
+    responses[5].text(),
     responses[6].json(),
+    responses[7].json(),
+    responses[8].json(),
   ]);
 
   validateManifest(manifest);
@@ -360,6 +560,13 @@ export async function loadTask07Evidence() {
     parseCsv(numericalText, "numerical eigenvalue"),
     energies,
   );
+  const numericalMoments = validateNumericalMoments(
+    parseCsv(numericalMomentsText, "numerical moments"),
+    manifest,
+  );
+  const uncertaintyConvergence = validateUncertaintyConvergence(
+    parseCsv(uncertaintyConvergenceText, "uncertainty convergence"),
+  );
   validateAnchors(anchors, expectations, manifest);
 
   return Object.freeze({
@@ -369,6 +576,8 @@ export async function loadTask07Evidence() {
     states,
     expectations,
     numerical,
+    numericalMoments,
+    uncertaintyConvergence,
     anchors,
   });
 }

@@ -13,30 +13,36 @@ const readJson = async (path) => JSON.parse(await readText(path));
 const [
   html,
   css,
+  minimalCss,
   diffractionScript,
+  relativityScript,
   evidenceLoader,
-  motion,
+  navigation,
   taskIndex,
   sweepText,
   orderText,
   fitText,
   validation,
   manifest,
+  relativisticExtension,
   ringPng,
   summaryPng,
   plottingSource,
 ] = await Promise.all([
   readText("site/tasks/task-06.html"),
   readText("site/assets/task-06.css"),
+  readText("site/assets/task-06-minimal.css"),
   readText("site/assets/task-06-diffraction.js"),
+  readText("site/assets/task-06-relativity.js"),
   readText("site/assets/task-06-evidence.js"),
-  readText("site/assets/task-06-motion.js"),
+  readText("site/assets/task-06-navigation.js"),
   readText("site/tasks.html"),
   readText("data/task06/voltage_sweep.csv"),
   readText("data/task06/diffraction_orders.csv"),
   readText("data/task06/validation_fits.csv"),
   readJson("data/task06/validation_report.json"),
   readJson("data/task06/manifest.json"),
+  readJson("data/task06/relativistic_extension.json"),
   readFile(resolve(projectRoot, "figures/task06/electron_diffraction_rings.png")),
   readFile(resolve(projectRoot, "figures/task06/task06_summary.png")),
   readText("task06_electron_diffraction/plotting.py"),
@@ -67,6 +73,7 @@ const orders = parseCsv(orderText);
 const fits = parseCsv(fitText);
 const constants = manifest.constants;
 const config = manifest.configuration;
+const speedOfLightMPerS = 299792458;
 
 check(
   "Accepted validation report",
@@ -151,6 +158,7 @@ check(
   [
     'id="diffraction-screen"',
     'id="spacing-recovery-chart"',
+    'id="relativity-chart"',
     'id="accelerating-voltage"',
     'data-voltage-preset="1000"',
     'data-voltage-preset="3000"',
@@ -159,13 +167,137 @@ check(
     'data-family="d2"',
     "x = r sin(2φ)",
     "y = 2r sin φ",
-    "Bragg can allow it",
-    "straight_line_validation.svg",
-    "electron_diffraction_rings.svg",
-    "normalized_order_collapse.svg",
+    "Bragg orders and screen orders",
     "ring_radius_vs_voltage.svg",
-  ].every((marker) => html.includes(marker)),
-  "The exact screen, official graph, voltage controls, two geometric domains, figures, and evidence downloads are present.",
+  ].every((marker) => html.includes(marker)) &&
+    !html.includes('id="evidence"'),
+  "The exact screen, graphite-spacing graph, voltage controls, geometric domains, and figures remain without a separate evidence section.",
+);
+
+check(
+  "Judge-facing task structure",
+  [
+    'href="#experiment"',
+    'href="#plot"',
+    'href="#method"',
+    'href="#validation"',
+    'id="experiment"',
+    'id="plot"',
+    'id="method"',
+    'id="validation"',
+    "Official Task 06 of 10",
+  ].every((marker) => html.includes(marker)) &&
+    !html.includes('<body class="video-cut"'),
+  "Experiment, Plot, Method, and Validation are reachable without shared video-cut hiding.",
+);
+
+check(
+  "Visible angle and geometry definitions",
+  html.includes("Bragg glancing angle") &&
+    html.includes("total beam deflection") &&
+    html.includes("x and y are different observables") &&
+    html.includes("no small-angle approximation") &&
+    html.includes("negligible kinetic energy"),
+  "The Method explicitly defines theta, phi=2theta, x, y, and the official assumptions.",
+);
+
+check(
+  "Evidence-driven live diagnostics",
+  [
+    "data-live-diagnostics",
+    "data-diagnostic-voltage",
+    "data-diagnostic-wavelength",
+    "data-d1-theta",
+    "data-d1-phi",
+    "data-d1-live-radius",
+    "data-d2-theta",
+    "data-d2-phi",
+    "data-d2-live-radius",
+  ].every((marker) => html.includes(marker)) &&
+    diffractionScript.includes("updateDiagnostics") &&
+    diffractionScript.includes("phiRad / 2"),
+  "Both first-order families expose live theta, phi, q, and photographic radius from checked evidence.",
+);
+
+check(
+  "Controlled sweep reset and export",
+  html.includes("data-sweep-toggle") &&
+    html.includes("data-reset-model") &&
+    html.includes("data-export-csv") &&
+    diffractionScript.includes("startSweep") &&
+    diffractionScript.includes("pauseSweep") &&
+    diffractionScript.includes("setVoltage(3000)") &&
+    diffractionScript.includes("buildExportCsv"),
+  "Task 6 provides a pausable 1-5 kV sweep, a 3 kV reset, and evidence-derived CSV export.",
+);
+
+check(
+  "Judge-facing validation evidence",
+  html.includes("42/42 Python tests") &&
+    html.includes("39/39 independent physics checks") &&
+    html.includes("15/15 static website checks") &&
+    html.includes("Internal consistency recovery") &&
+    html.includes("data-d1-theoretical-gradient") &&
+    html.includes("data-d2-theoretical-gradient") &&
+    html.includes("data-d1-intercept") &&
+    html.includes("data-d2-intercept") &&
+    diffractionScript.includes("populateValidationEvidence"),
+  "Visible validation distinguishes physical derivation, fitted evidence, and implementation checks.",
+);
+
+check(
+  "Loaded advanced relativistic extension",
+  html.includes('src="../assets/task-06-relativity.js') &&
+    html.includes("Advanced Extension — Relativistic Correction") &&
+    html.indexOf('src="../assets/task-06-relativity.js') >
+      html.indexOf('src="../assets/task-06-diffraction.js'),
+  "The validated relativistic comparison is explicitly secondary and its browser module is loaded.",
+);
+
+const extensionRecords = relativisticExtension.records;
+check(
+  "Validated relativistic precision extension",
+  relativisticExtension.schema_version === "task06-relativistic-extension-v1" &&
+    relativisticExtension.status ===
+      "secondary precision extension; official baseline preserved" &&
+    relativisticExtension.validation?.passed === true &&
+    relativisticExtension.validation?.check_count === 10 &&
+    relativisticExtension.validation?.checks.every((entry) => entry.passed === true) &&
+    extensionRecords.length === 401 &&
+    extensionRecords.every((record, index) => {
+      const baseline = sweep[index];
+      const voltage = 1000 + index * 10;
+      const kinetic = constants.elementary_charge_c * voltage;
+      const expectedRelativistic =
+        (constants.planck_constant_j_s * speedOfLightMPerS) /
+        Math.sqrt(
+          kinetic *
+            (kinetic +
+              2 *
+                constants.electron_mass_kg *
+                speedOfLightMPerS ** 2),
+        );
+      return (
+        record.voltage_v === voltage &&
+        relativeError(
+          record.wavelength_nonrel_pm,
+          Number(baseline.wavelength_pm),
+        ) < 5e-13 &&
+        relativeError(
+          record.wavelength_rel_pm * 1e-12,
+          expectedRelativistic,
+        ) < 5e-13 &&
+        record.wavelength_correction_percent < 0 &&
+        record.d1.radius_shift_um < 0 &&
+        record.d2.radius_shift_um < 0
+      );
+    }) &&
+    html.includes("Relativistic comparison") &&
+    html.includes("data-wavelength-correction") &&
+    html.includes("relativistic_extension.json") &&
+    relativityScript.includes("validateEvidence") &&
+    relativityScript.includes("firstOrderRadiusM"),
+  "401 relativistic records pass 10/10 checks while reproducing every official non-relativistic baseline wavelength.",
 );
 
 check(
@@ -179,6 +311,7 @@ check(
     diffractionScript.includes('"Home"') &&
     diffractionScript.includes('"End"') &&
     diffractionScript.includes("ResizeObserver") &&
+    diffractionScript.includes('new CustomEvent("task06:voltage"') &&
     diffractionScript.includes("data-voltage-preset"),
   "Slider, presets, family controls, chart-point selection, and keyboard voltage stepping are implemented.",
 );
@@ -188,25 +321,24 @@ check(
   html.includes("data-screen-loading") &&
     html.includes("data-screen-error") &&
     html.includes("data-validation-error") &&
-    html.includes('data-locked="false"') &&
     evidenceLoader.includes("throw new Error") &&
     diffractionScript.includes('dataset.task06Status = "error"') &&
-    diffractionScript.includes('dataset.locked = "false"') &&
     diffractionScript.includes("disableControls()"),
-  "Loading, verified, and explicit locked-error states prevent unvalidated interaction.",
+  "Loading and local error states keep controls unavailable when checked diffraction data fail to load.",
 );
 
 check(
-  "Local typography and motion dependencies",
-  html.includes("../vendor/packages/gsap/dist/gsap.min.js") &&
-    html.includes("../vendor/packages/gsap/dist/ScrollTrigger.min.js") &&
+  "Local classical typography and restrained navigation",
+  html.includes("task-06-minimal.css") &&
+    html.includes("task-06-navigation.js") &&
+    !html.includes("gsap.min.js") &&
+    !html.includes("task-06-motion.js") &&
     !/<(?:script|link)\b[^>]+(?:src|href)=["']https?:\/\//i.test(html) &&
-    css.includes('"Geist"') &&
-    css.includes('"Bodoni Moda Variable"') &&
-    css.includes('--figure: "Times New Roman"') &&
-    !css.includes('"Inter"') &&
-    diffractionScript.match(/"Times New Roman"/g)?.length >= 5,
-  "Pinned local interface fonts and motion are used; all scientific canvas text uses Times New Roman.",
+    minimalCss.includes('--serif: "Times New Roman"') &&
+    minimalCss.includes("color-scheme: light") &&
+    diffractionScript.match(/"Times New Roman"/g)?.length >= 5 &&
+    navigation.includes("IntersectionObserver"),
+  "The page uses a local Times-led light theme, restrained section navigation, and no motion framework.",
 );
 
 check(
@@ -214,9 +346,13 @@ check(
   diffractionScript.includes("canvas.clientWidth") &&
     diffractionScript.includes("canvas.clientHeight") &&
     diffractionScript.includes("Math.min(window.devicePixelRatio || 1, 2)") &&
+    relativityScript.includes("canvas.clientWidth") &&
+    relativityScript.includes("canvas.clientHeight") &&
+    relativityScript.includes("Math.min(window.devicePixelRatio || 1, 2)") &&
     !diffractionScript.includes("requestAnimationFrame(draw") &&
-    !diffractionScript.includes("setInterval("),
-  "Both canvases render at up to 2x density and perform no continuous idle repaint.",
+    !diffractionScript.includes("setInterval(") &&
+    !relativityScript.includes("setInterval("),
+  "All three canvases render at up to 2x density and perform no continuous idle repaint.",
 );
 
 const ringDimensions = [
@@ -239,22 +375,23 @@ check(
 
 check(
   "Responsive and reduced-motion safeguards",
-  css.includes("100dvh") &&
-    css.includes("@media (max-width: 767px)") &&
-    css.includes("@media (max-width: 410px)") &&
-    css.includes("@media (prefers-reduced-motion: reduce)") &&
-    motion.includes("prefers-reduced-motion: reduce") &&
-    motion.includes("pagehide"),
-  "Dynamic viewport, strict mobile layouts, reduced-motion handling, and cleanup paths are present.",
+  minimalCss.includes("100dvh") &&
+    minimalCss.includes("@media (max-width: 620px)") &&
+    minimalCss.includes("@media (prefers-reduced-motion: reduce)") &&
+    diffractionScript.includes("pagehide") &&
+    relativityScript.includes("pagehide"),
+  "Dynamic viewport, mobile layouts, reduced-motion handling, and cleanup paths are present.",
 );
 
 check(
   "Honest extension and intensity boundary",
-    html.includes("Automatic ring animation and relativistic comparison remain") &&
+  html.includes("non-relativistic result remains the baseline") &&
+    html.includes("Negative Δx means") &&
     html.includes("Width and glow are schematic") &&
-    html.includes("Not implied") &&
-    html.includes("−0.244%"),
-  "The page separates user-controlled geometry from deferred animation, relativity, and unmodelled intensity.",
+    !html.includes("Automatic ring animation") &&
+    !relativityScript.includes("requestAnimationFrame") &&
+    !relativityScript.includes("setInterval("),
+  "The implemented precision comparison remains secondary, quantitative, and separate from unmodelled intensity or decorative motion.",
 );
 
 check(

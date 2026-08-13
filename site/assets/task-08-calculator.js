@@ -18,15 +18,18 @@ const PRESETS = Object.freeze({
 });
 
 const COLOURS = Object.freeze({
-  orange: "#ff784d",
-  orangeDeep: "#a83c1d",
-  teal: "#4fe1d1",
-  tealDeep: "#007f73",
-  cream: "#fff2dc",
-  ink: "#221724",
-  muted: "#6a596a",
-  grid: "#d9cdd4",
-  paper: "#fffaf4",
+  orange: "#b65f45",
+  orangeDeep: "#8d432f",
+  teal: "#568b84",
+  tealDeep: "#356d67",
+  ochre: "#b79552",
+  cream: "#f8f4eb",
+  ink: "#2d2923",
+  muted: "#766f65",
+  grid: "#ded8cf",
+  gridSoft: "#ebe6de",
+  paper: "#fcfbf7",
+  paperDeep: "#f5f1e9",
 });
 
 const laboratory = document.querySelector("[data-detector-laboratory]");
@@ -43,7 +46,6 @@ const samplingControls = document.querySelector("[data-sampling-controls]");
 const photonPairsControl = document.querySelector("#photon-pairs");
 const seedControl = document.querySelector("#sample-seed");
 const sweepTooltip = document.querySelector("[data-sweep-tooltip]");
-const evidenceLock = document.querySelector("[data-evidence-lock]");
 
 const outputs = {
   angleTitle: document.querySelector("[data-angle-title]"),
@@ -65,11 +67,6 @@ const outputs = {
   landscapeSelected: document.querySelector("[data-landscape-selected]"),
   landscapeDifference: document.querySelector("[data-landscape-difference]"),
   sampleContext: document.querySelector("[data-sample-context]"),
-  coreChecks: document.querySelector("[data-core-checks]"),
-  statisticalChecks: document.querySelector("[data-statistical-checks]"),
-  lockTitle: document.querySelector("[data-lock-title]"),
-  lockDetail: document.querySelector("[data-lock-detail]"),
-  evidenceStatus: document.querySelector("[data-evidence-status]"),
 };
 
 const sampleOutputs = {
@@ -133,6 +130,24 @@ function line(context, x1, y1, x2, y2) {
   context.stroke();
 }
 
+function paintPaper(context, width, height) {
+  context.fillStyle = COLOURS.paper;
+  context.fillRect(0, 0, width, height);
+
+  const flecks = Math.min(280, Math.max(90, Math.round((width * height) / 3200)));
+  context.save();
+  context.fillStyle = "rgba(74, 64, 52, 0.035)";
+  for (let index = 0; index < flecks; index += 1) {
+    const x = (index * 83 + (index % 7) * 19) % width;
+    const y = (index * 47 + (index % 11) * 23) % height;
+    const radius = index % 5 === 0 ? 0.7 : 0.42;
+    context.beginPath();
+    context.arc(x, y, radius, 0, Math.PI * 2);
+    context.fill();
+  }
+  context.restore();
+}
+
 function signedAngle(value) {
   if (Math.abs(value) < 0.0005) return "0°";
   return `${value > 0 ? "+" : "−"}${Math.abs(value).toFixed(0)}°`;
@@ -170,34 +185,59 @@ function detectorAxis(angleDeg, radius) {
 
 function drawDetectorDial(context, centerX, centerY, radius, angleDeg, label, colour) {
   context.save();
-  context.strokeStyle = "rgba(255,242,220,0.16)";
-  context.lineWidth = 1.2;
+  context.fillStyle = "rgba(255, 255, 255, 0.68)";
+  context.strokeStyle = COLOURS.grid;
+  context.lineWidth = 1;
   context.beginPath();
   context.arc(centerX, centerY, radius, 0, Math.PI * 2);
+  context.fill();
   context.stroke();
-  context.setLineDash([4, 6]);
-  context.beginPath();
-  context.arc(centerX, centerY, radius * 0.63, 0, Math.PI * 2);
-  context.stroke();
-  context.setLineDash([]);
 
-  context.strokeStyle = "rgba(255,242,220,0.24)";
-  for (const offset of [0, Math.PI / 2]) {
+  context.strokeStyle = COLOURS.gridSoft;
+  context.beginPath();
+  context.arc(centerX, centerY, radius * 0.64, 0, Math.PI * 2);
+  context.stroke();
+
+  context.strokeStyle = "rgba(45, 41, 35, 0.17)";
+  context.lineWidth = 1;
+  for (let angle = 0; angle < 360; angle += 15) {
+    const radians = (angle * Math.PI) / 180;
+    const major = angle % 45 === 0;
+    const inner = radius * (major ? 0.86 : 0.91);
+    const outer = radius * 0.98;
     line(
       context,
-      centerX - radius * Math.cos(offset),
-      centerY - radius * Math.sin(offset),
-      centerX + radius * Math.cos(offset),
-      centerY + radius * Math.sin(offset),
+      centerX + inner * Math.cos(radians),
+      centerY + inner * Math.sin(radians),
+      centerX + outer * Math.cos(radians),
+      centerY + outer * Math.sin(radians),
     );
   }
 
+  context.strokeStyle = "rgba(45, 41, 35, 0.14)";
+  context.setLineDash([3, 5]);
+  line(context, centerX - radius * 0.76, centerY, centerX + radius * 0.76, centerY);
+  line(context, centerX, centerY - radius * 0.76, centerX, centerY + radius * 0.76);
+  context.setLineDash([]);
+
+  const angleRadians = (-angleDeg * Math.PI) / 180;
+  context.strokeStyle = colour;
+  context.lineWidth = 1.4;
+  context.beginPath();
+  context.arc(
+    centerX,
+    centerY,
+    radius * 0.36,
+    0,
+    angleRadians,
+    angleRadians < 0,
+  );
+  context.stroke();
+
   const primary = detectorAxis(angleDeg, radius * 0.73);
   const secondary = detectorAxis(angleDeg + 90, radius * 0.73);
-  context.strokeStyle = colour;
-  context.lineWidth = 4;
-  context.shadowColor = colour;
-  context.shadowBlur = 9;
+  context.strokeStyle = "rgba(255, 255, 255, 0.94)";
+  context.lineWidth = 7;
   line(
     context,
     centerX - primary.x,
@@ -205,9 +245,18 @@ function drawDetectorDial(context, centerX, centerY, radius, angleDeg, label, co
     centerX + primary.x,
     centerY + primary.y,
   );
-  context.setLineDash([8, 7]);
-  context.globalAlpha = 0.65;
-  context.lineWidth = 2.6;
+  context.strokeStyle = colour;
+  context.lineWidth = 3.4;
+  line(
+    context,
+    centerX - primary.x,
+    centerY - primary.y,
+    centerX + primary.x,
+    centerY + primary.y,
+  );
+  context.setLineDash([6, 6]);
+  context.globalAlpha = 0.5;
+  context.lineWidth = 1.6;
   line(
     context,
     centerX - secondary.x,
@@ -217,18 +266,20 @@ function drawDetectorDial(context, centerX, centerY, radius, angleDeg, label, co
   );
   context.globalAlpha = 1;
   context.setLineDash([]);
-  context.shadowBlur = 0;
+  context.strokeStyle = COLOURS.paper;
+  context.lineWidth = 2;
   context.fillStyle = colour;
   context.beginPath();
-  context.arc(centerX, centerY, 7, 0, Math.PI * 2);
+  context.arc(centerX, centerY, 6, 0, Math.PI * 2);
   context.fill();
+  context.stroke();
 
-  context.fillStyle = "#fff2dc";
-  context.font = `${Math.max(14, radius * 0.11)}px "Times New Roman"`;
+  context.fillStyle = COLOURS.muted;
+  context.font = `600 ${Math.max(11, radius * 0.085)}px Arial`;
   context.textAlign = "center";
-  context.fillText(label, centerX, centerY - radius - 25);
+  context.fillText(label, centerX, centerY - radius - 23);
   context.fillStyle = colour;
-  context.font = `${Math.max(20, radius * 0.16)}px "Times New Roman"`;
+  context.font = `${Math.max(19, radius * 0.15)}px "Times New Roman"`;
   context.fillText(signedAngle(angleDeg), centerX, centerY + 6);
   context.restore();
 }
@@ -238,8 +289,7 @@ function drawDetectors() {
   const { width, height } = canvasSize(detectorCanvas, detectorContext);
   const compact = width < 620;
   detectorContext.clearRect(0, 0, width, height);
-  detectorContext.fillStyle = "#0c090f";
-  detectorContext.fillRect(0, 0, width, height);
+  paintPaper(detectorContext, width, height);
 
   const centerY = compact ? height * 0.47 : height * 0.5;
   const leftX = compact ? width * 0.26 : width * 0.25;
@@ -249,28 +299,38 @@ function drawDetectors() {
     height * 0.29,
   );
 
-  const beam = detectorContext.createLinearGradient(leftX, 0, rightX, 0);
-  beam.addColorStop(0, COLOURS.orange);
-  beam.addColorStop(0.5, "#ca91ff");
-  beam.addColorStop(1, COLOURS.teal);
-  detectorContext.strokeStyle = beam;
-  detectorContext.lineWidth = 1.5;
-  detectorContext.globalAlpha = 0.8;
+  detectorContext.strokeStyle = "rgba(89, 78, 66, 0.36)";
+  detectorContext.lineWidth = 1.25;
+  detectorContext.setLineDash([5, 6]);
   line(detectorContext, leftX + radius, centerY, rightX - radius, centerY);
-  detectorContext.globalAlpha = 1;
+  detectorContext.setLineDash([]);
+
+  const arrowOffset = Math.min(45, Math.max(22, (rightX - leftX - 2 * radius) * 0.28));
+  detectorContext.fillStyle = COLOURS.muted;
+  for (const direction of [-1, 1]) {
+    const tipX = width / 2 + direction * arrowOffset;
+    detectorContext.beginPath();
+    detectorContext.moveTo(tipX, centerY);
+    detectorContext.lineTo(tipX - direction * 7, centerY - 4);
+    detectorContext.lineTo(tipX - direction * 7, centerY + 4);
+    detectorContext.closePath();
+    detectorContext.fill();
+  }
 
   const sourceX = width / 2;
-  detectorContext.fillStyle = "#ca91ff";
-  detectorContext.shadowColor = "#ca91ff";
-  detectorContext.shadowBlur = 16;
+  detectorContext.fillStyle = COLOURS.ochre;
+  detectorContext.strokeStyle = COLOURS.paper;
+  detectorContext.lineWidth = 3;
   detectorContext.beginPath();
-  detectorContext.arc(sourceX, centerY, 8, 0, Math.PI * 2);
+  detectorContext.arc(sourceX, centerY, 7, 0, Math.PI * 2);
   detectorContext.fill();
-  detectorContext.shadowBlur = 0;
-  detectorContext.font = `${compact ? 10 : 12}px "Times New Roman"`;
-  detectorContext.textAlign = "center";
-  detectorContext.fillStyle = "#d7c9d5";
-  detectorContext.fillText("ENTANGLED PAIR", sourceX, centerY + 31);
+  detectorContext.stroke();
+  if (!compact) {
+    detectorContext.font = `600 11px "Times New Roman"`;
+    detectorContext.textAlign = "center";
+    detectorContext.fillStyle = COLOURS.muted;
+    detectorContext.fillText("PHOTON PAIR", sourceX, centerY + 29);
+  }
 
   drawDetectorDial(
     detectorContext,
@@ -292,7 +352,7 @@ function drawDetectors() {
   );
 
   const comparison = mismatchComparison(state.thetaDeg, state.phiDeg);
-  detectorContext.fillStyle = "#fff2dc";
+  detectorContext.fillStyle = COLOURS.ink;
   detectorContext.font = `${compact ? 13 : 17}px "Times New Roman"`;
   detectorContext.fillText(
     `relative angle δ = ${signedAngle(comparison.relativeAngleDeg)}`,
@@ -327,8 +387,7 @@ function drawSweep() {
   state.sweepPlot = { plot, xFor, yFor };
 
   sweepContext.clearRect(0, 0, width, height);
-  sweepContext.fillStyle = COLOURS.paper;
-  sweepContext.fillRect(0, 0, width, height);
+  paintPaper(sweepContext, width, height);
   sweepContext.font = `${compact ? 10 : 14}px "Times New Roman"`;
   sweepContext.fillStyle = COLOURS.muted;
   sweepContext.strokeStyle = COLOURS.grid;
@@ -348,10 +407,11 @@ function drawSweep() {
   }
 
   const sweep = mismatchSweep(state.thetaDeg, -90, 90, 0.5);
-  for (const [key, colour, dashed] of [
+  const traces = [
     ["classicalMismatch", COLOURS.orangeDeep, false],
     ["quantumMismatch", COLOURS.tealDeep, true],
-  ]) {
+  ];
+  const trace = (key) => {
     sweepContext.beginPath();
     sweep.forEach((record, index) => {
       const x = xFor(record.phiDeg);
@@ -359,8 +419,17 @@ function drawSweep() {
       if (index === 0) sweepContext.moveTo(x, y);
       else sweepContext.lineTo(x, y);
     });
+  };
+  for (const [key, colour, dashed] of traces) {
+    trace(key);
+    sweepContext.strokeStyle = "rgba(255, 255, 255, 0.9)";
+    sweepContext.lineWidth = compact ? 5 : 6.5;
+    sweepContext.setLineDash(dashed ? [10, 7] : []);
+    sweepContext.stroke();
+
+    trace(key);
     sweepContext.strokeStyle = colour;
-    sweepContext.lineWidth = compact ? 2.5 : 3.3;
+    sweepContext.lineWidth = compact ? 2.2 : 3;
     sweepContext.setLineDash(dashed ? [10, 7] : []);
     sweepContext.stroke();
     sweepContext.setLineDash([]);
@@ -368,7 +437,7 @@ function drawSweep() {
 
   const comparison = mismatchComparison(state.thetaDeg, state.phiDeg);
   const selectedX = xFor(state.phiDeg);
-  sweepContext.strokeStyle = "#7f6b7b";
+  sweepContext.strokeStyle = "#8f867b";
   sweepContext.lineWidth = 1.4;
   sweepContext.setLineDash([4, 5]);
   line(sweepContext, selectedX, plot.y, selectedX, plot.y + plot.height);
@@ -410,7 +479,7 @@ function drawSweep() {
   sweepContext.fillText("Mismatch probability", 0, 0);
   sweepContext.restore();
   sweepContext.font = `italic ${compact ? 12 : 16}px "Times New Roman"`;
-  sweepContext.fillStyle = "#6a596a";
+  sweepContext.fillStyle = COLOURS.muted;
   sweepContext.textAlign = "right";
   sweepContext.fillText(
     `θ = ${signedAngle(state.thetaDeg)} · shared physical scale`,
@@ -607,9 +676,9 @@ function updateOutputs() {
   outputs.officialLock.textContent =
     state.thetaDeg === -30 && state.phiDeg === 30
       ? "3/8 versus 3/4"
-      : "Official anchor available";
+      : "Required example available";
   outputs.sweepTitle.textContent =
-    `θ = ${signedAngle(state.thetaDeg)} fixed · φ = ${signedAngle(state.phiDeg)} selected`;
+    `θ = ${signedAngle(state.thetaDeg)} · φ = ${signedAngle(state.phiDeg)}`;
   outputs.landscapeSelected.textContent =
     `${signedAngle(state.thetaDeg)} / ${signedAngle(state.phiDeg)}`;
   outputs.landscapeDifference.textContent =
@@ -671,14 +740,7 @@ function setFailureState() {
   document.querySelector("[data-sweep-error]").hidden = false;
   document.querySelector("[data-landscape-error]").hidden = false;
   outputs.badge.textContent = "Interaction locked";
-  outputs.sweepStatus.textContent = "Validation unavailable";
-  outputs.coreChecks.textContent = "Not verified";
-  outputs.statisticalChecks.textContent = "Not verified";
-  outputs.lockTitle.textContent = "Validation could not be confirmed";
-  outputs.lockDetail.textContent =
-    "One or more committed Task 8 artifacts failed to load or disagreed with the frozen equations. No interactive result is shown.";
-  outputs.evidenceStatus.textContent = "Locked";
-  evidenceLock.classList.add("is-error");
+  outputs.sweepStatus.textContent = "Sweep unavailable";
 }
 
 thetaControl.addEventListener("input", () => {
@@ -803,6 +865,10 @@ const resizeObserver = new ResizeObserver(() => {
   drawSweep();
   drawLandscape();
 });
+
+window.addEventListener("pagehide", () => resizeObserver.disconnect(), {
+  once: true,
+});
 for (const canvas of [detectorCanvas, sweepCanvas, landscapeCanvas]) {
   resizeObserver.observe(canvas);
 }
@@ -811,15 +877,7 @@ try {
   state.evidence = await loadTask08Evidence();
   laboratory.classList.remove("is-loading");
   enableControls();
-  outputs.sweepStatus.textContent = "361-point sweep locked";
-  outputs.coreChecks.textContent =
-    `${state.evidence.validation.checks.length}/${state.evidence.validation.checks.length} pass`;
-  outputs.statisticalChecks.textContent =
-    `${state.evidence.statisticalValidation.checks.length}/${state.evidence.statisticalValidation.checks.length} pass`;
-  outputs.lockTitle.textContent = "Both validated evidence layers loaded";
-  outputs.lockDetail.textContent =
-    "The complete angle grid, five exact reference cases, 42-check core report, and 24-check statistical report agree.";
-  outputs.evidenceStatus.textContent = "Evidence locked";
+  outputs.sweepStatus.textContent = "361-angle sweep";
   state.landscapeRaster = null;
   document.body.dataset.task08Status = "verified";
   renderAll();

@@ -12,16 +12,21 @@ const playLabel = playButton.querySelector("span");
 const playIcon = playButton.querySelector("path");
 const resetButton = document.querySelector("[data-reset]");
 const newSeedButton = document.querySelector("[data-new-seed]");
+const dimensionInputs = [...document.querySelectorAll('input[name="walk-dimension"]')];
+const simulationTitle = document.querySelector("[data-simulation-title]");
+const stageDimension = document.querySelector("[data-stage-dimension]");
 const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
 
 const MAX_EXACT_STEPS = 1_000_000;
 const MAX_PLOT_POINTS = 10_000;
 const PATH_PALETTE = [
-  [0, 120, 48, 34],
-  [0.22, 142, 55, 39],
-  [0.46, 164, 67, 47],
-  [0.7, 183, 91, 70],
-  [1, 198, 122, 103],
+  [0, 67, 56, 134],
+  [0.18, 47, 103, 178],
+  [0.38, 28, 150, 143],
+  [0.6, 112, 167, 73],
+  [0.78, 226, 163, 54],
+  [0.9, 220, 91, 72],
+  [1, 181, 55, 118],
 ];
 
 const outputs = {
@@ -40,6 +45,9 @@ function magnitudeValue(input) {
 const state = {
   xPositions: new Float64Array(0),
   yPositions: new Float64Array(0),
+  zPositions: new Float64Array(0),
+  projectedX: new Float64Array(0),
+  projectedY: new Float64Array(0),
   stepAtPoint: new Float64Array(0),
   minX: new Float64Array(0),
   maxX: new Float64Array(0),
@@ -49,6 +57,7 @@ const state = {
   stepSize: Number(sizeNumberInput.value),
   speed: Number(speedNumberInput.value),
   seed: Number(seedInput.value),
+  dimension: 2,
   pointCount: 0,
   blockSize: 1,
   mode: "exact",
@@ -81,6 +90,14 @@ function normalPair(random) {
   return [magnitude * Math.cos(phase), magnitude * Math.sin(phase)];
 }
 
+function normalValues(random, count) {
+  const values = [];
+  while (values.length < count) {
+    values.push(...normalPair(random));
+  }
+  return values.slice(0, count);
+}
+
 function validSeed(value) {
   const parsed = Number(value);
   if (!Number.isFinite(parsed)) return 2026;
@@ -97,8 +114,15 @@ function createStorage(pointCount) {
   return {
     x: new Float64Array(pointCount + 1),
     y: new Float64Array(pointCount + 1),
+    z: new Float64Array(pointCount + 1),
     steps: new Float64Array(pointCount + 1),
   };
+}
+
+function projectCoordinates(x, y = 0, z = 0) {
+  if (state.dimension === 1) return { x, y: 0 };
+  if (state.dimension === 2) return { x, y };
+  return { x: x - 0.48 * z, y: y + 0.3 * z };
 }
 
 function buildExactWalk(random) {
@@ -108,16 +132,29 @@ function buildExactWalk(random) {
   let point = 0;
   let x = 0;
   let y = 0;
+  let z = 0;
 
   for (let step = 1; step <= state.nSteps; step += 1) {
-    const theta = random() * Math.PI * 2;
-    x += state.stepSize * Math.cos(theta);
-    y += state.stepSize * Math.sin(theta);
+    if (state.dimension === 1) {
+      x += (random() < 0.5 ? -1 : 1) * state.stepSize;
+    } else if (state.dimension === 2) {
+      const theta = random() * Math.PI * 2;
+      x += state.stepSize * Math.cos(theta);
+      y += state.stepSize * Math.sin(theta);
+    } else {
+      const azimuth = random() * Math.PI * 2;
+      const cosinePolar = random() * 2 - 1;
+      const radialXY = Math.sqrt(Math.max(0, 1 - cosinePolar ** 2));
+      x += state.stepSize * radialXY * Math.cos(azimuth);
+      y += state.stepSize * radialXY * Math.sin(azimuth);
+      z += state.stepSize * cosinePolar;
+    }
 
     if (step % blockSize === 0 || step === state.nSteps) {
       point += 1;
       storage.x[point] = x;
       storage.y[point] = y;
+      storage.z[point] = z;
       storage.steps[point] = step;
     }
   }
@@ -132,16 +169,22 @@ function buildMultiscaleWalk(random) {
   let completedSteps = 0;
   let x = 0;
   let y = 0;
+  let z = 0;
 
   for (let point = 1; point <= pointCount; point += 1) {
     const microscopicSteps = Math.min(blockSize, state.nSteps - completedSteps);
-    const sigma = state.stepSize * Math.sqrt(microscopicSteps / 2);
-    const [normalX, normalY] = normalPair(random);
+    const sigma = state.stepSize * Math.sqrt(microscopicSteps / state.dimension);
+    const [normalX, normalY = 0, normalZ = 0] = normalValues(
+      random,
+      state.dimension,
+    );
     x += sigma * normalX;
     y += sigma * normalY;
+    z += sigma * normalZ;
     completedSteps += microscopicSteps;
     storage.x[point] = x;
     storage.y[point] = y;
+    storage.z[point] = z;
     storage.steps[point] = completedSteps;
   }
 
@@ -150,16 +193,25 @@ function buildMultiscaleWalk(random) {
 
 function buildPrefixBounds() {
   const length = state.pointCount + 1;
+  state.projectedX = new Float64Array(length);
+  state.projectedY = new Float64Array(length);
   state.minX = new Float64Array(length);
   state.maxX = new Float64Array(length);
   state.minY = new Float64Array(length);
   state.maxY = new Float64Array(length);
 
   for (let index = 1; index < length; index += 1) {
-    state.minX[index] = Math.min(state.minX[index - 1], state.xPositions[index]);
-    state.maxX[index] = Math.max(state.maxX[index - 1], state.xPositions[index]);
-    state.minY[index] = Math.min(state.minY[index - 1], state.yPositions[index]);
-    state.maxY[index] = Math.max(state.maxY[index - 1], state.yPositions[index]);
+    const projected = projectCoordinates(
+      state.xPositions[index],
+      state.yPositions[index],
+      state.zPositions[index],
+    );
+    state.projectedX[index] = projected.x;
+    state.projectedY[index] = projected.y;
+    state.minX[index] = Math.min(state.minX[index - 1], projected.x);
+    state.maxX[index] = Math.max(state.maxX[index - 1], projected.x);
+    state.minY[index] = Math.min(state.minY[index - 1], projected.y);
+    state.maxY[index] = Math.max(state.maxY[index - 1], projected.y);
   }
 }
 
@@ -172,6 +224,9 @@ function buildWalk() {
   speedNumberInput.value = String(state.speed);
   state.seed = validSeed(seedInput.value);
   seedInput.value = String(state.seed);
+  state.dimension = Number(
+    dimensionInputs.find((input) => input.checked)?.value || 2,
+  );
 
   const random = mulberry32(state.seed);
   const result =
@@ -181,6 +236,7 @@ function buildWalk() {
 
   state.xPositions = result.x;
   state.yPositions = result.y;
+  state.zPositions = result.z;
   state.stepAtPoint = result.steps;
   state.pointCount = result.pointCount;
   state.blockSize = result.blockSize;
@@ -214,6 +270,18 @@ function updateControlLabels() {
   updateRangeFill(stepsInput);
   updateRangeFill(sizeInput);
   updateRangeFill(speedInput);
+  const labels = {
+    1: ["One-dimensional random walk", "1D · line"],
+    2: ["Two-dimensional random walk", "2D"],
+    3: ["Three-dimensional random walk", "3D · oblique projection"],
+  };
+  const [title, view] = labels[state.dimension];
+  simulationTitle.textContent = title;
+  stageDimension.textContent = view;
+  canvas.setAttribute(
+    "aria-label",
+    `Animated ${title.toLowerCase()} trajectory${state.dimension === 3 ? " shown as an oblique projection" : ""}`,
+  );
 }
 
 function updateRangeFill(input) {
@@ -247,6 +315,7 @@ function updateResults() {
   const displacement = Math.hypot(
     state.xPositions[point] || 0,
     state.yPositions[point] || 0,
+    state.zPositions[point] || 0,
   );
   const rms = state.stepSize * Math.sqrt(state.currentStep);
   const ratio = rms > 0 ? displacement / rms : null;
@@ -278,10 +347,13 @@ function visibleBounds() {
   const point = pointIndexForStep(state.currentStep);
   const rms = state.stepSize * Math.sqrt(Math.max(state.currentStep, 1));
   const minimumSpan = state.stepSize * 16;
-  const minX = Math.min(state.minX[point], -rms, -minimumSpan / 2);
-  const maxX = Math.max(state.maxX[point], rms, minimumSpan / 2);
-  const minY = Math.min(state.minY[point], -rms, -minimumSpan / 2);
-  const maxY = Math.max(state.maxY[point], rms, minimumSpan / 2);
+  const guideX = state.dimension === 3 ? 1.48 * rms : rms;
+  const guideY =
+    state.dimension === 1 ? minimumSpan * 0.12 : state.dimension === 3 ? 1.3 * rms : rms;
+  const minX = Math.min(state.minX[point], -guideX, -minimumSpan / 2);
+  const maxX = Math.max(state.maxX[point], guideX, minimumSpan / 2);
+  const minY = Math.min(state.minY[point], -guideY, -minimumSpan / 2);
+  const maxY = Math.max(state.maxY[point], guideY, minimumSpan / 2);
   const targetX = (minX + maxX) / 2;
   const targetY = (minY + maxY) / 2;
   const targetScale = Math.max(
@@ -335,6 +407,10 @@ function formatGridValue(value, step) {
 }
 
 function drawGrid(bounds) {
+  if (state.dimension !== 2) {
+    drawProjectedAxes(bounds);
+    return;
+  }
   const worldLeft = bounds.cameraX - bounds.width / (2 * bounds.scale);
   const worldRight = bounds.cameraX + bounds.width / (2 * bounds.scale);
   const worldBottom = bounds.cameraY - bounds.height / (2 * bounds.scale);
@@ -387,24 +463,96 @@ function drawGrid(bounds) {
   context.restore();
 }
 
-function drawRmsCircle(bounds) {
+function drawProjectedAxes(bounds) {
+  const visibleSpan = Math.max(bounds.width, bounds.height) / bounds.scale;
+  const extent = visibleSpan * 0.45;
+  const axes =
+    state.dimension === 1
+      ? [{ label: "x", vector: [1, 0, 0] }]
+      : [
+          { label: "x", vector: [1, 0, 0] },
+          { label: "y", vector: [0, 1, 0] },
+          { label: "z", vector: [0, 0, 1] },
+        ];
+
+  context.save();
+  context.lineWidth = 1;
+  context.font = 'italic 17px "Times New Roman", Times, serif';
+  context.fillStyle = "rgba(54, 49, 41, 0.76)";
+  for (const axis of axes) {
+    const [vx, vy, vz] = axis.vector;
+    const startWorld = projectCoordinates(-extent * vx, -extent * vy, -extent * vz);
+    const endWorld = projectCoordinates(extent * vx, extent * vy, extent * vz);
+    const start = worldToScreen(startWorld.x, startWorld.y, bounds);
+    const end = worldToScreen(endWorld.x, endWorld.y, bounds);
+    context.strokeStyle = "rgba(55, 50, 42, 0.2)";
+    context.beginPath();
+    context.moveTo(start.x, start.y);
+    context.lineTo(end.x, end.y);
+    context.stroke();
+    context.fillText(axis.label, end.x + 8, end.y - 7);
+  }
+  context.restore();
+}
+
+function drawProjectedCircle(bounds, coordinateAtAngle) {
+  const path = new Path2D();
+  const segments = 120;
+  for (let index = 0; index <= segments; index += 1) {
+    const [x, y, z] = coordinateAtAngle((index / segments) * Math.PI * 2);
+    const projected = projectCoordinates(x, y, z);
+    const point = worldToScreen(projected.x, projected.y, bounds);
+    if (index === 0) path.moveTo(point.x, point.y);
+    else path.lineTo(point.x, point.y);
+  }
+  context.stroke(path);
+}
+
+function drawRmsGuide(bounds) {
   const rms = state.stepSize * Math.sqrt(Math.max(state.currentStep, 1));
   const origin = worldToScreen(0, 0, bounds);
   context.save();
   context.setLineDash([6, 9]);
-  context.lineDashOffset = -(performance.now() * 0.012) % 15;
   context.lineWidth = 1.25;
-  context.strokeStyle = "rgba(164, 67, 47, 0.68)";
-  context.beginPath();
-  context.arc(origin.x, origin.y, rms * bounds.scale, 0, Math.PI * 2);
-  context.stroke();
+  context.strokeStyle = "rgba(63, 100, 178, 0.72)";
+
+  if (state.dimension === 1) {
+    const left = worldToScreen(-rms, 0, bounds);
+    const right = worldToScreen(rms, 0, bounds);
+    context.beginPath();
+    context.moveTo(left.x, origin.y - 18);
+    context.lineTo(left.x, origin.y + 18);
+    context.moveTo(right.x, origin.y - 18);
+    context.lineTo(right.x, origin.y + 18);
+    context.stroke();
+  } else if (state.dimension === 2) {
+    context.beginPath();
+    context.arc(origin.x, origin.y, rms * bounds.scale, 0, Math.PI * 2);
+    context.stroke();
+  } else {
+    drawProjectedCircle(bounds, (angle) => [
+      rms * Math.cos(angle),
+      rms * Math.sin(angle),
+      0,
+    ]);
+    drawProjectedCircle(bounds, (angle) => [
+      rms * Math.cos(angle),
+      0,
+      rms * Math.sin(angle),
+    ]);
+    drawProjectedCircle(bounds, (angle) => [
+      0,
+      rms * Math.cos(angle),
+      rms * Math.sin(angle),
+    ]);
+  }
   context.restore();
 }
 
 function screenPoint(index, bounds) {
   return worldToScreen(
-    state.xPositions[index],
-    state.yPositions[index],
+    state.projectedX[index],
+    state.projectedY[index],
     bounds,
   );
 }
@@ -482,7 +630,7 @@ function drawMarkers(bounds) {
   if (currentPoint > 0) {
     const progress = state.currentStep / state.nSteps;
     const endpointColour = pathColour(progress);
-    const pulse = 9 + Math.sin(performance.now() * 0.006) * 1.2;
+    const pulse = 9;
     context.strokeStyle = pathColour(progress, 0.42);
     context.lineWidth = 1;
     context.beginPath();
@@ -501,21 +649,8 @@ function draw() {
   const bounds = visibleBounds();
   context.clearRect(0, 0, bounds.width, bounds.height);
 
-  const gradient = context.createRadialGradient(
-    bounds.width / 2,
-    bounds.height / 2,
-    0,
-    bounds.width / 2,
-    bounds.height / 2,
-    Math.max(bounds.width, bounds.height) * 0.72,
-  );
-  gradient.addColorStop(0, "rgba(182, 152, 93, 0.055)");
-  gradient.addColorStop(1, "rgba(255, 255, 255, 0)");
-  context.fillStyle = gradient;
-  context.fillRect(0, 0, bounds.width, bounds.height);
-
   drawGrid(bounds);
-  drawRmsCircle(bounds);
+  drawRmsGuide(bounds);
   drawPath(bounds);
   drawMarkers(bounds);
 }
@@ -619,6 +754,9 @@ speedNumberInput.addEventListener("change", () => {
 });
 
 seedInput.addEventListener("change", () => restartWithCurrentParameters());
+dimensionInputs.forEach((input) => {
+  input.addEventListener("change", () => restartWithCurrentParameters());
+});
 window.addEventListener("resize", resizeCanvas);
 new ResizeObserver(resizeCanvas).observe(canvas);
 

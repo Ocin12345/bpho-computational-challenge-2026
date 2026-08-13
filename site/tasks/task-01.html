@@ -5,21 +5,24 @@
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta
       name="description"
-      content="An interactive two-dimensional random-walk simulation for BPhO Computational Challenge Task 1."
+      content="An interactive two-dimensional random-walk laboratory for BPhO Computational Challenge Task 1."
     />
-    <meta name="theme-color" content="#171512" />
+    <meta name="theme-color" content="#ffffff" />
     <title>Task 01 — Random Walk | BPhO Computational Challenge 2026</title>
     <link
       rel="icon"
       href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Ccircle cx='32' cy='32' r='27' fill='%23f3eee4'/%3E%3Cpath d='M15 36c8-20 14 17 23-6 5-13 10 5 12-10' fill='none' stroke='%23a4432f' stroke-width='5' stroke-linecap='round'/%3E%3C/svg%3E"
     />
-    <link rel="stylesheet" href="../assets/task-01.css" />
-    <link rel="stylesheet" href="../assets/task-01-editorial.css" />
+    <link rel="stylesheet" href="../vendor/packages/katex/katex.min.css" />
+    <link rel="stylesheet" href="../assets/task-01.css?v=20260805a" />
+    <link rel="stylesheet" href="../assets/task-01-minimal.css?v=20260808a" />
+    <link rel="stylesheet" href="../assets/proof-math.css?v=20260808" />
+    <link rel="stylesheet" href="../assets/task-clean.css?v=20260809" />
+    <link rel="stylesheet" href="../assets/task-video.css?v=20260809" />
+    <link rel="stylesheet" href="../assets/task-01-gold.css?v=20260813" />
   </head>
-  <body>
+  <body class="video-cut" data-task="01">
     <a class="skip-link" href="#walk-canvas">Skip to simulation</a>
-    <canvas id="probability-background" aria-hidden="true"></canvas>
-
     <header class="lab-header">
       <a class="back-link" href="../tasks.html" aria-label="Return to all tasks">
         <svg viewBox="0 0 24 24" aria-hidden="true">
@@ -29,33 +32,22 @@
       </a>
 
       <div class="lab-identity">
-        <span>BPhO · Task 01</span>
+        <span>Task 01</span>
         <strong>Random Walk</strong>
       </div>
 
+      <nav class="section-nav" aria-label="Task 1 sections">
+        <a href="#simulation" aria-current="page">Walk</a>
+        <a href="#ensemble">Ensemble</a>
+        <a href="#method">Method</a>
+        <a href="#validation">Validation</a>
+      </nav>
     </header>
 
     <main class="lab-main" id="simulation">
       <section class="simulation-shell" aria-labelledby="simulation-title">
         <div class="simulation-workspace">
           <div class="simulation-stage">
-            <header class="stage-preface" data-stage-preface>
-              <p>Task 01 · stochastic processes</p>
-              <h1 id="simulation-title">
-                A line written
-                <em>by chance.</em>
-              </h1>
-              <span>
-                One seed defines one path. Repeat the experiment and the
-                statistical law emerges.
-              </span>
-              <ul aria-label="Simulation model">
-                <li>fixed step</li>
-                <li>uniform angle</li>
-                <li>reproducible seed</li>
-              </ul>
-            </header>
-
             <canvas
               id="walk-canvas"
               tabindex="0"
@@ -63,12 +55,29 @@
               aria-label="Animated two-dimensional random-walk trajectory"
             ></canvas>
 
+            <p class="stage-dimension" data-stage-dimension aria-hidden="true">2D</p>
+
             <div class="stage-progress" aria-hidden="true">
               <span data-progress-bar></span>
+            </div>
+            <div class="walk-legend" aria-label="Walk plot legend">
+              <span><i class="legend-swatch legend-swatch--path"></i>Path</span>
+              <span><i class="legend-swatch legend-swatch--rms"></i>RMS guide</span>
+              <span><i class="legend-swatch legend-swatch--origin"></i>Origin</span>
+              <span><i class="legend-swatch legend-swatch--endpoint"></i>Endpoint</span>
             </div>
           </div>
 
           <aside class="simulation-controls" aria-label="Simulation controls">
+            <header class="control-introduction">
+              <span>Task 01</span>
+              <h1 id="simulation-title" data-simulation-title>Two-dimensional random walk</h1>
+              <p>
+                Run the walk and compare its final displacement
+                with <i>r</i><sub>RMS</sub> = <i>s</i>√<i>N</i>.
+              </p>
+            </header>
+
             <p class="mode-warning" data-mode-warning hidden>
               Large-N Gaussian approximation
             </p>
@@ -118,41 +127,6 @@
               />
             </div>
 
-            <div class="control">
-              <label for="walk-speed-number">Animation speed</label>
-              <input
-                class="number-entry"
-                id="walk-speed-number"
-                type="number"
-                min="1000"
-                max="1000000000"
-                step="1000"
-                value="1000000"
-              />
-              <input
-                id="walk-speed"
-                type="range"
-                min="3"
-                max="9"
-                step="0.01"
-                value="6"
-                aria-label="Animation speed logarithmic slider"
-                aria-valuetext="1,000,000 steps per second"
-              />
-            </div>
-
-            <label class="seed-control">
-              <span>Random seed</span>
-              <input
-                id="walk-seed"
-                type="number"
-                min="0"
-                max="4294967295"
-                value="2026"
-                inputmode="numeric"
-              />
-            </label>
-
             <div class="control-actions">
               <button class="button button--primary" type="button" data-play>
                 <svg viewBox="0 0 24 24" aria-hidden="true">
@@ -161,8 +135,72 @@
                 <span>Run walk</span>
               </button>
               <button class="button" type="button" data-reset>Reset</button>
-              <button class="button" type="button" data-new-seed>New seed</button>
             </div>
+
+            <details class="advanced-controls">
+              <summary>Reproducibility &amp; extensions</summary>
+              <p>
+                <strong>Official task: 2D.</strong> Seed, animation speed and
+                the optional 1D/3D comparison stay available here without
+                competing with the required walk.
+              </p>
+              <fieldset class="dimension-picker">
+                <legend>Space</legend>
+                <label>
+                  <input type="radio" name="walk-dimension" value="1" />
+                  <span>1D extension</span>
+                </label>
+                <label>
+                  <input type="radio" name="walk-dimension" value="2" checked />
+                  <span>2D official</span>
+                </label>
+                <label>
+                  <input type="radio" name="walk-dimension" value="3" />
+                  <span>3D extension</span>
+                </label>
+              </fieldset>
+
+              <div class="control">
+                <label for="walk-speed-number">Animation speed</label>
+                <input
+                  class="number-entry"
+                  id="walk-speed-number"
+                  type="number"
+                  min="1000"
+                  max="1000000000"
+                  step="1000"
+                  value="1000000"
+                />
+                <input
+                  id="walk-speed"
+                  type="range"
+                  min="3"
+                  max="9"
+                  step="0.01"
+                  value="6"
+                  aria-label="Animation speed logarithmic slider"
+                  aria-valuetext="1,000,000 steps per second"
+                />
+              </div>
+
+              <label class="seed-control">
+                <span>Random seed</span>
+                <input
+                  id="walk-seed"
+                  type="number"
+                  min="0"
+                  max="4294967295"
+                  value="2026"
+                  inputmode="numeric"
+                />
+              </label>
+              <button class="button" type="button" data-new-seed>New seed</button>
+            </details>
+
+            <p class="units-note">
+              Coordinates use dimensionless simulation units; <i>s</i> sets the
+              unit scale.
+            </p>
 
             <dl class="live-results" aria-live="polite">
               <div>
@@ -193,69 +231,13 @@
       >
         <header class="ensemble-introduction">
           <div>
-            <p class="section-kicker">Statistical evidence</p>
-            <h2 id="ensemble-title">
-              One path is chance. An ensemble reveals the law.
-            </h2>
+            <h2 id="ensemble-title">Ensemble statistics</h2>
+            <p>
+              One path is unpredictable. Many independent walks reveal whether
+              the model is unbiased and follows the expected square-root law.
+            </p>
           </div>
         </header>
-
-        <section class="theory-panel" aria-labelledby="theory-title">
-          <header class="theory-heading">
-            <div>
-              <h3 id="theory-title">From random directions to diffusion</h3>
-            </div>
-          </header>
-
-          <div class="theory-equations">
-            <article>
-              <span>Direction</span>
-              <p class="display-equation">
-                θ<sub>i</sub> ∼ U(0, 2π)
-              </p>
-            </article>
-            <article>
-              <span>One fixed step</span>
-              <p class="display-equation">
-                Δ<b>r</b><sub>i</sub> =
-                s(cos θ<sub>i</sub>, sin θ<sub>i</sub>)
-              </p>
-            </article>
-            <article>
-              <span>Position after N steps</span>
-              <p class="display-equation">
-                x<sub>N</sub> = s∑cos θ<sub>i</sub>,
-                y<sub>N</sub> = s∑sin θ<sub>i</sub>
-              </p>
-            </article>
-            <article class="theory-result">
-              <span>Central prediction</span>
-              <p class="display-equation">
-                ⟨r<sub>N</sub><sup>2</sup>⟩ = Ns<sup>2</sup>
-                <br />
-                <span class="equation-secondary">
-                  r<sub>RMS</sub> = s√N
-                </span>
-              </p>
-            </article>
-          </div>
-
-          <footer class="theory-distribution">
-            <p>
-              <span>No drift</span>
-              ⟨x<sub>N</sub>⟩ = ⟨y<sub>N</sub>⟩ = 0
-            </p>
-            <p>
-              <span>Coordinate variance</span>
-              Var(x<sub>N</sub>) = Var(y<sub>N</sub>) =
-              Ns<sup>2</sup>/2
-            </p>
-            <p>
-              <span>Large-N radial distribution</span>
-              p(r) ≈ 2r/(Ns<sup>2</sup>) exp[−r<sup>2</sup>/(Ns<sup>2</sup>)]
-            </p>
-          </footer>
-        </section>
 
         <div class="ensemble-laboratory is-loading" data-ensemble-laboratory>
           <form class="ensemble-toolbar" data-ensemble-form>
@@ -359,6 +341,7 @@
             </figure>
           </div>
 
+          <p class="result-kicker">Current simulation</p>
           <dl class="ensemble-results" aria-live="polite">
             <div>
               <dt>Mean endpoint</dt>
@@ -380,8 +363,7 @@
 
           <footer class="ensemble-actions">
             <p data-ensemble-method>
-              Every displayed endpoint is produced from exact fixed-length
-              steps and a reproducible seed.
+              Fixed-length steps with a reproducible seed.
             </p>
             <div>
               <button class="button" type="button" data-download-ensemble disabled>
@@ -393,6 +375,95 @@
             </div>
           </footer>
         </div>
+
+        <section class="competition-result" aria-labelledby="competition-result-title">
+          <div>
+            <span>Reference validation</span>
+            <h3 id="competition-result-title">
+              Mean squared displacement grows in direct proportion to N.
+            </h3>
+            <p>
+              A committed reference run used 50,000 independent walks per N
+              across eight step counts. Its measured gradient agrees with the
+              theoretical value within its 95% confidence interval.
+            </p>
+          </div>
+          <dl>
+            <div>
+              <dt>Measured slope</dt>
+              <dd>0.9992 ± 0.0031</dd>
+            </div>
+            <div>
+              <dt>Theory</dt>
+              <dd>1.0000</dd>
+            </div>
+          </dl>
+        </section>
+
+        <section class="theory-panel" id="method" aria-labelledby="theory-title">
+          <header class="theory-heading">
+            <div>
+              <h3 id="theory-title">Method &amp; assumptions</h3>
+            </div>
+          </header>
+
+          <div class="theory-equations">
+            <article>
+              <span>Direction</span>
+              <p
+                class="display-equation"
+                data-proof-latex="\theta_i \sim \mathcal{U}(0,2\pi)"
+              >
+                θ<sub>i</sub> ∼ U(0, 2π)
+              </p>
+            </article>
+            <article>
+              <span>One fixed step</span>
+              <p
+                class="display-equation"
+                data-proof-latex="\Delta\mathbf{r}_i=s(\cos\theta_i,\sin\theta_i)"
+              >
+                Δ<b>r</b><sub>i</sub> =
+                s(cos θ<sub>i</sub>, sin θ<sub>i</sub>)
+              </p>
+            </article>
+            <article class="theory-result">
+              <span>Central prediction</span>
+              <p
+                class="display-equation"
+                data-proof-latex="\begin{aligned}\langle r_N^2\rangle &amp;= Ns^2 \\ r_{\mathrm{RMS}} &amp;= s\sqrt{N}\end{aligned}"
+              >
+                ⟨r<sub>N</sub><sup>2</sup>⟩ = Ns<sup>2</sup>
+                <br />
+                <span class="equation-secondary">
+                  r<sub>RMS</sub> = s√N
+                </span>
+              </p>
+            </article>
+          </div>
+
+          <footer class="theory-distribution">
+            <p>
+              Uniform independent directions give no preferred direction:
+              ⟨x<sub>N</sub>⟩ = ⟨y<sub>N</sub>⟩ = 0. The typical displacement
+              therefore grows as s√N rather than Ns.
+            </p>
+            <div class="method-assumptions">
+              <div>
+                <span>Model</span>
+                <p>Independent directions and fixed step length <i>s</i>.</p>
+              </div>
+              <div>
+                <span>Boundary</span>
+                <p>An unbounded plane with no force, drift or interaction.</p>
+              </div>
+              <div>
+                <span>Computation</span>
+                <p>Seeded browser sampling; extreme N uses a labelled CLT approximation.</p>
+              </div>
+            </div>
+          </footer>
+        </section>
       </section>
 
       <section
@@ -401,19 +472,20 @@
         aria-labelledby="validation-title"
       >
         <header class="validation-introduction">
-          <div>
-            <h2 id="validation-title">
-              Does the computation obey its own theory?
-            </h2>
-          </div>
+          <p class="section-kicker">Reference validation</p>
+          <h2 id="validation-title">Does the computation obey its own theory?</h2>
+          <p>
+            These committed checks test the fixed-step model independently of
+            the live browser controls: directions are uniform, the mean-square
+            displacement follows <i>N</i><i>s</i><sup>2</sup>, and endpoint
+            radii follow the two-dimensional Rayleigh law.
+          </p>
         </header>
 
         <div class="validation-laboratory is-loading" data-validation-laboratory>
           <header class="validation-overview">
             <div class="validation-provenance" aria-live="polite">
-              <p data-validation-provenance>
-                Checking deterministic validation data
-              </p>
+              <p data-validation-provenance>Checking deterministic validation data</p>
             </div>
 
             <dl class="validation-metrics">
@@ -435,25 +507,16 @@
               </div>
             </dl>
           </header>
-          <p
-            class="laboratory-message laboratory-message--error"
-            data-validation-error
-            hidden
-          >
-            The deterministic validation evidence could not be loaded. This
-            task remains unlocked.
+
+          <p class="laboratory-message laboratory-message--error" data-validation-error hidden>
+            The deterministic validation evidence could not be loaded. This task remains unlocked.
           </p>
 
           <div class="validation-charts">
             <figure class="validation-figure validation-figure--wide">
               <figcaption>
-                <div>
-                  <strong>Mean squared displacement</strong>
-                </div>
-                <p>
-                  Simulation with 95% confidence intervals against
-                  ⟨r²⟩ = Ns²
-                </p>
+                <div><strong>Mean squared displacement</strong></div>
+                <p>Simulation with 95% confidence intervals against ⟨r²⟩ = Ns²</p>
               </figcaption>
               <canvas
                 id="validation-msd-canvas"
@@ -464,9 +527,7 @@
 
             <figure class="validation-figure">
               <figcaption>
-                <div>
-                  <strong>Angular uniformity</strong>
-                </div>
+                <div><strong>Angular uniformity</strong></div>
                 <p>250,000 independently sampled directions</p>
               </figcaption>
               <canvas
@@ -478,9 +539,7 @@
 
             <figure class="validation-figure">
               <figcaption>
-                <div>
-                  <strong>Radial endpoint distribution</strong>
-                </div>
+                <div><strong>Radial endpoint distribution</strong></div>
                 <p>50,000 exact endpoints against the Rayleigh prediction</p>
               </figcaption>
               <canvas
@@ -491,10 +550,7 @@
             </figure>
           </div>
 
-          <section
-            class="validation-limitations"
-            aria-labelledby="limitations-title"
-          >
+          <section class="validation-limitations" aria-labelledby="limitations-title">
             <h3 id="limitations-title">Model assumptions</h3>
             <ul>
               <li>Steps are independent and have identical fixed length.</li>
@@ -507,28 +563,136 @@
           <footer class="validation-lock">
             <div>
               <span class="lock-mark" aria-hidden="true">01</span>
-              <p>
-                <strong data-validation-lock>Validation pending</strong>
-              </p>
+              <p><strong data-validation-lock>Validation pending</strong></p>
             </div>
-            <a
-              class="button"
-              href="../data/task-01-validation.json"
-              download
-            >
+            <a class="button" href="../data/task-01-validation.json" download>
               Download validation data
             </a>
           </footer>
         </div>
       </section>
+
+      <section
+        class="dimensions-section"
+        id="dimensions"
+        aria-labelledby="dimensions-title"
+      >
+        <header class="dimensions-introduction">
+          <p class="section-kicker">Dimensional comparison</p>
+          <h2 id="dimensions-title">One law across three dimensions</h2>
+          <p>
+            The endpoint cloud changes shape from 1D to 3D, but the distance
+            law does not: <i>r</i><sub>RMS</sub> = <i>s</i>√<i>N</i> in every case.
+          </p>
+        </header>
+
+        <div class="dimensions-laboratory is-loading" data-dimensions-laboratory>
+          <form class="dimensions-toolbar" data-dimensions-form>
+            <label>
+              <span>Walks per point</span>
+              <input id="dimensions-walk-count" type="number" min="500" max="10000" step="100" value="2000" />
+            </label>
+            <label>
+              <span>Maximum steps</span>
+              <select id="dimensions-max-steps">
+                <option value="400">400</option>
+                <option value="800" selected>800</option>
+                <option value="1600">1,600</option>
+              </select>
+            </label>
+            <label>
+              <span>Step length</span>
+              <input id="dimensions-step-size" type="number" min="0.01" max="100" step="0.01" value="1" />
+            </label>
+            <label>
+              <span>Master seed</span>
+              <input id="dimensions-seed" type="number" min="0" max="4294967295" value="2026" inputmode="numeric" />
+            </label>
+            <button class="button button--primary dimensions-run" type="submit" data-run-dimensions disabled>
+              Run comparison
+            </button>
+          </form>
+
+          <div class="dimensions-status" aria-live="polite">
+            <span data-dimensions-status>Loading dimensional results</span>
+            <div class="dimensions-progress" aria-hidden="true">
+              <span data-dimensions-progress></span>
+            </div>
+          </div>
+          <p class="laboratory-message laboratory-message--error" data-dimensions-error hidden>
+            The dimensional comparison could not be loaded.
+          </p>
+
+          <div class="dimensions-plots">
+            <figure class="dimensions-figure">
+              <figcaption>
+                <strong>Normalized endpoint distance</strong>
+                <span>Measured density and large-N theory</span>
+              </figcaption>
+              <canvas
+                id="dimensions-distribution-canvas"
+                role="img"
+                aria-label="Normalized endpoint-distance distributions in one, two and three dimensions"
+              ></canvas>
+            </figure>
+            <figure class="dimensions-figure">
+              <figcaption>
+                <strong>Root-mean-square scaling</strong>
+                <span>95% confidence intervals</span>
+              </figcaption>
+              <canvas
+                id="dimensions-scaling-canvas"
+                role="img"
+                aria-label="Root-mean-square displacement against square root of step count in one, two and three dimensions"
+              ></canvas>
+            </figure>
+          </div>
+
+          <dl class="dimensions-fits" aria-live="polite">
+            <div data-dimension-fit="1">
+              <dt>1D fit</dt>
+              <dd>—</dd>
+              <span>—</span>
+            </div>
+            <div data-dimension-fit="2">
+              <dt>2D fit</dt>
+              <dd>—</dd>
+              <span>—</span>
+            </div>
+            <div data-dimension-fit="3">
+              <dt>3D fit</dt>
+              <dd>—</dd>
+              <span>—</span>
+            </div>
+          </dl>
+
+          <footer class="dimensions-footer">
+            <p>
+              Exact fixed-length steps. In 3D, cos&nbsp;θ is sampled uniformly
+              to avoid bias towards the poles.
+            </p>
+            <div>
+              <button class="button" type="button" data-download-dimensions disabled>Download CSV</button>
+              <button class="button" type="button" data-export-dimensions disabled>Export figure</button>
+            </div>
+          </footer>
+
+          <aside class="dimensions-theory" aria-label="Dimensional random-walk theory">
+            <p>Universal distance law</p>
+            <strong data-proof-latex="\mathbb{E}\!\left(\lVert\mathbf{R}_N\rVert^2\right)=Ns^2">𝔼(|<b>R</b><sub>N</sub>|²) = Ns²</strong>
+            <p>Per coordinate</p>
+            <strong data-proof-latex="\operatorname{Var}(X_j)=\dfrac{Ns^2}{d}">Var(X<sub>j</sub>) = Ns² / d</strong>
+          </aside>
+        </div>
+      </section>
+
     </main>
 
-    <script src="../vendor/packages/gsap/dist/gsap.min.js"></script>
-    <script src="../vendor/packages/gsap/dist/ScrollTrigger.min.js"></script>
-    <script src="../assets/task-01-background.js"></script>
-    <script type="module" src="../assets/task-01.js"></script>
-    <script type="module" src="../assets/task-01-ensemble.js"></script>
-    <script type="module" src="../assets/task-01-validation.js"></script>
-    <script src="../assets/task-01-motion.js"></script>
+    <script src="../vendor/packages/katex/katex.min.js"></script>
+    <script src="../assets/proof-math.js?v=20260808"></script>
+    <script type="module" src="../assets/task-01.js?v=20260808a"></script>
+    <script type="module" src="../assets/task-01-ensemble.js?v=20260805a"></script>
+    <script type="module" src="../assets/task-01-validation.js?v=20260813"></script>
+    <script type="module" src="../assets/task-01-navigation.js?v=20260805a"></script>
   </body>
 </html>

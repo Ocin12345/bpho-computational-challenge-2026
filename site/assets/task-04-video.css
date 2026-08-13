@@ -1,0 +1,9 @@
+/* Task 4 filming path: the apparatus and the required comparison plot. */
+
+.app-shell--competition .task4-quick-nav button:nth-child(3) {
+  display: none;
+}
+
+.app-shell--competition .task4-quick-nav {
+  grid-template-columns: repeat(2, minmax(88px, 1fr));
+}

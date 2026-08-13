@@ -5,17 +5,22 @@
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta
       name="description"
-      content="An interactive, validated thermal-radiation laboratory for BPhO Computational Challenge Task 3."
+      content="An interactive thermal-radiation laboratory for BPhO Computational Challenge Task 3."
     />
-    <meta name="theme-color" content="#120b0a" />
+    <meta name="theme-color" content="#ffffff" />
     <title>Task 03 — Thermal Radiation | BPhO Computational Challenge 2026</title>
     <link
       rel="icon"
       href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%23120b0a'/%3E%3Ccircle cx='32' cy='32' r='16' fill='%23ff765e'/%3E%3Ccircle cx='27' cy='26' r='6' fill='%23fff1c8'/%3E%3C/svg%3E"
     />
-    <link rel="stylesheet" href="../assets/task-03.css" />
+    <link rel="stylesheet" href="../vendor/packages/katex/katex.min.css" />
+    <link rel="stylesheet" href="../assets/task-03.css?v=20260803b" />
+    <link rel="stylesheet" href="../assets/task-03-minimal.css?v=20260808b" />
+    <link rel="stylesheet" href="../assets/proof-math.css?v=20260808" />
+    <link rel="stylesheet" href="../assets/task-clean.css?v=20260809" />
+    <link rel="stylesheet" href="../assets/task-video.css?v=20260809" />
   </head>
-  <body>
+  <body class="video-cut" data-task="03">
     <a class="skip-link" href="#live-spectrum">Skip to live spectrum</a>
 
     <header class="task-header">
@@ -25,12 +30,20 @@
         </svg>
         All tasks
       </a>
-      <p>Task 03 <span>/</span> Computational Physics</p>
-      <a class="method-link" href="#model">Model</a>
+      <nav class="section-nav" aria-label="Task 3 sections">
+        <a href="#spectrum" aria-current="page">Spectrum</a>
+        <a href="#einstein">Heat capacity</a>
+        <a href="#method">Method</a>
+        <a href="#validation">Validation</a>
+      </nav>
+      <div class="task-identity">
+        <span>Task 03</span>
+        <strong>Thermal radiation</strong>
+      </div>
     </header>
 
     <main>
-      <section class="radiation-hero" aria-labelledby="page-title">
+      <section class="radiation-hero" id="spectrum" aria-labelledby="page-title">
         <div class="hero-field" aria-hidden="true"></div>
         <div class="hero-vignette" aria-hidden="true"></div>
 
@@ -43,26 +56,42 @@
             <span></span>
           </div>
           <div class="orb-annotation">
-            <span>Ideal emitter</span>
+            <span>Blackbody model</span>
             <strong>ε = 1</strong>
           </div>
         </div>
 
         <header class="hero-copy">
-          <p>Quantum statistics in light and matter</p>
-          <h1 id="page-title">Thermal<br /><em>Radiation</em></h1>
+          <p>Planck spectrum</p>
+          <h1 id="page-title">Thermal radiation</h1>
           <span>
-            Follow temperature from a glowing surface<br />
-            into the quantised vibrations of a solid.
+            Change the temperature to see the peak wavelength and emitted
+            power update together.
           </span>
+          <div
+            class="hero-principle"
+            role="group"
+            aria-label="Three linked effects of increasing temperature"
+          >
+            <div>
+              <small>Control</small>
+              <strong>Temperature, T</strong>
+            </div>
+            <div>
+              <small>Peak shifts left</small>
+              <strong>λ<sub>max</sub> ∝ 1/T</strong>
+            </div>
+            <div>
+              <small>Power rises</small>
+              <strong>M ∝ T<sup>4</sup></strong>
+            </div>
+          </div>
         </header>
 
         <div class="spectrum-instrument" id="live-spectrum">
           <header>
             <div>
-              <span data-live-quantity-title>
-                Live Planck spectrum · B<sub>λ</sub>(λ,T)
-              </span>
+              <span data-live-quantity-title>Planck spectrum · B<sub>λ</sub>(λ,T)</span>
               <strong data-temperature-label>5,000 K</strong>
             </div>
             <div class="instrument-meta">
@@ -88,6 +117,27 @@
                   M<sub>λ</sub> exitance
                 </button>
               </div>
+              <div
+                class="quantity-toggle spectrum-mode-toggle"
+                role="group"
+                aria-label="Choose the spectrum view"
+              >
+                <button
+                  class="is-active"
+                  type="button"
+                  data-planck-mode="single"
+                  aria-pressed="true"
+                >
+                  Single temperature
+                </button>
+                <button
+                  type="button"
+                  data-planck-mode="compare"
+                  aria-pressed="false"
+                >
+                  Compare 4,000–6,000 K
+                </button>
+              </div>
             </div>
           </header>
           <div class="live-chart-wrap">
@@ -105,6 +155,11 @@
             <span class="visible-key"><i></i>Visible band</span>
             <span>3,000 nm</span>
           </footer>
+          <div class="planck-comparison-legend" data-planck-legend hidden>
+            <span><i class="planck-legend--4000"></i>4,000 K</span>
+            <span><i class="planck-legend--5000"></i>5,000 K</span>
+            <span><i class="planck-legend--6000"></i>6,000 K</span>
+          </div>
         </div>
 
         <div class="hero-readouts" aria-live="polite">
@@ -118,13 +173,13 @@
               <dd data-integral-readout>11.28 MW m⁻² sr⁻¹</dd>
             </div>
             <div>
-              <dt>vs 4,000 K</dt>
+              <dt>Power ratio vs 4,000 K</dt>
               <dd data-relative-readout>2.44×</dd>
             </div>
           </dl>
           <p data-quantity-note>
-            B<sub>λ</sub> is the written-task radiance. M<sub>λ</sub> =
-            πB<sub>λ</sub> matches the irradiance-style example.
+            B<sub>λ</sub> is radiance per steradian. Switch to
+            M<sub>λ</sub> = πB<sub>λ</sub> for hemispherical exitance.
           </p>
         </div>
 
@@ -163,21 +218,12 @@
           </div>
         </div>
 
-        <button class="scroll-cue" type="button" data-scroll-model>
-          <span>Read the two quantum models</span>
-          <svg viewBox="0 0 24 24" aria-hidden="true">
-            <path d="M12 5v14M6 13l6 6 6-6" />
-          </svg>
-        </button>
       </section>
 
-      <section class="model-section" id="model" aria-labelledby="model-title">
+      <section class="model-section" id="method" aria-labelledby="method-title">
         <header class="section-introduction">
-          <p>The radiation field</p>
-          <h2 id="model-title">
-            Temperature reshapes<br />
-            <em>the whole spectrum.</em>
-          </h2>
+          <p>Method</p>
+          <h2 id="method-title">The equations behind the curves</h2>
           <span>
             Planck’s law gives the spectral radiance B<sub>λ</sub> required by
             the brief. For a Lambertian blackbody, integrating over the outward
@@ -188,7 +234,7 @@
         <div class="equation-story">
           <article class="equation-card equation-card--primary">
             <span>Required Planck radiance</span>
-            <p>
+            <p data-proof-latex="B_{\lambda}(\lambda,T)=\dfrac{2hc^2}{\lambda^5}\,\dfrac{1}{\exp\!\left(\dfrac{hc}{\lambda k_{\mathrm B}T}\right)-1}">
               B<sub>λ</sub>(λ,T) =
               <span class="fraction">
                 <span>2hc²</span>
@@ -207,13 +253,13 @@
 
           <article class="equation-card">
             <span>Wien displacement</span>
-            <p>λ<sub>max</sub>T = b</p>
+            <p data-proof-latex="\lambda_{\max}T=b">λ<sub>max</sub>T = b</p>
             <small>b = 2.897 771 955 × 10<sup>−3</sup> m K</small>
           </article>
 
           <article class="equation-card">
             <span>Stefan–Boltzmann</span>
-            <p>M = σT<sup>4</sup></p>
+            <p data-proof-latex="M=\sigma T^4">M = σT<sup>4</sup></p>
             <small>
               ∫M<sub>λ</sub>dλ = σT⁴; ∫B<sub>λ</sub>dλ = σT⁴/π.
             </small>
@@ -222,7 +268,7 @@
 
         <div class="quantity-identity">
           <span>Convention resolved</span>
-          <p>M<sub>λ</sub> = πB<sub>λ</sub></p>
+          <p data-proof-latex="M_{\lambda}=\pi B_{\lambda}">M<sub>λ</sub> = πB<sub>λ</sub></p>
           <small>
             The written brief names B(λ,T), while its example axis omits
             steradians and therefore behaves like irradiance. The laboratory
@@ -266,7 +312,7 @@
           </div>
           <div>
             <span>Constants</span>
-            <strong>Exact SI definitions</strong>
+            <strong>SI definitions</strong>
           </div>
         </div>
 
@@ -295,22 +341,39 @@
             </div>
           </div>
         </div>
+
+        <div class="method-notes">
+          <article>
+            <span>Einstein model</span>
+            <p>
+              Each solid uses its material-dependent Einstein temperature
+              T<sub>E</sub> from the official project dataset. At high
+              temperature the model approaches the classical Dulong–Petit
+              limit, C<sub>V</sub> → 3R.
+            </p>
+          </article>
+          <article>
+            <span>Numerical stability</span>
+            <p>
+              The browser Planck calculation uses <code>expm1</code> for the
+              occupation factor. The reference implementation also uses
+              stable negative-exponential and high-temperature branches for
+              the Einstein expression.
+            </p>
+          </article>
+        </div>
       </section>
 
-      <section class="einstein-section" aria-labelledby="einstein-title">
+      <section class="einstein-section" id="einstein" aria-labelledby="einstein-title">
         <div class="einstein-scroll-layout">
           <header class="einstein-heading">
             <div>
-              <p>The quantum solid</p>
-              <h2 id="einstein-title">
-                One oscillator<br />
-                frequency.<br />
-                <em>Seven materials.</em>
-              </h2>
+              <p>Quantum solid</p>
+              <h2 id="einstein-title">Einstein heat capacity</h2>
             </div>
             <span>
-              Einstein treats every atom as an independent quantum harmonic
-              oscillator with one characteristic temperature, T<sub>E</sub>.
+              Compare all seven solids. Each material is represented by one
+              characteristic Einstein temperature, T<sub>E</sub>.
             </span>
           </header>
 
@@ -401,7 +464,7 @@
 
             <div class="einstein-equation">
               <span>Einstein heat capacity</span>
-              <p>
+              <p data-proof-latex="C_V=3R\left(\dfrac{T_E}{T}\right)^2\dfrac{e^{T_E/T}}{\left(e^{T_E/T}-1\right)^2}">
                 C<sub>V</sub> = 3R
                 <span class="math-group">
                   <span class="fraction">
@@ -424,276 +487,316 @@
         </div>
       </section>
 
-      <section class="evidence-section" aria-labelledby="evidence-title">
+      <section
+        class="evidence-section"
+        id="validation"
+        aria-labelledby="validation-title"
+      >
         <header class="evidence-heading">
           <div>
-            <p>Independent numerical evidence</p>
-            <h2 id="evidence-title">
-              Three laws.<br />
-              <em>One checked computation.</em>
-            </h2>
+            <p>Validation</p>
+            <h2 id="validation-title">Reference validation</h2>
           </div>
           <span data-evidence-provenance>
-            Loading the verified Task 03 dataset…
+            Loading the verified Python reference evidence…
           </span>
         </header>
 
-        <div class="evidence-metrics">
-          <article>
-            <span>Validation checks</span>
-            <strong data-check-count>—</strong>
-            <small>all pre-declared checks</small>
-          </article>
-          <article>
-            <span>Largest Wien error</span>
-            <strong data-wien-error>—</strong>
-            <small>numerical peak vs b/T</small>
-          </article>
-          <article>
-            <span>Largest integral error</span>
-            <strong data-integral-error>—</strong>
-            <small>radiance and exitance identities</small>
-          </article>
-          <article>
-            <span>Collapse discrepancy</span>
-            <strong data-collapse-error>—</strong>
-            <small>C<sub>V</sub>/3R vs T/T<sub>E</sub></small>
-          </article>
-        </div>
-
-        <section class="validation-carousel" aria-labelledby="validation-verdict-title">
-          <div class="validation-carousel__mark" aria-hidden="true">
-            <span>∫</span>
-            <span>W</span>
-            <span>C<sub>V</sub></span>
-          </div>
-          <div class="validation-carousel__content">
-            <p id="validation-verdict-title">Independent validation verdicts</p>
-            <div class="validation-carousel__viewport" aria-live="polite">
-              <article class="validation-verdict is-active" data-verdict-slide>
-                <blockquote>
-                  The numerical wavelength peaks track b/T at all three benchmark
-                  temperatures; the largest relative error is 7.58 × 10<sup>−6</sup>.
-                </blockquote>
-                <cite>Wien displacement check</cite>
-              </article>
-              <article class="validation-verdict" data-verdict-slide hidden>
-                <blockquote>
-                  Integrated radiance and exitance reproduce σT<sup>4</sup>/π and
-                  σT<sup>4</sup> to a largest relative error of 1.08 × 10<sup>−9</sup>.
-                </blockquote>
-                <cite>Stefan–Boltzmann integral check</cite>
-              </article>
-              <article class="validation-verdict" data-verdict-slide hidden>
-                <blockquote>
-                  All seven materials collapse onto one C<sub>V</sub>/(3R) curve,
-                  with a maximum absolute discrepancy of 8.88 × 10<sup>−16</sup>.
-                </blockquote>
-                <cite>Einstein scaling check</cite>
-              </article>
-            </div>
-            <div class="validation-carousel__controls">
-              <button type="button" data-verdict-previous aria-label="Previous validation verdict">
-                <svg viewBox="0 0 24 24" aria-hidden="true">
-                  <path d="M15 5l-7 7 7 7" />
-                </svg>
-              </button>
-              <span data-verdict-status>1 / 3</span>
-              <button type="button" data-verdict-next aria-label="Next validation verdict">
-                <svg viewBox="0 0 24 24" aria-hidden="true">
-                  <path d="M9 5l7 7-7 7" />
-                </svg>
-              </button>
-            </div>
-          </div>
-        </section>
-
-        <div class="evidence-grid" data-evidence-content hidden>
-          <article class="chart-card chart-card--planck">
-            <header>
-              <div>
-                <h3 data-evidence-planck-title>
-                  Validated B<sub>λ</sub> spectra
-                </h3>
-                <p>
-                  The required blackbody spectrum at 4,000, 5,000 and 6,000 K.
-                </p>
-              </div>
-              <div
-                class="evidence-quantity-toggle"
-                role="group"
-                aria-label="Choose the validated Planck quantity"
-              >
-                <button
-                  class="is-active"
-                  type="button"
-                  data-evidence-quantity="radiance"
-                  aria-pressed="true"
-                >
-                  B<sub>λ</sub>
-                </button>
-                <button
-                  type="button"
-                  data-evidence-quantity="exitance"
-                  aria-pressed="false"
-                >
-                  M<sub>λ</sub>
-                </button>
-              </div>
-            </header>
-            <canvas
-              id="planck-evidence-chart"
-              role="img"
-              aria-label="Validated Planck spectral radiance at 4000, 5000 and 6000 kelvin"
-            ></canvas>
-            <div class="chart-legend" aria-hidden="true">
-              <span><i style="--legend:#ff765e"></i>4,000 K</span>
-              <span><i style="--legend:#f3bb62"></i>5,000 K</span>
-              <span><i style="--legend:#8edfff"></i>6,000 K</span>
-            </div>
-          </article>
-
-          <article class="chart-card chart-card--collapse">
-            <header>
-              <div>
-                <h3>Universal Einstein curve</h3>
-                <p>
-                  Scaling by T<sub>E</sub> makes all seven materials overlap.
-                </p>
-              </div>
-            </header>
-            <canvas
-              id="einstein-collapse-chart"
-              role="img"
-              aria-label="Seven normalized Einstein heat-capacity curves collapsed onto one universal curve"
-            ></canvas>
-            <div class="symbol-row" aria-label="Materials represented">
-              <span>Au</span><span>Cu</span><span>Ti</span><span>Al</span>
-              <span>Fe</span><span>Si</span><span>C</span>
-            </div>
-          </article>
-        </div>
-
-        <div
-          class="benchmark-table-wrap"
-          data-evidence-content
-          role="region"
-          aria-label="Scrollable thermal-radiation benchmark table"
-          tabindex="0"
-          hidden
-        >
-          <table class="benchmark-table">
-            <caption>
-              Numerical peak and integrated exitance against exact identities
-            </caption>
-            <thead>
-              <tr>
-                <th scope="col">T / K</th>
-                <th scope="col">Numerical λ<sub>max</sub></th>
-                <th scope="col">Wien b/T</th>
-                <th scope="col">Numerical ∫B<sub>λ</sub>dλ</th>
-                <th scope="col">σT⁴/π</th>
-                <th scope="col">Numerical ∫M<sub>λ</sub>dλ</th>
-                <th scope="col">σT⁴</th>
-              </tr>
-            </thead>
-            <tbody data-benchmark-body></tbody>
-          </table>
-        </div>
-
-        <section class="brief-coverage" aria-labelledby="brief-coverage-title">
-          <header>
-            <span>Requirement audit</span>
-            <h3 id="brief-coverage-title">Every item in the Task 3 brief</h3>
-          </header>
+        <aside class="reference-evidence-lock" aria-label="Validation provenance">
           <div>
-            <article>
-              <strong>Planck B(λ,T)</strong>
-              <p>
-                Direct spectral-radiance plot with the required equation,
-                wavelength axis and explicit SI units.
-              </p>
+            <span>Reproducible evidence</span>
+            <strong>Frozen reference calculations</strong>
+          </div>
+          <p>
+            These values come from the stored Task 3 Python validation bundle,
+            not from the current slider position. The live laboratories remain
+            available above for exploration.
+          </p>
+        </aside>
+
+        <div class="evidence-metrics" aria-label="Validation summary">
+          <article>
+            <span>Scientific checks</span>
+            <strong data-check-count>—</strong>
+            <small>validated checks passed</small>
+          </article>
+          <article>
+            <span>Wien peak</span>
+            <strong data-wien-error>—</strong>
+            <small>largest relative deviation</small>
+          </article>
+          <article>
+            <span>Planck integral</span>
+            <strong data-integral-error>—</strong>
+            <small>largest relative error</small>
+          </article>
+          <article>
+            <span>Curve collapse</span>
+            <strong data-collapse-error>—</strong>
+            <small>maximum C<sub>V</sub> / 3R difference</small>
+          </article>
+        </div>
+
+        <div class="reference-check-grid" aria-label="Reference limit checks">
+          <article>
+            <span>A · Wien displacement</span>
+            <strong data-wien-card-error>—</strong>
+            <small>largest relative peak error</small>
+            <p>
+              For 4,000, 5,000 and 6,000 K, the numerical peak satisfies
+              λ<sub>max</sub>T ≈ 2.897771955 × 10<sup>−3</sup> m K.
+            </p>
+          </article>
+          <article>
+            <span>B · Stefan–Boltzmann</span>
+            <strong data-fitted-exponent>—</strong>
+            <small>fitted exitance exponent</small>
+            <p>
+              Numerical integration gives M ∝ T<sup>4</sup>, with the stored
+              exitance values compared directly against σT<sup>4</sup>.
+            </p>
+          </article>
+          <article>
+            <span>C · High-temperature limit</span>
+            <strong data-high-temperature-ratio>—</strong>
+            <small>C<sub>V</sub> / 3R at 100T<sub>E</sub></small>
+            <p>
+              The Einstein model approaches the Dulong–Petit limit
+              3R = 24.9434 J mol<sup>−1</sup> K<sup>−1</sup>.
+            </p>
+          </article>
+          <article>
+            <span>D · Low-temperature limit</span>
+            <strong data-low-temperature-value>—</strong>
+            <small>Gold at T = 0 K</small>
+            <p>
+              The continuous model reaches C<sub>V</sub> = 0 as T → 0, while
+              all material curves remain finite and non-negative.
+            </p>
+          </article>
+        </div>
+
+        <div class="evidence-content" data-evidence-content hidden>
+          <div class="evidence-grid">
+            <article class="chart-card">
+              <header>
+                <div>
+                  <h3 data-evidence-planck-title>Validated B<sub>λ</sub> spectra</h3>
+                  <p>
+                    Three stored Planck spectra with numerical peak markers and
+                    the same SI units as the live laboratory.
+                  </p>
+                </div>
+                <div class="evidence-quantity-toggle" role="group" aria-label="Choose the validated Planck quantity">
+                  <button class="is-active" type="button" data-evidence-quantity="radiance" aria-pressed="true">B<sub>λ</sub></button>
+                  <button type="button" data-evidence-quantity="exitance" aria-pressed="false">M<sub>λ</sub></button>
+                </div>
+              </header>
+              <canvas id="planck-evidence-chart" role="img" aria-label="Validated Planck spectra at 4000, 5000 and 6000 kelvin"></canvas>
+              <div class="chart-legend" aria-label="Planck validation legend">
+                <span><i style="--legend:#ff765e"></i>4,000 K</span>
+                <span><i style="--legend:#f3bb62"></i>5,000 K</span>
+                <span><i style="--legend:#8edfff"></i>6,000 K</span>
+              </div>
             </article>
-            <article>
-              <strong>Several temperatures</strong>
-              <p>
-                Validated 4,000 K, 5,000 K and 6,000 K curves, plus a live
-                2,500–8,000 K explorer.
-              </p>
-            </article>
-            <article>
-              <strong>Atomic crystals</strong>
-              <p>
-                Einstein molar C<sub>V</sub>(T) for gold, copper and iron,
-                together with titanium, aluminium, silicon and carbon.
-              </p>
+
+            <article class="chart-card">
+              <header>
+                <div>
+                  <h3>Einstein curve collapse</h3>
+                  <p>
+                    All seven materials collapse onto one dimensionless
+                    C<sub>V</sub> / 3R curve against T/T<sub>E</sub>.
+                  </p>
+                </div>
+              </header>
+              <canvas id="einstein-collapse-chart" role="img" aria-label="Normalized Einstein heat capacity curves for seven materials"></canvas>
+              <div class="symbol-row" aria-label="Material symbols">
+                <span>Au</span><span>Cu</span><span>Ti</span><span>Al</span><span>Fe</span><span>Si</span><span>C</span>
+              </div>
             </article>
           </div>
-        </section>
+
+          <div class="benchmark-table-wrap">
+            <table class="benchmark-table">
+              <caption>Stored Planck reference values: numerical integration versus analytical targets</caption>
+              <thead>
+                <tr>
+                  <th scope="col">T</th>
+                  <th scope="col">Numerical peak</th>
+                  <th scope="col">Wien target</th>
+                  <th scope="col">Numerical B integral</th>
+                  <th scope="col">σT<sup>4</sup> / π</th>
+                  <th scope="col">Numerical M integral</th>
+                  <th scope="col">σT<sup>4</sup></th>
+                </tr>
+              </thead>
+              <tbody data-benchmark-body></tbody>
+            </table>
+          </div>
+        </div>
 
         <p class="evidence-error" data-evidence-error hidden>
-          Verified evidence could not be loaded. Numerical validation claims
-          have therefore been withheld.
+          Verified evidence could not be loaded. Numerical claims have
+          therefore been withheld.
         </p>
 
         <footer class="scope-note">
+          <p>
+            <strong>Material provenance.</strong> Einstein material parameters
+            follow the supplied official Task 3 BPhO Computational Physics
+            presentation; the project README records the source and conversion
+            chain. This section is reference evidence, separate from live
+            slider values.
+          </p>
           <div>
-            <p>
-              <strong>Scope.</strong>
-              The radiation model assumes an ideal blackbody. The Einstein
-              model reports C<sub>V</sub> for independent, identical-frequency
-              oscillators; it is not a Debye model and does not include
-              anharmonic or constant-pressure corrections.
-            </p>
-            <p>
-              B<sub>λ</sub> is radiance per steradian; M<sub>λ</sub> is
-              hemispherical exitance and equals πB<sub>λ</sub>. Canvas colours
-              aid reading only; conclusions come from labelled axes and
-              verified values.
-            </p>
+            <a href="../data/task-03-evidence.json" download>Evidence JSON</a>
+            <a href="../../task03_thermal_radiation/README.md">Project provenance</a>
           </div>
-          <nav aria-label="Download Task 3 evidence">
-            <a href="../data/task-03-evidence.json" download>Web evidence</a>
-            <a href="../../data/task03/planck_spectra.csv" download>
-              Planck CSV
-            </a>
-            <a href="../../data/task03/einstein_heat_capacity.csv" download>
-              Einstein CSV
-            </a>
-            <a href="../../data/task03/validation_report.json" download>
-              Validation report
-            </a>
-          </nav>
         </footer>
       </section>
 
-      <section class="action-chapter" aria-labelledby="action-title">
-        <div class="action-chapter__copy">
-          <p>Model and evidence</p>
-          <h2 id="action-title">Run the model.<br /><em>Question the curve.</em></h2>
-          <span>
-            Change the temperature, switch the plotted quantity, and compare
-            every visual claim with the downloadable numerical evidence.
-          </span>
+      <section class="debye-section" id="extension" aria-labelledby="debye-title" hidden>
+        <header class="debye-heading">
           <div>
-            <a class="action-link action-link--primary" href="#live-spectrum">
-              Return to live spectrum
-            </a>
-            <a
-              class="action-link action-link--secondary"
-              href="../../data/task03/validation_report.json"
-              download
-            >
-              Download validation report
-            </a>
+            <p>Debye comparison</p>
+            <h2 id="debye-title">From Einstein to Debye</h2>
           </div>
-        </div>
-        <div class="action-chapter__identity" aria-hidden="true">
-          <span>B<sub>λ</sub></span>
-          <i></i>
-          <span>C<sub>V</sub></span>
+          <span>
+            Einstein assigns every atom one vibration frequency. Debye includes
+            a continuum of acoustic modes and recovers the observed
+            low-temperature C<sub>V</sub> ∝ T<sup>3</sup> law.
+          </span>
+        </header>
+
+        <div class="debye-laboratory is-loading" data-debye-laboratory>
+          <form class="debye-toolbar" data-debye-form>
+            <label>
+              <span>Material</span>
+              <select id="debye-material" disabled>
+                <option value="Au">Gold · Au</option>
+                <option value="Cu">Copper · Cu</option>
+                <option value="Ti">Titanium · Ti</option>
+                <option value="Al">Aluminium · Al</option>
+                <option value="Fe" selected>Iron · Fe</option>
+                <option value="Si">Silicon · Si</option>
+                <option value="C">Carbon · C</option>
+              </select>
+            </label>
+            <label class="debye-temperature-control">
+              <span>
+                Reduced temperature, T / θ<sub>D</sub>
+                <output for="debye-temperature-ratio" data-debye-ratio-output>0.10</output>
+              </span>
+              <input
+                id="debye-temperature-ratio"
+                type="range"
+                min="0.02"
+                max="2"
+                step="0.01"
+                value="0.1"
+                disabled
+              />
+              <small><span>0.02</span><span>2.00</span></small>
+            </label>
+            <p class="debye-status" data-debye-status aria-live="polite">
+              Loading Debye comparison
+            </p>
+          </form>
+
+          <p class="evidence-error" data-debye-error hidden>
+            The Debye comparison could not be loaded. Comparison results
+            are unavailable.
+          </p>
+
+          <div class="debye-workspace" data-debye-content hidden>
+            <figure class="debye-chart-card">
+              <figcaption>
+                <div>
+                  <strong>Normalized molar heat capacity</strong>
+                  <span>Einstein and Debye predictions</span>
+                </div>
+                <div class="debye-legend" aria-hidden="true">
+                  <span><i class="debye-key"></i>Debye</span>
+                  <span><i class="einstein-key"></i>Einstein</span>
+                  <span><i class="limit-key"></i>3R limit</span>
+                </div>
+              </figcaption>
+              <canvas
+                id="debye-comparison-chart"
+                tabindex="0"
+                role="img"
+                aria-label="Normalized Einstein and Debye heat-capacity curves"
+              ></canvas>
+              <div class="chart-tooltip chart-tooltip--light" data-debye-tooltip hidden></div>
+            </figure>
+
+            <aside class="debye-readout-panel">
+              <header>
+                <span data-debye-material-name>Iron · Fe</span>
+                <strong data-debye-temperature>47.0 K</strong>
+              </header>
+              <dl aria-live="polite">
+                <div>
+                  <dt>Debye temperature</dt>
+                  <dd data-debye-theta>470.0 K</dd>
+                </div>
+                <div>
+                  <dt>Debye C<sub>V</sub></dt>
+                  <dd data-debye-capacity>—</dd>
+                </div>
+                <div>
+                  <dt>Einstein C<sub>V</sub></dt>
+                  <dd data-extension-einstein-capacity>—</dd>
+                </div>
+                <div class="debye-emphasis">
+                  <dt>Debye / Einstein</dt>
+                  <dd data-debye-ratio>—</dd>
+                </div>
+              </dl>
+              <p data-debye-interpretation>
+                At low temperature, acoustic modes give the solid substantially
+                more heat capacity than the Einstein model predicts.
+              </p>
+            </aside>
+          </div>
+
+          <div class="debye-equations" data-debye-content hidden>
+            <article>
+              <span>Einstein: one frequency</span>
+              <p data-proof-latex="C_V\sim e^{-\theta_E/T}">C<sub>V</sub> ∼ e<sup>−θ<sub>E</sub>/T</sup></p>
+              <small>Exponential suppression at low T.</small>
+            </article>
+            <article>
+              <span>Debye: continuum of modes</span>
+              <p data-proof-latex="C_V=9R\left(\dfrac{T}{\theta_D}\right)^3\int_0^{\theta_D/T}\dfrac{x^4e^x}{(e^x-1)^2}\,\mathrm{d}x">
+                C<sub>V</sub> = 9R(T/θ<sub>D</sub>)³
+                ∫<sub>0</sub><sup>θ<sub>D</sub>/T</sup>
+                x⁴eˣ/(eˣ−1)² dx
+              </p>
+              <small>All acoustic frequencies up to a cutoff.</small>
+            </article>
+            <article>
+              <span>Low-temperature result</span>
+              <p data-proof-latex="C_V\xrightarrow[T\ll\theta_D]{}\dfrac{12\pi^4}{5}R\left(\dfrac{T}{\theta_D}\right)^3">C<sub>V</sub> → (12π⁴/5)R(T/θ<sub>D</sub>)³</p>
+              <small>The experimentally characteristic T³ law.</small>
+            </article>
+          </div>
+
+          <footer class="debye-footer" data-debye-content hidden>
+            <p>
+              Both models approach 3R at high temperature. Their decisive
+              difference is the low-frequency physics at low temperature.
+            </p>
+            <div>
+              <button class="button" type="button" data-download-debye>Download CSV</button>
+              <button class="button" type="button" data-export-debye>Export figure</button>
+            </div>
+          </footer>
         </div>
       </section>
+
+
     </main>
 
     <footer class="page-footer">
@@ -701,11 +804,11 @@
       <a href="../tasks.html">Task index</a>
     </footer>
 
+    <script src="../vendor/packages/katex/katex.min.js"></script>
+    <script src="../assets/proof-math.js?v=20260808"></script>
     <script src="../data/task-03-evidence.js"></script>
-    <script src="../vendor/packages/gsap/dist/gsap.min.js"></script>
-    <script src="../vendor/packages/gsap/dist/ScrollTrigger.min.js"></script>
-    <script src="../assets/task-03-simulation.js"></script>
-    <script src="../assets/task-03-evidence.js"></script>
-    <script src="../assets/task-03-motion.js"></script>
+    <script src="../assets/task-03-evidence.js?v=20260813"></script>
+    <script src="../assets/task-03-simulation.js?v=20260808"></script>
+    <script src="../assets/task-03-navigation.js?v=20260808"></script>
   </body>
 </html>

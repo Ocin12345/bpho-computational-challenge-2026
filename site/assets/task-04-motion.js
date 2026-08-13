@@ -22,9 +22,7 @@
     .from(".hero-copy > p", { y: 24 }, "-=0.28")
     .from(".hero-copy h1", { y: 38 }, "-=0.58")
     .from(".hero-copy > span", { y: 27 }, "-=0.61")
-    .from(".threshold-chamber", { x: 35 }, "-=0.7")
-    .from(".hero-controls > *", { y: 24, stagger: 0.055 }, "-=0.53")
-    .from(".threshold-strip", { y: 20 }, "-=0.5");
+    .from(".task4-3d-embed", { y: 34 }, "-=0.7");
 
   const revealGroups = [
     {
@@ -54,15 +52,6 @@
         ".evidence-lock",
       ],
       y: 34,
-    },
-    {
-      trigger: ".extension-section",
-      selectors: [
-        ".extension-section .section-introduction > *",
-        ".extension-figure",
-        ".assumption-ledger > div",
-      ],
-      y: 38,
     },
   ];
 

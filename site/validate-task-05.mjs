@@ -13,30 +13,40 @@ const readJson = async (path) => JSON.parse(await readText(path));
 const [
   html,
   css,
+  minimalCss,
+  goldCss,
   atlasScript,
+  extensionScript,
   evidenceLoader,
-  motion,
+  navigation,
   taskIndex,
   levelText,
   transitionText,
   limitText,
   validation,
   manifest,
+  extensionTransitionText,
+  extensionEvidence,
   requiredPng,
   requiredSvg,
   plottingSource,
 ] = await Promise.all([
   readText("site/tasks/task-05.html"),
   readText("site/assets/task-05.css"),
+  readText("site/assets/task-05-minimal.css"),
+  readText("site/assets/task-05-gold.css").catch(() => ""),
   readText("site/assets/task-05-atlas.js"),
+  readText("site/assets/task-05-extension.js"),
   readText("site/assets/task-05-evidence.js"),
-  readText("site/assets/task-05-motion.js"),
+  readText("site/assets/task-05-navigation.js"),
   readText("site/tasks.html"),
   readText("data/task05/energy_levels.csv"),
   readText("data/task05/emission_transitions.csv"),
   readText("data/task05/series_limits.csv"),
   readJson("data/task05/validation_report.json"),
   readJson("data/task05/reproducibility_manifest.json"),
+  readText("data/task05/reduced_mass_transitions.csv"),
+  readJson("data/task05/reduced_mass_validation.json"),
   readFile(resolve(projectRoot, "figures/task05/photon_energy_vs_wavelength.png")),
   readText("figures/task05/photon_energy_vs_wavelength.svg"),
   readText("task05_hydrogen_spectrum/plotting.py"),
@@ -65,15 +75,64 @@ function relativeError(observed, expected) {
 const levels = parseCsv(levelText);
 const transitions = parseCsv(transitionText);
 const limits = parseCsv(limitText);
+const extensionTransitions = parseCsv(extensionTransitionText);
 const constants = manifest.constants;
+
+check(
+  "Accepted reduced-mass extension evidence",
+  extensionEvidence.schema_version === "task05-reduced-mass-v1" &&
+    extensionEvidence.status === "accepted_optional_extension" &&
+    extensionEvidence.baseline_model ===
+      "ideal stationary-nucleus Bohr hydrogen" &&
+    extensionEvidence.validation.passed === true &&
+    extensionEvidence.validation.check_count === 12 &&
+    extensionEvidence.validation.checks.length === 12 &&
+    extensionEvidence.validation.checks.every((entry) => entry.passed) &&
+    extensionTransitions.length === 45,
+  `${extensionEvidence.validation.checks.filter((entry) => entry.passed).length}/12 separate extension checks pass for all ${extensionTransitions.length} transitions.`,
+);
+
+check(
+  "Reduced-mass physics identities",
+  extensionTransitions.every((transition) => {
+    const ratio = extensionEvidence.constants.electron_proton_mass_ratio;
+    const factor = extensionEvidence.constants.reduced_mass_factor;
+    const idealEnergy = Number(transition.ideal_energy_ev);
+    const correctedEnergy = Number(transition.corrected_energy_ev);
+    const idealWavelength = Number(transition.ideal_wavelength_nm);
+    const correctedWavelength = Number(transition.corrected_wavelength_nm);
+    return (
+      correctedEnergy < idealEnergy &&
+      correctedWavelength > idealWavelength &&
+      relativeError(correctedEnergy, idealEnergy * factor) < 5e-13 &&
+      relativeError(correctedWavelength, idealWavelength * (1 + ratio)) <
+        5e-13 &&
+      relativeError(correctedEnergy * correctedWavelength, constants.hc_ev_nm) <
+        5e-13
+    );
+  }),
+  "Every extension line follows the CODATA electron-proton mass ratio, lengthens wavelength, lowers energy, and preserves Eλ=hc.",
+);
 
 check(
   "Accepted validation report",
   validation.schema_version === "task05-validation-v1" &&
     validation.passed === true &&
     validation.checks.length === 30 &&
-    validation.checks.every((entry) => entry.passed === true),
-  `${validation.checks.filter((entry) => entry.passed).length}/${validation.checks.length} independent checks pass.`,
+    validation.checks.every((entry) => entry.passed === true) &&
+    [
+      'id="validation"',
+      "Energy-scale invariant",
+      "Independent Rydberg route",
+      "Formula consistency, not experiment",
+      "58/58",
+      'data-validation-transitions',
+      'data-rydberg-residual',
+      'data-energy-scale',
+    ].every((marker) => html.includes(marker)) &&
+    atlasScript.includes("populateValidationEvidence") &&
+    atlasScript.includes("rydberg_constant_per_m"),
+  `${validation.checks.filter((entry) => entry.passed).length}/${validation.checks.length} checks pass and their formula-consistency evidence is exposed on-page.`,
 );
 
 check(
@@ -139,32 +198,50 @@ check(
           (final ** 2 / constants.rydberg_constant_per_m) * 1e9,
         ) < 5e-13
       );
-    }),
-  "Five finite-series destinations agree with E∞=ER/nf² and λ∞=nf²/R∞.",
+    }) &&
+    [
+      "approximate screen colour",
+      "neutral pseudocolours",
+      "Equal line heights",
+      "hydrogen_series_convergence.svg",
+      'id="convergence"',
+    ].every((marker) => html.includes(marker)) &&
+    atlasScript.includes('if (wavelengthNm < 380) return "#64748b"') &&
+    atlasScript.includes('if (wavelengthNm > 750) return "#8a8178"') &&
+    atlasScript.includes("formatRegion"),
+  "Five analytical limits are exposed with honest visible-colour and UV/IR pseudocolour conventions.",
 );
 
 check(
-  "Complete required website content",
+  "Judge-facing method and model boundary",
   [
+    'href="#spectrum"',
+    'href="#atlas"',
+    'href="#balmer"',
+    'href="#model"',
+    'href="#validation"',
     'id="energy-level-stage"',
     'id="emission-energy-chart"',
     'id="transition-selector"',
-    'data-series="Lyman"',
-    'data-series="Balmer"',
-    'data-visible-only',
-    "Forty-five emissions",
-    "Equal line heights show wavelength position",
-    "photon_energy_vs_wavelength.svg",
-    "bohr_energy_level_diagram.svg",
-    "balmer_visible_spectrum.svg",
-    "hydrogen_series_convergence.svg",
-    "30/30 independent checks",
-  ].every((marker) => html.includes(marker)),
-  "The required graph, level model, complete explorer, Balmer window, convergence, evidence, and downloads are present.",
+    'id="model"',
+    "Method",
+    "ideal calculated vacuum wavelengths",
+    "656.112 nm",
+    "stationary,",
+    "infinitely massive proton",
+    "Lyman",
+    "Balmer",
+    "Paschen",
+    "Brackett",
+    "Pfund",
+    'data-download-transition-csv',
+  ].every((marker) => html.includes(marker)) &&
+    !html.includes('class="video-cut"'),
+  "The five-route judge navigation exposes the ideal-model method, series map, H-alpha anchor, model boundary, and catalogue download.",
 );
 
 check(
-  "Interactive and keyboard-complete atlas",
+  "Interactive atlas and synchronized line spectrum",
   atlasScript.includes("handleChartPointerMove") &&
     atlasScript.includes("handleChartKeydown") &&
     atlasScript.includes('"ArrowLeft"') &&
@@ -173,34 +250,61 @@ check(
     atlasScript.includes('"End"') &&
     atlasScript.includes("transitionSelector.addEventListener") &&
     atlasScript.includes("ResizeObserver") &&
-    atlasScript.includes("state.visibleOnly"),
-  "Pointer, select, previous/next, series filter, visible-window toggle, and keyboard navigation are implemented.",
+    atlasScript.includes("state.visibleOnly") &&
+    atlasScript.includes("updateBalmerSelection") &&
+    atlasScript.includes("data-transition-index") &&
+    atlasScript.includes("downloadTransitionCsv"),
+  "Pointer, keyboard, filters, transition controls, selected-line highlighting, and CSV export are implemented.",
 );
 
 check(
-  "Fail-closed evidence state",
+  "Visible and initialized reduced-mass extension",
+  [
+    'id="mass-transition-selector"',
+    'id="mass-comparison-chart"',
+    "When the proton is allowed to move",
+    "Equal marker heights show",
+    "reduced_mass_transitions.csv",
+    "data-download-mass-chart",
+  ].every((marker) => html.includes(marker)) &&
+    extensionScript.includes("validateEvidence") &&
+    extensionScript.includes("ResizeObserver") &&
+    extensionScript.includes("canvas.toBlob") &&
+    extensionScript.includes('dataset.task05ExtensionStatus = "ready"') &&
+    !extensionScript.includes("requestAnimationFrame") &&
+    !extensionScript.includes("setInterval(") &&
+    html.includes('data-task="05"') &&
+    html.includes("../assets/task-05-extension.js") &&
+    goldCss.includes(".extension-section"),
+  "The accepted 45-line moving-proton comparison is loaded, validated, visible, and downloadable.",
+);
+
+check(
+  "Fail-closed evidence state without dormant loading",
   html.includes("data-instrument-loading") &&
     html.includes("data-instrument-error") &&
     html.includes("data-atlas-error") &&
-    html.includes('data-locked="false"') &&
     evidenceLoader.includes("throw new Error") &&
     atlasScript.includes('dataset.task05Status = "error"') &&
-    atlasScript.includes('dataset.locked = "false"') &&
-    atlasScript.includes("disableControls()"),
-  "Loading, verified, and explicit locked-error states prevent unvalidated interaction.",
+    atlasScript.includes("disableControls()") &&
+    extensionScript.includes('dataset.task05ExtensionStatus = "error"') &&
+    html.includes("data-mass-error"),
+  "Both evidence loaders fail closed, while the extension script resolves the visible loading state to ready or explicit error.",
 );
 
 check(
-  "Local typography and motion dependencies",
-  html.includes("../vendor/packages/gsap/dist/gsap.min.js") &&
-    html.includes("../vendor/packages/gsap/dist/ScrollTrigger.min.js") &&
+  "Local typography and restrained presentation",
+    html.includes("../assets/task-05-minimal.css") &&
+    html.includes("../assets/task-05-gold.css") &&
+    html.includes("../assets/task-video.css") &&
+    html.includes("../assets/task-05-navigation.js") &&
+    !html.includes("gsap.min.js") &&
+    !html.includes("ScrollTrigger.min.js") &&
     !/<(?:script|link)\b[^>]+(?:src|href)=["']https?:\/\//i.test(html) &&
-    css.includes('"Geist"') &&
-    css.includes('"Bodoni Moda Variable"') &&
-    css.includes('--figure: "Times New Roman"') &&
-    !css.includes('"Inter"') &&
+    minimalCss.includes('--serif: "Times New Roman"') &&
+    minimalCss.includes(".section-nav") &&
     atlasScript.match(/"Times New Roman"/g)?.length >= 8,
-  "Pinned local interface fonts and motion are used; all scientific canvas text uses Times New Roman.",
+  "The interface uses local formal typography, simple section navigation, and no decorative motion dependency.",
 );
 
 check(
@@ -227,22 +331,25 @@ check(
 
 check(
   "Responsive and reduced-motion safeguards",
-  css.includes("100dvh") &&
-    css.includes("@media (max-width: 767px)") &&
-    css.includes("@media (max-width: 410px)") &&
-    css.includes("@media (prefers-reduced-motion: reduce)") &&
-    motion.includes("prefers-reduced-motion: reduce") &&
-    motion.includes("pagehide"),
-  "Dynamic viewport, strict mobile layouts, reduced-motion handling, and cleanup paths are present.",
+  minimalCss.includes("100dvh") &&
+    minimalCss.includes("@media (max-width: 760px)") &&
+    minimalCss.includes("@media (prefers-reduced-motion: reduce)") &&
+    navigation.includes("IntersectionObserver") &&
+    minimalCss.includes(".extension-section") &&
+    minimalCss.includes(".mass-table-wrap") &&
+    goldCss.includes("@media (max-width: 760px)") &&
+    goldCss.includes("overflow-x: auto"),
+  "Dynamic viewport, mobile section navigation, validation tables, reduced motion, and section tracking are present.",
 );
 
 check(
   "Honest extension boundary",
-  html.includes("A classical “electron orbit” animation was intentionally deferred") &&
-    html.includes("Equal line strength") &&
-    html.includes("Preferred future extension") &&
+  html.includes("leading reduced-mass correction accounts for proton motion") &&
+    html.includes("Energy eigenstates are not literal planetary paths") &&
+    html.includes("does not calculate line strength") &&
+    html.includes("not a precision fit to measured hydrogen") &&
     !html.includes("electron-orbit animation"),
-  "The page explains why decorative orbital motion and unmodelled spectral claims are excluded.",
+  "The reduced-mass result remains separate from the baseline and excludes orbital, intensity, linewidth, and precision-spectroscopy claims.",
 );
 
 check(

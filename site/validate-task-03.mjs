@@ -10,34 +10,35 @@ const root = dirname(here);
 
 const paths = {
   evidence: join(here, "data", "task-03-evidence.json"),
+  debyeEvidence: join(here, "data", "task-03-debye-validation.json"),
   html: join(here, "tasks", "task-03.html"),
   css: join(here, "assets", "task-03.css"),
+  minimalCss: join(here, "assets", "task-03-minimal.css"),
   simulation: join(here, "assets", "task-03-simulation.js"),
+  extensionScript: join(here, "assets", "task-03-extension.js"),
   evidenceScript: join(here, "assets", "task-03-evidence.js"),
-  motionScript: join(here, "assets", "task-03-motion.js"),
-  vendorPackage: join(here, "vendor", "package.json"),
-  vendorLock: join(here, "vendor", "package-lock.json"),
+  navigationScript: join(here, "assets", "task-03-navigation.js"),
   taskIndex: join(here, "tasks.html"),
   sourceValidation: join(root, "data", "task03", "validation_report.json"),
 };
 
 const [
   evidenceText,
+  debyeEvidenceText,
   html,
   css,
+  minimalCss,
   simulation,
+  extensionScript,
   evidenceScript,
-  motionScript,
-  vendorPackageText,
-  vendorLockText,
+  navigationScript,
   taskIndex,
   sourceText,
 ] =
   await Promise.all(Object.values(paths).map((path) => readFile(path, "utf8")));
 const evidence = JSON.parse(evidenceText);
+const debyeEvidence = JSON.parse(debyeEvidenceText);
 const sourceValidation = JSON.parse(sourceText);
-const vendorPackage = JSON.parse(vendorPackageText);
-const vendorLock = JSON.parse(vendorLockText);
 
 const relativeError = (observed, expected) =>
   Math.abs(observed - expected) / Math.abs(expected);
@@ -52,6 +53,26 @@ assert.equal(sourceValidation.passed, true);
 assert.equal(sourceValidation.checks.length, 27);
 assert.ok(sourceValidation.checks.every((check) => check.passed));
 assert.equal(evidence.generated_from.length, 6);
+
+assert.equal(debyeEvidence.schema_version, 1);
+assert.equal(debyeEvidence.accepted, true);
+assert.equal(debyeEvidence.materials.length, 7);
+assert.equal(debyeEvidence.curve.length, 251);
+assert.equal(debyeEvidence.diagnostics.length, 6);
+assert.equal(debyeEvidence.curve[0].debye_over_3r, 0);
+assert.equal(debyeEvidence.curve[0].einstein_over_3r, 0);
+assert.ok(
+  debyeEvidence.curve
+    .slice(1)
+    .every(
+      (point) =>
+        point.debye_over_3r > point.einstein_over_3r &&
+        point.debye_over_3r <= 1,
+    ),
+);
+assert.ok(debyeEvidence.checks.low_temperature_cubic_relative_error < 1e-10);
+assert.ok(debyeEvidence.checks.high_temperature_series_relative_error < 1e-12);
+assert.ok(debyeEvidence.checks.quadrature_convergence_over_3r < 1e-11);
 
 const constants = evidence.constants;
 for (const temperature of [4000, 5000, 6000]) {
@@ -164,38 +185,57 @@ for (const symbol of normalizedSymbols.slice(1)) {
 [
   'id="planck-live-chart"',
   'id="einstein-chart"',
-  'id="planck-evidence-chart"',
-  'id="einstein-collapse-chart"',
+  'id="spectrum"',
+  'id="einstein"',
+  'id="method"',
+  'id="validation"',
+  'id="extension"',
+  'aria-labelledby="debye-title" hidden',
+  'class="section-nav"',
+  'class="task-identity"',
   'data-temperature-preset="4000"',
   'data-planck-quantity="radiance"',
   'data-planck-quantity="exitance"',
-  'data-evidence-quantity="radiance"',
-  'data-evidence-quantity="exitance"',
+  'data-planck-mode="single"',
+  'data-planck-mode="compare"',
+  'data-planck-legend',
   'data-material="C"',
+  'data-evidence-content',
+  'data-check-count',
+  'data-wien-error',
+  'data-integral-error',
+  'data-collapse-error',
+  'data-benchmark-body',
+  'id="planck-evidence-chart"',
+  'id="einstein-collapse-chart"',
+  'id="debye-comparison-chart"',
+  'id="debye-material"',
+  'id="debye-temperature-ratio"',
+  "From Einstein to Debye",
+  "C<sub>V</sub> ∝ T<sup>3</sup>",
   "Required Planck radiance",
-  "Every item in the Task 3 brief",
-  "gold, copper and iron",
-  "../data/task-03-evidence.js",
+  "Einstein heat capacity",
   "../assets/task-03-simulation.js",
-  "../assets/task-03-evidence.js",
-  "../assets/task-03-motion.js",
-  "../vendor/packages/gsap/dist/gsap.min.js",
-  "ScrollTrigger.min.js",
-  'class="spectrum-scan"',
-  "orb-orbit--one",
-  'class="constants-marquee"',
+  "../assets/task-03-navigation.js",
+  "../assets/task-03-minimal.css",
+  "../assets/task-video.css",
+  'class="video-cut"',
+  'data-task="03"',
   'class="einstein-scroll-layout"',
-  'class="validation-carousel"',
-  'data-verdict-slide',
-  'class="action-chapter"',
-  "../../data/task03/validation_report.json",
 ].forEach((marker) => assert.ok(html.includes(marker), `Missing ${marker}`));
 
-assert.equal(vendorPackage.dependencies.gsap, "3.15.0");
-assert.equal(vendorPackage.dependencies.geist, "1.7.2");
-assert.equal(vendorPackage.dependencies["@fontsource-variable/bodoni-moda"], "5.3.0");
-assert.equal(vendorPackage.dependencies["@fontsource-variable/cormorant"], "5.3.0");
-assert.equal(vendorLock.lockfileVersion, 3);
+assert.ok(!html.includes('href="#extension"'));
+assert.ok(html.includes("../assets/task-03-evidence.js"));
+assert.ok(html.includes("Reference validation"));
+assert.ok(html.includes("Material provenance"));
+
+[
+  "../assets/task-03-motion.js",
+  "gsap.min.js",
+  "ScrollTrigger.min.js",
+  'class="validation-carousel"',
+  'class="action-chapter"',
+].forEach((marker) => assert.ok(!html.includes(marker), `Redundant ${marker}`));
 
 assert.ok(taskIndex.includes('href="./tasks/task-03.html"'));
 assert.ok(
@@ -211,15 +251,20 @@ assert.ok(
 assert.ok(!/href="#task-03"[\s\S]{0,120}aria-disabled="true"/m.test(taskIndex));
 
 assert.ok(css.includes('--figure: "Times New Roman"'));
-assert.ok(css.includes('font-family: "Geist"'));
-assert.ok(css.includes("Geist-Variable.woff2"));
-assert.ok(css.includes("grid-template-columns: repeat(6, minmax(0, 1fr))"));
-assert.ok(css.includes("grid-auto-flow: dense"));
-assert.ok(css.includes("@keyframes constants-marquee"));
 assert.ok(css.includes(".material-selector button.is-active"));
 assert.ok(css.includes("@media (max-width: 900px)"));
 assert.ok(css.includes("@media (max-width: 620px)"));
 assert.ok(css.includes("@media (prefers-reduced-motion: reduce)"));
+assert.ok(minimalCss.includes('--serif: "Times New Roman"'));
+assert.ok(minimalCss.includes(".section-nav"));
+assert.ok(minimalCss.includes(".radiation-hero"));
+assert.ok(minimalCss.includes(".einstein-workbench"));
+assert.ok(minimalCss.includes(".debye-laboratory"));
+assert.ok(minimalCss.includes(".debye-workspace"));
+assert.ok(minimalCss.includes("#debye-comparison-chart"));
+assert.ok(minimalCss.includes(".evidence-metrics"));
+assert.ok(minimalCss.includes("@media (max-width: 760px)"));
+assert.ok(minimalCss.includes("@media (prefers-reduced-motion: reduce)"));
 assert.ok(!html.includes("family=Inter"));
 assert.ok(!css.includes('--sans: "Inter"'));
 assert.ok(!html.includes("01 ·"));
@@ -228,20 +273,25 @@ assert.ok(!html.includes("03 ·"));
 assert.ok(simulation.includes('"Times New Roman"'));
 assert.ok(evidenceScript.includes('"Times New Roman"'));
 assert.ok(simulation.includes("Math.expm1"));
+assert.ok(extensionScript.includes("task-03-debye-validation.json"));
+assert.ok(extensionScript.includes("window.devicePixelRatio"));
+assert.ok(extensionScript.includes("interpolateCurve"));
+assert.ok(!html.includes("Validation JSON"));
+assert.ok(!minimalCss.includes("linear-gradient"));
+assert.ok(!minimalCss.includes("radial-gradient"));
 assert.ok(evidenceScript.includes("normalized_series"));
 assert.ok(evidenceScript.includes("runMaterialTransition"));
 assert.ok(evidenceScript.includes("startEvidenceReveal"));
-assert.ok(motionScript.includes("IntersectionObserver"));
-assert.ok(motionScript.includes("prefers-reduced-motion"));
-assert.ok(motionScript.includes("gsap.registerPlugin(ScrollTrigger)"));
-assert.ok(motionScript.includes("pin: heading"));
-assert.ok(motionScript.includes("data-verdict-slide"));
+assert.ok(navigationScript.includes("IntersectionObserver"));
+assert.ok(navigationScript.includes("aria-current"));
 assert.ok(simulation.includes("animateTemperatureTo"));
 assert.ok(simulation.includes("Math.sin(phase)"));
+assert.ok(simulation.includes('document.addEventListener("visibilitychange"'));
 
 console.log("Task 03 website validation passed.");
 console.log("  scientific source: 27 / 27 checks");
 console.log("  Planck web series: 3 × 581 points");
 console.log("  Einstein web series: 7 × 201 points");
 console.log("  normalized curves: 7 × 201 points");
-console.log("  index, controls, downloads, fonts and responsive rules: present");
+console.log("  Debye extension retained outside filming path: 251 validated normalized points across 7 solids");
+console.log("  focused layout, controls, downloads and responsive rules: present");

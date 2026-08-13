@@ -37,20 +37,20 @@ const elements = {
   glassCanvas: document.querySelector("#glass-canvas"),
   sliceCanvas: document.querySelector("#slice-canvas"),
   radialCanvas: document.querySelector("#radial-canvas"),
+  scalingCanvas: document.querySelector("#z-scaling-canvas"),
   glassLoading: document.querySelector("[data-glass-loading]"),
   glassError: document.querySelector("[data-glass-error]"),
   sliceError: document.querySelector("[data-slice-error]"),
   radialError: document.querySelector("[data-radial-error]"),
+  scalingError: document.querySelector("[data-scaling-error]"),
   sliceTitle: document.querySelector("[data-slice-title]"),
   radialTitle: document.querySelector("[data-radial-title]"),
   radialNodes: document.querySelector("[data-radial-nodes]"),
   angularNodes: document.querySelector("[data-angular-nodes]"),
   parity: document.querySelector("[data-parity]"),
-  coreChecks: document.querySelector("[data-core-checks]"),
-  evidenceLock: document.querySelector("[data-evidence-lock]"),
-  lockTitle: document.querySelector("[data-lock-title]"),
-  lockDetail: document.querySelector("[data-lock-detail]"),
-  evidenceStatus: document.querySelector("[data-evidence-status]"),
+  scalingTitle: document.querySelector("[data-scaling-title]"),
+  scalingState: document.querySelector("[data-scaling-state]"),
+  ionRows: [...document.querySelectorAll("[data-ion-row]")],
 };
 
 const ELEMENT_SYMBOLS = Object.freeze([
@@ -76,16 +76,33 @@ const ELEMENT_SYMBOLS = Object.freeze([
   "Ca",
 ]);
 
-const MAGMA_STOPS = Object.freeze([
-  [0, [0, 0, 4]],
-  [0.18, [42, 12, 76]],
-  [0.38, [107, 29, 128]],
-  [0.58, [178, 52, 123]],
-  [0.78, [241, 103, 92]],
-  [1, [252, 253, 191]],
+const DENSITY_STOPS = Object.freeze([
+  [0, [250, 247, 239]],
+  [0.2, [229, 210, 181]],
+  [0.42, [205, 157, 109]],
+  [0.64, [178, 101, 69]],
+  [0.84, [121, 67, 54]],
+  [1, [54, 42, 38]],
 ]);
 
+const FIGURE = Object.freeze({
+  paper: "#fcfbf7",
+  ink: "#302c27",
+  muted: "#746e65",
+  grid: "rgba(72, 65, 58, .11)",
+  gridStrong: "rgba(72, 65, 58, .24)",
+  rust: "#a4533e",
+  teal: "#3f7771",
+  tealSoft: "rgba(63, 119, 113, .18)",
+  ochre: "#b79552",
+});
+
 const FIGURE_FONT = '"Times New Roman", Times, serif';
+const SCALING_IONS = Object.freeze([
+  Object.freeze({ Z: 1, A: 1, label: "H", colour: FIGURE.rust }),
+  Object.freeze({ Z: 2, A: 4, label: "He⁺", colour: FIGURE.teal }),
+  Object.freeze({ Z: 3, A: 6, label: "Li²⁺", colour: FIGURE.ochre }),
+]);
 const VIEW_SCALE = 0.37;
 const camera = { yaw: -0.82, pitch: 0.43, zoom: 1 };
 
@@ -121,7 +138,7 @@ function populateControls() {
     Array.from({ length: 8 }, (_, index) => [index + 1, String(index + 1)]),
     3,
   );
-  const presets = [["", "Custom validated state"]];
+  const presets = [["", "Custom state"]];
   for (const state of officialGalleryStates()) {
     presets.push([
       `${state.n},${state.l},${state.m}`,
@@ -250,14 +267,14 @@ function fitCanvas(canvas) {
   return { context, width, height, ratio };
 }
 
-function magma(value) {
+function densityColour(value) {
   const bounded = Math.max(0, Math.min(1, value));
-  let lower = MAGMA_STOPS[0];
-  let upper = MAGMA_STOPS[MAGMA_STOPS.length - 1];
-  for (let index = 1; index < MAGMA_STOPS.length; index += 1) {
-    if (bounded <= MAGMA_STOPS[index][0]) {
-      lower = MAGMA_STOPS[index - 1];
-      upper = MAGMA_STOPS[index];
+  let lower = DENSITY_STOPS[0];
+  let upper = DENSITY_STOPS[DENSITY_STOPS.length - 1];
+  for (let index = 1; index < DENSITY_STOPS.length; index += 1) {
+    if (bounded <= DENSITY_STOPS[index][0]) {
+      lower = DENSITY_STOPS[index - 1];
+      upper = DENSITY_STOPS[index];
       break;
     }
   }
@@ -287,7 +304,7 @@ function densityTexture(
     for (let column = 0; column < resolution; column += 1) {
       const sourceIndex = sourceRow * resolution + column;
       const relative = values[sourceIndex] / maximum;
-      const colour = magma(relative ** 0.55);
+      const colour = densityColour(relative ** 0.58);
       const imageIndex = 4 * (displayRow * resolution + column);
       let boundary = false;
       if (contour && relative >= threshold) {
@@ -311,9 +328,9 @@ function densityTexture(
           }
         }
       }
-      image.data[imageIndex] = boundary ? 255 : colour[0];
-      image.data[imageIndex + 1] = boundary ? 255 : colour[1];
-      image.data[imageIndex + 2] = boundary ? 255 : colour[2];
+      image.data[imageIndex] = boundary ? 63 : colour[0];
+      image.data[imageIndex + 1] = boundary ? 55 : colour[1];
+      image.data[imageIndex + 2] = boundary ? 49 : colour[2];
       image.data[imageIndex + 3] = transparent
         ? relative < threshold
           ? 0
@@ -375,20 +392,20 @@ function drawColourScale(context, width, height, threshold) {
   const left = width - scaleWidth - 24;
   const top = height - 42;
   const gradient = context.createLinearGradient(left, 0, left + scaleWidth, 0);
-  MAGMA_STOPS.forEach(([stop, colour]) => {
+  DENSITY_STOPS.forEach(([stop, colour]) => {
     gradient.addColorStop(stop, `rgb(${colour.join(",")})`);
   });
   context.fillStyle = gradient;
   context.fillRect(left, top, scaleWidth, 7);
-  context.strokeStyle = "rgba(255,255,255,.35)";
+  context.strokeStyle = FIGURE.gridStrong;
   context.strokeRect(left, top, scaleWidth, 7);
-  context.fillStyle = "rgba(244,238,246,.82)";
+  context.fillStyle = FIGURE.muted;
   context.font = `12px ${FIGURE_FONT}`;
   context.textAlign = "left";
   context.fillText("0", left, top - 6);
   context.textAlign = "right";
   context.fillText("relative density 1", left + scaleWidth, top - 6);
-  context.fillStyle = "#64e7dc";
+  context.fillStyle = FIGURE.teal;
   context.textAlign = "center";
   context.fillText(
     `cutoff ${threshold.toFixed(2)}`,
@@ -400,21 +417,10 @@ function drawColourScale(context, width, height, threshold) {
 
 function renderGlass(stack, display, state) {
   const { context, width, height } = fitCanvas(elements.glassCanvas);
-  const background = context.createRadialGradient(
-    width * 0.49,
-    height * 0.42,
-    20,
-    width * 0.5,
-    height * 0.5,
-    width * 0.72,
-  );
-  background.addColorStop(0, "#22112d");
-  background.addColorStop(0.48, "#101323");
-  background.addColorStop(1, "#06050b");
-  context.fillStyle = background;
+  context.fillStyle = FIGURE.paper;
   context.fillRect(0, 0, width, height);
 
-  context.strokeStyle = "rgba(166,136,255,.075)";
+  context.strokeStyle = FIGURE.grid;
   context.lineWidth = 1;
   for (let index = 1; index <= 4; index += 1) {
     context.beginPath();
@@ -453,7 +459,7 @@ function renderGlass(stack, display, state) {
   const basisY = [-sineYaw, sinePitch * cosineYaw];
   const basisZ = [0, -cosinePitch];
 
-  context.strokeStyle = "rgba(100,231,220,.095)";
+  context.strokeStyle = FIGURE.tealSoft;
   context.lineWidth = 0.8;
   for (const { slice, texture } of ordered) {
     const z = slice.z / display.extent;
@@ -479,23 +485,20 @@ function renderGlass(stack, display, state) {
     context.restore();
   }
 
-  drawAxis(context, width, height, 1.22, 0, 0, "#a688ff", "x");
-  drawAxis(context, width, height, 0, 1.22, 0, "#64e7dc", "y");
-  drawAxis(context, width, height, 0, 0, 1.22, "#f64ccc", "z");
+  drawAxis(context, width, height, 1.22, 0, 0, FIGURE.ink, "x");
+  drawAxis(context, width, height, 0, 1.22, 0, FIGURE.teal, "y");
+  drawAxis(context, width, height, 0, 0, 1.22, FIGURE.rust, "z");
 
-  context.fillStyle = "#fff0d7";
+  context.fillStyle = FIGURE.ink;
   context.font = `24px ${FIGURE_FONT}`;
   context.fillText(stateLabel(state), 24, 38);
-  context.fillStyle = "rgba(223,214,226,.76)";
+  context.fillStyle = FIGURE.muted;
   context.font = `14px ${FIGURE_FONT}`;
   context.fillText(
     `${display.sliceCount} fixed xy planes · axes in n²a`,
     24,
     61,
   );
-  context.fillStyle = "#64e7dc";
-  context.font = `italic 13px ${FIGURE_FONT}`;
-  context.fillText("stationary |ψ|² · camera view only", 24, height - 24);
   drawColourScale(context, width, height, display.threshold);
 }
 
@@ -517,12 +520,12 @@ function drawSlicePanel(
     false,
     true,
   );
-  context.fillStyle = "#040308";
+  context.fillStyle = FIGURE.paper;
   context.fillRect(x, y, size, size);
   context.imageSmoothingEnabled = true;
   context.imageSmoothingQuality = "high";
   context.drawImage(texture, x, y, size, size);
-  context.strokeStyle = "rgba(255,255,255,.25)";
+  context.strokeStyle = FIGURE.gridStrong;
   context.lineWidth = 1;
   context.strokeRect(x + 0.5, y + 0.5, size - 1, size - 1);
   context.beginPath();
@@ -537,10 +540,10 @@ function drawSlicePanel(
     xz: "xz · y = 0",
     yz: "yz · x = 0",
   }[planeData.plane];
-  context.fillStyle = "#fff0d7";
+  context.fillStyle = FIGURE.ink;
   context.font = `17px ${FIGURE_FONT}`;
   context.fillText(planeLabel, x, y - 13);
-  context.fillStyle = "rgba(223,214,226,.72)";
+  context.fillStyle = FIGURE.muted;
   context.font = `12px ${FIGURE_FONT}`;
   context.fillText(`−${display.extent.toFixed(1)}`, x, y + size + 17);
   context.textAlign = "right";
@@ -554,7 +557,7 @@ function drawSlicePanel(
 
 function renderSlices(data, display, state) {
   const { context, width, height } = fitCanvas(elements.sliceCanvas);
-  context.fillStyle = "#08070e";
+  context.fillStyle = FIGURE.paper;
   context.fillRect(0, 0, width, height);
 
   const vertical = width < 640;
@@ -586,10 +589,10 @@ function renderSlices(data, display, state) {
     });
   }
 
-  context.fillStyle = "#64e7dc";
-  context.font = `italic 13px ${FIGURE_FONT}`;
+  context.fillStyle = FIGURE.muted;
+  context.font = `13px ${FIGURE_FONT}`;
   context.fillText(
-    `${stateLabel(state)} · common maximum · white contour = ${display.threshold.toFixed(2)}`,
+    `${stateLabel(state)} · shared scale · contour ${display.threshold.toFixed(2)}`,
     22,
     height - 23,
   );
@@ -615,14 +618,11 @@ function renderRadial(state) {
   const y = (value) =>
     margin.top + plotHeight * (1 - value / (1.08 * maximum));
 
-  const background = context.createLinearGradient(0, 0, 0, height);
-  background.addColorStop(0, "#130d19");
-  background.addColorStop(1, "#07060b");
-  context.fillStyle = background;
+  context.fillStyle = FIGURE.paper;
   context.fillRect(0, 0, width, height);
 
-  context.strokeStyle = "rgba(166,136,255,.14)";
-  context.fillStyle = "rgba(222,214,226,.68)";
+  context.strokeStyle = FIGURE.grid;
+  context.fillStyle = FIGURE.muted;
   context.font = `12px ${FIGURE_FONT}`;
   context.lineWidth = 1;
   for (let index = 0; index <= 5; index += 1) {
@@ -647,8 +647,8 @@ function renderRadial(state) {
   }
 
   const area = context.createLinearGradient(0, margin.top, 0, height - margin.bottom);
-  area.addColorStop(0, "rgba(246,76,204,.52)");
-  area.addColorStop(1, "rgba(166,136,255,.04)");
+  area.addColorStop(0, "rgba(164, 83, 62, .34)");
+  area.addColorStop(1, "rgba(164, 83, 62, .025)");
   context.beginPath();
   context.moveTo(x(0), y(0));
   profile.forEach((point) =>
@@ -667,7 +667,7 @@ function renderRadial(state) {
       y(point.probabilityPerScaledRadius),
     );
   });
-  context.strokeStyle = "#f64ccc";
+  context.strokeStyle = FIGURE.rust;
   context.lineWidth = 2.4;
   context.stroke();
 
@@ -677,14 +677,14 @@ function renderRadial(state) {
   for (const row of nodeRows) {
     const position = Number(row.radius_over_n_squared_a);
     context.setLineDash([5, 5]);
-    context.strokeStyle = "#64e7dc";
+    context.strokeStyle = FIGURE.teal;
     context.lineWidth = 1.2;
     context.beginPath();
     context.moveTo(x(position), margin.top);
     context.lineTo(x(position), height - margin.bottom);
     context.stroke();
     context.setLineDash([]);
-    context.fillStyle = "#64e7dc";
+    context.fillStyle = FIGURE.teal;
     context.textAlign = "center";
     context.font = `italic 11px ${FIGURE_FONT}`;
     context.fillText(`node ${row.node_index}`, x(position), margin.top + 14);
@@ -695,7 +695,7 @@ function renderRadial(state) {
       ? point
       : best,
   );
-  context.fillStyle = "#fff0d7";
+  context.fillStyle = FIGURE.ochre;
   context.beginPath();
   context.arc(
     x(peak.scaledRadius),
@@ -706,7 +706,7 @@ function renderRadial(state) {
   );
   context.fill();
 
-  context.strokeStyle = "rgba(255,240,215,.72)";
+  context.strokeStyle = FIGURE.gridStrong;
   context.lineWidth = 1.2;
   context.beginPath();
   context.moveTo(margin.left, margin.top);
@@ -714,7 +714,7 @@ function renderRadial(state) {
   context.lineTo(width - margin.right, height - margin.bottom);
   context.stroke();
 
-  context.fillStyle = "#fff0d7";
+  context.fillStyle = FIGURE.ink;
   context.font = `16px ${FIGURE_FONT}`;
   context.textAlign = "center";
   context.fillText(
@@ -728,12 +728,171 @@ function renderRadial(state) {
   context.fillText("probability per d[r/(n²a)]", 0, 0);
   context.restore();
   context.textAlign = "left";
-  context.fillStyle = "rgba(223,214,226,.76)";
+  context.fillStyle = FIGURE.muted;
   context.font = `13px ${FIGURE_FONT}`;
   context.fillText(
     `${stateLabel(state)} · normalized radial distribution`,
     margin.left,
     21,
+  );
+}
+
+function renderIonScaling(selectedState) {
+  const { context, width, height } = fitCanvas(elements.scalingCanvas);
+  const compact = width < 560;
+  const margin = {
+    left: compact ? 58 : 76,
+    right: compact ? 18 : 30,
+    top: compact ? 72 : 62,
+    bottom: compact ? 72 : 78,
+  };
+  const plotWidth = width - margin.left - margin.right;
+  const plotHeight = height - margin.top - margin.bottom;
+  const scaledExtent = 6.2;
+  const series = SCALING_IONS.map((ion) => {
+    const state = validateState({
+      n: selectedState.n,
+      l: selectedState.l,
+      m: selectedState.m,
+      Z: ion.Z,
+      A: ion.A,
+    });
+    const summary = stateSummary(state);
+    const radialScaleAngstrom =
+      state.n ** 2 * summary.effectiveBohrRadiusAngstrom;
+    const points = radialProfile(state, {
+      extent: scaledExtent,
+      samples: 701,
+    }).map((point) => ({
+      radiusAngstrom: point.scaledRadius * radialScaleAngstrom,
+      probabilityPerAngstrom:
+        point.probabilityPerScaledRadius / radialScaleAngstrom,
+    }));
+    return Object.freeze({ ion, state, summary, points });
+  });
+
+  const xMaximum =
+    scaledExtent *
+    selectedState.n ** 2 *
+    series[0].summary.effectiveBohrRadiusAngstrom;
+  const yMaximum =
+    1.08 *
+    Math.max(
+      ...series.flatMap(({ points }) =>
+        points.map((point) => point.probabilityPerAngstrom),
+      ),
+    );
+  const x = (value) => margin.left + (plotWidth * value) / xMaximum;
+  const y = (value) =>
+    margin.top + plotHeight * (1 - value / Math.max(yMaximum, 1e-12));
+  const tick = (value) => {
+    if (value >= 10) return value.toFixed(0);
+    if (value >= 1) return value.toFixed(1);
+    return value.toFixed(2);
+  };
+
+  context.fillStyle = FIGURE.paper;
+  context.fillRect(0, 0, width, height);
+  context.strokeStyle = FIGURE.grid;
+  context.fillStyle = FIGURE.muted;
+  context.font = `12px ${FIGURE_FONT}`;
+  context.lineWidth = 1;
+  for (let index = 0; index <= 5; index += 1) {
+    const value = (xMaximum * index) / 5;
+    const position = x(value);
+    context.beginPath();
+    context.moveTo(position, margin.top);
+    context.lineTo(position, height - margin.bottom);
+    context.stroke();
+    context.textAlign = "center";
+    context.fillText(tick(value), position, height - margin.bottom + 23);
+  }
+  for (let index = 0; index <= 4; index += 1) {
+    const value = (yMaximum * index) / 4;
+    const position = y(value);
+    context.beginPath();
+    context.moveTo(margin.left, position);
+    context.lineTo(width - margin.right, position);
+    context.stroke();
+    context.textAlign = "right";
+    context.fillText(tick(value), margin.left - 9, position + 4);
+  }
+
+  for (const { ion, points } of series) {
+    context.beginPath();
+    points.forEach((point, index) => {
+      context[index === 0 ? "moveTo" : "lineTo"](
+        x(point.radiusAngstrom),
+        y(point.probabilityPerAngstrom),
+      );
+    });
+    context.strokeStyle = ion.colour;
+    context.lineWidth = 2.5;
+    context.lineJoin = "round";
+    context.lineCap = "round";
+    context.stroke();
+  }
+
+  context.strokeStyle = FIGURE.gridStrong;
+  context.lineWidth = 1.2;
+  context.beginPath();
+  context.moveTo(margin.left, margin.top);
+  context.lineTo(margin.left, height - margin.bottom);
+  context.lineTo(width - margin.right, height - margin.bottom);
+  context.stroke();
+
+  const legendGap = compact ? Math.max(72, (width - 32) / 3) : 112;
+  const legendLeft = compact ? 14 : margin.left;
+  series.forEach(({ ion }, index) => {
+    const legendX = legendLeft + index * legendGap;
+    context.strokeStyle = ion.colour;
+    context.lineWidth = 3;
+    context.beginPath();
+    context.moveTo(legendX, 25);
+    context.lineTo(legendX + 24, 25);
+    context.stroke();
+    context.fillStyle = FIGURE.ink;
+    context.textAlign = "left";
+    context.font = `14px ${FIGURE_FONT}`;
+    context.fillText(ion.label, legendX + 31, 30);
+  });
+
+  context.fillStyle = FIGURE.ink;
+  context.font = `16px ${FIGURE_FONT}`;
+  context.textAlign = "center";
+  context.fillText(
+    "physical radius, r (Å)",
+    margin.left + plotWidth / 2,
+    height - 25,
+  );
+  context.save();
+  context.translate(18, margin.top + plotHeight / 2);
+  context.rotate(-Math.PI / 2);
+  context.fillText("radial probability per Å", 0, 0);
+  context.restore();
+
+  const label = stateLabel(selectedState);
+  elements.scalingTitle.textContent = `${label} · H, He⁺, Li²⁺`;
+  elements.scalingState.textContent = label;
+  const hydrogenSummary = series[0].summary;
+  series.forEach(({ ion, summary }, index) => {
+    const row = elements.ionRows[index];
+    const energyRatio = Math.abs(summary.energyEv / hydrogenSummary.energyEv);
+    const radiusRatio =
+      summary.effectiveBohrRadiusAngstrom /
+      hydrogenSummary.effectiveBohrRadiusAngstrom;
+    row.querySelector("[data-ion-energy]").textContent =
+      `${signed(summary.energyEv)} eV · ${energyRatio.toFixed(3)}×`;
+    row.querySelector("[data-ion-radius]").textContent =
+      `a = ${summary.effectiveBohrRadiusAngstrom.toFixed(6)} Å · ${radiusRatio.toFixed(3)}×`;
+    row.querySelector("dt").setAttribute(
+      "aria-label",
+      `${ion.label}, nuclear charge ${ion.Z}`,
+    );
+  });
+  elements.scalingCanvas.setAttribute(
+    "aria-label",
+    `Physical radial probability for H, He plus, and Li two plus in the ${label} state. Increasing nuclear charge contracts the distribution.`,
   );
 }
 
@@ -758,7 +917,7 @@ function renderEverything({ resample = false } = {}) {
       key: stackKey,
       data: sampleSliceStack(state, {
         extent: display.extent,
-        resolution: 61,
+        resolution: 81,
         sliceCount: display.sliceCount,
       }),
     };
@@ -777,7 +936,7 @@ function renderEverything({ resample = false } = {}) {
       key: sliceKey,
       data: sampleOrthogonalSlices(state, {
         extent: display.extent,
-        resolution: 81,
+        resolution: 121,
       }),
     };
   }
@@ -785,7 +944,8 @@ function renderEverything({ resample = false } = {}) {
   renderGlass(stackCache.data, display, state);
   renderSlices(sliceCache.data, display, state);
   renderRadial(state);
-  elements.laboratoryStatus.textContent = "Evidence locked · live";
+  renderIonScaling(state);
+  elements.laboratoryStatus.textContent = "";
 }
 
 function invalidateSamples() {
@@ -923,7 +1083,16 @@ function wireEvents() {
     elements.glassCanvas,
     elements.sliceCanvas,
     elements.radialCanvas,
+    elements.scalingCanvas,
   ].forEach((canvasElement) => resizeObserver.observe(canvasElement));
+  window.addEventListener(
+    "pagehide",
+    () => {
+      window.clearTimeout(resizeTimer);
+      resizeObserver.disconnect();
+    },
+    { once: true },
+  );
 }
 
 function setEnabled(enabled) {
@@ -946,14 +1115,8 @@ function setEnabled(enabled) {
 
 function lockEvidence(result) {
   evidence = result;
-  elements.coreChecks.textContent =
-    `${result.validation.checks.length} / ${result.validation.checks.length}`;
-  elements.lockTitle.textContent = "All evidence layers agree";
-  elements.lockDetail.textContent =
-    "204 states, 25 official gallery entries, 6,005 radial samples, 84 node roots, 22 science checks, and both media manifests are locked.";
-  elements.evidenceStatus.textContent = "Verified";
   elements.laboratory.classList.remove("is-loading");
-  elements.laboratoryStatus.textContent = "Rendering validated state";
+  elements.laboratoryStatus.textContent = "Rendering";
   document.body.dataset.task10Status = "verified";
   setEnabled(true);
   renderEverything({ resample: true });
@@ -964,17 +1127,15 @@ function failClosed(error) {
   evidence = null;
   setEnabled(false);
   elements.laboratory.classList.remove("is-loading");
-  elements.laboratoryStatus.textContent = "Evidence unavailable";
-  elements.evidenceLock.classList.add("is-error");
-  elements.lockTitle.textContent = "Evidence lock failed";
-  elements.lockDetail.textContent =
-    "The interactive laboratory remains disabled because one or more committed scientific or media layers did not validate.";
-  elements.evidenceStatus.textContent = "Locked";
-  [elements.glassError, elements.sliceError, elements.radialError].forEach(
-    (message) => {
-      message.hidden = false;
-    },
-  );
+  elements.laboratoryStatus.textContent = "Orbital data unavailable";
+  [
+    elements.glassError,
+    elements.sliceError,
+    elements.radialError,
+    elements.scalingError,
+  ].forEach((message) => {
+    message.hidden = false;
+  });
   document.body.dataset.task10Status = "error";
 }
 

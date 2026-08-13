@@ -1,6 +1,6 @@
-import * as THREE from "https://cdn.jsdelivr.net/npm/three@0.164.1/build/three.module.js";
+import * as THREE from "../vendor/packages/three/three.module.min.js";
 
-const animationLibrary = import("https://esm.sh/animejs@4.5.0").catch(() => null);
+const animationLibrary = import("../vendor/packages/animejs/anime.esm.min.js").catch(() => null);
 const body = document.body;
 const aboutMode = body.classList.contains("about-page");
 const canvas = document.querySelector("#quantum-field");

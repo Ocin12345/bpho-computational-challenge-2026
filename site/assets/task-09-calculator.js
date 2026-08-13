@@ -11,12 +11,25 @@ import {
 } from "../../task09_compton_scattering/app/cross-section.js";
 
 const OFFICIAL_ENERGIES = Object.freeze([50, 100, 200, 500, 1000]);
+const FIGURE = Object.freeze({
+  paper: "#fcfbf7",
+  paperDeep: "#f5f1e9",
+  ink: "#2d2923",
+  muted: "#746e65",
+  grid: "#ded8cf",
+  gridSoft: "#ebe6de",
+  photon: "#b65f45",
+  photonLight: "#cf866f",
+  electron: "#3f7771",
+  electronLight: "#73a29c",
+  source: "#b79552",
+});
 const ENERGY_COLOURS = new Map([
-  [50, "#75bfff"],
-  [100, "#67d7ac"],
-  [200, "#ff7747"],
-  [500, "#dc8bc4"],
-  [1000, "#eebd59"],
+  [50, "#5f7f9a"],
+  [100, "#5f8875"],
+  [200, "#aa563e"],
+  [500, "#806b89"],
+  [1000, "#b18742"],
 ]);
 const ENERGY_DASHES = new Map([
   [50, []],
@@ -64,11 +77,6 @@ const outputs = {
   ),
   polarDensity: document.querySelector("[data-polar-density]"),
   forwardProbability: document.querySelector("[data-forward-probability]"),
-  coreChecks: document.querySelector("[data-core-checks]"),
-  extensionChecks: document.querySelector("[data-extension-checks]"),
-  lockTitle: document.querySelector("[data-lock-title]"),
-  lockDetail: document.querySelector("[data-lock-detail]"),
-  evidenceStatus: document.querySelector("[data-evidence-status]"),
 };
 
 const state = {
@@ -142,6 +150,21 @@ function clear(context, width, height, colour) {
   context.fillRect(0, 0, width, height);
 }
 
+function paintPaper(context, width, height) {
+  clear(context, width, height, FIGURE.paper);
+  const flecks = Math.min(320, Math.max(100, Math.round((width * height) / 3500)));
+  context.save();
+  context.fillStyle = "rgba(74, 64, 52, 0.034)";
+  for (let index = 0; index < flecks; index += 1) {
+    const x = (index * 83 + (index % 7) * 19) % width;
+    const y = (index * 47 + (index % 11) * 23) % height;
+    context.beginPath();
+    context.arc(x, y, index % 5 === 0 ? 0.7 : 0.42, 0, Math.PI * 2);
+    context.fill();
+  }
+  context.restore();
+}
+
 function line(context, x1, y1, x2, y2, colour, width = 1, dash = []) {
   context.save();
   context.beginPath();
@@ -187,7 +210,7 @@ function drawArc(context, x, y, radius, start, end, colour) {
 
 function drawCollision() {
   const { width, height } = resizeCanvas(collisionCanvas, collisionContext);
-  clear(collisionContext, width, height, "#081620");
+  paintPaper(collisionContext, width, height);
   const result = comptonKinematics(state.energyKev, state.thetaDeg);
   const compact = width < 600;
   const originX = compact ? width * 0.36 : width * 0.4;
@@ -212,7 +235,7 @@ function drawCollision() {
     y: originY + vectorScale * electronY,
   };
 
-  collisionContext.strokeStyle = "#183444";
+  collisionContext.strokeStyle = FIGURE.gridSoft;
   collisionContext.lineWidth = 1;
   for (let index = -4; index <= 5; index += 1) {
     line(
@@ -221,17 +244,17 @@ function drawCollision() {
       originY + index * 52,
       width,
       originY + index * 52,
-      "#122d3d",
+      FIGURE.gridSoft,
     );
   }
-  line(collisionContext, 0, originY, width, originY, "#375261", 1.2);
+  line(collisionContext, 0, originY, width, originY, FIGURE.grid, 1.2);
   arrow(
     collisionContext,
     originX - incomingLength,
     originY,
     originX - 9,
     originY,
-    "#ff7747",
+    FIGURE.photon,
     4,
   );
   arrow(
@@ -240,7 +263,7 @@ function drawCollision() {
     originY,
     photonEnd.x,
     photonEnd.y,
-    "#ff7747",
+    FIGURE.photon,
     4,
   );
   if (result.electronRecoilDirectionDefined) {
@@ -250,24 +273,24 @@ function drawCollision() {
       originY,
       electronEnd.x,
       electronEnd.y,
-      "#62c5ee",
+      FIGURE.electron,
       4,
     );
   } else {
     collisionContext.beginPath();
     collisionContext.arc(originX, originY, 16, 0, Math.PI * 2);
-    collisionContext.strokeStyle = "#62c5ee";
+    collisionContext.strokeStyle = FIGURE.electron;
     collisionContext.lineWidth = 2;
     collisionContext.stroke();
   }
 
   collisionContext.beginPath();
   collisionContext.arc(originX, originY, 8, 0, Math.PI * 2);
-  collisionContext.fillStyle = "#fff0d4";
+  collisionContext.fillStyle = FIGURE.source;
   collisionContext.fill();
   collisionContext.beginPath();
   collisionContext.arc(originX, originY, 18, 0, Math.PI * 2);
-  collisionContext.strokeStyle = "rgba(255,240,212,.3)";
+  collisionContext.strokeStyle = "rgba(45, 41, 35, 0.18)";
   collisionContext.stroke();
 
   const thetaRadius = compact ? 42 : 60;
@@ -279,7 +302,7 @@ function drawCollision() {
       thetaRadius,
       0,
       -theta,
-      "#ff9b74",
+      FIGURE.photonLight,
     );
   }
   if (
@@ -293,12 +316,12 @@ function drawCollision() {
       thetaRadius * 0.72,
       0,
       (result.electronRecoilAngleDeg * Math.PI) / 180,
-      "#8ed8f5",
+      FIGURE.electronLight,
     );
   }
 
   collisionContext.font = `${compact ? 12 : 15}px "Times New Roman"`;
-  collisionContext.fillStyle = "#a8bac3";
+  collisionContext.fillStyle = FIGURE.muted;
   collisionContext.textBaseline = "middle";
   collisionContext.textAlign = "center";
   collisionContext.fillText(
@@ -306,13 +329,13 @@ function drawCollision() {
     originX - incomingLength * 0.53,
     originY - 25,
   );
-  collisionContext.fillStyle = "#ff9b74";
+  collisionContext.fillStyle = FIGURE.photon;
   collisionContext.fillText(
     `E′ = ${formatFixed(result.scatteredEnergyKev, 3)} keV`,
     clamp(photonEnd.x, 90, width - 90),
     clamp(photonEnd.y - 26, 26, height - 26),
   );
-  collisionContext.fillStyle = "#8ed8f5";
+  collisionContext.fillStyle = FIGURE.electron;
   collisionContext.fillText(
     result.electronRecoilDirectionDefined
       ? `electron · K = ${formatFixed(result.electronKineticEnergyKev, 3)} keV`
@@ -321,13 +344,13 @@ function drawCollision() {
     clamp(electronEnd.y + 28, 26, height - 26),
   );
   collisionContext.font = `italic ${compact ? 13 : 17}px "Times New Roman"`;
-  collisionContext.fillStyle = "#ffb18e";
+  collisionContext.fillStyle = FIGURE.photon;
   collisionContext.fillText(
     `θ = ${degrees(result.thetaDeg)}`,
     originX + thetaRadius * 1.15,
     originY - thetaRadius * 0.45,
   );
-  collisionContext.fillStyle = "#a8dff4";
+  collisionContext.fillStyle = FIGURE.electron;
   collisionContext.fillText(
     result.electronRecoilDirectionDefined
       ? `φ = ${degrees(result.electronRecoilAngleDeg)}`
@@ -371,7 +394,7 @@ function drawKinematics() {
     kinematicsCanvas,
     kinematicsContext,
   );
-  clear(kinematicsContext, width, height, "#07131d");
+  paintPaper(kinematicsContext, width, height);
   const compact = width < 700;
   const left = compact ? 50 : 76;
   const right = compact ? 16 : 32;
@@ -415,7 +438,7 @@ function drawKinematics() {
 
   plots.forEach((plot, panelIndex) => {
     const config = configurations[panelIndex];
-    kinematicsContext.fillStyle = "#0b1b27";
+    kinematicsContext.fillStyle = "rgba(255, 255, 255, 0.62)";
     kinematicsContext.fillRect(
       plot.x - left + 8,
       plot.y - 30,
@@ -423,7 +446,15 @@ function drawKinematics() {
       plot.height + 56,
     );
     kinematicsContext.font = `${compact ? 13 : 17}px "Times New Roman"`;
-    kinematicsContext.fillStyle = "#f7ecd8";
+    kinematicsContext.strokeStyle = FIGURE.grid;
+    kinematicsContext.lineWidth = 1;
+    kinematicsContext.strokeRect(
+      plot.x - left + 8,
+      plot.y - 30,
+      plot.width + left + right - 16,
+      plot.height + 56,
+    );
+    kinematicsContext.fillStyle = FIGURE.ink;
     kinematicsContext.textAlign = "left";
     kinematicsContext.textBaseline = "alphabetic";
     kinematicsContext.fillText(
@@ -441,10 +472,10 @@ function drawKinematics() {
         y,
         plot.x + plot.width,
         y,
-        "#203a4a",
+        FIGURE.grid,
       );
       kinematicsContext.font = `${compact ? 10 : 12}px "Times New Roman"`;
-      kinematicsContext.fillStyle = "#8fa5b0";
+      kinematicsContext.fillStyle = FIGURE.muted;
       kinematicsContext.textAlign = "right";
       kinematicsContext.textBaseline = "middle";
       kinematicsContext.fillText(
@@ -461,10 +492,10 @@ function drawKinematics() {
         plot.y,
         x,
         plot.y + plot.height,
-        "#183342",
+        FIGURE.gridSoft,
       );
       kinematicsContext.font = `${compact ? 10 : 12}px "Times New Roman"`;
-      kinematicsContext.fillStyle = "#8fa5b0";
+      kinematicsContext.fillStyle = FIGURE.muted;
       kinematicsContext.textAlign = "center";
       kinematicsContext.textBaseline = "top";
       kinematicsContext.fillText(
@@ -483,8 +514,19 @@ function drawKinematics() {
         config.extractor,
         config.maximum,
       );
+      kinematicsContext.strokeStyle = "rgba(255, 255, 255, 0.92)";
+      kinematicsContext.lineWidth = selectedOfficial ? 6.2 : 4.2;
+      kinematicsContext.setLineDash(ENERGY_DASHES.get(energy));
+      kinematicsContext.stroke();
+      chartPath(
+        kinematicsContext,
+        officialCurveValues(energy),
+        plot,
+        config.extractor,
+        config.maximum,
+      );
       kinematicsContext.strokeStyle = ENERGY_COLOURS.get(energy);
-      kinematicsContext.lineWidth = selectedOfficial ? 3.6 : 1.8;
+      kinematicsContext.lineWidth = selectedOfficial ? 3.3 : 1.8;
       kinematicsContext.setLineDash(ENERGY_DASHES.get(energy));
       kinematicsContext.stroke();
     }
@@ -496,7 +538,7 @@ function drawKinematics() {
         config.extractor,
         config.maximum,
       );
-      kinematicsContext.strokeStyle = "#fff0d4";
+      kinematicsContext.strokeStyle = FIGURE.ink;
       kinematicsContext.lineWidth = 3.4;
       kinematicsContext.setLineDash([2, 6]);
       kinematicsContext.stroke();
@@ -516,24 +558,24 @@ function drawKinematics() {
       plot.y,
       markerX,
       plot.y + plot.height,
-      "#dce8eb",
+      "#8f867b",
       1,
       [2, 5],
     );
     kinematicsContext.beginPath();
     kinematicsContext.arc(markerX, markerY, 5.3, 0, Math.PI * 2);
-    kinematicsContext.fillStyle = "#fff0d4";
+    kinematicsContext.fillStyle = FIGURE.source;
     kinematicsContext.fill();
-    kinematicsContext.strokeStyle = "#07131d";
-    kinematicsContext.lineWidth = 1.5;
+    kinematicsContext.strokeStyle = FIGURE.paper;
+    kinematicsContext.lineWidth = 2;
     kinematicsContext.stroke();
 
     if (panelIndex === 2) {
       kinematicsContext.beginPath();
       kinematicsContext.arc(plot.x, plot.y, 5.2, 0, Math.PI * 2);
-      kinematicsContext.fillStyle = "#0b1b27";
+      kinematicsContext.fillStyle = FIGURE.paper;
       kinematicsContext.fill();
-      kinematicsContext.strokeStyle = "#ff7747";
+      kinematicsContext.strokeStyle = FIGURE.photon;
       kinematicsContext.lineWidth = 2;
       kinematicsContext.stroke();
     }
@@ -568,7 +610,7 @@ function forwardProbability() {
 
 function drawCrossSection() {
   const { width, height } = resizeCanvas(crossCanvas, crossContext);
-  clear(crossContext, width, height, "#fffaf0");
+  paintPaper(crossContext, width, height);
   const compact = width < 650;
   const left = compact ? 52 : 72;
   const right = compact ? 18 : 28;
@@ -595,13 +637,13 @@ function drawCrossSection() {
       title: "Relative differential strength · (dσ/dΩ) / rₑ²",
       maximum: 1,
       extractor: (value) => value.relative,
-      colour: "#a83a18",
+      colour: FIGURE.photon,
     },
     {
       title: "Normalized polar-angle density · p(θ) / rad⁻¹",
       maximum: Math.ceil(densityMaximum * 10) / 10,
       extractor: (value) => value.thetaPdf,
-      colour: "#00648c",
+      colour: FIGURE.electron,
     },
   ];
   const selectedCross = kleinNishinaState(state.energyKev, state.thetaDeg);
@@ -613,15 +655,15 @@ function drawCrossSection() {
   plots.forEach((plot, index) => {
     const config = configurations[index];
     crossContext.font = `${compact ? 13 : 17}px "Times New Roman"`;
-    crossContext.fillStyle = "#18252c";
+    crossContext.fillStyle = FIGURE.ink;
     crossContext.textAlign = "left";
     crossContext.fillText(config.title, plot.x, plot.y - 22);
     for (let tick = 0; tick <= 4; tick += 1) {
       const fraction = tick / 4;
       const y = plot.y + plot.height * (1 - fraction);
-      line(crossContext, plot.x, y, plot.x + plot.width, y, "#d8d3c9");
+      line(crossContext, plot.x, y, plot.x + plot.width, y, FIGURE.grid);
       crossContext.font = `${compact ? 10 : 12}px "Times New Roman"`;
-      crossContext.fillStyle = "#5c686e";
+      crossContext.fillStyle = FIGURE.muted;
       crossContext.textAlign = "right";
       crossContext.fillText(
         (config.maximum * fraction).toFixed(2),
@@ -631,8 +673,8 @@ function drawCrossSection() {
     }
     for (const theta of [0, 45, 90, 135, 180]) {
       const x = plot.x + (theta / 180) * plot.width;
-      line(crossContext, x, plot.y, x, plot.y + plot.height, "#e2ddd4");
-      crossContext.fillStyle = "#5c686e";
+      line(crossContext, x, plot.y, x, plot.y + plot.height, FIGURE.gridSoft);
+      crossContext.fillStyle = FIGURE.muted;
       crossContext.textAlign = "center";
       crossContext.fillText(`${theta}°`, x, plot.y + plot.height + 19);
     }
@@ -658,7 +700,7 @@ function drawCrossSection() {
       plot.y,
       markerX,
       plot.y + plot.height,
-      "#304c59",
+      "#8f867b",
       1,
       [2, 5],
     );
@@ -666,7 +708,7 @@ function drawCrossSection() {
     crossContext.arc(markerX, markerY, 5, 0, Math.PI * 2);
     crossContext.fillStyle = config.colour;
     crossContext.fill();
-    crossContext.strokeStyle = "#fffaf0";
+    crossContext.strokeStyle = FIGURE.paper;
     crossContext.lineWidth = 1.5;
     crossContext.stroke();
   });
@@ -704,7 +746,7 @@ function updateOutputs() {
   );
   outputs.retained.style.width = `${energyRatio * 100}%`;
   outputs.curveTitle.textContent =
-    `${formatEnergy(state.energyKev)} selected · θ = ${degrees(state.thetaDeg)}`;
+    `${formatEnergy(state.energyKev)} · θ = ${degrees(state.thetaDeg)}`;
   outputs.crossSelected.textContent =
     `${formatEnergy(state.energyKev)} · ${degrees(state.thetaDeg)}`;
   outputs.totalCrossSection.textContent =
@@ -782,14 +824,7 @@ function setFailureState() {
   document.querySelector("[data-kinematics-error]").hidden = false;
   document.querySelector("[data-cross-section-error]").hidden = false;
   outputs.laboratoryStatus.textContent = "Interaction locked";
-  outputs.kinematicsStatus.textContent = "Validation unavailable";
-  outputs.coreChecks.textContent = "Not verified";
-  outputs.extensionChecks.textContent = "Not verified";
-  outputs.lockTitle.textContent = "Validation could not be confirmed";
-  outputs.lockDetail.textContent =
-    "One or more committed Task 9 artifacts failed to load or disagreed with the frozen equations. No interactive result is shown.";
-  outputs.evidenceStatus.textContent = "Locked";
-  document.querySelector("[data-evidence-lock]").classList.add("is-error");
+  outputs.kinematicsStatus.textContent = "Curve data unavailable";
 }
 
 energyControl.addEventListener("input", () => {
@@ -880,16 +915,8 @@ loadTask09Evidence()
       );
     }
     laboratory.classList.remove("is-loading");
-    outputs.laboratoryStatus.textContent = "Exact state";
-    outputs.kinematicsStatus.textContent = "3,605 points verified";
-    outputs.coreChecks.textContent =
-      `${evidence.validation.checks.length}/${evidence.validation.checks.length} pass`;
-    outputs.extensionChecks.textContent =
-      `${evidence.crossValidation.checks.length}/${evidence.crossValidation.checks.length} pass`;
-    outputs.lockTitle.textContent = "Both validated evidence layers loaded";
-    outputs.lockDetail.textContent =
-      "Every interactive value is recomputed from the accepted relativistic equations; official curves remain tied to the committed data tables.";
-    outputs.evidenceStatus.textContent = "Verified";
+    outputs.laboratoryStatus.textContent = "Relativistic";
+    outputs.kinematicsStatus.textContent = "0.25° spacing";
     enableControls();
     document.body.dataset.task09Status = "verified";
     renderAll();

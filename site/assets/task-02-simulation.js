@@ -40,6 +40,9 @@ const outputs = {
   hoverDisplacement: document.querySelector("[data-hover-displacement]"),
   hoverSpeed: document.querySelector("[data-hover-speed]"),
   progress: document.querySelector("[data-progress]"),
+  modelParticleCount: document.querySelector("[data-model-particle-count]"),
+  modelLargeMass: document.querySelector("[data-model-large-mass]"),
+  modelMassRatio: document.querySelector("[data-model-mass-ratio]"),
 };
 
 const presetButtons = [
@@ -55,6 +58,28 @@ const displayOptions = {
   impacts: true,
   streaks: true,
 };
+
+const TRACE_PALETTE = [
+  [177, 132, 91],
+  [169, 102, 75],
+  [159, 76, 55],
+  [130, 68, 52],
+];
+
+function traceColour(progress, alpha = 1) {
+  const value = clamp(progress, 0, 1);
+  const scaled = value * (TRACE_PALETTE.length - 1);
+  const lowerIndex = Math.floor(scaled);
+  const upperIndex = Math.min(TRACE_PALETTE.length - 1, lowerIndex + 1);
+  const blend = scaled - lowerIndex;
+  const channels = TRACE_PALETTE[lowerIndex].map((channel, index) =>
+    Math.round(
+      channel +
+        (TRACE_PALETTE[upperIndex][index] - channel) * blend,
+    ),
+  );
+  return `rgba(${channels[0]}, ${channels[1]}, ${channels[2]}, ${alpha})`;
+}
 
 const PRESETS = {
   reference: {
@@ -535,22 +560,13 @@ function displayHash(index, salt = 0) {
 }
 
 function drawBackground() {
-  const gradient = context.createLinearGradient(
-    0,
-    0,
-    viewport.width,
-    viewport.height,
-  );
-  gradient.addColorStop(0, "#101817");
-  gradient.addColorStop(0.48, "#0b1110");
-  gradient.addColorStop(1, "#17211f");
-  context.fillStyle = gradient;
+  context.fillStyle = "#fbfaf6";
   context.fillRect(0, 0, viewport.width, viewport.height);
 }
 
 function drawGrid() {
   context.save();
-  context.strokeStyle = "rgba(196, 211, 203, 0.045)";
+  context.strokeStyle = "rgba(54, 52, 47, 0.075)";
   context.lineWidth = 0.7;
 
   for (let value = 0; value <= CONSTANTS.boxSizeNm; value += 1.4) {
@@ -573,8 +589,8 @@ function drawTracerPath() {
   context.lineCap = "round";
   context.lineJoin = "round";
 
-  context.strokeStyle = "rgba(215, 195, 162, 0.07)";
-  context.lineWidth = 5.5;
+  context.strokeStyle = "rgba(159, 76, 55, 0.12)";
+  context.lineWidth = 6.5;
   context.beginPath();
   context.moveTo(worldX(state.path[0].x), worldY(state.path[0].y));
   for (let index = 1; index < state.path.length; index += 1) {
@@ -589,8 +605,8 @@ function drawTracerPath() {
     const progress = index / (state.path.length - 1);
     const previous = state.path[index - 1];
     const current = state.path[index];
-    context.strokeStyle = `rgba(215, 195, 162, ${0.04 + progress * 0.5})`;
-    context.lineWidth = 0.65 + progress * 0.95;
+    context.strokeStyle = traceColour(progress, 0.46 + progress * 0.4);
+    context.lineWidth = 1 + progress * 1.15;
     context.beginPath();
     context.moveTo(worldX(previous.x), worldY(previous.y));
     context.lineTo(worldX(current.x), worldY(current.y));
@@ -608,7 +624,7 @@ function drawParticleStreaks() {
   context.save();
   context.lineWidth = 0.7;
   context.lineCap = "round";
-  context.strokeStyle = "rgba(166, 180, 174, 0.11)";
+  context.strokeStyle = "rgba(78, 75, 68, 0.12)";
   context.beginPath();
 
   for (let index = 0; index < count; index += 3) {
@@ -633,19 +649,19 @@ function drawSmallParticles() {
     3.8,
   );
   const palette = [
-    "#a6b4ae",
-    "#7f918c",
-    "#c6d0ca",
-    "#6b7f7a",
-    "#d7ddd8",
-    "#586d68",
+    "#78969a",
+    "#8090a2",
+    "#9a87a2",
+    "#c2a35d",
+    "#ba7563",
+    "#829173",
   ];
 
   context.save();
   context.globalAlpha = 0.9;
   palette.forEach((colour, colourIndex) => {
     context.fillStyle = colour;
-    context.strokeStyle = "rgba(255, 255, 255, 0.14)";
+    context.strokeStyle = "rgba(56, 52, 46, 0.15)";
     context.lineWidth = 0.45;
     context.beginPath();
     for (let index = 0; index < count; index += 1) {
@@ -679,12 +695,12 @@ function drawCollisionPulses(frameDelta) {
     const radius = 2 + progress * 7;
     const x = worldX(pulse.x);
     const y = worldY(pulse.y);
-    context.strokeStyle = `rgba(196, 118, 88, ${alpha})`;
+    context.strokeStyle = traceColour(progress, alpha);
     context.lineWidth = 1.15;
     context.beginPath();
     context.arc(x, y, radius, 0, Math.PI * 2);
     context.stroke();
-    context.strokeStyle = `rgba(215, 195, 162, ${alpha * 0.42})`;
+    context.strokeStyle = `rgba(230, 184, 67, ${alpha * 0.46})`;
     context.lineWidth = 0.7;
     context.beginPath();
     context.arc(x, y, radius * 1.65, 0, Math.PI * 2);
@@ -704,7 +720,7 @@ function drawResetPulses(frameDelta) {
   state.resetPulses.forEach((pulse) => {
     pulse.age += frameDelta;
     const progress = pulse.age / 0.18;
-    context.fillStyle = `rgba(255, 255, 255, ${Math.max(0, 0.16 * (1 - progress))})`;
+    context.fillStyle = `rgba(82, 76, 68, ${Math.max(0, 0.13 * (1 - progress))})`;
     context.beginPath();
     context.arc(
       worldX(pulse.x),
@@ -737,20 +753,31 @@ function drawTracer() {
     y,
     radius * (1.16 + pulse * 0.025),
   );
-  halo.addColorStop(0, "rgba(196, 118, 88, 0)");
-  halo.addColorStop(0.72, "rgba(196, 118, 88, 0.025)");
-  halo.addColorStop(1, `rgba(215, 195, 162, ${0.07 + pulse * 0.025})`);
+  halo.addColorStop(0, "rgba(159, 76, 55, 0)");
+  halo.addColorStop(0.72, "rgba(159, 76, 55, 0.035)");
+  halo.addColorStop(1, `rgba(159, 76, 55, ${0.08 + pulse * 0.025})`);
   context.fillStyle = halo;
   context.beginPath();
   context.arc(x, y, radius * 1.18, 0, Math.PI * 2);
   context.fill();
 
-  context.fillStyle = "#c47658";
+  const tracerFill = context.createRadialGradient(
+    x - radius * 0.28,
+    y - radius * 0.3,
+    radius * 0.08,
+    x,
+    y,
+    radius,
+  );
+  tracerFill.addColorStop(0, "#c98970");
+  tracerFill.addColorStop(0.62, "#ad624c");
+  tracerFill.addColorStop(1, "#864837");
+  context.fillStyle = tracerFill;
   context.beginPath();
   context.arc(x, y, radius, 0, Math.PI * 2);
   context.fill();
 
-  context.strokeStyle = "rgba(255, 255, 255, 0.34)";
+  context.strokeStyle = "rgba(76, 52, 43, 0.5)";
   context.lineWidth = Math.max(1.5, radius * 0.012);
   context.beginPath();
   context.arc(x, y, radius, 0, Math.PI * 2);
@@ -762,7 +789,7 @@ function drawStartMarker() {
   const x = worldX(state.startX);
   const y = worldY(state.startY);
   context.save();
-  context.strokeStyle = "rgba(233, 246, 239, 0.52)";
+  context.strokeStyle = "rgba(53, 51, 47, 0.55)";
   context.lineWidth = 1;
   context.beginPath();
   context.moveTo(x - 4, y);
@@ -787,13 +814,13 @@ function drawScene(frameDelta = 0) {
     viewport.size,
   );
   context.clip();
-  drawTracerPath();
   drawParticleStreaks();
   drawSmallParticles();
   drawResetPulses(frameDelta);
   drawCollisionPulses(frameDelta);
-  drawStartMarker();
   drawTracer();
+  drawTracerPath();
+  drawStartMarker();
   context.restore();
 }
 
@@ -811,6 +838,12 @@ function updateMetrics(force = false) {
   outputs.collisions.textContent = state.impulses.toLocaleString();
   outputs.thermalSpeed.textContent =
     `${state.parameters.thermalSpeed.toFixed(3)} nm ps⁻¹`;
+  outputs.modelParticleCount.textContent =
+    state.parameters.particleCount.toLocaleString();
+  outputs.modelLargeMass.textContent =
+    `${(CONSTANTS.smallMassKg * state.parameters.massRatio).toExponential(4)} kg`;
+  outputs.modelMassRatio.textContent =
+    state.parameters.massRatio.toLocaleString();
   const progress = clamp(state.time / CONSTANTS.maxTimePs, 0, 1);
   outputs.progress.style.setProperty("--simulation-progress", progress);
   outputs.progress.setAttribute("aria-valuenow", state.time.toFixed(2));
@@ -1105,7 +1138,7 @@ viewToggleButtons.forEach((button) => {
   button.addEventListener("click", () => toggleDisplayOption(button));
 });
 
-buttons.scrollMethod.addEventListener("click", () => {
+buttons.scrollMethod?.addEventListener("click", () => {
   document.querySelector("#method")?.scrollIntoView({
     behavior: window.matchMedia("(prefers-reduced-motion: reduce)").matches
       ? "auto"

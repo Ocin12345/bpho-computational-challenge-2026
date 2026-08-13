@@ -5,17 +5,22 @@
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta
       name="description"
-      content="A validated interactive infinite-well laboratory for BPhO Computational Challenge Task 7: discrete energies, stationary probability densities, and the Heisenberg uncertainty extension."
+      content="An interactive infinite-well laboratory for BPhO Computational Challenge Task 7: discrete energies, stationary probability densities and the Heisenberg uncertainty relation."
     />
-    <meta name="theme-color" content="#111525" />
+    <meta name="theme-color" content="#ffffff" />
     <title>Task 07 — Particle in a Box | BPhO Computational Challenge 2026</title>
     <link
       rel="icon"
       href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' fill='%23111525'/%3E%3Cpath d='M8 12v40M56 12v40' stroke='%23f4e341' stroke-width='5'/%3E%3Cpath d='M8 38c8-23 16-23 24 0s16 23 24 0' fill='none' stroke='%2376a7ff' stroke-width='4'/%3E%3C/svg%3E"
     />
+    <link rel="stylesheet" href="../vendor/packages/katex/katex.min.css" />
     <link rel="stylesheet" href="../assets/task-07.css?v=20260731" />
+    <link rel="stylesheet" href="../assets/task-07-minimal.css?v=20260808a" />
+    <link rel="stylesheet" href="../assets/proof-math.css?v=20260808" />
+    <link rel="stylesheet" href="../assets/task-clean.css?v=20260809" />
+    <link rel="stylesheet" href="../assets/task-07-gold.css?v=20260813a" />
   </head>
-  <body>
+  <body data-task="07">
     <a class="skip-link" href="#state-laboratory">Skip to state laboratory</a>
 
     <header class="task-header">
@@ -25,22 +30,23 @@
         </svg>
         All tasks
       </a>
-      <p>Task 07 <span>/</span> Bound states</p>
-      <a class="method-link" href="#uncertainty">Extension proof</a>
+      <nav class="section-nav" aria-label="Task 7 sections">
+        <a href="#state">Experiment</a>
+        <a href="#spectrum">Plot</a>
+        <a href="#method">Method</a>
+        <a href="#validation">Validation</a>
+      </nav>
+      <p class="task-identity"><span>Task 07</span><strong>Particle in a box</strong></p>
     </header>
 
     <main>
-      <section class="box-hero" aria-labelledby="page-title">
+      <section class="box-hero" id="state" aria-labelledby="page-title">
         <header class="hero-copy">
-          <p>One electron · one-dimensional infinite well</p>
-          <h1 id="page-title">
-            No in-between.
-            <em>Only allowed.</em>
-          </h1>
+          <p>One electron · 1.00 nm infinite well</p>
+          <h1 id="page-title">Particle in a box</h1>
           <span>
-            Infinite walls force standing waves. Their boundary conditions
-            admit integer quantum numbers, discrete energies, and probability
-            patterns that remain stationary in time.
+            Select a quantum state to compare its standing wave, probability
+            density, energy, nodes, and uncertainty product.
           </span>
         </header>
 
@@ -52,10 +58,10 @@
         >
           <header class="laboratory-header">
             <div>
-              <span id="laboratory-title">Live eigenstate laboratory</span>
-              <strong data-state-title>Loading validated states</strong>
+              <span id="laboratory-title">Eigenstate</span>
+              <strong data-state-title>Loading states</strong>
             </div>
-            <p data-state-badge>Checking evidence</p>
+            <p data-state-badge>Loading model</p>
           </header>
 
           <div class="state-canvas-wrap">
@@ -64,19 +70,19 @@
               tabindex="0"
               role="img"
               aria-label="Interactive standing wave and probability density inside a one-dimensional infinite well"
+              aria-description="A stationary-state probability density does not represent particle motion."
             ></canvas>
             <div class="state-loading" data-state-loading>
-              Reading 8,004 validated state samples
+              Loading 8,004 state samples
             </div>
             <p class="state-error" data-state-error hidden>
-              The validated Task 7 eigenstates could not be loaded.
+              The Task 7 eigenstates could not be loaded.
             </p>
           </div>
 
-          <div class="state-legend" aria-label="State display encoding">
-            <p><i class="legend-line legend-line--psi"></i> Signed wavefunction, ψ</p>
+          <div class="state-legend" role="group" aria-label="State display encoding">
+            <p><i class="legend-line legend-line--psi"></i> Rescaled wavefunction shape, √(a/2)ψ</p>
             <p><i class="legend-line legend-line--density"></i> Probability density, a|ψ|²</p>
-            <small>The plotted phase is fixed; a stationary density does not move.</small>
           </div>
 
           <dl class="state-readouts" aria-live="polite">
@@ -112,6 +118,7 @@
               max="10"
               step="1"
               value="1"
+              aria-label="Quantum number"
               disabled
             />
             <small>
@@ -144,97 +151,118 @@
             <button type="button" data-state-preset="10" disabled>n = 10</button>
           </div>
 
+          <button class="reset-state" type="button" data-reset-state disabled>
+            Reset experiment
+          </button>
+
           <div class="hero-claim">
-            <span>Frozen baseline</span>
             <strong>electron · a = 1.00 nm</strong>
-            <small>Normalized plots preserve the state shapes for any box width.</small>
           </div>
         </form>
 
-        <div class="catalogue-strip" aria-label="Task 7 evidence summary">
+        <div class="catalogue-strip" aria-label="Task 7 model summary">
           <div>
             <span>Allowed energies</span>
             <strong>10</strong>
           </div>
           <div>
-            <span>State samples</span>
-            <strong>8,004</strong>
+            <span>Numerical validation</span>
+            <strong>5 grids · 50 checks</strong>
           </div>
-          <div>
-            <span>Independent checks</span>
-            <strong>37/37</strong>
-          </div>
-          <p>
-            No curve is animated as particle motion. For a single energy
-            eigenstate, the global phase changes but |ψ<sub>n</sub>|² does not.
-          </p>
         </div>
       </section>
 
-      <section class="model-section" id="model" aria-labelledby="model-title">
+      <section class="model-section" id="method" aria-labelledby="method-title">
         <header class="section-introduction section-introduction--paper">
-          <p>Boundary conditions write the spectrum</p>
-          <h2 id="model-title">
-            The walls choose
-            <em>whole half-waves.</em>
-          </h2>
+          <p>Method</p>
+          <h2 id="method-title">From eigenvectors to numerical uncertainty</h2>
           <span>
-            The wavefunction must vanish at both infinite walls. That single
-            condition selects positive integer n, fixes the node count, and
-            makes the energy quadratic rather than continuous.
+            The analytical solution predicts the answer; a separate finite-difference
+            route tests it. Moments are evaluated directly from normalized numerical
+            eigenvectors on five successively refined grids.
           </span>
         </header>
 
+        <div class="method-columns">
+          <article>
+            <span>Analytical reference</span>
+            <h3>Closed-form infinite well</h3>
+            <p>
+              Dirichlet walls select ψ<sub>n</sub> = √(2/a) sin(nπx/a),
+              E<sub>n</sub> = n²π²ℏ²/(2ma²), and
+              |ψ<sub>n</sub>|² = (2/a)sin²(nπx/a).
+            </p>
+            <p>
+              Exact moments give ⟨x⟩ = a/2, ⟨p⟩ = 0 and
+              ΔxΔp/ℏ = √(n²π²/12 − 1/2).
+            </p>
+          </article>
+          <article>
+            <span>Independent numerical verification</span>
+            <h3>Tridiagonal eigensystem</h3>
+            <p>
+              A uniform interior grid and central second derivative form a
+              symmetric tridiagonal Hamiltonian. Numerical eigenvectors are
+              normalized with the discrete SI inner product.
+            </p>
+            <p>
+              This is verification of the closed-form model—not experimental
+              evidence—and it does not insert analytical uncertainties into the operator calculation.
+            </p>
+          </article>
+        </div>
+
         <div class="equation-architecture">
           <article class="equation-primary">
-            <span>Normalized stationary state</span>
-            <p>
-              ψ<sub>n</sub>(x,t) =
-              √(2/a) sin(nπx/a)e<sup>−iE<sub>n</sub>t/ℏ</sup>
+            <span>Finite-difference Hamiltonian</span>
+            <p class="math-scroll" role="img" tabindex="0" aria-label="Finite-difference Hamiltonian equation" data-proof-latex="H_{ij}=\dfrac{\hbar^2}{2m\Delta x^2}\left(2\delta_{ij}-\delta_{i,j+1}-\delta_{i,j-1}\right)">
+              H<sub>ij</sub> = ℏ²(2δ<sub>ij</sub> − δ<sub>i,j+1</sub> − δ<sub>i,j−1</sub>)/(2mΔx²)
             </p>
             <small>
-              Defined for 0 &lt; x &lt; a, with ψ(0) = ψ(a) = 0 and n =
-              1, 2, 3, …
+              Zero ghost values impose ψ(0) = ψ(a) = 0. The eigensolver receives no
+              analytical energies or uncertainty values.
             </small>
           </article>
           <article>
-            <span>Allowed energy</span>
-            <p>E<sub>n</sub> = n²π²ℏ² / 2ma²</p>
+            <span>Discrete quadrature</span>
+            <p class="math-scroll" role="img" tabindex="0" aria-label="Discrete expectation equation" data-proof-latex="\langle A\rangle_h=\sum_i\psi_i^*(A_h\psi)_i\,\Delta x">⟨A⟩<sub>h</sub> = Σ ψ<sub>i</sub>* (A<sub>h</sub>ψ)<sub>i</sub> Δx</p>
           </article>
           <article>
-            <span>Born probability</span>
-            <p>|ψ<sub>n</sub>|² = (2/a) sin²(nπx/a)</p>
+            <span>Momentum operator</span>
+            <p class="math-scroll" role="img" tabindex="0" aria-label="Central momentum equation" data-proof-latex="(p_h\psi)_i=-i\hbar\dfrac{\psi_{i+1}-\psi_{i-1}}{2\Delta x}">(p<sub>h</sub>ψ)<sub>i</sub> = −iℏ(ψ<sub>i+1</sub>−ψ<sub>i−1</sub>)/(2Δx)</p>
           </article>
           <article>
-            <span>Interior nodes</span>
-            <p>N<sub>nodes</sub> = n − 1</p>
+            <span>Uncertainty from moments</span>
+            <p class="math-scroll" role="img" tabindex="0" aria-label="Numerical uncertainty equation" data-proof-latex="\Delta A_h=\sqrt{\langle A^2\rangle_h-\lvert\langle A\rangle_h\rvert^2}">ΔA<sub>h</sub> = √(⟨A²⟩<sub>h</sub> − |⟨A⟩<sub>h</sub>|²)</p>
           </article>
         </div>
 
         <div class="boundary-statement">
-          <p>V(x)</p>
+          <p>Grid study</p>
           <div>
-            <span>0</span>
-            <small>inside · 0 &lt; x &lt; a</small>
+            <span>100 → 1600</span>
+            <small>interior points · five grids</small>
           </div>
           <div>
-            <span>∞</span>
-            <small>outside · x ≤ 0 or x ≥ a</small>
+            <span>n = 1 → 10</span>
+            <small>all official states tested</small>
           </div>
-          <strong>ψ cannot leak through an infinite wall.</strong>
+          <strong>Errors are measured against analytical results only after the numerical moments are computed.</strong>
+          <small>
+            These curves describe a stationary probability distribution, not a
+            particle trajectory; finite walls and time-dependent dynamics are outside
+            this Task 7 model.
+          </small>
         </div>
       </section>
 
       <section class="spectrum-section" id="spectrum" aria-labelledby="spectrum-title">
         <header class="section-introduction">
-          <p>Official plot one</p>
-          <h2 id="spectrum-title">
-            Energy climbs
-            <em>as n².</em>
-          </h2>
+          <p>Required plot 1</p>
+          <h2 id="spectrum-title">Energy rises as n²</h2>
           <span>
             Stems and markers keep the allowed states visibly discrete. Select
-            any marker to synchronise the complete page; no line implies
+            any marker to update the page; no line implies
             energies between the integers.
           </span>
         </header>
@@ -242,11 +270,11 @@
         <div class="spectrum-laboratory" data-spectrum-laboratory>
           <header class="figure-toolbar">
             <div>
-              <span>Selected level</span>
+              <span>Energy level</span>
               <strong data-spectrum-selected>n = 1 · 0.376030 eV</strong>
             </div>
             <p>E<sub>n</sub> / E<sub>1</sub> = n² exactly</p>
-            <span data-spectrum-status>Evidence loading</span>
+            <span data-spectrum-status>Loading spectrum</span>
           </header>
           <div class="canvas-frame canvas-frame--spectrum">
             <canvas
@@ -257,7 +285,7 @@
             ></canvas>
             <div class="chart-tooltip" data-spectrum-tooltip hidden></div>
             <p class="chart-error" data-spectrum-error hidden>
-              The validated energy spectrum could not be loaded.
+              The energy spectrum could not be loaded.
             </p>
           </div>
         </div>
@@ -271,7 +299,7 @@
           <article>
             <span>Tenth level</span>
             <strong>37.603016 eV</strong>
-            <p>Exactly 100 times the ground energy.</p>
+            <p>E<sub>10</sub> = 100E<sub>1</sub>.</p>
           </article>
           <article>
             <span>Successive gap</span>
@@ -283,11 +311,8 @@
 
       <section class="density-section" id="density" aria-labelledby="density-title">
         <header class="section-introduction section-introduction--paper">
-          <p>Official plot two</p>
-          <h2 id="density-title">
-            More energy creates
-            <em>more structure.</em>
-          </h2>
+          <p>Required plot 2</p>
+          <h2 id="density-title">Probability density inside the box</h2>
           <span>
             All four required densities are normalized, non-negative, zero at
             both walls, and symmetric about the midpoint. Toggle states to
@@ -302,7 +327,6 @@
             <label><input type="checkbox" data-density-state="2" checked disabled /><i></i>n = 2</label>
             <label><input type="checkbox" data-density-state="3" checked disabled /><i></i>n = 3</label>
             <label><input type="checkbox" data-density-state="4" checked disabled /><i></i>n = 4</label>
-            <small>Axes use x/a and a|ψ|², so the area remains one.</small>
           </div>
 
           <div class="density-figure">
@@ -313,7 +337,7 @@
               aria-label="Normalized probability densities for quantum states one through four"
             ></canvas>
             <p class="chart-error" data-density-error hidden>
-              The validated probability densities could not be loaded.
+              The probability densities could not be loaded.
             </p>
           </div>
         </div>
@@ -332,13 +356,10 @@
         aria-labelledby="uncertainty-title"
       >
         <header class="section-introduction">
-          <p>Official extension · completed</p>
-          <h2 id="uncertainty-title">
-            Confinement never
-            <em>beats the bound.</em>
-          </h2>
+          <p>Uncertainty proof</p>
+          <h2 id="uncertainty-title">The uncertainty bound</h2>
           <span>
-            The complete LaTeX derivation evaluates both position moments and
+            The derivation evaluates both position moments and
             both momentum moments. Every positive integer state obeys
             ΔxΔp ≥ ℏ/2; even the minimum ground-state product is strictly larger.
           </span>
@@ -348,23 +369,23 @@
           <div class="moment-ledger">
             <article>
               <span>Mean position</span>
-              <p>⟨x⟩ = a/2</p>
+              <p tabindex="0" data-proof-latex="\langle x\rangle=\dfrac{a}{2}">⟨x⟩ = a/2</p>
             </article>
             <article>
               <span>Position spread</span>
-              <p>Δx = a√(1/12 − 1/2n²π²)</p>
+              <p tabindex="0" data-proof-latex="\Delta x=a\sqrt{\dfrac{1}{12}-\dfrac{1}{2n^2\pi^2}}">Δx = a√(1/12 − 1/2n²π²)</p>
             </article>
             <article>
               <span>Mean momentum</span>
-              <p>⟨p⟩ = 0</p>
+              <p tabindex="0" data-proof-latex="\langle p\rangle=0">⟨p⟩ = 0</p>
             </article>
             <article>
               <span>Momentum spread</span>
-              <p>Δp = nπℏ/a</p>
+              <p tabindex="0" data-proof-latex="\Delta p=\dfrac{n\pi\hbar}{a}">Δp = nπℏ/a</p>
             </article>
             <article class="moment-ledger__result">
               <span>Product</span>
-              <p>ΔxΔp = ℏ√(n²π²/12 − 1/2)</p>
+              <p tabindex="0" data-proof-latex="\Delta x\,\Delta p=\hbar\sqrt{\dfrac{n^2\pi^2}{12}-\dfrac{1}{2}}">ΔxΔp = ℏ√(n²π²/12 − 1/2)</p>
               <strong data-extension-result>n = 1 · 0.567862ℏ &gt; 0.5ℏ</strong>
             </article>
           </div>
@@ -373,9 +394,9 @@
             <header>
               <div>
                 <span>Heisenberg product</span>
-                <strong data-uncertainty-selected>Ground state selected</strong>
+                <strong data-uncertainty-selected>n = 1</strong>
               </div>
-              <p>Pink rule = ℏ/2</p>
+              <p>Heisenberg bound = ℏ/2</p>
             </header>
             <canvas
               id="uncertainty-canvas"
@@ -384,161 +405,125 @@
               aria-label="Uncertainty product divided by reduced Planck constant for states one through ten"
             ></canvas>
             <p class="chart-error" data-uncertainty-error hidden>
-              The validated uncertainty evidence could not be loaded.
+              The uncertainty data could not be loaded.
             </p>
           </div>
         </div>
 
         <div class="extension-actions">
           <div>
-            <span>Four-page accepted extension</span>
-            <strong>Analytical proof + independent numerical evidence</strong>
+            <span>Four-page derivation</span>
+            <strong>Analytical derivation and numerical result</strong>
           </div>
           <a href="../../reports/task07/particle_in_box_uncertainty.pdf">Read PDF</a>
           <a href="../../reports/task07/particle_in_box_uncertainty.tex">LaTeX source</a>
           <a href="../../reports/task07/particle_in_box_uncertainty_accessible.md">Accessible text</a>
         </div>
+
+        <section class="numerical-evidence" aria-labelledby="numerical-evidence-title">
+          <header>
+            <p>Independent numerical evidence</p>
+            <h3 id="numerical-evidence-title">Finest-grid moments and five-grid convergence</h3>
+            <span>
+              Representative states are shown below. Every displayed numerical value
+              comes from the N = 1600 eigenvectors; analytical values appear only in
+              the comparison columns.
+            </span>
+          </header>
+          <div class="numerical-evidence-grid">
+            <div class="numerical-table-wrap" tabindex="0" aria-label="Scrollable numerical moment comparison table">
+              <table id="numerical-moments-table">
+                <caption>Numerical versus analytical uncertainty, N = 1600</caption>
+                <thead>
+                  <tr>
+                    <th scope="col">n</th>
+                    <th scope="col">Δx<sub>num</sub> / nm</th>
+                    <th scope="col">Δx<sub>reference</sub> / nm</th>
+                    <th scope="col">⟨p²⟩<sub>num</sub> / 10⁻⁴⁸</th>
+                    <th scope="col">Δp<sub>num</sub> / 10⁻²⁵</th>
+                    <th scope="col">Δp<sub>reference</sub> / 10⁻²⁵</th>
+                    <th scope="col">(ΔxΔp / ℏ)<sub>num</sub></th>
+                    <th scope="col">(ΔxΔp / ℏ)<sub>reference</sub></th>
+                    <th scope="col">2ΔxΔp / ℏ</th>
+                    <th scope="col">relative error</th>
+                  </tr>
+                </thead>
+                <tbody data-numerical-moments-body>
+                  <tr><td colspan="10">Loading canonical evidence…</td></tr>
+                </tbody>
+              </table>
+            </div>
+            <figure class="convergence-figure">
+              <figcaption>
+                <strong>Refinement error</strong>
+                <span>Maximum error across n = 1–10; log–log axes, order fitted against h</span>
+              </figcaption>
+              <canvas
+                id="convergence-canvas"
+                tabindex="0"
+                role="img"
+                aria-label="Five-grid convergence of numerical momentum uncertainty and uncertainty product errors"
+              ></canvas>
+              <p class="chart-error" data-convergence-error hidden>
+                The numerical convergence evidence could not be loaded.
+              </p>
+            </figure>
+          </div>
+          <p class="asymptotic-note">
+            <strong>n-dependence:</strong> as n grows, Δx → a/√12 while
+            Δp = nπℏ/a, so ΔxΔp ~ nπℏ/√12. The numerical sequence reproduces
+            this approximately linear high-n rise rather than merely clearing the bound.
+          </p>
+        </section>
       </section>
 
-      <section class="numerical-section" id="numerical" aria-labelledby="numerical-title">
-        <header class="section-introduction section-introduction--paper">
-          <p>Independent computational check</p>
-          <h2 id="numerical-title">
-            A second solver
-            <em>finds the same states.</em>
-          </h2>
+      <section class="validation-section" id="validation" aria-labelledby="validation-title">
+        <header class="section-introduction">
+          <p>Validation</p>
+          <h2 id="validation-title">A reproducible, judge-readable evidence chain</h2>
           <span>
-            A tridiagonal finite-difference Hamiltonian uses none of the
-            analytical energy formula. Five grid refinements independently
-            converge to the first ten levels at the expected second-order rate.
+            The page loads only after its manifest, scientific report, analytical
+            catalogue, finite-difference study, and numerical moments all pass
+            browser-side integrity checks.
           </span>
         </header>
-
-        <div class="convergence-band">
-          <article>
-            <span>Interior grids</span>
-            <strong>100 → 1,600</strong>
-            <p>Five deterministic refinements.</p>
-          </article>
-          <article>
-            <span>Finest-grid max error</span>
-            <strong>3.21 × 10<sup>−5</sup></strong>
-            <p>Across all first ten energies.</p>
-          </article>
-          <article>
-            <span>Observed order</span>
-            <strong>1.99896–1.99996</strong>
-            <p>Matches central-difference order two.</p>
-          </article>
-          <article>
-            <span>Eigenfunction overlap</span>
-            <strong>&gt; 0.9999999999999</strong>
-            <p>Every finest-grid state.</p>
-          </article>
+        <div class="validation-ledger" aria-live="polite">
+          <article><span>Boundary conditions</span><strong data-validation-boundary>Loading</strong><small>Both infinite walls</small></article>
+          <article><span>Normalization</span><strong data-validation-normalization>Loading</strong><small>Maximum discrete norm error</small></article>
+          <article><span>Nodes &amp; orthogonality</span><strong data-validation-nodes>Loading</strong><small>n − 1 nodes; Gram matrix checked</small></article>
+          <article><span>Energy scaling</span><strong data-validation-energy>Loading</strong><small>E<sub>n</sub>/E<sub>1</sub> = n²; numerical refinement</small></article>
+          <article><span>Eigenvector agreement</span><strong data-validation-overlap>Loading</strong><small>Finest-grid overlap deficit from unity</small></article>
+          <article><span>⟨p⟩</span><strong data-validation-pmean>Loading</strong><small>Maximum scaled mean momentum</small></article>
+          <article><span>⟨p²⟩</span><strong data-validation-p2>Loading</strong><small>Maximum finest-grid relative error</small></article>
+          <article><span>Δp error</span><strong data-validation-error>Loading</strong><small>Maximum finest-grid relative error</small></article>
+          <article><span>ΔxΔp error</span><strong data-validation-uncertainty>Loading</strong><small>Maximum finest-grid relative error</small></article>
+          <article><span>Uncertainty convergence</span><strong data-validation-order>Loading</strong><small>Observed product order</small></article>
+          <article><span>Automated validation</span><strong data-validation-count>Loading</strong><small>Independent Python checks</small></article>
+          <article><span>Heisenberg bound</span><strong data-validation-bound>Loading</strong><small>All 50 numerical states</small></article>
         </div>
-
-        <figure class="accepted-figure accepted-figure--wide">
-          <img
-            src="../../figures/task07/energy_level_wavefunctions.png"
-            width="2400"
-            height="1500"
-            loading="lazy"
-            alt="First five infinite-well eigenfunctions offset to their allowed energies, with infinite walls, boundary conditions, energy scaling, and node count."
-          />
-          <figcaption>
-            <span>Accepted figure · 2400 × 1500 px</span>
-            <strong>Standing waves at their allowed energies</strong>
-          </figcaption>
-        </figure>
-
-        <div class="figure-pair">
-          <figure class="accepted-figure">
-            <img
-              src="../../figures/task07/wavefunctions_and_density.png"
-              width="2400"
-              height="1500"
-              loading="lazy"
-              alt="Comparison of signed wavefunctions and non-negative probability densities for infinite-well states."
-            />
-            <figcaption>
-              <span>Accepted figure · Times New Roman</span>
-              <strong>Amplitude is not probability</strong>
-            </figcaption>
-          </figure>
-          <figure class="accepted-figure">
-            <img
-              src="../../figures/task07/uncertainty_principle.png"
-              width="2400"
-              height="1500"
-              loading="lazy"
-              alt="Position and momentum uncertainties and their product for the first ten states, including the Heisenberg lower bound."
-            />
-            <figcaption>
-              <span>Accepted extension figure</span>
-              <strong>Every state clears ℏ/2</strong>
-            </figcaption>
-          </figure>
+        <div class="evidence-downloads" aria-label="Task 7 evidence downloads">
+          <a href="../../data/task07/numerical_moments.csv" download>Numerical moments CSV</a>
+          <a href="../../data/task07/uncertainty_convergence.csv" download>Convergence CSV</a>
+          <a href="../../data/task07/validation_report.json" download>Validation JSON</a>
+          <a href="../../data/task07/manifest.json" download>Evidence manifest</a>
         </div>
       </section>
 
-      <section class="evidence-section" id="evidence" aria-labelledby="evidence-title">
-        <header>
-          <p>Reproducible evidence</p>
-          <h2 id="evidence-title">Validated before interaction.</h2>
-        </header>
-        <div class="evidence-lock" data-evidence-lock>
-          <span>Scientific state</span>
-          <strong data-lock-title>Loading committed evidence</strong>
-          <p data-lock-detail>
-            Controls remain locked until the manifest, 37-check report, all
-            state rows, uncertainty values, and numerical study agree.
-          </p>
-        </div>
-        <div class="evidence-grid">
-          <article>
-            <span>Analytical validation</span>
-            <strong data-validation-count>—</strong>
-            <p>Boundaries, normalization, orthogonality, nodes, energy and uncertainty.</p>
-          </article>
-          <article>
-            <span>Reference path</span>
-            <strong>60 decimal digits</strong>
-            <p>Independent scalar anchors for energy, moments, and the ground product.</p>
-          </article>
-          <article>
-            <span>Figure package</span>
-            <strong>6 PNG/SVG pairs</strong>
-            <p>2400×1500 analytical figures plus a 3840×2160 summary.</p>
-          </article>
-          <article>
-            <span>Evidence state</span>
-            <strong data-evidence-status>Checking</strong>
-            <p>Any missing or inconsistent file leaves every control disabled.</p>
-          </article>
-        </div>
-        <nav class="evidence-downloads" aria-label="Task 7 evidence downloads">
-          <a href="../../data/task07/manifest.json">Manifest</a>
-          <a href="../../data/task07/validation_report.json">37-check report</a>
-          <a href="../../data/task07/energy_levels.csv">Energy data</a>
-          <a href="../../data/task07/stationary_states.csv">State data</a>
-          <a href="../../data/task07/numerical_eigenvalues.csv">Numerical data</a>
-          <a href="../../figures/task07/task07_summary.png">4K summary</a>
-        </nav>
-      </section>
+
     </main>
 
     <footer class="task-footer">
       <a href="./task-06.html">← Task 06 · Electron diffraction</a>
       <div>
         <span>BPhO Computational Challenge 2026</span>
-        <strong>Task 07 · accepted scientific baseline</strong>
+        <strong>Task 07 · Particle in a box</strong>
       </div>
-      <a href="../tasks.html">All tasks ↑</a>
+      <a href="../tasks.html">All tasks</a>
     </footer>
 
-    <script src="../vendor/packages/gsap/dist/gsap.min.js"></script>
-    <script src="../vendor/packages/gsap/dist/ScrollTrigger.min.js"></script>
+    <script src="../vendor/packages/katex/katex.min.js"></script>
+    <script src="../assets/proof-math.js?v=20260808"></script>
     <script type="module" src="../assets/task-07-laboratory.js?v=20260731b"></script>
-    <script type="module" src="../assets/task-07-motion.js?v=20260731"></script>
+    <script type="module" src="../assets/task-07-navigation.js?v=20260808a"></script>
   </body>
 </html>

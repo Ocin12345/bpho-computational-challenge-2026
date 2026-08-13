@@ -1,0 +1,140 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta
+      name="description"
+      content="Validated advanced investigations extending all ten BPhO Computational Challenge models."
+    />
+    <meta name="theme-color" content="#081019" />
+    <title>Advanced Lab | BPhO Computational Challenge 2026</title>
+    <link
+      rel="icon"
+      href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%23071017'/%3E%3Cpath d='M12 36c9-26 16 18 25-4 5-13 10 4 15-12' fill='none' stroke='%2374f2ce' stroke-width='5' stroke-linecap='round'/%3E%3C/svg%3E"
+    />
+    <link rel="stylesheet" href="./assets/local-shell-fonts.css" />
+    <link rel="stylesheet" href="./assets/advanced.css" />
+  </head>
+  <body>
+    <a class="skip-link" href="#advanced-content">Skip to the investigation</a>
+
+    <header class="lab-header">
+      <a class="brand" href="./index.html" aria-label="BPhO Computational Challenge home">
+        <span aria-hidden="true">ψ</span>
+        <strong>BPhO · Advanced Lab</strong>
+      </a>
+      <nav aria-label="Primary navigation">
+        <a href="./index.html">Home</a>
+        <a href="./tasks.html">Core tasks</a>
+      </nav>
+    </header>
+
+    <main id="advanced-content">
+      <section class="hero" aria-labelledby="advanced-title">
+        <div>
+          <p class="eyebrow">Beyond the official brief · reproducible extensions</p>
+          <h1 id="advanced-title">Ten models,<br /><em>one deeper question.</em></h1>
+          <p class="hero-copy">
+            The competition route remains concise. This parallel laboratory relaxes one
+            idealisation in every task, tests the result, and exposes the committed numerical
+            evidence behind it.
+          </p>
+        </div>
+        <aside class="acceptance-card" aria-label="Advanced extension validation status">
+          <span class="status-dot" aria-hidden="true"></span>
+          <p>Scientific gate</p>
+          <strong data-check-total>Loading…</strong>
+          <small>deterministic checks · Tasks 01—10</small>
+        </aside>
+      </section>
+
+      <section class="task-selector" aria-labelledby="selector-title">
+        <div class="section-heading">
+          <div>
+            <p class="eyebrow">Investigation index</p>
+            <h2 id="selector-title">Choose a task</h2>
+          </div>
+          <p>Each tab is backed by the same generated JSON used by the scientific release gate.</p>
+        </div>
+        <div class="task-tabs" role="tablist" aria-label="Advanced task selector" data-task-tabs></div>
+      </section>
+
+      <article class="investigation" aria-live="polite" aria-labelledby="investigation-title">
+        <header class="investigation-heading">
+          <div>
+            <p class="eyebrow" data-task-number>Task 01 · Extension</p>
+            <h2 id="investigation-title" data-task-title>Loading advanced evidence…</h2>
+            <p data-task-summary></p>
+          </div>
+          <span class="complete-badge" data-task-status>Loading</span>
+        </header>
+
+        <div class="metrics" data-metrics aria-label="Key numerical results"></div>
+
+        <div class="analysis-grid">
+          <section class="plot-card" aria-labelledby="plot-title">
+            <div class="card-heading">
+              <div>
+                <p class="eyebrow">Computed view</p>
+                <h3 id="plot-title" data-plot-title>Numerical result</h3>
+              </div>
+              <label class="morph-control" data-morph-control hidden>
+                Morph progress
+                <input data-morph-slider type="range" min="0" max="40" value="0" />
+                <output data-morph-output>0%</output>
+              </label>
+            </div>
+            <canvas data-advanced-chart width="1000" height="560" role="img"></canvas>
+            <p class="plot-caption" data-plot-caption></p>
+          </section>
+
+          <aside class="method-card">
+            <div>
+              <p class="eyebrow">What changed?</p>
+              <h3 data-question-title></h3>
+              <p data-method></p>
+            </div>
+            <div>
+              <p class="eyebrow">Boundary</p>
+              <p data-boundary></p>
+            </div>
+            <div>
+              <p class="eyebrow">Reproduce</p>
+              <code data-command></code>
+            </div>
+          </aside>
+        </div>
+
+        <section class="checks-card" aria-labelledby="checks-title">
+          <div class="section-heading compact">
+            <div>
+              <p class="eyebrow">Regression ledger</p>
+              <h3 id="checks-title">Checks for this investigation</h3>
+            </div>
+          </div>
+          <ul data-checks></ul>
+        </section>
+      </article>
+
+      <section class="reports" id="reports" aria-labelledby="reports-title">
+        <div class="section-heading">
+          <div>
+            <p class="eyebrow">Research record</p>
+            <h2 id="reports-title">Methods, results and limitations</h2>
+          </div>
+          <p>Ten illustrated reports connect the official model to its extension and source code.</p>
+        </div>
+        <div class="report-grid" data-report-grid></div>
+      </section>
+    </main>
+
+    <footer>
+      <p>The concise competition submission is unchanged.</p>
+      <a href="./tasks.html">Return to the core task route →</a>
+    </footer>
+
+    <noscript>This evidence explorer requires JavaScript, but the reports remain readable as Markdown files.</noscript>
+    <script type="module" src="./assets/advanced.js"></script>
+  </body>
+</html>

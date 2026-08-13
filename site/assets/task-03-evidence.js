@@ -10,6 +10,14 @@
   const wienError = document.querySelector("[data-wien-error]");
   const integralError = document.querySelector("[data-integral-error]");
   const collapseError = document.querySelector("[data-collapse-error]");
+  const wienCardError = document.querySelector("[data-wien-card-error]");
+  const fittedExponent = document.querySelector("[data-fitted-exponent]");
+  const highTemperatureRatio = document.querySelector(
+    "[data-high-temperature-ratio]",
+  );
+  const lowTemperatureValue = document.querySelector(
+    "[data-low-temperature-value]",
+  );
   const benchmarkBody = document.querySelector("[data-benchmark-body]");
   const evidencePlanckTitle = document.querySelector(
     "[data-evidence-planck-title]",
@@ -145,7 +153,7 @@
   }
 
   function drawGrid(context, chart, xTicks, yTicks, xFor, yFor, labels) {
-    context.font = '11px "Times New Roman", Times, serif';
+    context.font = `${chart.compact ? 11 : 12}px "Times New Roman", Times, serif`;
     context.lineWidth = 1;
 
     yTicks.forEach((tick) => {
@@ -175,6 +183,7 @@
     });
 
     context.save();
+    context.font = '12px "Times New Roman", Times, serif';
     context.translate(13, chart.top + chart.plotHeight / 2);
     context.rotate(-Math.PI / 2);
     context.fillStyle = "rgba(23, 21, 19, 0.63)";
@@ -491,15 +500,15 @@
           else context.lineTo(x, y);
         });
         context.strokeStyle = colours[symbol];
-        let lineWidth = symbol === selectedSymbol ? 3.1 : 1.15;
-        let lineAlpha = symbol === selectedSymbol ? 1 : 0.46;
+        let lineWidth = symbol === selectedSymbol ? 3.2 : 1.35;
+        let lineAlpha = symbol === selectedSymbol ? 1 : 0.6;
         if (materialTransition) {
           if (symbol === materialTransition.fromSymbol) {
-            lineWidth = 3.1 - 1.95 * transitionProgress;
-            lineAlpha = 1 - 0.54 * transitionProgress;
+            lineWidth = 3.2 - 1.85 * transitionProgress;
+            lineAlpha = 1 - 0.4 * transitionProgress;
           } else if (symbol === selectedSymbol) {
-            lineWidth = 1.15 + 1.95 * transitionProgress;
-            lineAlpha = 0.46 + 0.54 * transitionProgress;
+            lineWidth = 1.35 + 1.85 * transitionProgress;
+            lineAlpha = 0.6 + 0.4 * transitionProgress;
           }
         }
         context.lineWidth = lineWidth;
@@ -701,6 +710,35 @@
     collapseError.textContent = scientific(
       validation.normalized_collapse_max_absolute_difference,
     );
+    if (wienCardError) {
+      wienCardError.textContent = `${(
+        validation.largest_wien_peak_relative_error * 100
+      ).toExponential(2)}%`;
+    }
+    if (fittedExponent) {
+      const first = evidence.planck.validation[0];
+      const last = evidence.planck.validation.at(-1);
+      const exponent =
+        Math.log(last.numerical_exitance_w_m2 / first.numerical_exitance_w_m2) /
+        Math.log(last.temperature_k / first.temperature_k);
+      fittedExponent.textContent = exponent.toFixed(6);
+    }
+    if (highTemperatureRatio) {
+      const gold = evidence.einstein.materials.find(
+        (material) => material.symbol === "Au",
+      );
+      const limit = evidence.einstein.high_temperature_limit_j_mol_k;
+      highTemperatureRatio.textContent = einsteinCapacity(
+        gold.einstein_temperature_k,
+        100 * gold.einstein_temperature_k,
+      )
+        .toFixed(8);
+    }
+    if (lowTemperatureValue) {
+      lowTemperatureValue.textContent = `${evidence.einstein.series.Au[0].cv_j_mol_k.toFixed(
+        4,
+      )} J mol⁻¹ K⁻¹`;
+    }
     provenance.textContent = `Verified Python reference · ${validation.passed_checks}/${validation.total_checks} checks pass`;
     contentBlocks.forEach((block) => {
       block.hidden = false;

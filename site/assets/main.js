@@ -1,4 +1,4 @@
-import * as THREE from "https://cdn.jsdelivr.net/npm/three@0.164.1/build/three.module.js";
+import * as THREE from "../vendor/packages/three/three.module.min.js";
 
 const body = document.body;
 const canvas = document.querySelector("#quantum-field");

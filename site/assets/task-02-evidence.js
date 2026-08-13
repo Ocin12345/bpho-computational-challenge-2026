@@ -41,11 +41,43 @@ const outputs = {
   rSquared: document.querySelector("[data-r-squared]"),
   runCount: document.querySelector("[data-run-count]"),
   collisionError: document.querySelector("[data-collision-error]"),
+  fitEquation: document.querySelector("[data-fit-equation]"),
+  meanX: document.querySelector("[data-mean-x]"),
+  meanXCi: document.querySelector("[data-mean-x-ci]"),
+  meanY: document.querySelector("[data-mean-y]"),
+  meanYCi: document.querySelector("[data-mean-y-ci]"),
+  convergenceOrder: document.querySelector("[data-convergence-order]"),
+  residualPenetration: document.querySelector("[data-residual-penetration]"),
   content: document.querySelector("[data-evidence-content]"),
   error: document.querySelector("[data-evidence-error]"),
   empty: document.querySelector("[data-evidence-empty]"),
   section: document.querySelector(".evidence-section"),
 };
+
+const EVIDENCE_PALETTE = [
+  [73, 76, 190],
+  [52, 145, 216],
+  [50, 199, 179],
+  [116, 190, 112],
+  [230, 184, 67],
+  [232, 103, 77],
+  [205, 72, 137],
+];
+
+function evidenceColour(progress, alpha = 1) {
+  const value = Math.min(1, Math.max(0, progress));
+  const scaled = value * (EVIDENCE_PALETTE.length - 1);
+  const lowerIndex = Math.floor(scaled);
+  const upperIndex = Math.min(EVIDENCE_PALETTE.length - 1, lowerIndex + 1);
+  const blend = scaled - lowerIndex;
+  const channels = EVIDENCE_PALETTE[lowerIndex].map((channel, index) =>
+    Math.round(
+      channel +
+        (EVIDENCE_PALETTE[upperIndex][index] - channel) * blend,
+    ),
+  );
+  return `rgba(${channels[0]}, ${channels[1]}, ${channels[2]}, ${alpha})`;
+}
 
 let evidence = null;
 let resizeFrame = 0;
@@ -185,7 +217,7 @@ function drawMsdChart(payload, renderOptions = {}) {
   context.clip();
 
   const [fitStart, fitEnd] = payload.ensemble.fit_window_ps;
-  context.fillStyle = "rgba(240, 183, 91, 0.095)";
+  context.fillStyle = "rgba(230, 184, 67, 0.11)";
   context.fillRect(
     xMap(fitStart),
     frame.top,
@@ -193,7 +225,7 @@ function drawMsdChart(payload, renderOptions = {}) {
     frame.height,
   );
 
-  context.fillStyle = "rgba(78, 177, 187, 0.19)";
+  context.fillStyle = "rgba(50, 199, 179, 0.2)";
   context.beginPath();
   rows.forEach((row, index) => {
     const x = xMap(row.time_ps);
@@ -207,7 +239,7 @@ function drawMsdChart(payload, renderOptions = {}) {
   context.closePath();
   context.fill();
 
-  context.strokeStyle = "#667b76";
+  context.strokeStyle = "#279b99";
   context.lineWidth = 2.4;
   context.lineJoin = "round";
   context.beginPath();
@@ -223,7 +255,7 @@ function drawMsdChart(payload, renderOptions = {}) {
     payload.ensemble.msd_fit_intercept_nm2 +
     payload.ensemble.msd_fit_slope_nm2_per_ps * time;
   context.setLineDash([8, 6]);
-  context.strokeStyle = "#c47658";
+  context.strokeStyle = "#e6674d";
   context.lineWidth = 2.1;
   context.beginPath();
   context.moveTo(xMap(fitStart), yMap(fit(fitStart)));
@@ -265,12 +297,12 @@ function drawMsdChart(payload, renderOptions = {}) {
   context.textAlign = "left";
   context.textBaseline = "middle";
 
-  context.fillStyle = "rgba(78, 177, 187, 0.2)";
+  context.fillStyle = "rgba(50, 199, 179, 0.22)";
   context.fillRect(frame.left + 23, frame.top + 23, 25, 10);
   context.fillStyle = "#625e57";
   context.fillText("95% confidence band", frame.left + 57, frame.top + 28);
 
-  context.strokeStyle = "#667b76";
+  context.strokeStyle = "#279b99";
   context.lineWidth = 2.2;
   context.beginPath();
   context.moveTo(frame.left + 23, frame.top + 47);
@@ -280,7 +312,7 @@ function drawMsdChart(payload, renderOptions = {}) {
   context.fillText("ensemble MSD", frame.left + 57, frame.top + 47);
 
   context.setLineDash([6, 4]);
-  context.strokeStyle = "#c47658";
+  context.strokeStyle = "#e6674d";
   context.beginPath();
   context.moveTo(frame.left + 23, frame.top + 65);
   context.lineTo(frame.left + 48, frame.top + 65);
@@ -340,7 +372,10 @@ function drawEndpointChart(payload, renderOptions = {}) {
   context.clip();
   endpoints.forEach((point, index) => {
     const alpha = 0.46 + (index % 6) * 0.035;
-    context.fillStyle = `rgba(102, 123, 118, ${alpha})`;
+    context.fillStyle = evidenceColour(
+      endpoints.length <= 1 ? 0.5 : index / (endpoints.length - 1),
+      alpha + 0.12,
+    );
     context.beginPath();
     context.arc(xMap(point.x_nm), yMap(point.y_nm), 4.3, 0, Math.PI * 2);
     context.fill();
@@ -353,7 +388,7 @@ function drawEndpointChart(payload, renderOptions = {}) {
   const meanScreenX = xMap(meanX);
   const meanScreenY = yMap(meanY);
 
-  context.strokeStyle = "#c47658";
+  context.strokeStyle = "#e6674d";
   context.lineWidth = 2;
   context.beginPath();
   context.moveTo(xMap(xLow), meanScreenY);
@@ -361,7 +396,7 @@ function drawEndpointChart(payload, renderOptions = {}) {
   context.moveTo(meanScreenX, yMap(yLow));
   context.lineTo(meanScreenX, yMap(yHigh));
   context.stroke();
-  context.fillStyle = "#c47658";
+  context.fillStyle = "#e6674d";
   context.beginPath();
   context.arc(meanScreenX, meanScreenY, 6.2, 0, Math.PI * 2);
   context.fill();
@@ -436,7 +471,7 @@ function drawConvergenceChart(payload, renderOptions = {}) {
   const referenceCoefficient =
     rows[0].rms_endpoint_error_nm / rows[0].time_step_ps;
   context.setLineDash([8, 6]);
-  context.strokeStyle = "#c47658";
+  context.strokeStyle = "#e6674d";
   context.lineWidth = 2;
   context.beginPath();
   rows.forEach((row, index) => {
@@ -448,7 +483,7 @@ function drawConvergenceChart(payload, renderOptions = {}) {
   context.stroke();
   context.setLineDash([]);
 
-  context.strokeStyle = "#667b76";
+  context.strokeStyle = "#279b99";
   context.lineWidth = 2.5;
   context.beginPath();
   rows.forEach((row, index) => {
@@ -459,8 +494,10 @@ function drawConvergenceChart(payload, renderOptions = {}) {
   });
   context.stroke();
 
-  rows.forEach((row) => {
-    context.fillStyle = "#667b76";
+  rows.forEach((row, index) => {
+    context.fillStyle = evidenceColour(
+      rows.length <= 1 ? 0.5 : index / (rows.length - 1),
+    );
     context.beginPath();
     context.arc(
       xMap(row.time_step_ps),
@@ -580,6 +617,10 @@ function exportFigure(button) {
 function populateMetrics(payload) {
   const diffusion = payload.ensemble.diffusion_coefficient_nm2_per_ps;
   const [low, high] = payload.ensemble.diffusion_ci_nm2_per_ps;
+  const slope = payload.ensemble.msd_fit_slope_nm2_per_ps;
+  const intercept = payload.ensemble.msd_fit_intercept_nm2;
+  const [meanXLow, meanXHigh] = payload.ensemble.final_mean_x_ci_nm;
+  const [meanYLow, meanYHigh] = payload.ensemble.final_mean_y_ci_nm;
   outputs.diffusion.textContent = `${diffusion.toExponential(2)} nm² ps⁻¹`;
   outputs.diffusionCi.textContent =
     `95% CI ${low.toExponential(2)}–${high.toExponential(2)}`;
@@ -588,6 +629,20 @@ function populateMetrics(payload) {
   outputs.runCount.textContent = String(payload.ensemble.run_count);
   outputs.collisionError.textContent =
     payload.validation.worst_normalized_collision_error.toExponential(2);
+  outputs.fitEquation.textContent =
+    `⟨r²⟩ = ${intercept.toFixed(3)} + ${slope.toFixed(5)}t`;
+  outputs.meanX.textContent =
+    `${payload.ensemble.final_mean_x_nm.toFixed(3)} nm`;
+  outputs.meanXCi.textContent =
+    `95% CI ${meanXLow.toFixed(3)} to ${meanXHigh.toFixed(3)} nm`;
+  outputs.meanY.textContent =
+    `${payload.ensemble.final_mean_y_nm.toFixed(3)} nm`;
+  outputs.meanYCi.textContent =
+    `95% CI ${meanYLow.toFixed(3)} to ${meanYHigh.toFixed(3)} nm`;
+  outputs.convergenceOrder.textContent =
+    payload.validation.minimum_observed_order.toFixed(3);
+  outputs.residualPenetration.textContent =
+    `${payload.validation.maximum_residual_penetration_nm.toFixed(1)} nm`;
   outputs.provenance.textContent =
     `Verified Python evidence · ${payload.ensemble.run_count} seeds · ` +
     `${payload.ensemble.source_series_points.toLocaleString()} recorded time points`;

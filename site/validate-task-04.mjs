@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 
 import assert from "node:assert/strict";
-import { readFile } from "node:fs/promises";
+import { readFile, stat } from "node:fs/promises";
 import { dirname, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 
@@ -21,6 +21,7 @@ const [
   cutoffText,
   validation,
   manifest,
+  embeddedAppIndex,
 ] = await Promise.all([
   readText("site/tasks/task-04.html"),
   readText("site/assets/task-04.css"),
@@ -31,7 +32,21 @@ const [
   readText("data/task04/material_cutoffs.csv"),
   readJson("data/task04/validation_report.json"),
   readJson("data/task04/reproducibility_manifest.json"),
+  readText("site/apps/task-04/index.html"),
 ]);
+
+const embeddedModelPaths = [
+  "photoelectric-optical-bench.glb",
+  "photoelectric-light-source.glb",
+  "photoelectric-photocell.glb",
+  "photoelectric-bias-power-supply.glb",
+  "photoelectric-picoammeter.glb",
+];
+const embeddedModelStats = await Promise.all(
+  embeddedModelPaths.map((name) =>
+    stat(resolve(projectRoot, "site/apps/task-04/models", name)),
+  ),
+);
 
 const checks = [];
 
@@ -111,21 +126,35 @@ check(
 check(
   "Complete required and extension content",
   [
-    'id="photoelectric-stage"',
+    'id="photoelectric-apparatus"',
+    "data-task4-3d-app",
+    "embed=apparatus",
+    "Interactive 3D photoelectric-effect apparatus",
     'id="stopping-potential-chart"',
-    'data-threshold-preset="below"',
-    'data-threshold-preset="at"',
-    'data-threshold-preset="above"',
     'data-axis-mode="frequency"',
     'data-axis-mode="wavelength"',
     "Show mathematical extrapolation",
-    "43 independent checks",
-    "photoelectric_demo.gif",
-    "stopping_voltage_frequency.svg",
-    "stopping_voltage_wavelength.svg",
     "Intensity changes the illustrative emission rate",
-  ].every((marker) => html.includes(marker)),
-  "The required graph, threshold states, model boundary, evidence, and optional extension are present.",
+  ].every((marker) => html.includes(marker)) &&
+    !html.includes("photoelectric_demo.gif") &&
+    !html.includes('id="photoelectric-stage"') &&
+    !html.includes('id="evidence"'),
+  "The packaged interactive 3D app is primary; the duplicate 2D chamber and redundant evidence wall are absent while the required graph remains.",
+);
+
+check(
+  "Full-page experiment handoff",
+  html.includes('window.location.replace("../apps/task-04/index.html?lab=experiment")') &&
+    embeddedAppIndex.includes("/site/apps/task-04/assets/"),
+  "Task 4 opens the packaged full experiment application instead of nesting it inside the editorial page.",
+);
+
+check(
+  "Packaged 3D apparatus assets",
+  embeddedAppIndex.includes("/site/apps/task-04/assets/") &&
+    embeddedModelStats.length === 5 &&
+    embeddedModelStats.every((entry) => entry.isFile() && entry.size > 100_000),
+  "The self-contained app bundle and five required GLB equipment models are present.",
 );
 
 check(
@@ -141,24 +170,21 @@ check(
 );
 
 check(
-  "High-DPI interactive figures",
+  "High-DPI interactive graph",
   simulation.includes("canvas.clientWidth") &&
     simulation.includes("canvas.clientHeight") &&
     simulation.includes("Math.min(window.devicePixelRatio || 1, 2)") &&
-    simulation.match(/"Times New Roman"/g)?.length >= 8,
-  "Both canvases size from CSS pixels and render at up to 2x density.",
+    simulation.match(/"Times New Roman"/g)?.length >= 4,
+  "The required graph sizes from CSS pixels and renders at up to 2x density.",
 );
 
 check(
   "Fail-closed evidence states",
-  html.includes("data-chamber-loading") &&
-    html.includes("data-chamber-error") &&
-    html.includes("data-chart-error") &&
-    html.includes('data-locked="false"') &&
+  html.includes("data-chart-error") &&
     evidenceLoader.includes("throw new Error") &&
     simulation.includes('dataset.task04Status = "error"') &&
-    simulation.includes('dataset.locked = "false"'),
-  "Loading, success, and explicit unlocked error states are implemented.",
+    simulation.includes("setControlsEnabled(false)"),
+  "The graph keeps a local loading/error state and disables controls when its checked data cannot load.",
 );
 
 check(

@@ -1,0 +1,1610 @@
+{
+  "schema_version": 1,
+  "generated_at_utc": "2026-08-08T02:17:30.388587+00:00",
+  "accepted": true,
+  "extension": "Einstein--Debye molar heat-capacity comparison",
+  "normalization": {
+    "temperature": "T / theta_D",
+    "heat_capacity": "C_V / (3R)",
+    "einstein_temperature_over_debye_temperature": 0.8059959770082348,
+    "gas_constant_j_mol_k": 8.31446261815324
+  },
+  "materials": [
+    {
+      "name": "Gold",
+      "symbol": "Au",
+      "debye_temperature_k": 170.0,
+      "einstein_temperature_k": 137.0193160913999
+    },
+    {
+      "name": "Copper",
+      "symbol": "Cu",
+      "debye_temperature_k": 343.5,
+      "einstein_temperature_k": 276.8596181023286
+    },
+    {
+      "name": "Titanium",
+      "symbol": "Ti",
+      "debye_temperature_k": 420.0,
+      "einstein_temperature_k": 338.5183103434586
+    },
+    {
+      "name": "Aluminium",
+      "symbol": "Al",
+      "debye_temperature_k": 428.0,
+      "einstein_temperature_k": 344.9662781595245
+    },
+    {
+      "name": "Iron",
+      "symbol": "Fe",
+      "debye_temperature_k": 470.0,
+      "einstein_temperature_k": 378.8181091938703
+    },
+    {
+      "name": "Silicon",
+      "symbol": "Si",
+      "debye_temperature_k": 645.0,
+      "einstein_temperature_k": 519.8674051703115
+    },
+    {
+      "name": "Carbon",
+      "symbol": "C",
+      "debye_temperature_k": 2230.0,
+      "einstein_temperature_k": 1797.3710287283636
+    }
+  ],
+  "curve": [
+    {
+      "temperature_over_debye_temperature": 0.0,
+      "debye_over_3r": 0.0,
+      "einstein_over_3r": 0.0,
+      "low_temperature_cubic_over_3r": 0.0
+    },
+    {
+      "temperature_over_debye_temperature": 0.01,
+      "debye_over_3r": 7.792727282720193e-05,
+      "einstein_over_3r": 6.43732184714102e-32,
+      "low_temperature_cubic_over_3r": 7.792727282720194e-05
+    },
+    {
+      "temperature_over_debye_temperature": 0.02,
+      "debye_over_3r": 0.00062341818261761,
+      "einstein_over_3r": 5.112407865403025e-15,
+      "low_temperature_cubic_over_3r": 0.0006234181826176155
+    },
+    {
+      "temperature_over_debye_temperature": 0.03,
+      "debye_over_3r": 0.002104036365956724,
+      "einstein_over_3r": 1.550373716151089e-09,
+      "low_temperature_cubic_over_3r": 0.0021040363663344516
+    },
+    {
+      "temperature_over_debye_temperature": 0.04,
+      "debye_over_3r": 0.004987344231027244,
+      "einstein_over_3r": 7.203700292011483e-07,
+      "low_temperature_cubic_over_3r": 0.004987345460940924
+    },
+    {
+      "temperature_over_debye_temperature": 0.05,
+      "debye_over_3r": 0.009740756600704515,
+      "einstein_over_3r": 2.5937834880353838e-05,
+      "low_temperature_cubic_over_3r": 0.009740909103400244
+    },
+    {
+      "temperature_over_debye_temperature": 0.060000000000000005,
+      "debye_over_3r": 0.01682856805255697,
+      "einstein_over_3r": 0.00026446676297436623,
+      "low_temperature_cubic_over_3r": 0.01683229093067562
+    },
+    {
+      "temperature_over_debye_temperature": 0.06999999999999999,
+      "debye_over_3r": 0.02669296513326627,
+      "einstein_over_3r": 0.0013240749019021233,
+      "low_temperature_cubic_over_3r": 0.026729054579730252
+    },
+    {
+      "temperature_over_debye_temperature": 0.08,
+      "debye_over_3r": 0.0397017063582904,
+      "einstein_over_3r": 0.0042758975963110325,
+      "low_temperature_cubic_over_3r": 0.03989876368752739
+    },
+    {
+      "temperature_over_debye_temperature": 0.09,
+      "debye_over_3r": 0.056073527425046996,
+      "einstein_over_3r": 0.010350560263952148,
+      "low_temperature_cubic_over_3r": 0.0568089818910302
+    },
+    {
+      "temperature_over_debye_temperature": 0.09999999999999999,
+      "debye_over_3r": 0.07582100303109081,
+      "einstein_over_3r": 0.020537338469255824,
+      "low_temperature_cubic_over_3r": 0.07792727282720191
+    },
+    {
+      "temperature_over_debye_temperature": 0.11,
+      "debye_over_3r": 0.09874008802726796,
+      "einstein_over_3r": 0.03534055260201754,
+      "low_temperature_cubic_over_3r": 0.10372120013300576
+    },
+    {
+      "temperature_over_debye_temperature": 0.12,
+      "debye_over_3r": 0.12444527794878937,
+      "einstein_over_3r": 0.054746795396992294,
+      "low_temperature_cubic_over_3r": 0.1346583274454049
+    },
+    {
+      "temperature_over_debye_temperature": 0.13,
+      "debye_over_3r": 0.15243041140486094,
+      "einstein_over_3r": 0.07833056918436164,
+      "low_temperature_cubic_over_3r": 0.17120621840136266
+    },
+    {
+      "temperature_over_debye_temperature": 0.14,
+      "debye_over_3r": 0.18213363005564712,
+      "einstein_over_3r": 0.10540860347168779,
+      "low_temperature_cubic_over_3r": 0.21383243663784215
+    },
+    {
+      "temperature_over_debye_temperature": 0.15000000000000002,
+      "debye_over_3r": 0.21299242541596153,
+      "einstein_over_3r": 0.13518372785687183,
+      "low_temperature_cubic_over_3r": null
+    },
+    {
+      "temperature_over_debye_temperature": 0.16,
+      "debye_over_3r": 0.24448300437915038,
+      "einstein_over_3r": 0.16685294098781048,
+      "low_temperature_cubic_over_3r": null
+    },
+    {
+      "temperature_over_debye_temperature": 0.17,
+      "debye_over_3r": 0.27614394248083457,
+      "einstein_over_3r": 0.1996761674869336,
+      "low_temperature_cubic_over_3r": null
+    },
+    {
+      "temperature_over_debye_temperature": 0.18000000000000002,
+      "debye_over_3r": 0.3075869465856231,
+      "einstein_over_3r": 0.2330123420060123,
+      "low_temperature_cubic_over_3r": null
+    },
+    {
+      "temperature_over_debye_temperature": 0.19,
+      "debye_over_3r": 0.3384983673618362,
+      "einstein_over_3r": 0.2663322151338865,
+      "low_temperature_cubic_over_3r": null
+    },
+    {
+      "temperature_over_debye_temperature": 0.2,
+      "debye_over_3r": 0.3686348236051715,
+      "einstein_over_3r": 0.29921646424994,
+      "low_temperature_cubic_over_3r": null
+    },
+    {
+      "temperature_over_debye_temperature": 0.21000000000000002,
+      "debye_over_3r": 0.3978155892666888,
+      "einstein_over_3r": 0.3313456692610663,
+      "low_temperature_cubic_over_3r": null
+    },
+    {
+      "temperature_over_debye_temperature": 0.22,
+      "debye_over_3r": 0.42591362347085027,
+      "einstein_over_3r": 0.36248663845327234,
+      "low_temperature_cubic_over_3r": null
+    },
+    {
+      "temperature_over_debye_temperature": 0.23,
+      "debye_over_3r": 0.45284646204916223,
+      "einstein_over_3r": 0.392477884092041,
+      "low_temperature_cubic_over_3r": null
+    },
+    {
+      "temperature_over_debye_temperature": 0.24000000000000002,
+      "debye_over_3r": 0.47856768604067573,
+      "einstein_over_3r": 0.4212158335389812,
+      "low_temperature_cubic_over_3r": null
+    },
+    {
+      "temperature_over_debye_temperature": 0.25,
+      "debye_over_3r": 0.50305933092181,
+      "einstein_over_3r": 0.44864255682557247,
+      "low_temperature_cubic_over_3r": null
+    },
+    {
+      "temperature_over_debye_temperature": 0.26,
+      "debye_over_3r": 0.5263253712514201,
+      "einstein_over_3r": 0.47473529431279893,
+      "low_temperature_cubic_over_3r": null
+    },
+    {
+      "temperature_over_debye_temperature": 0.27,
+      "debye_over_3r": 0.5483862767279062,
+      "einstein_over_3r": 0.4994977830104029,
+      "low_temperature_cubic_over_3r": null
+    },
+    {
+      "temperature_over_debye_temperature": 0.28,
+      "debye_over_3r": 0.5692745592838269,
+      "einstein_over_3r": 0.5229532326462041,
+      "low_temperature_cubic_over_3r": null
+    },
+    {
+      "temperature_over_debye_temperature": 0.29000000000000004,
+      "debye_over_3r": 0.5890311950735981,
+      "einstein_over_3r": 0.5451387394231577,
+      "low_temperature_cubic_over_3r": null
+    },
+    {
+      "temperature_over_debye_temperature": 0.3,
+      "debye_over_3r": 0.607702794429888,
+      "einstein_over_3r": 0.5661009109382148,
+      "low_temperature_cubic_over_3r": null
+    },
+    {
+      "temperature_over_debye_temperature": 0.31,
+      "debye_over_3r": 0.6253393964411037,
+      "einstein_over_3r": 0.5858924872455776,
+      "low_temperature_cubic_over_3r": null
+    },
+    {
+      "temperature_over_debye_temperature": 0.32,
+      "debye_over_3r": 0.6419927758192423,
+      "einstein_over_3r": 0.6045697666848733,
+      "low_temperature_cubic_over_3r": null
+    },
+    {
+      "temperature_over_debye_temperature": 0.33,
+      "debye_over_3r": 0.6577151638856847,
+      "einstein_over_3r": 0.622190672828844,
+      "low_temperature_cubic_over_3r": null
+    },
+    {
+      "temperature_over_debye_temperature": 0.34,
+      "debye_over_3r": 0.6725583002684079,
+      "einstein_over_3r": 0.6388133263595563,
+      "low_temperature_cubic_over_3r": null
+    },
+    {
+      "temperature_over_debye_temperature": 0.35000000000000003,
+      "debye_over_3r": 0.6865727458891797,
+      "einstein_over_3r": 0.6544950107002718,
+      "low_temperature_cubic_over_3r": null
+    },
+    {
+      "temperature_over_debye_temperature": 0.36000000000000004,
+      "debye_over_3r": 0.699807400351446,
+      "einstein_over_3r": 0.6692914419486092,
+      "low_temperature_cubic_over_3r": null
+    },
+    {
+      "temperature_over_debye_temperature": 0.37,
+      "debye_over_3r": 0.7123091776761322,
+      "einstein_over_3r": 0.6832562719273748,
+      "low_temperature_cubic_over_3r": null
+    },
+    {
+      "temperature_over_debye_temperature": 0.38,
+      "debye_over_3r": 0.7241228034743759,
+      "einstein_over_3r": 0.6964407682102127,
+      "low_temperature_cubic_over_3r": null
+    },
+    {
+      "temperature_over_debye_temperature": 0.39,
+      "debye_over_3r": 0.7352907042213271,
+      "einstein_over_3r": 0.70889362716913,
+      "low_temperature_cubic_over_3r": null
+    },
+    {
+      "temperature_over_debye_temperature": 0.4,
+      "debye_over_3r": 0.7458529654878069,
+      "einstein_over_3r": 0.7206608858560195,
+      "low_temperature_cubic_over_3r": null
+    },
+    {
+      "temperature_over_debye_temperature": 0.41000000000000003,
+      "debye_over_3r": 0.7558473409962644,
+      "einstein_over_3r": 0.731785906283347,
+      "low_temperature_cubic_over_3r": null
+    },
+    {
+      "temperature_over_debye_temperature": 0.42000000000000004,
+      "debye_over_3r": 0.7653092983862101,
+      "einstein_over_3r": 0.7423094117815433,
+      "low_temperature_cubic_over_3r": null
+    },
+    {
+      "temperature_over_debye_temperature": 0.43,
+      "debye_over_3r": 0.7742720907759433,
+      "einstein_over_3r": 0.7522695599019781,
+      "low_temperature_cubic_over_3r": null
+    },
+    {
+      "temperature_over_debye_temperature": 0.44,
+      "debye_over_3r": 0.7827668457431218,
+      "einstein_over_3r": 0.7617020400721383,
+      "low_temperature_cubic_over_3r": null
+    },
+    {
+      "temperature_over_debye_temperature": 0.45,
+      "debye_over_3r": 0.7908226653446842,
+      "einstein_over_3r": 0.7706401871130353,
+      "low_temperature_cubic_over_3r": null
+    },
+    {
+      "temperature_over_debye_temperature": 0.46,
+      "debye_over_3r": 0.798466732363405,
+      "einstein_over_3r": 0.7791151039753895,
+      "low_temperature_cubic_over_3r": null
+    },
+    {
+      "temperature_over_debye_temperature": 0.47000000000000003,
+      "debye_over_3r": 0.8057244191914213,
+      "einstein_over_3r": 0.7871557887827128,
+      "low_temperature_cubic_over_3r": null
+    },
+    {
+      "temperature_over_debye_temperature": 0.48000000000000004,
+      "debye_over_3r": 0.8126193967114352,
+      "einstein_over_3r": 0.7947892625988641,
+      "low_temperature_cubic_over_3r": null
+    },
+    {
+      "temperature_over_debye_temperature": 0.49,
+      "debye_over_3r": 0.8191737412712357,
+      "einstein_over_3r": 0.8020406953540229,
+      "low_temperature_cubic_over_3r": null
+    },
+    {
+      "temperature_over_debye_temperature": 0.5,
+      "debye_over_3r": 0.8254080384125047,
+      "einstein_over_3r": 0.8089335281363298,
+      "low_temperature_cubic_over_3r": null
+    },
+    {
+      "temperature_over_debye_temperature": 0.51,
+      "debye_over_3r": 0.831341482447156,
+      "einstein_over_3r": 0.8154895906415379,
+      "low_temperature_cubic_over_3r": null
+    },
+    {
+      "temperature_over_debye_temperature": 0.52,
+      "debye_over_3r": 0.8369919713026168,
+      "einstein_over_3r": 0.8217292130126984,
+      "low_temperature_cubic_over_3r": null
+    },
+    {
+      "temperature_over_debye_temperature": 0.53,
+      "debye_over_3r": 0.8423761963045193,
+      "einstein_over_3r": 0.8276713316295896,
+      "low_temperature_cubic_over_3r": null
+    },
+    {
+      "temperature_over_debye_temperature": 0.54,
+      "debye_over_3r": 0.8475097267492343,
+      "einstein_over_3r": 0.8333335886492145,
+      "low_temperature_cubic_over_3r": null
+    },
+    {
+      "temperature_over_debye_temperature": 0.55,
+      "debye_over_3r": 0.8524070892538281,
+      "einstein_over_3r": 0.8387324252744051,
+      "low_temperature_cubic_over_3r": null
+    },
+    {
+      "temperature_over_debye_temperature": 0.56,
+      "debye_over_3r": 0.857081841968517,
+      "einstein_over_3r": 0.8438831688530114,
+      "low_temperature_cubic_over_3r": null
+    },
+    {
+      "temperature_over_debye_temperature": 0.5700000000000001,
+      "debye_over_3r": 0.8615466438052585,
+      "einstein_over_3r": 0.8488001139973828,
+      "low_temperature_cubic_over_3r": null
+    },
+    {
+      "temperature_over_debye_temperature": 0.5800000000000001,
+      "debye_over_3r": 0.8658133188826417,
+      "einstein_over_3r": 0.8534965979722354,
+      "low_temperature_cubic_over_3r": null
+    },
+    {
+      "temperature_over_debye_temperature": 0.59,
+      "debye_over_3r": 0.8698929164169931,
+      "einstein_over_3r": 0.8579850706357314,
+      "low_temperature_cubic_over_3r": null
+    },
+    {
+      "temperature_over_debye_temperature": 0.6,
+      "debye_over_3r": 0.8737957663067998,
+      "einstein_over_3r": 0.8622771592392018,
+      "low_temperature_cubic_over_3r": null
+    },
+    {
+      "temperature_over_debye_temperature": 0.61,
+      "debye_over_3r": 0.8775315306653589,
+      "einstein_over_3r": 0.8663837283997179,
+      "low_temperature_cubic_over_3r": null
+    },
+    {
+      "temperature_over_debye_temperature": 0.62,
+      "debye_over_3r": 0.881109251557482,
+      "einstein_over_3r": 0.8703149355598564,
+      "low_temperature_cubic_over_3r": null
+    },
+    {
+      "temperature_over_debye_temperature": 0.63,
+      "debye_over_3r": 0.8845373951920554,
+      "einstein_over_3r": 0.8740802822430609,
+      "low_temperature_cubic_over_3r": null
+    },
+    {
+      "temperature_over_debye_temperature": 0.64,
+      "debye_over_3r": 0.8878238928147135,
+      "einstein_over_3r": 0.8776886614027891,
+      "low_temperature_cubic_over_3r": null
+    },
+    {
+      "temperature_over_debye_temperature": 0.65,
+      "debye_over_3r": 0.89097617853499,
+      "einstein_over_3r": 0.8811484011506406,
+      "low_temperature_cubic_over_3r": null
+    },
+    {
+      "temperature_over_debye_temperature": 0.66,
+      "debye_over_3r": 0.8940012243108967,
+      "einstein_over_3r": 0.8844673051339053,
+      "low_temperature_cubic_over_3r": null
+    },
+    {
+      "temperature_over_debye_temperature": 0.67,
+      "debye_over_3r": 0.8969055723015772,
+      "einstein_over_3r": 0.8876526898172789,
+      "low_temperature_cubic_over_3r": null
+    },
+    {
+      "temperature_over_debye_temperature": 0.68,
+      "debye_over_3r": 0.8996953647859941,
+      "einstein_over_3r": 0.8907114189074126,
+      "low_temperature_cubic_over_3r": null
+    },
+    {
+      "temperature_over_debye_temperature": 0.6900000000000001,
+      "debye_over_3r": 0.9023763718328599,
+      "einstein_over_3r": 0.8936499351429664,
+      "low_temperature_cubic_over_3r": null
+    },
+    {
+      "temperature_over_debye_temperature": 0.7000000000000001,
+      "debye_over_3r": 0.9049540168944851,
+      "einstein_over_3r": 0.8964742896571625,
+      "low_temperature_cubic_over_3r": null
+    },
+    {
+      "temperature_over_debye_temperature": 0.7100000000000001,
+      "debye_over_3r": 0.9074334004850395,
+      "einstein_over_3r": 0.899190169104732,
+      "low_temperature_cubic_over_3r": null
+    },
+    {
+      "temperature_over_debye_temperature": 0.72,
+      "debye_over_3r": 0.9098193220920758,
+      "einstein_over_3r": 0.9018029207307521,
+      "low_temperature_cubic_over_3r": null
+    },
+    {
+      "temperature_over_debye_temperature": 0.73,
+      "debye_over_3r": 0.9121163004590633,
+      "einstein_over_3r": 0.9043175755452101,
+      "low_temperature_cubic_over_3r": null
+    },
+    {
+      "temperature_over_debye_temperature": 0.74,
+      "debye_over_3r": 0.9143285923662231,
+      "einstein_over_3r": 0.9067388697543434,
+      "low_temperature_cubic_over_3r": null
+    },
+    {
+      "temperature_over_debye_temperature": 0.75,
+      "debye_over_3r": 0.9164602100271273,
+      "einstein_over_3r": 0.9090712645877924,
+      "low_temperature_cubic_over_3r": null
+    },
+    {
+      "temperature_over_debye_temperature": 0.76,
+      "debye_over_3r": 0.9185149372093478,
+      "einstein_over_3r": 0.9113189646494685,
+      "low_temperature_cubic_over_3r": null
+    },
+    {
+      "temperature_over_debye_temperature": 0.77,
+      "debye_over_3r": 0.9204963441788857,
+      "einstein_over_3r": 0.9134859349096655,
+      "low_temperature_cubic_over_3r": null
+    },
+    {
+      "temperature_over_debye_temperature": 0.78,
+      "debye_over_3r": 0.9224078015601912,
+      "einstein_over_3r": 0.9155759164463864,
+      "low_temperature_cubic_over_3r": null
+    },
+    {
+      "temperature_over_debye_temperature": 0.79,
+      "debye_over_3r": 0.9242524931962234,
+      "einstein_over_3r": 0.9175924410349948,
+      "low_temperature_cubic_over_3r": null
+    },
+    {
+      "temperature_over_debye_temperature": 0.8,
+      "debye_over_3r": 0.9260334280862248,
+      "einstein_over_3r": 0.9195388446771768,
+      "low_temperature_cubic_over_3r": null
+    },
+    {
+      "temperature_over_debye_temperature": 0.81,
+      "debye_over_3r": 0.9277534514726209,
+      "einstein_over_3r": 0.9214182801526868,
+      "low_temperature_cubic_over_3r": null
+    },
+    {
+      "temperature_over_debye_temperature": 0.8200000000000001,
+      "debye_over_3r": 0.9294152551426812,
+      "einstein_over_3r": 0.9232337286704867,
+      "low_temperature_cubic_over_3r": null
+    },
+    {
+      "temperature_over_debye_temperature": 0.8300000000000001,
+      "debye_over_3r": 0.9310213870052843,
+      "einstein_over_3r": 0.9249880106895608,
+      "low_temperature_cubic_over_3r": null
+    },
+    {
+      "temperature_over_debye_temperature": 0.8400000000000001,
+      "debye_over_3r": 0.9325742599982461,
+      "einstein_over_3r": 0.9266837959738982,
+      "low_temperature_cubic_over_3r": null
+    },
+    {
+      "temperature_over_debye_temperature": 0.85,
+      "debye_over_3r": 0.9340761603771893,
+      "einstein_over_3r": 0.9283236129408304,
+      "low_temperature_cubic_over_3r": null
+    },
+    {
+      "temperature_over_debye_temperature": 0.86,
+      "debye_over_3r": 0.935529255432825,
+      "einstein_over_3r": 0.9299098573570513,
+      "low_temperature_cubic_over_3r": null
+    },
+    {
+      "temperature_over_debye_temperature": 0.87,
+      "debye_over_3r": 0.9369356006797365,
+      "einstein_over_3r": 0.9314448004321888,
+      "low_temperature_cubic_over_3r": null
+    },
+    {
+      "temperature_over_debye_temperature": 0.88,
+      "debye_over_3r": 0.9382971465563045,
+      "einstein_over_3r": 0.9329305963557311,
+      "low_temperature_cubic_over_3r": null
+    },
+    {
+      "temperature_over_debye_temperature": 0.89,
+      "debye_over_3r": 0.9396157446722271,
+      "einstein_over_3r": 0.9343692893193791,
+      "low_temperature_cubic_over_3r": null
+    },
+    {
+      "temperature_over_debye_temperature": 0.9,
+      "debye_over_3r": 0.9408931536371891,
+      "einstein_over_3r": 0.9357628200634789,
+      "low_temperature_cubic_over_3r": null
+    },
+    {
+      "temperature_over_debye_temperature": 0.91,
+      "debye_over_3r": 0.9421310445015519,
+      "einstein_over_3r": 0.9371130319830722,
+      "low_temperature_cubic_over_3r": null
+    },
+    {
+      "temperature_over_debye_temperature": 0.92,
+      "debye_over_3r": 0.9433310058375085,
+      "einstein_over_3r": 0.9384216768262423,
+      "low_temperature_cubic_over_3r": null
+    },
+    {
+      "temperature_over_debye_temperature": 0.93,
+      "debye_over_3r": 0.9444945484868852,
+      "einstein_over_3r": 0.9396904200148115,
+      "low_temperature_cubic_over_3r": null
+    },
+    {
+      "temperature_over_debye_temperature": 0.9400000000000001,
+      "debye_over_3r": 0.9456231099997225,
+      "einstein_over_3r": 0.940920845615056,
+      "low_temperature_cubic_over_3r": null
+    },
+    {
+      "temperature_over_debye_temperature": 0.9500000000000001,
+      "debye_over_3r": 0.9467180587858889,
+      "einstein_over_3r": 0.9421144609839129,
+      "low_temperature_cubic_over_3r": null
+    },
+    {
+      "temperature_over_debye_temperature": 0.9600000000000001,
+      "debye_over_3r": 0.9477806980002307,
+      "einstein_over_3r": 0.9432727011141309,
+      "low_temperature_cubic_over_3r": null
+    },
+    {
+      "temperature_over_debye_temperature": 0.97,
+      "debye_over_3r": 0.9488122691801936,
+      "einstein_over_3r": 0.9443969326999996,
+      "low_temperature_cubic_over_3r": null
+    },
+    {
+      "temperature_over_debye_temperature": 0.98,
+      "debye_over_3r": 0.9498139556533771,
+      "einstein_over_3r": 0.9454884579435769,
+      "low_temperature_cubic_over_3r": null
+    },
+    {
+      "temperature_over_debye_temperature": 0.99,
+      "debye_over_3r": 0.9507868857311593,
+      "einstein_over_3r": 0.94654851811981,
+      "low_temperature_cubic_over_3r": null
+    },
+    {
+      "temperature_over_debye_temperature": 1.0,
+      "debye_over_3r": 0.9517321357032825,
+      "einstein_over_3r": 0.9475782969175155,
+      "low_temperature_cubic_over_3r": null
+    },
+    {
+      "temperature_over_debye_temperature": 1.01,
+      "debye_over_3r": 0.9526507326471825,
+      "einstein_over_3r": 0.9485789235718867,
+      "low_temperature_cubic_over_3r": null
+    },
+    {
+      "temperature_over_debye_temperature": 1.02,
+      "debye_over_3r": 0.9535436570647853,
+      "einstein_over_3r": 0.9495514758029949,
+      "low_temperature_cubic_over_3r": null
+    },
+    {
+      "temperature_over_debye_temperature": 1.03,
+      "debye_over_3r": 0.954411845358558,
+      "einstein_over_3r": 0.9504969825736704,
+      "low_temperature_cubic_over_3r": null
+    },
+    {
+      "temperature_over_debye_temperature": 1.04,
+      "debye_over_3r": 0.9552561921577112,
+      "einstein_over_3r": 0.9514164266791157,
+      "low_temperature_cubic_over_3r": null
+    },
+    {
+      "temperature_over_debye_temperature": 1.05,
+      "debye_over_3r": 0.9560775525046492,
+      "einstein_over_3r": 0.9523107471797082,
+      "low_temperature_cubic_over_3r": null
+    },
+    {
+      "temperature_over_debye_temperature": 1.06,
+      "debye_over_3r": 0.9568767439110195,
+      "einstein_over_3r": 0.9531808416875674,
+      "low_temperature_cubic_over_3r": null
+    },
+    {
+      "temperature_over_debye_temperature": 1.07,
+      "debye_over_3r": 0.9576545482920298,
+      "einstein_over_3r": 0.9540275685167071,
+      "low_temperature_cubic_over_3r": null
+    },
+    {
+      "temperature_over_debye_temperature": 1.08,
+      "debye_over_3r": 0.9584117137870656,
+      "einstein_over_3r": 0.9548517487058441,
+      "low_temperature_cubic_over_3r": null
+    },
+    {
+      "temperature_over_debye_temperature": 1.09,
+      "debye_over_3r": 0.9591489564740673,
+      "einstein_over_3r": 0.9556541679223003,
+      "low_temperature_cubic_over_3r": null
+    },
+    {
+      "temperature_over_debye_temperature": 1.1,
+      "debye_over_3r": 0.9598669619845855,
+      "einstein_over_3r": 0.956435578254796,
+      "low_temperature_cubic_over_3r": null
+    },
+    {
+      "temperature_over_debye_temperature": 1.11,
+      "debye_over_3r": 0.9605663870259387,
+      "einstein_over_3r": 0.9571966999023908,
+      "low_temperature_cubic_over_3r": null
+    },
+    {
+      "temperature_over_debye_temperature": 1.12,
+      "debye_over_3r": 0.961247860816447,
+      "einstein_over_3r": 0.9579382227662994,
+      "low_temperature_cubic_over_3r": null
+    },
+    {
+      "temperature_over_debye_temperature": 1.1300000000000001,
+      "debye_over_3r": 0.9619119864392833,
+      "einstein_over_3r": 0.9586608079508241,
+      "low_temperature_cubic_over_3r": null
+    },
+    {
+      "temperature_over_debye_temperature": 1.1400000000000001,
+      "debye_over_3r": 0.9625593421201082,
+      "einstein_over_3r": 0.9593650891792215,
+      "low_temperature_cubic_over_3r": null
+    },
+    {
+      "temperature_over_debye_temperature": 1.1500000000000001,
+      "debye_over_3r": 0.9631904824332833,
+      "einstein_over_3r": 0.9600516741298943,
+      "low_temperature_cubic_over_3r": null
+    },
+    {
+      "temperature_over_debye_temperature": 1.1600000000000001,
+      "debye_over_3r": 0.9638059394411361,
+      "einstein_over_3r": 0.9607211456979354,
+      "low_temperature_cubic_over_3r": null
+    },
+    {
+      "temperature_over_debye_temperature": 1.17,
+      "debye_over_3r": 0.9644062237704292,
+      "einstein_over_3r": 0.9613740631866916,
+      "low_temperature_cubic_over_3r": null
+    },
+    {
+      "temperature_over_debye_temperature": 1.18,
+      "debye_over_3r": 0.9649918256299174,
+      "einstein_over_3r": 0.9620109634337036,
+      "low_temperature_cubic_over_3r": null
+    },
+    {
+      "temperature_over_debye_temperature": 1.19,
+      "debye_over_3r": 0.9655632157725956,
+      "einstein_over_3r": 0.9626323618750705,
+      "low_temperature_cubic_over_3r": null
+    },
+    {
+      "temperature_over_debye_temperature": 1.2,
+      "debye_over_3r": 0.9661208464060198,
+      "einstein_over_3r": 0.9632387535520183,
+      "low_temperature_cubic_over_3r": null
+    },
+    {
+      "temperature_over_debye_temperature": 1.21,
+      "debye_over_3r": 0.9666651520538259,
+      "einstein_over_3r": 0.9638306140631937,
+      "low_temperature_cubic_over_3r": null
+    },
+    {
+      "temperature_over_debye_temperature": 1.22,
+      "debye_over_3r": 0.9671965503713948,
+      "einstein_over_3r": 0.9644084004659652,
+      "low_temperature_cubic_over_3r": null
+    },
+    {
+      "temperature_over_debye_temperature": 1.23,
+      "debye_over_3r": 0.9677154429183922,
+      "einstein_over_3r": 0.9649725521297978,
+      "low_temperature_cubic_over_3r": null
+    },
+    {
+      "temperature_over_debye_temperature": 1.24,
+      "debye_over_3r": 0.9682222158907452,
+      "einstein_over_3r": 0.9655234915445676,
+      "low_temperature_cubic_over_3r": null
+    },
+    {
+      "temperature_over_debye_temperature": 1.25,
+      "debye_over_3r": 0.9687172408144475,
+      "einstein_over_3r": 0.9660616250864795,
+      "low_temperature_cubic_over_3r": null
+    },
+    {
+      "temperature_over_debye_temperature": 1.26,
+      "debye_over_3r": 0.9692008752034211,
+      "einstein_over_3r": 0.9665873437440969,
+      "low_temperature_cubic_over_3r": null
+    },
+    {
+      "temperature_over_debye_temperature": 1.27,
+      "debye_over_3r": 0.9696734631835353,
+      "einstein_over_3r": 0.9671010238068102,
+      "low_temperature_cubic_over_3r": null
+    },
+    {
+      "temperature_over_debye_temperature": 1.28,
+      "debye_over_3r": 0.9701353360847322,
+      "einstein_over_3r": 0.9676030275179324,
+      "low_temperature_cubic_over_3r": null
+    },
+    {
+      "temperature_over_debye_temperature": 1.29,
+      "debye_over_3r": 0.9705868130030901,
+      "einstein_over_3r": 0.9680937036944633,
+      "low_temperature_cubic_over_3r": null
+    },
+    {
+      "temperature_over_debye_temperature": 1.3,
+      "debye_over_3r": 0.9710282013345448,
+      "einstein_over_3r": 0.968573388315439,
+      "low_temperature_cubic_over_3r": null
+    },
+    {
+      "temperature_over_debye_temperature": 1.31,
+      "debye_over_3r": 0.9714597972818698,
+      "einstein_over_3r": 0.9690424050806539,
+      "low_temperature_cubic_over_3r": null
+    },
+    {
+      "temperature_over_debye_temperature": 1.32,
+      "debye_over_3r": 0.9718818863364252,
+      "einstein_over_3r": 0.9695010659414328,
+      "low_temperature_cubic_over_3r": null
+    },
+    {
+      "temperature_over_debye_temperature": 1.33,
+      "debye_over_3r": 0.972294743736088,
+      "einstein_over_3r": 0.9699496716050348,
+      "low_temperature_cubic_over_3r": null
+    },
+    {
+      "temperature_over_debye_temperature": 1.34,
+      "debye_over_3r": 0.9726986349006839,
+      "einstein_over_3r": 0.9703885120141537,
+      "low_temperature_cubic_over_3r": null
+    },
+    {
+      "temperature_over_debye_temperature": 1.35,
+      "debye_over_3r": 0.9730938158461726,
+      "einstein_over_3r": 0.9708178668029055,
+      "low_temperature_cubic_over_3r": null
+    },
+    {
+      "temperature_over_debye_temperature": 1.36,
+      "debye_over_3r": 0.9734805335787426,
+      "einstein_over_3r": 0.9712380057305987,
+      "low_temperature_cubic_over_3r": null
+    },
+    {
+      "temperature_over_debye_temperature": 1.37,
+      "debye_over_3r": 0.9738590264699233,
+      "einstein_over_3r": 0.9716491890945079,
+      "low_temperature_cubic_over_3r": null
+    },
+    {
+      "temperature_over_debye_temperature": 1.3800000000000001,
+      "debye_over_3r": 0.9742295246137351,
+      "einstein_over_3r": 0.9720516681227933,
+      "low_temperature_cubic_over_3r": null
+    },
+    {
+      "temperature_over_debye_temperature": 1.3900000000000001,
+      "debye_over_3r": 0.9745922501668502,
+      "einstein_over_3r": 0.9724456853486482,
+      "low_temperature_cubic_over_3r": null
+    },
+    {
+      "temperature_over_debye_temperature": 1.4000000000000001,
+      "debye_over_3r": 0.9749474176726759,
+      "einstein_over_3r": 0.9728314749666757,
+      "low_temperature_cubic_over_3r": null
+    },
+    {
+      "temperature_over_debye_temperature": 1.4100000000000001,
+      "debye_over_3r": 0.9752952343702104,
+      "einstein_over_3r": 0.973209263172454,
+      "low_temperature_cubic_over_3r": null
+    },
+    {
+      "temperature_over_debye_temperature": 1.42,
+      "debye_over_3r": 0.975635900488484,
+      "einstein_over_3r": 0.9735792684861824,
+      "low_temperature_cubic_over_3r": null
+    },
+    {
+      "temperature_over_debye_temperature": 1.43,
+      "debye_over_3r": 0.9759696095273401,
+      "einstein_over_3r": 0.973941702061245,
+      "low_temperature_cubic_over_3r": null
+    },
+    {
+      "temperature_over_debye_temperature": 1.44,
+      "debye_over_3r": 0.9762965485252689,
+      "einstein_over_3r": 0.9742967679784914,
+      "low_temperature_cubic_over_3r": null
+    },
+    {
+      "temperature_over_debye_temperature": 1.45,
+      "debye_over_3r": 0.9766168983149712,
+      "einstein_over_3r": 0.9746446635269786,
+      "low_temperature_cubic_over_3r": null
+    },
+    {
+      "temperature_over_debye_temperature": 1.46,
+      "debye_over_3r": 0.976930833767283,
+      "einstein_over_3r": 0.974985579471868,
+      "low_temperature_cubic_over_3r": null
+    },
+    {
+      "temperature_over_debye_temperature": 1.47,
+      "debye_over_3r": 0.9772385240240589,
+      "einstein_over_3r": 0.9753197003101554,
+      "low_temperature_cubic_over_3r": null
+    },
+    {
+      "temperature_over_debye_temperature": 1.48,
+      "debye_over_3r": 0.9775401327205778,
+      "einstein_over_3r": 0.9756472045148467,
+      "low_temperature_cubic_over_3r": null
+    },
+    {
+      "temperature_over_debye_temperature": 1.49,
+      "debye_over_3r": 0.9778358181980042,
+      "einstein_over_3r": 0.9759682647681693,
+      "low_temperature_cubic_over_3r": null
+    },
+    {
+      "temperature_over_debye_temperature": 1.5,
+      "debye_over_3r": 0.9781257337064068,
+      "einstein_over_3r": 0.9762830481843827,
+      "low_temperature_cubic_over_3r": null
+    },
+    {
+      "temperature_over_debye_temperature": 1.51,
+      "debye_over_3r": 0.9784100275988006,
+      "einstein_over_3r": 0.9765917165226998,
+      "low_temperature_cubic_over_3r": null
+    },
+    {
+      "temperature_over_debye_temperature": 1.52,
+      "debye_over_3r": 0.9786888435166773,
+      "einstein_over_3r": 0.9768944263908266,
+      "low_temperature_cubic_over_3r": null
+    },
+    {
+      "temperature_over_debye_temperature": 1.53,
+      "debye_over_3r": 0.9789623205674246,
+      "einstein_over_3r": 0.9771913294395772,
+      "low_temperature_cubic_over_3r": null
+    },
+    {
+      "temperature_over_debye_temperature": 1.54,
+      "debye_over_3r": 0.9792305934940486,
+      "einstein_over_3r": 0.977482572549016,
+      "low_temperature_cubic_over_3r": null
+    },
+    {
+      "temperature_over_debye_temperature": 1.55,
+      "debye_over_3r": 0.9794937928375739,
+      "einstein_over_3r": 0.9777682980065305,
+      "low_temperature_cubic_over_3r": null
+    },
+    {
+      "temperature_over_debye_temperature": 1.56,
+      "debye_over_3r": 0.9797520450924746,
+      "einstein_over_3r": 0.9780486436772432,
+      "low_temperature_cubic_over_3r": null
+    },
+    {
+      "temperature_over_debye_temperature": 1.57,
+      "debye_over_3r": 0.9800054728554762,
+      "einstein_over_3r": 0.9783237431671288,
+      "low_temperature_cubic_over_3r": null
+    },
+    {
+      "temperature_over_debye_temperature": 1.58,
+      "debye_over_3r": 0.9802541949680474,
+      "einstein_over_3r": 0.9785937259791857,
+      "low_temperature_cubic_over_3r": null
+    },
+    {
+      "temperature_over_debye_temperature": 1.59,
+      "debye_over_3r": 0.9804983266528835,
+      "einstein_over_3r": 0.9788587176630055,
+      "low_temperature_cubic_over_3r": null
+    },
+    {
+      "temperature_over_debye_temperature": 1.6,
+      "debye_over_3r": 0.9807379796446698,
+      "einstein_over_3r": 0.9791188399580467,
+      "low_temperature_cubic_over_3r": null
+    },
+    {
+      "temperature_over_debye_temperature": 1.61,
+      "debye_over_3r": 0.9809732623153926,
+      "einstein_over_3r": 0.9793742109309179,
+      "low_temperature_cubic_over_3r": null
+    },
+    {
+      "temperature_over_debye_temperature": 1.62,
+      "debye_over_3r": 0.9812042797944555,
+      "einstein_over_3r": 0.9796249451069517,
+      "low_temperature_cubic_over_3r": null
+    },
+    {
+      "temperature_over_debye_temperature": 1.6300000000000001,
+      "debye_over_3r": 0.9814311340838483,
+      "einstein_over_3r": 0.9798711535963365,
+      "low_temperature_cubic_over_3r": null
+    },
+    {
+      "temperature_over_debye_temperature": 1.6400000000000001,
+      "debye_over_3r": 0.981653924168591,
+      "einstein_over_3r": 0.9801129442150639,
+      "low_temperature_cubic_over_3r": null
+    },
+    {
+      "temperature_over_debye_temperature": 1.6500000000000001,
+      "debye_over_3r": 0.9818727461226806,
+      "einstein_over_3r": 0.9803504216009302,
+      "low_temperature_cubic_over_3r": null
+    },
+    {
+      "temperature_over_debye_temperature": 1.6600000000000001,
+      "debye_over_3r": 0.9820876932107417,
+      "einstein_over_3r": 0.9805836873248185,
+      "low_temperature_cubic_over_3r": null
+    },
+    {
+      "temperature_over_debye_temperature": 1.6700000000000002,
+      "debye_over_3r": 0.9822988559855793,
+      "einstein_over_3r": 0.9808128399974868,
+      "low_temperature_cubic_over_3r": null
+    },
+    {
+      "temperature_over_debye_temperature": 1.68,
+      "debye_over_3r": 0.982506322381823,
+      "einstein_over_3r": 0.9810379753720561,
+      "low_temperature_cubic_over_3r": null
+    },
+    {
+      "temperature_over_debye_temperature": 1.69,
+      "debye_over_3r": 0.9827101778058352,
+      "einstein_over_3r": 0.9812591864424048,
+      "low_temperature_cubic_over_3r": null
+    },
+    {
+      "temperature_over_debye_temperature": 1.7,
+      "debye_over_3r": 0.9829105052220573,
+      "einstein_over_3r": 0.9814765635376472,
+      "low_temperature_cubic_over_3r": null
+    },
+    {
+      "temperature_over_debye_temperature": 1.71,
+      "debye_over_3r": 0.983107385235948,
+      "einstein_over_3r": 0.9816901944128746,
+      "low_temperature_cubic_over_3r": null
+    },
+    {
+      "temperature_over_debye_temperature": 1.72,
+      "debye_over_3r": 0.9833008961736697,
+      "einstein_over_3r": 0.9819001643363289,
+      "low_temperature_cubic_over_3r": null
+    },
+    {
+      "temperature_over_debye_temperature": 1.73,
+      "debye_over_3r": 0.9834911141586662,
+      "einstein_over_3r": 0.9821065561731633,
+      "low_temperature_cubic_over_3r": null
+    },
+    {
+      "temperature_over_debye_temperature": 1.74,
+      "debye_over_3r": 0.9836781131852684,
+      "einstein_over_3r": 0.9823094504659436,
+      "low_temperature_cubic_over_3r": null
+    },
+    {
+      "temperature_over_debye_temperature": 1.75,
+      "debye_over_3r": 0.983861965189458,
+      "einstein_over_3r": 0.9825089255120348,
+      "low_temperature_cubic_over_3r": null
+    },
+    {
+      "temperature_over_debye_temperature": 1.76,
+      "debye_over_3r": 0.9840427401169146,
+      "einstein_over_3r": 0.982705057438004,
+      "low_temperature_cubic_over_3r": null
+    },
+    {
+      "temperature_over_debye_temperature": 1.77,
+      "debye_over_3r": 0.9842205059884648,
+      "einstein_over_3r": 0.9828979202711784,
+      "low_temperature_cubic_over_3r": null
+    },
+    {
+      "temperature_over_debye_temperature": 1.78,
+      "debye_over_3r": 0.984395328963043,
+      "einstein_over_3r": 0.9830875860084733,
+      "low_temperature_cubic_over_3r": null
+    },
+    {
+      "temperature_over_debye_temperature": 1.79,
+      "debye_over_3r": 0.9845672733982734,
+      "einstein_over_3r": 0.9832741246826138,
+      "low_temperature_cubic_over_3r": null
+    },
+    {
+      "temperature_over_debye_temperature": 1.8,
+      "debye_over_3r": 0.9847364019087727,
+      "einstein_over_3r": 0.9834576044258571,
+      "low_temperature_cubic_over_3r": null
+    },
+    {
+      "temperature_over_debye_temperature": 1.81,
+      "debye_over_3r": 0.9849027754222746,
+      "einstein_over_3r": 0.9836380915313291,
+      "low_temperature_cubic_over_3r": null
+    },
+    {
+      "temperature_over_debye_temperature": 1.82,
+      "debye_over_3r": 0.9850664532336614,
+      "einstein_over_3r": 0.983815650512067,
+      "low_temperature_cubic_over_3r": null
+    },
+    {
+      "temperature_over_debye_temperature": 1.83,
+      "debye_over_3r": 0.9852274930569991,
+      "einstein_over_3r": 0.9839903441578731,
+      "low_temperature_cubic_over_3r": null
+    },
+    {
+      "temperature_over_debye_temperature": 1.84,
+      "debye_over_3r": 0.9853859510756539,
+      "einstein_over_3r": 0.9841622335900692,
+      "low_temperature_cubic_over_3r": null
+    },
+    {
+      "temperature_over_debye_temperature": 1.85,
+      "debye_over_3r": 0.9855418819905708,
+      "einstein_over_3r": 0.9843313783142381,
+      "low_temperature_cubic_over_3r": null
+    },
+    {
+      "temperature_over_debye_temperature": 1.86,
+      "debye_over_3r": 0.9856953390667946,
+      "einstein_over_3r": 0.9844978362710375,
+      "low_temperature_cubic_over_3r": null
+    },
+    {
+      "temperature_over_debye_temperature": 1.87,
+      "debye_over_3r": 0.9858463741782977,
+      "einstein_over_3r": 0.9846616638851637,
+      "low_temperature_cubic_over_3r": null
+    },
+    {
+      "temperature_over_debye_temperature": 1.8800000000000001,
+      "debye_over_3r": 0.9859950378511974,
+      "einstein_over_3r": 0.9848229161125457,
+      "low_temperature_cubic_over_3r": null
+    },
+    {
+      "temperature_over_debye_temperature": 1.8900000000000001,
+      "debye_over_3r": 0.9861413793054127,
+      "einstein_over_3r": 0.9849816464858399,
+      "low_temperature_cubic_over_3r": null
+    },
+    {
+      "temperature_over_debye_temperature": 1.9000000000000001,
+      "debye_over_3r": 0.9862854464948378,
+      "einstein_over_3r": 0.9851379071582916,
+      "low_temperature_cubic_over_3r": null
+    },
+    {
+      "temperature_over_debye_temperature": 1.9100000000000001,
+      "debye_over_3r": 0.9864272861460835,
+      "einstein_over_3r": 0.9852917489460372,
+      "low_temperature_cubic_over_3r": null
+    },
+    {
+      "temperature_over_debye_temperature": 1.9200000000000002,
+      "debye_over_3r": 0.9865669437958471,
+      "einstein_over_3r": 0.985443221368899,
+      "low_temperature_cubic_over_3r": null
+    },
+    {
+      "temperature_over_debye_temperature": 1.93,
+      "debye_over_3r": 0.9867044638269696,
+      "einstein_over_3r": 0.9855923726897475,
+      "low_temperature_cubic_over_3r": null
+    },
+    {
+      "temperature_over_debye_temperature": 1.94,
+      "debye_over_3r": 0.9868398895032265,
+      "einstein_over_3r": 0.9857392499524779,
+      "low_temperature_cubic_over_3r": null
+    },
+    {
+      "temperature_over_debye_temperature": 1.95,
+      "debye_over_3r": 0.9869732630029022,
+      "einstein_over_3r": 0.9858838990186519,
+      "low_temperature_cubic_over_3r": null
+    },
+    {
+      "temperature_over_debye_temperature": 1.96,
+      "debye_over_3r": 0.9871046254512059,
+      "einstein_over_3r": 0.9860263646028775,
+      "low_temperature_cubic_over_3r": null
+    },
+    {
+      "temperature_over_debye_temperature": 1.97,
+      "debye_over_3r": 0.9872340169515608,
+      "einstein_over_3r": 0.9861666903069543,
+      "low_temperature_cubic_over_3r": null
+    },
+    {
+      "temperature_over_debye_temperature": 1.98,
+      "debye_over_3r": 0.9873614766158224,
+      "einstein_over_3r": 0.986304918652844,
+      "low_temperature_cubic_over_3r": null
+    },
+    {
+      "temperature_over_debye_temperature": 1.99,
+      "debye_over_3r": 0.9874870425934587,
+      "einstein_over_3r": 0.9864410911145133,
+      "low_temperature_cubic_over_3r": null
+    },
+    {
+      "temperature_over_debye_temperature": 2.0,
+      "debye_over_3r": 0.9876107520997407,
+      "einstein_over_3r": 0.9865752481486864,
+      "low_temperature_cubic_over_3r": null
+    },
+    {
+      "temperature_over_debye_temperature": 2.01,
+      "debye_over_3r": 0.9877326414429743,
+      "einstein_over_3r": 0.9867074292245535,
+      "low_temperature_cubic_over_3r": null
+    },
+    {
+      "temperature_over_debye_temperature": 2.02,
+      "debye_over_3r": 0.9878527460508131,
+      "einstein_over_3r": 0.9868376728524781,
+      "low_temperature_cubic_over_3r": null
+    },
+    {
+      "temperature_over_debye_temperature": 2.03,
+      "debye_over_3r": 0.9879711004956913,
+      "einstein_over_3r": 0.9869660166117341,
+      "low_temperature_cubic_over_3r": null
+    },
+    {
+      "temperature_over_debye_temperature": 2.04,
+      "debye_over_3r": 0.9880877385194027,
+      "einstein_over_3r": 0.9870924971773155,
+      "low_temperature_cubic_over_3r": null
+    },
+    {
+      "temperature_over_debye_temperature": 2.05,
+      "debye_over_3r": 0.9882026930568635,
+      "einstein_over_3r": 0.987217150345852,
+      "low_temperature_cubic_over_3r": null
+    },
+    {
+      "temperature_over_debye_temperature": 2.0599999999999996,
+      "debye_over_3r": 0.9883159962590894,
+      "einstein_over_3r": 0.9873400110606658,
+      "low_temperature_cubic_over_3r": null
+    },
+    {
+      "temperature_over_debye_temperature": 2.07,
+      "debye_over_3r": 0.9884276795154103,
+      "einstein_over_3r": 0.9874611134360005,
+      "low_temperature_cubic_over_3r": null
+    },
+    {
+      "temperature_over_debye_temperature": 2.0799999999999996,
+      "debye_over_3r": 0.9885377734749654,
+      "einstein_over_3r": 0.9875804907804503,
+      "low_temperature_cubic_over_3r": null
+    },
+    {
+      "temperature_over_debye_temperature": 2.09,
+      "debye_over_3r": 0.9886463080674848,
+      "einstein_over_3r": 0.9876981756196258,
+      "low_temperature_cubic_over_3r": null
+    },
+    {
+      "temperature_over_debye_temperature": 2.0999999999999996,
+      "debye_over_3r": 0.9887533125234043,
+      "einstein_over_3r": 0.9878141997180834,
+      "low_temperature_cubic_over_3r": null
+    },
+    {
+      "temperature_over_debye_temperature": 2.11,
+      "debye_over_3r": 0.9888588153933244,
+      "einstein_over_3r": 0.9879285941005344,
+      "low_temperature_cubic_over_3r": null
+    },
+    {
+      "temperature_over_debye_temperature": 2.1199999999999997,
+      "debye_over_3r": 0.9889628445668454,
+      "einstein_over_3r": 0.9880413890723804,
+      "low_temperature_cubic_over_3r": null
+    },
+    {
+      "temperature_over_debye_temperature": 2.13,
+      "debye_over_3r": 0.9890654272907934,
+      "einstein_over_3r": 0.9881526142395816,
+      "low_temperature_cubic_over_3r": null
+    },
+    {
+      "temperature_over_debye_temperature": 2.1399999999999997,
+      "debye_over_3r": 0.98916659018687,
+      "einstein_over_3r": 0.9882622985278892,
+      "low_temperature_cubic_over_3r": null
+    },
+    {
+      "temperature_over_debye_temperature": 2.15,
+      "debye_over_3r": 0.9892663592687381,
+      "einstein_over_3r": 0.9883704702014722,
+      "low_temperature_cubic_over_3r": null
+    },
+    {
+      "temperature_over_debye_temperature": 2.1599999999999997,
+      "debye_over_3r": 0.9893647599585648,
+      "einstein_over_3r": 0.9884771568809438,
+      "low_temperature_cubic_over_3r": null
+    },
+    {
+      "temperature_over_debye_temperature": 2.17,
+      "debye_over_3r": 0.9894618171030453,
+      "einstein_over_3r": 0.9885823855608252,
+      "low_temperature_cubic_over_3r": null
+    },
+    {
+      "temperature_over_debye_temperature": 2.1799999999999997,
+      "debye_over_3r": 0.989557554988927,
+      "einstein_over_3r": 0.9886861826264592,
+      "low_temperature_cubic_over_3r": null
+    },
+    {
+      "temperature_over_debye_temperature": 2.19,
+      "debye_over_3r": 0.98965199735804,
+      "einstein_over_3r": 0.9887885738703914,
+      "low_temperature_cubic_over_3r": null
+    },
+    {
+      "temperature_over_debye_temperature": 2.1999999999999997,
+      "debye_over_3r": 0.9897451674218701,
+      "einstein_over_3r": 0.9888895845082456,
+      "low_temperature_cubic_over_3r": null
+    },
+    {
+      "temperature_over_debye_temperature": 2.21,
+      "debye_over_3r": 0.9898370878756729,
+      "einstein_over_3r": 0.9889892391941035,
+      "low_temperature_cubic_over_3r": null
+    },
+    {
+      "temperature_over_debye_temperature": 2.2199999999999998,
+      "debye_over_3r": 0.9899277809121554,
+      "einstein_over_3r": 0.9890875620354092,
+      "low_temperature_cubic_over_3r": null
+    },
+    {
+      "temperature_over_debye_temperature": 2.23,
+      "debye_over_3r": 0.9900172682347395,
+      "einstein_over_3r": 0.9891845766074174,
+      "low_temperature_cubic_over_3r": null
+    },
+    {
+      "temperature_over_debye_temperature": 2.2399999999999998,
+      "debye_over_3r": 0.9901055710704172,
+      "einstein_over_3r": 0.9892803059671981,
+      "low_temperature_cubic_over_3r": null
+    },
+    {
+      "temperature_over_debye_temperature": 2.25,
+      "debye_over_3r": 0.990192710182213,
+      "einstein_over_3r": 0.9893747726672117,
+      "low_temperature_cubic_over_3r": null
+    },
+    {
+      "temperature_over_debye_temperature": 2.26,
+      "debye_over_3r": 0.9902787058812749,
+      "einstein_over_3r": 0.9894679987684762,
+      "low_temperature_cubic_over_3r": null
+    },
+    {
+      "temperature_over_debye_temperature": 2.27,
+      "debye_over_3r": 0.9903635780385923,
+      "einstein_over_3r": 0.9895600058533349,
+      "low_temperature_cubic_over_3r": null
+    },
+    {
+      "temperature_over_debye_temperature": 2.28,
+      "debye_over_3r": 0.9904473460963686,
+      "einstein_over_3r": 0.9896508150378345,
+      "low_temperature_cubic_over_3r": null
+    },
+    {
+      "temperature_over_debye_temperature": 2.29,
+      "debye_over_3r": 0.9905300290790485,
+      "einstein_over_3r": 0.989740446983743,
+      "low_temperature_cubic_over_3r": null
+    },
+    {
+      "temperature_over_debye_temperature": 2.3,
+      "debye_over_3r": 0.9906116456040202,
+      "einstein_over_3r": 0.9898289219101964,
+      "low_temperature_cubic_over_3r": null
+    },
+    {
+      "temperature_over_debye_temperature": 2.31,
+      "debye_over_3r": 0.9906922138919957,
+      "einstein_over_3r": 0.9899162596050076,
+      "low_temperature_cubic_over_3r": null
+    },
+    {
+      "temperature_over_debye_temperature": 2.32,
+      "debye_over_3r": 0.9907717517770886,
+      "einstein_over_3r": 0.9900024794356393,
+      "low_temperature_cubic_over_3r": null
+    },
+    {
+      "temperature_over_debye_temperature": 2.3299999999999996,
+      "debye_over_3r": 0.9908502767165941,
+      "einstein_over_3r": 0.9900876003598461,
+      "low_temperature_cubic_over_3r": null
+    },
+    {
+      "temperature_over_debye_temperature": 2.34,
+      "debye_over_3r": 0.9909278058004791,
+      "einstein_over_3r": 0.9901716409360191,
+      "low_temperature_cubic_over_3r": null
+    },
+    {
+      "temperature_over_debye_temperature": 2.3499999999999996,
+      "debye_over_3r": 0.9910043557605993,
+      "einstein_over_3r": 0.9902546193332084,
+      "low_temperature_cubic_over_3r": null
+    },
+    {
+      "temperature_over_debye_temperature": 2.36,
+      "debye_over_3r": 0.9910799429796452,
+      "einstein_over_3r": 0.9903365533408719,
+      "low_temperature_cubic_over_3r": null
+    },
+    {
+      "temperature_over_debye_temperature": 2.3699999999999997,
+      "debye_over_3r": 0.9911545834998323,
+      "einstein_over_3r": 0.9904174603783285,
+      "low_temperature_cubic_over_3r": null
+    },
+    {
+      "temperature_over_debye_temperature": 2.38,
+      "debye_over_3r": 0.9912282930313362,
+      "einstein_over_3r": 0.9904973575039452,
+      "low_temperature_cubic_over_3r": null
+    },
+    {
+      "temperature_over_debye_temperature": 2.3899999999999997,
+      "debye_over_3r": 0.9913010869604905,
+      "einstein_over_3r": 0.9905762614240569,
+      "low_temperature_cubic_over_3r": null
+    },
+    {
+      "temperature_over_debye_temperature": 2.4,
+      "debye_over_3r": 0.9913729803577448,
+      "einstein_over_3r": 0.9906541885016323,
+      "low_temperature_cubic_over_3r": null
+    },
+    {
+      "temperature_over_debye_temperature": 2.4099999999999997,
+      "debye_over_3r": 0.9914439879854003,
+      "einstein_over_3r": 0.9907311547646912,
+      "low_temperature_cubic_over_3r": null
+    },
+    {
+      "temperature_over_debye_temperature": 2.42,
+      "debye_over_3r": 0.9915141243051233,
+      "einstein_over_3r": 0.9908071759144823,
+      "low_temperature_cubic_over_3r": null
+    },
+    {
+      "temperature_over_debye_temperature": 2.4299999999999997,
+      "debye_over_3r": 0.9915834034852475,
+      "einstein_over_3r": 0.9908822673334304,
+      "low_temperature_cubic_over_3r": null
+    },
+    {
+      "temperature_over_debye_temperature": 2.44,
+      "debye_over_3r": 0.9916518394078692,
+      "einstein_over_3r": 0.9909564440928581,
+      "low_temperature_cubic_over_3r": null
+    },
+    {
+      "temperature_over_debye_temperature": 2.4499999999999997,
+      "debye_over_3r": 0.9917194456757459,
+      "einstein_over_3r": 0.9910297209604924,
+      "low_temperature_cubic_over_3r": null
+    },
+    {
+      "temperature_over_debye_temperature": 2.46,
+      "debye_over_3r": 0.9917862356189997,
+      "einstein_over_3r": 0.9911021124077628,
+      "low_temperature_cubic_over_3r": null
+    },
+    {
+      "temperature_over_debye_temperature": 2.4699999999999998,
+      "debye_over_3r": 0.9918522223016351,
+      "einstein_over_3r": 0.9911736326168881,
+      "low_temperature_cubic_over_3r": null
+    },
+    {
+      "temperature_over_debye_temperature": 2.48,
+      "debye_over_3r": 0.9919174185278762,
+      "einstein_over_3r": 0.9912442954877752,
+      "low_temperature_cubic_over_3r": null
+    },
+    {
+      "temperature_over_debye_temperature": 2.4899999999999998,
+      "debye_over_3r": 0.9919818368483295,
+      "einstein_over_3r": 0.9913141146447252,
+      "low_temperature_cubic_over_3r": null
+    },
+    {
+      "temperature_over_debye_temperature": 2.5,
+      "debye_over_3r": 0.9920454895659752,
+      "einstein_over_3r": 0.9913831034429521,
+      "low_temperature_cubic_over_3r": null
+    }
+  ],
+  "diagnostics": [
+    {
+      "temperature_over_debye_temperature": 0.02,
+      "debye_over_3r": 0.00062341818261761,
+      "einstein_over_3r": 5.112407865403025e-15,
+      "debye_to_einstein_ratio": 121942184393.47154
+    },
+    {
+      "temperature_over_debye_temperature": 0.05,
+      "debye_over_3r": 0.009740756600704515,
+      "einstein_over_3r": 2.5937834880353838e-05,
+      "debye_to_einstein_ratio": 375.5423937902574
+    },
+    {
+      "temperature_over_debye_temperature": 0.1,
+      "debye_over_3r": 0.07582100303109081,
+      "einstein_over_3r": 0.02053733846925586,
+      "debye_to_einstein_ratio": 3.691861199278276
+    },
+    {
+      "temperature_over_debye_temperature": 0.25,
+      "debye_over_3r": 0.50305933092181,
+      "einstein_over_3r": 0.44864255682557247,
+      "debye_to_einstein_ratio": 1.1212920470168286
+    },
+    {
+      "temperature_over_debye_temperature": 1.0,
+      "debye_over_3r": 0.9517321357032825,
+      "einstein_over_3r": 0.9475782969175155,
+      "debye_to_einstein_ratio": 1.0043836364755077
+    },
+    {
+      "temperature_over_debye_temperature": 2.0,
+      "debye_over_3r": 0.9876107520997407,
+      "einstein_over_3r": 0.9865752481486864,
+      "debye_to_einstein_ratio": 1.0010495944967173
+    }
+  ],
+  "checks": {
+    "zero_temperature_limit": true,
+    "debye_bounded_and_monotonic": true,
+    "debye_exceeds_einstein_on_displayed_domain": true,
+    "low_temperature_cubic_relative_error": 8.924529681509443e-15,
+    "high_temperature_series_relative_error": 3.552731442394271e-15,
+    "quadrature_convergence_over_3r": 3.1334837669068503e-15
+  }
+}

@@ -45,12 +45,17 @@
   const quantityButtons = Array.from(
     document.querySelectorAll("[data-planck-quantity]"),
   );
+  const modeButtons = Array.from(
+    document.querySelectorAll("[data-planck-mode]"),
+  );
+  const comparisonLegend = document.querySelector("[data-planck-legend]");
   const reducedMotion = window.matchMedia(
     "(prefers-reduced-motion: reduce)",
   ).matches;
 
   let temperature = Number(temperatureInput.value);
   let planckQuantity = "radiance";
+  let compareMode = false;
   let sweepFrame = 0;
   let sweeping = false;
   let sweepStartTime = 0;
@@ -183,16 +188,25 @@
     const xMinimum = 100;
     const xMaximum = 3000;
     const samples = 420;
-    const points = [];
-    let maximum = 0;
-
-    for (let index = 0; index <= samples; index += 1) {
-      const wavelength =
-        xMinimum + (index / samples) * (xMaximum - xMinimum);
-      const value = spectralValue(wavelength, temperature);
-      points.push({ wavelength, value });
-      maximum = Math.max(maximum, value);
-    }
+    const comparisonTemperatures = [4000, 5000, 6000];
+    const curveTemperatures = compareMode
+      ? comparisonTemperatures
+      : [temperature];
+    const curves = curveTemperatures.map((curveTemperature) => {
+      const points = [];
+      for (let index = 0; index <= samples; index += 1) {
+        const wavelength =
+          xMinimum + (index / samples) * (xMaximum - xMinimum);
+        points.push({
+          wavelength,
+          value: spectralValue(wavelength, curveTemperature),
+        });
+      }
+      return { temperature: curveTemperature, points };
+    });
+    const maximum = Math.max(
+      ...curves.flatMap((curve) => curve.points.map((point) => point.value)),
+    );
 
     const xFor = (wavelength) =>
       left +
@@ -224,19 +238,19 @@
       plotHeight,
     );
 
-    context.font = '11px "Times New Roman", Times, serif';
+    context.font = `${geometry.compact ? 11 : 12}px "Times New Roman", Times, serif`;
     context.textAlign = "right";
     context.textBaseline = "middle";
     for (let index = 0; index <= 4; index += 1) {
       const fraction = index / 4;
       const y = top + plotHeight - fraction * plotHeight;
-      context.strokeStyle = "rgba(255, 250, 240, 0.105)";
+      context.strokeStyle = "rgba(37, 35, 31, 0.12)";
       context.lineWidth = 1;
       context.beginPath();
       context.moveTo(left, y);
       context.lineTo(left + plotWidth, y);
       context.stroke();
-      context.fillStyle = "rgba(255, 250, 240, 0.50)";
+      context.fillStyle = "rgba(37, 35, 31, 0.62)";
       const tick = maximum * fraction;
       const label =
         tick >= 1e6
@@ -254,103 +268,93 @@
       : [100, 500, 1000, 1500, 2000, 2500, 3000];
     xTicks.forEach((tick) => {
       const x = xFor(tick);
-      context.strokeStyle = "rgba(255, 250, 240, 0.085)";
+      context.strokeStyle = "rgba(37, 35, 31, 0.09)";
       context.beginPath();
       context.moveTo(x, top);
       context.lineTo(x, top + plotHeight);
       context.stroke();
-      context.fillStyle = "rgba(255, 250, 240, 0.50)";
+      context.fillStyle = "rgba(37, 35, 31, 0.62)";
       context.fillText(tick.toLocaleString("en-GB"), x, top + plotHeight + 9);
     });
 
-    const [red, green, blue] = blackbodyRgb(temperature);
-    const lineGradient = context.createLinearGradient(
-      left,
-      0,
-      left + plotWidth,
-      0,
-    );
-    lineGradient.addColorStop(0, "rgba(142, 223, 255, 0.72)");
-    lineGradient.addColorStop(
-      clamp((380 - xMinimum) / (xMaximum - xMinimum), 0, 1),
-      `rgba(${red}, ${green}, ${blue}, 0.92)`,
-    );
-    lineGradient.addColorStop(
-      clamp((750 - xMinimum) / (xMaximum - xMinimum), 0, 1),
-      "rgba(255, 154, 92, 0.98)",
-    );
-    lineGradient.addColorStop(1, "rgba(255, 118, 94, 0.35)");
+    const drawCurve = (curve, colour, lineWidth = 2.3) => {
+      context.beginPath();
+      curve.points.forEach((point, index) => {
+        const x = xFor(point.wavelength);
+        const y = yFor(point.value);
+        if (index === 0) context.moveTo(x, y);
+        else context.lineTo(x, y);
+      });
+      context.strokeStyle = colour;
+      context.lineWidth = lineWidth;
+      context.lineJoin = "round";
+      context.stroke();
+    };
 
-    const fillGradient = context.createLinearGradient(0, top, 0, top + plotHeight);
-    fillGradient.addColorStop(0, `rgba(${red}, ${green}, ${blue}, 0.25)`);
-    fillGradient.addColorStop(1, "rgba(255, 118, 94, 0.015)");
+    if (compareMode) {
+      const colours = ["#b95743", "#b48529", "#4d8ca0"];
+      curves.forEach((curve, index) =>
+        drawCurve(curve, colours[index], index === 1 ? 2.8 : 2.2),
+      );
+    } else {
+      const curve = curves[0];
+      context.beginPath();
+      curve.points.forEach((point, index) => {
+        const x = xFor(point.wavelength);
+        const y = yFor(point.value);
+        if (index === 0) context.moveTo(x, y);
+        else context.lineTo(x, y);
+      });
+      context.lineTo(left + plotWidth, top + plotHeight);
+      context.lineTo(left, top + plotHeight);
+      context.closePath();
+      context.fillStyle = "rgba(162, 79, 57, 0.09)";
+      context.fill();
+      drawCurve(curve, "#a24f39");
 
-    context.beginPath();
-    points.forEach((point, index) => {
-      const x = xFor(point.wavelength);
-      const y = yFor(point.value);
-      if (index === 0) context.moveTo(x, y);
-      else context.lineTo(x, y);
-    });
-    context.lineTo(left + plotWidth, top + plotHeight);
-    context.lineTo(left, top + plotHeight);
-    context.closePath();
-    context.fillStyle = fillGradient;
-    context.fill();
-
-    context.beginPath();
-    points.forEach((point, index) => {
-      const x = xFor(point.wavelength);
-      const y = yFor(point.value);
-      if (index === 0) context.moveTo(x, y);
-      else context.lineTo(x, y);
-    });
-    context.strokeStyle = lineGradient;
-    context.lineWidth = 2.3;
-    context.lineJoin = "round";
-    context.stroke();
-
-    const peakNm = (constants.wien / temperature) * 1e9;
-    const peakValue = spectralValue(peakNm, temperature);
-    const peakX = xFor(peakNm);
-    const peakY = yFor(peakValue);
-    context.setLineDash([4, 4]);
-    context.strokeStyle = "rgba(255, 250, 240, 0.46)";
-    context.lineWidth = 1;
-    context.beginPath();
-    context.moveTo(peakX, peakY);
-    context.lineTo(peakX, top + plotHeight);
-    context.stroke();
-    context.setLineDash([]);
-    if ((sweeping || temperatureTweenFrame) && !reducedMotion) {
-      const pulse = (Math.sin(timestamp / 210) + 1) / 2;
-      context.strokeStyle = `rgba(255, 250, 240, ${(
-        0.14 +
-        pulse * 0.22
-      ).toFixed(3)})`;
+      const peakNm = (constants.wien / temperature) * 1e9;
+      const peakValue = spectralValue(peakNm, temperature);
+      const peakX = xFor(peakNm);
+      const peakY = yFor(peakValue);
+      context.setLineDash([4, 4]);
+      context.strokeStyle = "rgba(37, 35, 31, 0.42)";
       context.lineWidth = 1;
       context.beginPath();
-      context.arc(peakX, peakY, 7 + pulse * 4, 0, Math.PI * 2);
+      context.moveTo(peakX, peakY);
+      context.lineTo(peakX, top + plotHeight);
       context.stroke();
+      context.setLineDash([]);
+      if ((sweeping || temperatureTweenFrame) && !reducedMotion) {
+        const pulse = (Math.sin(timestamp / 210) + 1) / 2;
+        context.strokeStyle = `rgba(162, 79, 57, ${(
+          0.14 +
+          pulse * 0.22
+        ).toFixed(3)})`;
+        context.lineWidth = 1;
+        context.beginPath();
+        context.arc(peakX, peakY, 7 + pulse * 4, 0, Math.PI * 2);
+        context.stroke();
+      }
+      context.fillStyle = "#25231f";
+      context.beginPath();
+      context.arc(peakX, peakY, 4, 0, Math.PI * 2);
+      context.fill();
+      context.font = '12.5px "Times New Roman", Times, serif';
+      context.fillStyle = "#25231f";
+      context.textAlign = peakX > left + plotWidth * 0.72 ? "right" : "left";
+      context.textBaseline = "bottom";
+      context.fillText(
+        `λmax ${peakNm.toFixed(1)} nm`,
+        peakX + (context.textAlign === "right" ? -9 : 9),
+        peakY - 7,
+      );
     }
-    context.fillStyle = "#fffaf0";
-    context.beginPath();
-    context.arc(peakX, peakY, 4, 0, Math.PI * 2);
-    context.fill();
-    context.font = '12px "Times New Roman", Times, serif';
-    context.textAlign = peakX > left + plotWidth * 0.72 ? "right" : "left";
-    context.textBaseline = "bottom";
-    context.fillText(
-      `λmax ${peakNm.toFixed(1)} nm`,
-      peakX + (context.textAlign === "right" ? -9 : 9),
-      peakY - 7,
-    );
 
     context.save();
     context.translate(14, top + plotHeight / 2);
     context.rotate(-Math.PI / 2);
-    context.fillStyle = "rgba(255, 250, 240, 0.56)";
-    context.font = '11px "Times New Roman", Times, serif';
+    context.fillStyle = "rgba(37, 35, 31, 0.68)";
+    context.font = `${geometry.compact ? 11 : 12}px "Times New Roman", Times, serif`;
     context.textAlign = "center";
     context.textBaseline = "top";
     context.fillText(
@@ -362,7 +366,7 @@
     );
     context.restore();
 
-    context.fillStyle = "rgba(255, 250, 240, 0.56)";
+    context.fillStyle = "rgba(37, 35, 31, 0.68)";
     context.textAlign = "center";
     context.textBaseline = "bottom";
     context.fillText(
@@ -428,10 +432,13 @@
       "--orb-pulse-high",
       (1.011 + energy * 0.009).toFixed(3),
     );
-    liveQuantityTitle.innerHTML =
-      planckQuantity === "radiance"
-        ? "Live Planck spectrum · B<sub>λ</sub>(λ,T)"
-        : "Live Planck spectrum · M<sub>λ</sub>(λ,T)";
+    liveQuantityTitle.innerHTML = compareMode
+      ? planckQuantity === "radiance"
+        ? "Planck comparison · B<sub>λ</sub>(λ,T)"
+        : "Planck comparison · M<sub>λ</sub>(λ,T)"
+      : planckQuantity === "radiance"
+        ? "Planck spectrum · B<sub>λ</sub>(λ,T)"
+        : "Planck spectrum · M<sub>λ</sub>(λ,T)";
     quantityButtons.forEach((button) => {
       const active = button.dataset.planckQuantity === planckQuantity;
       button.classList.toggle("is-active", active);
@@ -450,6 +457,13 @@
         Number(button.dataset.temperaturePreset) === Math.round(temperature),
       );
     });
+    modeButtons.forEach((button) => {
+      const active =
+        button.dataset.planckMode === (compareMode ? "compare" : "single");
+      button.classList.toggle("is-active", active);
+      button.setAttribute("aria-pressed", active ? "true" : "false");
+    });
+    if (comparisonLegend) comparisonLegend.hidden = !compareMode;
   }
 
   function setTemperature(nextTemperature, options = {}) {
@@ -568,7 +582,30 @@
     });
   });
 
+  modeButtons.forEach((button) => {
+    button.addEventListener("click", () => {
+      compareMode = button.dataset.planckMode === "compare";
+      updateReadouts();
+      drawSpectrum();
+      if (tooltip) tooltip.hidden = true;
+    });
+  });
+
   sweepButton?.addEventListener("click", toggleSweep);
+
+  if (hero && "IntersectionObserver" in window) {
+    const heroObserver = new IntersectionObserver(
+      ([entry]) => {
+        if (!entry.isIntersecting && sweeping) stopSweep();
+      },
+      { threshold: 0.05 },
+    );
+    heroObserver.observe(hero);
+  }
+
+  document.addEventListener("visibilitychange", () => {
+    if (document.hidden && sweeping) stopSweep();
+  });
 
   canvas.addEventListener("pointermove", (event) => {
     if (!chartState || !tooltip) return;
@@ -592,9 +629,17 @@
       ((x - geometry.left) / geometry.plotWidth) *
         (xMaximum - xMinimum);
     const value = spectralValue(wavelength, temperature);
-    tooltip.innerHTML = `<strong>${wavelength.toFixed(
-      0,
-    )} nm</strong><br>${formatSpectral(value)}`;
+    tooltip.innerHTML = compareMode
+      ? `<strong>${wavelength.toFixed(0)} nm</strong><br>` +
+        [4000, 5000, 6000]
+          .map(
+            (curveTemperature) =>
+              `${curveTemperature.toLocaleString("en-GB")} K · ${formatSpectral(
+                spectralValue(wavelength, curveTemperature),
+              )}`,
+          )
+          .join("<br>")
+      : `<strong>${wavelength.toFixed(0)} nm</strong><br>${formatSpectral(value)}`;
     tooltip.style.left = `${clamp(x, 8, canvas.clientWidth - 170)}px`;
     tooltip.style.top = `${clamp(y, 55, canvas.clientHeight - 8)}px`;
     tooltip.hidden = false;
@@ -611,15 +656,6 @@
     stopTemperatureTween();
     setTemperature(temperature + (event.key === "ArrowRight" ? 100 : -100));
   });
-
-  document
-    .querySelector("[data-scroll-model]")
-    ?.addEventListener("click", () => {
-      document.querySelector("#model")?.scrollIntoView({
-        behavior: reducedMotion ? "auto" : "smooth",
-        block: "start",
-      });
-    });
 
   const scheduleResize = () => {
     cancelAnimationFrame(resizeFrame);

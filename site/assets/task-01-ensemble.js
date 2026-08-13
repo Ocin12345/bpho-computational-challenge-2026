@@ -34,11 +34,13 @@ const MAX_POINTS_PER_PATH = 650;
 const MAX_EXACT_MICROSCOPIC_STEPS = 20_000_000;
 const MAX_RENDERED_ENDPOINTS = 25_000;
 const PATH_COLOURS = [
-  [120, 48, 34],
-  [141, 53, 38],
-  [164, 67, 47],
-  [183, 91, 70],
-  [198, 122, 103],
+  [67, 56, 134],
+  [47, 103, 178],
+  [28, 150, 143],
+  [112, 167, 73],
+  [226, 163, 54],
+  [220, 91, 72],
+  [181, 55, 118],
 ];
 
 let latestResult = null;
@@ -386,7 +388,7 @@ function drawTrajectories(result) {
     pathsContext.strokeStyle = colourForIndex(
       pathIndex,
       result.displayedPaths.length,
-      0.28,
+      0.42,
     );
     pathsContext.lineWidth = 1.05;
     pathsContext.lineCap = "round";
@@ -420,7 +422,7 @@ function drawEndpoints(result) {
   endpointsContext.save();
   endpointsContext.setLineDash([7, 8]);
   endpointsContext.lineWidth = 1.35;
-  endpointsContext.strokeStyle = "rgba(164, 67, 47, 0.72)";
+  endpointsContext.strokeStyle = "rgba(63, 100, 178, 0.76)";
   endpointsContext.beginPath();
   endpointsContext.arc(
     origin.x,
@@ -450,7 +452,7 @@ function drawEndpoints(result) {
     endpointsContext.fillStyle = colourForIndex(
       Math.round(angleProgress * 100),
       101,
-      renderedEndpoints > 700 ? 0.34 : 0.52,
+      renderedEndpoints > 700 ? 0.42 : 0.68,
     );
     endpointsContext.beginPath();
     endpointsContext.arc(
@@ -569,7 +571,15 @@ function triggerDownload(url, filename) {
 
 function downloadCsv() {
   if (!latestResult) return;
-  const rows = ["walk,x,y,r,method"];
+  const rows = [
+    "# Task 1 ensemble export",
+    `# n_walks=${latestResult.nWalks}`,
+    `# n_steps=${latestResult.nSteps}`,
+    `# step_length=${latestResult.stepSize}`,
+    `# master_seed=${latestResult.seed}`,
+    `# method=${latestResult.mode}`,
+    "walk,x,y,r,method",
+  ];
   for (let index = 0; index < latestResult.nWalks; index += 1) {
     const x = latestResult.endpointX[index];
     const y = latestResult.endpointY[index];

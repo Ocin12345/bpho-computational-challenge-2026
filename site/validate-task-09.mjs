@@ -12,9 +12,10 @@ const readJson = async (path) => JSON.parse(await readText(path));
 const [
   html,
   css,
+  minimalCss,
   calculator,
   evidenceLoader,
-  motion,
+  navigation,
   taskIndex,
   kinematicsText,
   summaryText,
@@ -34,9 +35,10 @@ const [
 ] = await Promise.all([
   readText("site/tasks/task-09.html"),
   readText("site/assets/task-09.css"),
+  readText("site/assets/task-09-minimal.css"),
   readText("site/assets/task-09-calculator.js"),
   readText("site/assets/task-09-evidence.js"),
-  readText("site/assets/task-09-motion.js"),
+  readText("site/assets/task-09-navigation.js"),
   readText("site/tasks.html"),
   readText("data/task09/compton_angle_study.csv"),
   readText("data/task09/energy_summary.csv"),
@@ -268,12 +270,9 @@ check(
     "Δλ / λ = α(1 − cos θ)",
     "v / c = √(1 − γ",
     "φ is undefined",
-    "44-check report",
-    "30-check report",
-    "required_kinematics.png",
-    "energy_transfer_geometry.png",
-  ].every((marker) => html.includes(marker)),
-  "The exact collision, three required curves, endpoint disclosure, extension, evidence ledger, and accepted figures are present.",
+  ].every((marker) => html.includes(marker)) &&
+    !html.includes('id="evidence"'),
+  "The exact collision, three required curves, endpoint disclosure, and probability study remain without an evidence ledger.",
 );
 
 check(
@@ -305,15 +304,17 @@ check(
 );
 
 check(
-  "Local typography and motion dependencies",
-  html.includes("../vendor/packages/gsap/dist/gsap.min.js") &&
-    html.includes("../vendor/packages/gsap/dist/ScrollTrigger.min.js") &&
+  "Local classical typography and restrained navigation",
+  html.includes("task-09-minimal.css") &&
+    html.includes("task-09-navigation.js") &&
+    !html.includes("gsap.min.js") &&
+    !html.includes("task-09-motion.js") &&
     !/<(?:script|link)\b[^>]+(?:src|href)=["']https?:\/\//i.test(html) &&
-    css.includes('"Geist"') &&
-    css.includes('"Bodoni Moda Variable"') &&
-    css.includes('--figure: "Times New Roman"') &&
-    (calculator.match(/"Times New Roman"/g)?.length ?? 0) >= 7,
-  "Pinned local interface fonts and motion are used; every scientific canvas label uses Times New Roman.",
+    minimalCss.includes('--serif: "Times New Roman"') &&
+    minimalCss.includes("color-scheme: light") &&
+    (calculator.match(/"Times New Roman"/g)?.length ?? 0) >= 7 &&
+    navigation.includes("IntersectionObserver"),
+  "The page uses a local Times-led light theme, restrained section navigation, and no motion framework.",
 );
 
 check(
@@ -349,13 +350,11 @@ check(
 
 check(
   "Responsive and reduced-motion safeguards",
-  css.includes("100svh") &&
-    css.includes("@media (max-width: 820px)") &&
-    css.includes("@media (max-width: 520px)") &&
-    css.includes("@media (prefers-reduced-motion: reduce)") &&
-    motion.includes("prefers-reduced-motion: reduce") &&
-    motion.includes("pagehide"),
-  "Dynamic viewport layout, two mobile breakpoints, reduced-motion handling, and cleanup paths are present.",
+  minimalCss.includes("100dvh") &&
+    minimalCss.includes("@media (max-width: 620px)") &&
+    minimalCss.includes("@media (prefers-reduced-motion: reduce)") &&
+    calculator.includes("pagehide"),
+  "Dynamic viewport layout, mobile breakpoints, reduced-motion handling, and cleanup paths are present.",
 );
 
 check(
@@ -365,11 +364,11 @@ check(
     normalizedHtml.includes("electron binding") &&
     normalizedHtml.includes("doppler broadening") &&
     normalizedHtml.includes("detector response") &&
-    normalizedHtml.includes("possible does not mean equally likely") &&
+    normalizedHtml.includes("where scattering is most likely") &&
     normalizedHtml.includes(
       "90° value on the curve is only the continuous",
     ),
-  "The two-body assumptions, separately labelled extension, excluded experimental effects, and undefined forward direction are explicit.",
+  "The two-body assumptions, scattering-probability scope, excluded experimental effects, and undefined forward direction are explicit.",
 );
 
 check(

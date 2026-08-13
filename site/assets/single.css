@@ -27,7 +27,9 @@ body {
   overflow: hidden;
   color: var(--ivory);
   background: var(--void);
-  font-family: "Fredoka", Arial, sans-serif;
+  font-family: "Cormorant Garamond", Georgia, serif;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
 }
 
 #quantum-field,
@@ -182,9 +184,10 @@ body {
   font-family: "Cormorant Garamond", Georgia, serif;
   font-size: clamp(14px, 1.12vw, 17px);
   font-weight: 600;
-  letter-spacing: 0.035em;
+  letter-spacing: 0.055em;
   line-height: 1;
   text-decoration: none;
+  text-transform: uppercase;
   white-space: nowrap;
   transition:
     color 180ms ease,
@@ -1151,6 +1154,7 @@ a.resource-card:focus-visible {
 .title {
   max-width: calc(100vw - 56px);
   margin: 0;
+  font-family: "Bodoni Moda", Georgia, serif;
   font-weight: 800;
   line-height: 0.73;
   letter-spacing: -0.045em;
@@ -1173,43 +1177,43 @@ a.resource-card:focus-visible {
   will-change: transform, opacity, filter;
 }
 
-.title__bpho {
+.title__bpho,
+.title__quantum {
   color: var(--yellow);
-  font-family: "Gorditas", Arial, sans-serif;
-  font-size: min(15vw, 23vh, 225px);
+  font-family: "Bodoni Moda", Georgia, serif;
   font-style: normal;
-  font-weight: 700;
-  letter-spacing: -0.06em;
+  font-weight: 650;
+  letter-spacing: -0.085em;
   -webkit-text-stroke: 0.6px rgba(5, 6, 24, 0.62);
+}
+
+.title__bpho {
+  font-size: min(15vw, 23vh, 225px);
 }
 
 .title__computational {
   color: var(--ivory);
-  font-family: "Lilita One", Arial, sans-serif;
+  font-family: "Cormorant Garamond", Georgia, serif;
   font-size: min(8.3vw, 14.7vh, 134px);
   font-style: normal;
-  font-weight: 400;
-  letter-spacing: -0.065em;
+  font-weight: 650;
+  letter-spacing: -0.075em;
   -webkit-text-stroke: 0.45px rgba(5, 6, 24, 0.58);
 }
 
 .title__challenge {
   color: var(--ivory);
-  font-family: "Lilita One", Arial, sans-serif;
+  font-family: "Cormorant Garamond", Georgia, serif;
   font-size: min(11vw, 18.8vh, 170px);
-  font-style: normal;
-  font-weight: 400;
-  letter-spacing: -0.07em;
+  font-style: italic;
+  font-weight: 650;
+  letter-spacing: -0.065em;
   -webkit-text-stroke: 0.5px rgba(5, 6, 24, 0.62);
 }
 
 .title__quantum {
   margin-top: 12px;
-  font-family: "Fredoka", Arial, sans-serif;
   font-size: min(8.1vw, 13.6vh, 132px);
-  font-style: normal;
-  font-weight: 700;
-  letter-spacing: -0.055em;
 }
 
 .title__quantum > span {
@@ -1233,10 +1237,11 @@ a.resource-card:focus-visible {
   align-items: baseline;
   margin: clamp(14px, 2.2vh, 24px) 0 0;
   color: rgba(244, 240, 223, 0.86);
-  font-family: "Fredoka", Arial, sans-serif;
+  font-family: "Cormorant Garamond", Georgia, serif;
   font-size: clamp(27px, 2.4vw, 37px);
-  font-weight: 600;
-  letter-spacing: 0.005em;
+  font-style: italic;
+  font-weight: 650;
+  letter-spacing: -0.02em;
   line-height: 1.1;
   pointer-events: none;
 }
@@ -1261,9 +1266,10 @@ a.resource-card:focus-visible {
 }
 
 .credit strong {
-  font-family: "Grandstander", Arial, sans-serif;
-  font-style: italic;
-  font-weight: 600;
+  font-family: inherit;
+  font-style: inherit;
+  font-weight: inherit;
+  letter-spacing: inherit;
   color: #fff0a8;
   -webkit-text-stroke: 0.45px rgba(5, 6, 24, 0.78);
 }
@@ -1271,8 +1277,8 @@ a.resource-card:focus-visible {
 .credit span {
   font-family: inherit;
   font-size: 1em;
-  font-style: normal;
-  font-weight: 400;
+  font-style: inherit;
+  font-weight: inherit;
 }
 
 .cursor {

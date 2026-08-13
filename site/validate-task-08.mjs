@@ -12,9 +12,10 @@ const readJson = async (path) => JSON.parse(await readText(path));
 const [
   html,
   css,
+  minimalCss,
   calculator,
   evidenceLoader,
-  motion,
+  navigation,
   taskIndex,
   sweepText,
   gridText,
@@ -32,9 +33,10 @@ const [
 ] = await Promise.all([
   readText("site/tasks/task-08.html"),
   readText("site/assets/task-08.css"),
+  readText("site/assets/task-08-minimal.css"),
   readText("site/assets/task-08-calculator.js"),
   readText("site/assets/task-08-evidence.js"),
-  readText("site/assets/task-08-motion.js"),
+  readText("site/assets/task-08-navigation.js"),
   readText("site/tasks.html"),
   readText("data/task08/angle_sweep.csv"),
   readText("data/task08/mismatch_grid.csv"),
@@ -189,6 +191,21 @@ check(
 );
 
 check(
+  "Finite-photon study retained outside the filming path",
+  !html.includes('href="#finite-sample">Sample</a>') &&
+    html.includes('id="finite-sample"') &&
+    html.includes("Finite photon sampling") &&
+    html.includes("data-classical-observed") &&
+    html.includes("data-quantum-observed") &&
+    html.includes('class="video-cut"') &&
+    html.includes('data-task="08"') &&
+    html.includes("task-video.css") &&
+    minimalCss.includes(".sampling-section {") &&
+    minimalCss.includes("order: 4;"),
+  "The deterministic sample remains in source, while the visible filming path is the exact comparison calculator required by the brief.",
+);
+
+check(
   "Complete required website content",
   [
     'id="detector-canvas"',
@@ -203,13 +220,11 @@ check(
     'data-next-sample',
     "P<sub>C</sub> = 1 − cos²θ cos²φ − sin²θ sin²φ",
     "P<sub>Q</sub> = sin²(φ − θ)",
-    "42-check report",
-    "24/24",
     "All 32,761 angle pairs",
-    "probability_sweep.png",
-    "mismatch_landscape.png",
-  ].every((marker) => html.includes(marker)),
-  "The two-angle calculator, exact equations, sweep, full landscape, finite sample, evidence ledger, and accepted figures are present.",
+  ].every((marker) => html.includes(marker)) &&
+    !html.includes('id="evidence"') &&
+    !html.includes("statistical checks pass"),
+  "The exact calculator remains visually primary; supporting equations, sweeps and samples stay in source without evidence ledgers or pass counters.",
 );
 
 check(
@@ -241,15 +256,17 @@ check(
 );
 
 check(
-  "Local typography and motion dependencies",
-  html.includes("../vendor/packages/gsap/dist/gsap.min.js") &&
-    html.includes("../vendor/packages/gsap/dist/ScrollTrigger.min.js") &&
+  "Local classical typography and restrained navigation",
+  html.includes("task-08-minimal.css") &&
+    html.includes("task-08-navigation.js") &&
+    !html.includes("gsap.min.js") &&
+    !html.includes("task-08-motion.js") &&
     !/<(?:script|link)\b[^>]+(?:src|href)=["']https?:\/\//i.test(html) &&
-    css.includes('"Geist"') &&
-    css.includes('"Bodoni Moda Variable"') &&
-    css.includes('--figure: "Times New Roman"') &&
-    (calculator.match(/"Times New Roman"/g)?.length ?? 0) >= 8,
-  "Pinned local interface fonts and motion are used; all three scientific canvases use Times New Roman.",
+    minimalCss.includes('--serif: "Times New Roman"') &&
+    minimalCss.includes("color-scheme: light") &&
+    (calculator.match(/"Times New Roman"/g)?.length ?? 0) >= 8 &&
+    navigation.includes("IntersectionObserver"),
+  "The page uses a local Times-led light theme, restrained section navigation, and no motion framework.",
 );
 
 check(
@@ -279,19 +296,20 @@ check(
 
 check(
   "Responsive and reduced-motion safeguards",
-  css.includes("100svh") &&
-    css.includes("@media (max-width: 820px)") &&
-    css.includes("@media (max-width: 520px)") &&
-    css.includes("@media (prefers-reduced-motion: reduce)") &&
-    motion.includes("prefers-reduced-motion: reduce") &&
-    motion.includes("pagehide"),
-  "Dynamic viewport sizing, two mobile breakpoints, reduced-motion handling, and cleanup paths are present.",
+  minimalCss.includes("100dvh") &&
+    minimalCss.includes("@media (max-width: 620px)") &&
+    minimalCss.includes("@media (prefers-reduced-motion: reduce)") &&
+    calculator.includes("pagehide"),
+  "Dynamic viewport sizing, mobile breakpoints, reduced-motion handling, and cleanup paths are present.",
 );
 
 check(
   "Honest scientific scope boundary",
   html.includes("not a complete QKD") &&
-    html.includes("no loss, dark counts, decoherence, eavesdropper") &&
+    html.includes("no loss") &&
+    html.includes("dark counts") &&
+    html.includes("decoherence") &&
+    html.includes("eavesdropper") &&
     html.includes("not cryptographically") &&
     html.includes("Observed counts fluctuate; they never replace") &&
     finite.cryptographic_security === false,

@@ -1,15 +1,17 @@
 import { loadTask07Evidence } from "./task-07-evidence.js?v=20260731b";
 
 const COLOURS = Object.freeze({
-  psi: "#76a7ff",
-  density: "#ff809f",
-  accent: "#f4e341",
-  blueDeep: "#245fb8",
-  ink: "#171d31",
-  muted: "#596477",
-  grid: "#d7dbe3",
-  paper: "#fbfaf5",
-  states: ["#0072b2", "#d55e00", "#009e73", "#b9568e"],
+  psi: "#355c6d",
+  density: "#a24f39",
+  accent: "#a24f39",
+  blueDeep: "#355c6d",
+  ink: "#29251f",
+  muted: "#756e65",
+  grid: "#ded8cf",
+  gridSoft: "#ece7df",
+  paper: "#fcfbf7",
+  paperDeep: "#f5f1e9",
+  states: ["#355c6d", "#a24f39", "#5d7668", "#7c6676"],
 });
 
 const laboratory = document.querySelector("[data-state-laboratory]");
@@ -21,10 +23,13 @@ const densityCanvas = document.querySelector("#density-canvas");
 const densityContext = densityCanvas.getContext("2d");
 const uncertaintyCanvas = document.querySelector("#uncertainty-canvas");
 const uncertaintyContext = uncertaintyCanvas.getContext("2d");
+const convergenceCanvas = document.querySelector("#convergence-canvas");
+const convergenceContext = convergenceCanvas.getContext("2d");
 const quantumControl = document.querySelector("#quantum-number");
 const controls = document.querySelector("[data-state-controls]");
-const evidenceLock = document.querySelector("[data-evidence-lock]");
 const spectrumTooltip = document.querySelector("[data-spectrum-tooltip]");
+const resetStateButton = document.querySelector("[data-reset-state]");
+const numericalMomentsBody = document.querySelector("[data-numerical-moments-body]");
 
 const outputs = {
   stateTitle: document.querySelector("[data-state-title]"),
@@ -38,10 +43,18 @@ const outputs = {
   spectrumStatus: document.querySelector("[data-spectrum-status]"),
   uncertaintySelected: document.querySelector("[data-uncertainty-selected]"),
   extensionResult: document.querySelector("[data-extension-result]"),
-  lockTitle: document.querySelector("[data-lock-title]"),
-  lockDetail: document.querySelector("[data-lock-detail]"),
   validationCount: document.querySelector("[data-validation-count]"),
-  evidenceStatus: document.querySelector("[data-evidence-status]"),
+  validationBoundary: document.querySelector("[data-validation-boundary]"),
+  validationNormalization: document.querySelector("[data-validation-normalization]"),
+  validationNodes: document.querySelector("[data-validation-nodes]"),
+  validationEnergy: document.querySelector("[data-validation-energy]"),
+  validationOverlap: document.querySelector("[data-validation-overlap]"),
+  validationPMean: document.querySelector("[data-validation-pmean]"),
+  validationP2: document.querySelector("[data-validation-p2]"),
+  validationOrder: document.querySelector("[data-validation-order]"),
+  validationError: document.querySelector("[data-validation-error]"),
+  validationUncertainty: document.querySelector("[data-validation-uncertainty]"),
+  validationBound: document.querySelector("[data-validation-bound]"),
 };
 
 const state = {
@@ -73,12 +86,54 @@ function line(context, x1, y1, x2, y2) {
   context.stroke();
 }
 
+function paintPaper(context, width, height) {
+  context.fillStyle = COLOURS.paper;
+  context.fillRect(0, 0, width, height);
+
+  context.save();
+  context.fillStyle = "rgba(70, 57, 44, 0.035)";
+  const speckCount = Math.max(90, Math.round((width * height) / 4200));
+  for (let index = 0; index < speckCount; index += 1) {
+    const x = (index * 83 + 29) % Math.max(1, width);
+    const y = (index * 137 + 53) % Math.max(1, height);
+    const size = index % 7 === 0 ? 0.9 : 0.55;
+    context.fillRect(x, y, size, size);
+  }
+  context.restore();
+}
+
+function strokePrinted(context, colour, width) {
+  context.save();
+  context.strokeStyle = "rgba(56, 43, 33, 0.11)";
+  context.lineWidth = width + 2.2;
+  context.stroke();
+  context.restore();
+  context.strokeStyle = colour;
+  context.lineWidth = width;
+  context.stroke();
+}
+
 function currentEnergy() {
   return state.evidence.energies[state.n - 1];
 }
 
 function currentExpectation() {
   return state.evidence.expectations[state.n - 1];
+}
+
+function renderInlineMath(node, source, fallback) {
+  if (window.katex) {
+    window.katex.render(source, node, {
+      displayMode: false,
+      output: "htmlAndMathml",
+      strict: "warn",
+      throwOnError: false,
+      trust: false,
+    });
+    node.classList.add("proof-inline-math");
+    return;
+  }
+  node.textContent = fallback;
 }
 
 function drawStateLaboratory() {
@@ -106,28 +161,17 @@ function drawStateLaboratory() {
   const viewDensity = state.view !== "wavefunction";
 
   stateContext.clearRect(0, 0, width, height);
-  stateContext.fillStyle = "#090c16";
-  stateContext.fillRect(0, 0, width, height);
-
-  const wellGradient = stateContext.createLinearGradient(
-    plot.x,
-    0,
-    plot.x + plot.width,
-    0,
-  );
-  wellGradient.addColorStop(0, "rgba(118,167,255,0.04)");
-  wellGradient.addColorStop(0.5, "rgba(118,167,255,0.12)");
-  wellGradient.addColorStop(1, "rgba(118,167,255,0.04)");
-  stateContext.fillStyle = wellGradient;
+  paintPaper(stateContext, width, height);
+  stateContext.fillStyle = COLOURS.paperDeep;
   stateContext.fillRect(plot.x, plot.y, plot.width, plot.height);
 
-  stateContext.fillStyle = "rgba(255,255,255,0.035)";
+  stateContext.fillStyle = "#eee8de";
   stateContext.fillRect(0, plot.y, plot.x, plot.height);
   stateContext.fillRect(plot.x + plot.width, plot.y, margins.right, plot.height);
 
-  stateContext.strokeStyle = "#7f8ba7";
+  stateContext.strokeStyle = "#d4cdc2";
   stateContext.lineWidth = 1;
-  stateContext.setLineDash([3, 5]);
+  stateContext.setLineDash([4, 6]);
   line(stateContext, plot.x, mid, plot.x + plot.width, mid);
   line(
     stateContext,
@@ -138,7 +182,7 @@ function drawStateLaboratory() {
   );
   stateContext.setLineDash([]);
 
-  stateContext.strokeStyle = "#f1f2ed";
+  stateContext.strokeStyle = COLOURS.ink;
   stateContext.lineWidth = compact ? 3 : 4;
   line(stateContext, plot.x, plot.y - 12, plot.x, plot.y + plot.height + 8);
   line(
@@ -150,14 +194,6 @@ function drawStateLaboratory() {
   );
 
   if (viewDensity) {
-    const densityGradient = stateContext.createLinearGradient(
-      0,
-      densityBaseline - densityScale,
-      0,
-      densityBaseline,
-    );
-    densityGradient.addColorStop(0, "rgba(255,128,159,0.5)");
-    densityGradient.addColorStop(1, "rgba(255,128,159,0.04)");
     stateContext.beginPath();
     stateContext.moveTo(plot.x, densityBaseline);
     for (let index = 0; index <= sampleCount; index += 1) {
@@ -170,7 +206,7 @@ function drawStateLaboratory() {
     }
     stateContext.lineTo(plot.x + plot.width, densityBaseline);
     stateContext.closePath();
-    stateContext.fillStyle = densityGradient;
+    stateContext.fillStyle = "rgba(162, 79, 57, 0.14)";
     stateContext.fill();
 
     stateContext.beginPath();
@@ -182,12 +218,7 @@ function drawStateLaboratory() {
       if (index === 0) stateContext.moveTo(x, y);
       else stateContext.lineTo(x, y);
     }
-    stateContext.strokeStyle = COLOURS.density;
-    stateContext.lineWidth = compact ? 2.3 : 3;
-    stateContext.shadowColor = COLOURS.density;
-    stateContext.shadowBlur = 9;
-    stateContext.stroke();
-    stateContext.shadowBlur = 0;
+    strokePrinted(stateContext, COLOURS.density, compact ? 2.2 : 2.8);
   }
 
   if (viewPsi) {
@@ -200,12 +231,7 @@ function drawStateLaboratory() {
       if (index === 0) stateContext.moveTo(x, y);
       else stateContext.lineTo(x, y);
     }
-    stateContext.strokeStyle = COLOURS.psi;
-    stateContext.lineWidth = compact ? 2.5 : 3.2;
-    stateContext.shadowColor = COLOURS.psi;
-    stateContext.shadowBlur = 10;
-    stateContext.stroke();
-    stateContext.shadowBlur = 0;
+    strokePrinted(stateContext, COLOURS.psi, compact ? 2.3 : 3);
   }
 
   stateContext.fillStyle = COLOURS.accent;
@@ -217,14 +243,14 @@ function drawStateLaboratory() {
   }
 
   stateContext.font = `${compact ? 10 : 12}px "Times New Roman"`;
-  stateContext.fillStyle = "#edf0f5";
+  stateContext.fillStyle = COLOURS.ink;
   stateContext.textAlign = "left";
   stateContext.fillText(
     `INFINITE WELL · n = ${state.n}`,
     compact ? 14 : 20,
     compact ? 27 : 30,
   );
-  stateContext.fillStyle = "#a9b3c8";
+  stateContext.fillStyle = COLOURS.muted;
   stateContext.textAlign = "right";
   stateContext.fillText(
     `${state.n - 1} INTERIOR NODE${state.n === 2 ? "" : "S"}`,
@@ -233,7 +259,11 @@ function drawStateLaboratory() {
   );
   stateContext.fillStyle = COLOURS.psi;
   stateContext.textAlign = "left";
-  stateContext.fillText("SIGNED ψ", plot.x + 8, mid - amplitude - 15);
+  stateContext.fillText(
+    "WAVEFUNCTION SHAPE · √(a/2)ψ",
+    plot.x + 8,
+    mid - amplitude - 15,
+  );
   stateContext.fillStyle = COLOURS.density;
   stateContext.fillText(
     "a|ψ|² ≥ 0",
@@ -241,12 +271,12 @@ function drawStateLaboratory() {
     densityBaseline - densityScale - 14,
   );
 
-  stateContext.fillStyle = "#dce0e9";
+  stateContext.fillStyle = COLOURS.ink;
   stateContext.textAlign = "center";
   stateContext.fillText("0", plot.x, height - 24);
   stateContext.fillText("x / a", plot.x + plot.width / 2, height - 24);
   stateContext.fillText("1", plot.x + plot.width, height - 24);
-  stateContext.fillStyle = "#9aa5bc";
+  stateContext.fillStyle = COLOURS.muted;
   stateContext.fillText("V = ∞", plot.x - 20, plot.y - 23);
   stateContext.fillText("V = ∞", plot.x + plot.width + 18, plot.y - 23);
 
@@ -263,7 +293,7 @@ function drawSpectrum() {
   const margins = {
     left: compact ? 64 : 90,
     right: compact ? 23 : 42,
-    top: compact ? 52 : 64,
+    top: compact ? 34 : 40,
     bottom: compact ? 69 : 82,
   };
   const plot = {
@@ -277,8 +307,7 @@ function drawSpectrum() {
     plot.y + plot.height - (energy / 40) * plot.height;
 
   spectrumContext.clearRect(0, 0, width, height);
-  spectrumContext.fillStyle = COLOURS.paper;
-  spectrumContext.fillRect(0, 0, width, height);
+  paintPaper(spectrumContext, width, height);
   spectrumContext.font = `${compact ? 10 : 14}px "Times New Roman"`;
   spectrumContext.fillStyle = COLOURS.muted;
   spectrumContext.strokeStyle = COLOURS.grid;
@@ -292,6 +321,9 @@ function drawSpectrum() {
   }
   for (let n = 1; n <= 10; n += 1) {
     const x = xFor(n);
+    spectrumContext.strokeStyle = COLOURS.gridSoft;
+    spectrumContext.lineWidth = 1;
+    line(spectrumContext, x, plot.y, x, plot.y + plot.height);
     spectrumContext.textAlign = "center";
     spectrumContext.fillText(String(n), x, plot.y + plot.height + 25);
   }
@@ -312,15 +344,20 @@ function drawSpectrum() {
     const x = xFor(energy.n);
     const y = yFor(energy.energyEv);
     const selected = energy.n === state.n;
-    spectrumContext.strokeStyle = selected ? COLOURS.accent : "#5f91df";
-    spectrumContext.lineWidth = selected ? 3.2 : 2;
+    spectrumContext.strokeStyle = selected
+      ? "rgba(162, 79, 57, 0.58)"
+      : "rgba(53, 92, 109, 0.42)";
+    spectrumContext.lineWidth = selected ? 2.6 : 1.5;
     line(spectrumContext, x, yFor(0), x, y);
     spectrumContext.fillStyle = selected ? COLOURS.accent : COLOURS.blueDeep;
-    spectrumContext.strokeStyle = COLOURS.ink;
-    spectrumContext.lineWidth = selected ? 2 : 1;
+    spectrumContext.strokeStyle = COLOURS.paper;
+    spectrumContext.lineWidth = selected ? 3 : 2;
     spectrumContext.beginPath();
     spectrumContext.arc(x, y, selected ? 9 : 6, 0, Math.PI * 2);
     spectrumContext.fill();
+    spectrumContext.stroke();
+    spectrumContext.strokeStyle = selected ? COLOURS.accent : COLOURS.ink;
+    spectrumContext.lineWidth = 1;
     spectrumContext.stroke();
     state.spectrumPoints.push({ x, y, energy });
   }
@@ -339,14 +376,6 @@ function drawSpectrum() {
   spectrumContext.fillText("Energy, Eₙ / eV", 0, 0);
   spectrumContext.restore();
 
-  spectrumContext.font = `italic ${compact ? 13 : 17}px "Times New Roman"`;
-  spectrumContext.fillStyle = "#5a6476";
-  spectrumContext.textAlign = "right";
-  spectrumContext.fillText(
-    "markers are allowed states · stems are guides",
-    plot.x + plot.width,
-    plot.y - 21,
-  );
 }
 
 function drawDensity() {
@@ -356,7 +385,7 @@ function drawDensity() {
   const margins = {
     left: compact ? 64 : 87,
     right: compact ? 22 : 38,
-    top: compact ? 48 : 62,
+    top: compact ? 34 : 40,
     bottom: compact ? 68 : 78,
   };
   const plot = {
@@ -370,8 +399,7 @@ function drawDensity() {
     plot.y + plot.height - (density / 2.1) * plot.height;
 
   densityContext.clearRect(0, 0, width, height);
-  densityContext.fillStyle = COLOURS.paper;
-  densityContext.fillRect(0, 0, width, height);
+  paintPaper(densityContext, width, height);
   densityContext.font = `${compact ? 10 : 14}px "Times New Roman"`;
   densityContext.fillStyle = COLOURS.muted;
   densityContext.strokeStyle = COLOURS.grid;
@@ -385,6 +413,9 @@ function drawDensity() {
   }
   for (const tick of [0, 0.25, 0.5, 0.75, 1]) {
     const x = xFor(tick);
+    densityContext.strokeStyle = COLOURS.gridSoft;
+    densityContext.lineWidth = 1;
+    line(densityContext, x, plot.y, x, plot.y + plot.height);
     densityContext.textAlign = "center";
     densityContext.fillText(tick.toFixed(2), x, plot.y + plot.height + 24);
   }
@@ -410,9 +441,11 @@ function drawDensity() {
       if (index === 0) densityContext.moveTo(x, y);
       else densityContext.lineTo(x, y);
     });
-    densityContext.strokeStyle = COLOURS.states[n - 1];
-    densityContext.lineWidth = compact ? 2.2 : 3;
-    densityContext.stroke();
+    strokePrinted(
+      densityContext,
+      COLOURS.states[n - 1],
+      compact ? 2.1 : 2.7,
+    );
   }
 
   densityContext.fillStyle = COLOURS.ink;
@@ -428,14 +461,6 @@ function drawDensity() {
   densityContext.rotate(-Math.PI / 2);
   densityContext.fillText("Scaled density, a|ψₙ|²", 0, 0);
   densityContext.restore();
-  densityContext.font = `italic ${compact ? 12 : 16}px "Times New Roman"`;
-  densityContext.fillStyle = "#596477";
-  densityContext.textAlign = "right";
-  densityContext.fillText(
-    "each visible curve integrates to 1",
-    plot.x + plot.width,
-    plot.y - 19,
-  );
 }
 
 function drawUncertainty() {
@@ -459,8 +484,7 @@ function drawUncertainty() {
     plot.y + plot.height - (product / 9.5) * plot.height;
 
   uncertaintyContext.clearRect(0, 0, width, height);
-  uncertaintyContext.fillStyle = COLOURS.paper;
-  uncertaintyContext.fillRect(0, 0, width, height);
+  paintPaper(uncertaintyContext, width, height);
   uncertaintyContext.font = `${compact ? 10 : 13}px "Times New Roman"`;
   uncertaintyContext.fillStyle = COLOURS.muted;
   uncertaintyContext.strokeStyle = COLOURS.grid;
@@ -473,6 +497,15 @@ function drawUncertainty() {
     uncertaintyContext.fillText(String(tick), plot.x - 10, y + 4);
   }
   for (let n = 1; n <= 10; n += 1) {
+    uncertaintyContext.strokeStyle = COLOURS.gridSoft;
+    uncertaintyContext.lineWidth = 1;
+    line(
+      uncertaintyContext,
+      xFor(n),
+      plot.y,
+      xFor(n),
+      plot.y + plot.height,
+    );
     uncertaintyContext.textAlign = "center";
     uncertaintyContext.fillText(
       String(n),
@@ -481,7 +514,7 @@ function drawUncertainty() {
     );
   }
 
-  uncertaintyContext.strokeStyle = "#bf4b73";
+  uncertaintyContext.strokeStyle = "rgba(162, 79, 57, 0.72)";
   uncertaintyContext.lineWidth = 2;
   uncertaintyContext.setLineDash([9, 7]);
   line(
@@ -492,7 +525,7 @@ function drawUncertainty() {
     yFor(0.5),
   );
   uncertaintyContext.setLineDash([]);
-  uncertaintyContext.fillStyle = "#a63f62";
+  uncertaintyContext.fillStyle = COLOURS.accent;
   uncertaintyContext.textAlign = "right";
   uncertaintyContext.fillText(
     "Heisenberg bound = 0.5",
@@ -507,13 +540,15 @@ function drawUncertainty() {
     if (index === 0) uncertaintyContext.moveTo(x, y);
     else uncertaintyContext.lineTo(x, y);
   });
-  uncertaintyContext.strokeStyle = "#246fbb";
-  uncertaintyContext.lineWidth = compact ? 2.5 : 3.2;
-  uncertaintyContext.stroke();
+  strokePrinted(
+    uncertaintyContext,
+    COLOURS.psi,
+    compact ? 2.4 : 3,
+  );
 
   for (const record of state.evidence.expectations) {
     const selected = record.n === state.n;
-    uncertaintyContext.fillStyle = selected ? COLOURS.accent : "#246fbb";
+    uncertaintyContext.fillStyle = selected ? COLOURS.accent : COLOURS.psi;
     uncertaintyContext.strokeStyle = COLOURS.ink;
     uncertaintyContext.lineWidth = selected ? 2 : 1;
     uncertaintyContext.beginPath();
@@ -559,6 +594,153 @@ function drawUncertainty() {
   uncertaintyContext.restore();
 }
 
+function drawConvergence() {
+  if (!state.evidence) return;
+  const { width, height } = canvasSize(convergenceCanvas, convergenceContext);
+  const compact = width < 520;
+  const margins = {
+    left: compact ? 62 : 76,
+    right: compact ? 20 : 30,
+    top: compact ? 42 : 52,
+    bottom: compact ? 58 : 68,
+  };
+  const plot = {
+    x: margins.left,
+    y: margins.top,
+    width: width - margins.left - margins.right,
+    height: height - margins.top - margins.bottom,
+  };
+  const rows = state.evidence.uncertaintyConvergence;
+  const logX = (grid) => Math.log10(grid);
+  const logY = (error) => Math.log10(error);
+  const minX = logX(rows[0].grid);
+  const maxX = logX(rows.at(-1).grid);
+  const minY = -5.2;
+  const maxY = -1.8;
+  const xFor = (grid) => plot.x + ((logX(grid) - minX) / (maxX - minX)) * plot.width;
+  const yFor = (error) =>
+    plot.y + plot.height - ((logY(error) - minY) / (maxY - minY)) * plot.height;
+
+  convergenceContext.clearRect(0, 0, width, height);
+  paintPaper(convergenceContext, width, height);
+  convergenceContext.font = `${compact ? 10 : 12}px "Times New Roman"`;
+  convergenceContext.fillStyle = COLOURS.muted;
+  convergenceContext.strokeStyle = COLOURS.grid;
+  for (const exponent of [-5, -4, -3, -2]) {
+    const y = yFor(10 ** exponent);
+    line(convergenceContext, plot.x, y, plot.x + plot.width, y);
+    convergenceContext.textAlign = "right";
+    convergenceContext.fillText(`10${String(exponent).replace("-", "⁻")}`, plot.x - 10, y + 4);
+  }
+  rows.forEach((row) => {
+    const x = xFor(row.grid);
+    convergenceContext.strokeStyle = COLOURS.gridSoft;
+    line(convergenceContext, x, plot.y, x, plot.y + plot.height);
+    convergenceContext.fillStyle = COLOURS.muted;
+    convergenceContext.textAlign = "center";
+    convergenceContext.fillText(String(row.grid), x, plot.y + plot.height + 20);
+  });
+
+  const series = [
+    { key: "energyError", colour: COLOURS.ink, label: "E error" },
+    { key: "deltaPError", colour: COLOURS.psi, label: "Δp error" },
+    { key: "uncertaintyError", colour: COLOURS.density, label: "ΔxΔp error" },
+  ];
+  series.forEach(({ key, colour }, seriesIndex) => {
+    convergenceContext.beginPath();
+    rows.forEach((row, index) => {
+      const x = xFor(row.grid);
+      const y = yFor(row[key]);
+      if (index === 0) convergenceContext.moveTo(x, y);
+      else convergenceContext.lineTo(x, y);
+    });
+    strokePrinted(convergenceContext, colour, compact ? 2.2 : 2.8);
+    rows.forEach((row) => {
+      convergenceContext.beginPath();
+      convergenceContext.arc(xFor(row.grid), yFor(row[key]), seriesIndex ? 4 : 3.5, 0, Math.PI * 2);
+      convergenceContext.fillStyle = colour;
+      convergenceContext.fill();
+    });
+  });
+
+  convergenceContext.strokeStyle = COLOURS.ink;
+  line(convergenceContext, plot.x, plot.y, plot.x, plot.y + plot.height);
+  line(convergenceContext, plot.x, plot.y + plot.height, plot.x + plot.width, plot.y + plot.height);
+  convergenceContext.textAlign = "center";
+  convergenceContext.fillStyle = COLOURS.ink;
+  convergenceContext.fillText("Interior grid points, N", plot.x + plot.width / 2, height - 16);
+  series.forEach(({ colour, label }, index) => {
+    const x = plot.x + 10 + index * (compact ? 86 : 112);
+    convergenceContext.fillStyle = colour;
+    convergenceContext.fillRect(x, 14, 18, 3);
+    convergenceContext.fillStyle = COLOURS.ink;
+    convergenceContext.textAlign = "left";
+    convergenceContext.fillText(label, x + 25, 19);
+  });
+}
+
+function renderNumericalEvidence() {
+  if (!state.evidence) return;
+  const finest = state.evidence.numericalMoments.filter(
+    (record) => record.grid === 1600 && [1, 2, 3, 5, 10].includes(record.n),
+  );
+  numericalMomentsBody.replaceChildren(
+    ...finest.map((record) => {
+      const row = document.createElement("tr");
+      const values = [
+        String(record.n),
+        (record.deltaX * 1e9).toFixed(6),
+        (record.analyticalDeltaX * 1e9).toFixed(6),
+        (record.pSquared * 1e48).toFixed(6),
+        (record.deltaP * 1e25).toFixed(6),
+        (record.analyticalDeltaP * 1e25).toFixed(6),
+        record.product.toFixed(6),
+        record.analyticalProduct.toFixed(6),
+        record.ratio.toFixed(6),
+        `${(record.relativeUncertaintyError * 100).toFixed(4)}%`,
+      ];
+      values.forEach((value) => {
+        const cell = document.createElement("td");
+        cell.textContent = value;
+        row.append(cell);
+      });
+      return row;
+    }),
+  );
+  const convergence = state.evidence.uncertaintyConvergence;
+  const finestGrid = convergence.at(-1);
+  const minimumProduct = Math.min(
+    ...state.evidence.numericalMoments.map((record) => record.product),
+  );
+  const passed = state.evidence.validation.checks.filter(
+    (check) => check.passed === true,
+  ).length;
+  outputs.validationCount.textContent = `${passed}/${state.evidence.validation.checks.length}`;
+  outputs.validationBoundary.textContent = "ψ(0) = ψ(a) = 0";
+  outputs.validationNormalization.textContent = Math.max(
+    ...state.evidence.numericalMoments.map(
+      (record) => Math.abs(record.normalization - 1),
+    ),
+  ).toExponential(2);
+  outputs.validationNodes.textContent = "10/10 pass";
+  outputs.validationEnergy.textContent = "n² · order 2";
+  outputs.validationOverlap.textContent = `1 − ${(1 - finestGrid.minimumOverlap).toExponential(2)}`;
+  outputs.validationPMean.textContent = finestGrid.pMeanScaleRatio.toExponential(2);
+  outputs.validationP2.textContent = `${(finestGrid.pSquaredError * 100).toFixed(4)}%`;
+  outputs.validationOrder.textContent =
+    `${finestGrid.minimumProductOrder.toFixed(3)}–${finestGrid.maximumProductOrder.toFixed(3)}`;
+  outputs.validationError.textContent = `${(finestGrid.deltaPError * 100).toFixed(4)}%`;
+  outputs.validationUncertainty.textContent = `${(finestGrid.uncertaintyError * 100).toFixed(4)}%`;
+  outputs.validationBound.textContent = `${minimumProduct.toFixed(6)} ℏ`;
+  drawConvergence();
+}
+
+function makeRenderedMathScrollableAndFocusable() {
+  document.querySelectorAll(".moment-ledger .katex-display").forEach((display) => {
+    display.setAttribute("tabindex", "0");
+  });
+}
+
 function updateOutputs() {
   const energy = currentEnergy();
   const expectation = currentExpectation();
@@ -573,8 +755,11 @@ function updateOutputs() {
     `n = ${state.n} · ${energy.energyEv.toFixed(6)} eV`;
   outputs.uncertaintySelected.textContent =
     `n = ${state.n} · ${expectation.productOverHbar.toFixed(6)}ℏ`;
-  outputs.extensionResult.textContent =
-    `n = ${state.n} · ${expectation.productOverHbar.toFixed(6)}ℏ > 0.5ℏ`;
+  renderInlineMath(
+    outputs.extensionResult,
+    String.raw`n=${state.n}\;\cdot\;${expectation.productOverHbar.toFixed(6)}\hbar>0.5\hbar`,
+    `n = ${state.n} · ${expectation.productOverHbar.toFixed(6)}ℏ > 0.5ℏ`,
+  );
   document.querySelectorAll("[data-state-preset]").forEach((button) => {
     button.classList.toggle(
       "is-current",
@@ -590,6 +775,7 @@ function renderAll() {
   drawSpectrum();
   drawDensity();
   drawUncertainty();
+  drawConvergence();
 }
 
 function selectState(n, { focus = false } = {}) {
@@ -624,15 +810,10 @@ function setFailureState() {
   document.querySelector("[data-spectrum-error]").hidden = false;
   document.querySelector("[data-density-error]").hidden = false;
   document.querySelector("[data-uncertainty-error]").hidden = false;
-  outputs.stateTitle.textContent = "Evidence unavailable";
-  outputs.stateBadge.textContent = "Interaction locked";
-  outputs.spectrumStatus.textContent = "Validation unavailable";
-  outputs.lockTitle.textContent = "Validation could not be confirmed";
-  outputs.lockDetail.textContent =
-    "One or more committed Task 7 artifacts failed to load or disagreed with the frozen analytical model. No interactive result is shown.";
-  outputs.validationCount.textContent = "Not verified";
-  outputs.evidenceStatus.textContent = "Locked";
-  evidenceLock.classList.add("is-error");
+  document.querySelector("[data-convergence-error]").hidden = false;
+  outputs.stateTitle.textContent = "Model data unavailable";
+  outputs.stateBadge.textContent = "Controls unavailable";
+  outputs.spectrumStatus.textContent = "Spectrum unavailable";
 }
 
 function enableControls() {
@@ -672,6 +853,17 @@ document.querySelectorAll("[data-density-state]").forEach((control) => {
     } else state.densityStates.delete(n);
     drawDensity();
   });
+});
+
+resetStateButton.addEventListener("click", () => {
+  state.view = "both";
+  state.densityStates = new Set([1, 2, 3, 4]);
+  document.querySelector('input[name="state-view"][value="both"]').checked = true;
+  document.querySelectorAll("[data-density-state]").forEach((control) => {
+    control.checked = true;
+  });
+  selectState(1);
+  quantumControl.focus({ preventScroll: true });
 });
 
 for (const canvas of [stateCanvas, spectrumCanvas, uncertaintyCanvas]) {
@@ -731,27 +923,27 @@ for (const canvas of [
   spectrumCanvas,
   densityCanvas,
   uncertaintyCanvas,
+  convergenceCanvas,
 ]) {
   resizeObserver.observe(canvas);
 }
+
+window.addEventListener("pagehide", () => resizeObserver.disconnect(), {
+  once: true,
+});
 
 try {
   state.evidence = await loadTask07Evidence();
   laboratory.classList.remove("is-loading");
   enableControls();
-  outputs.spectrumStatus.textContent = "10 discrete levels locked";
-  outputs.lockTitle.textContent = "Validated Task 7 evidence loaded";
-  outputs.lockDetail.textContent =
-    "All 37 checks pass. The analytical state catalogue, uncertainty values, 60-digit anchors, and independent five-grid eigensolver agree.";
-  outputs.validationCount.textContent =
-    `${state.evidence.validation.checks.length}/${state.evidence.validation.checks.length} pass`;
-  outputs.evidenceStatus.textContent = "Evidence locked";
-  evidenceLock.classList.add("is-verified");
+  makeRenderedMathScrollableAndFocusable();
+  outputs.spectrumStatus.textContent = "10 discrete levels";
   document.body.dataset.task07Status = "verified";
+  renderNumericalEvidence();
   renderAll();
   window.dispatchEvent(new CustomEvent("task07:ready"));
 } catch (error) {
-  console.error("Task 7 evidence validation failed", error);
+  console.error("Task 7 model data failed to load", error);
   document.body.dataset.task07Status = "error";
   setFailureState();
 }
