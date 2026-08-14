@@ -1,5 +1,15 @@
 /* Task 07 gold upgrade: visible numerical method, validation and evidence. */
 
+/* The filming view keeps the four required outputs in sequence. The full
+   method, numerical table and validation ledger remain available in source
+   but stay out of the recording path. */
+.video-cut[data-task="07"] #method,
+.video-cut[data-task="07"] #validation,
+.video-cut[data-task="07"] .numerical-evidence,
+.video-cut[data-task="07"] .video-support-link {
+  display: none !important;
+}
+
 #method,
 #validation {
   border-top: 1px solid var(--task07-line);
@@ -224,6 +234,127 @@
   max-width: 100%;
   overflow-x: auto;
   overflow-y: hidden;
+}
+
+/* Editorial pass: keep the recording path focused on the model and its result. */
+.hero-copy {
+  align-items: start;
+  row-gap: 14px;
+}
+
+.hero-copy h1 {
+  font-size: clamp(44px, 5vw, 76px);
+  line-height: 0.94;
+}
+
+.hero-copy > span {
+  max-width: 48ch;
+  padding-top: 4px;
+  font-size: clamp(17px, 1.45vw, 21px);
+  line-height: 1.42;
+}
+
+.section-introduction > p {
+  max-width: 28ch;
+  line-height: 1.25;
+}
+
+.spectrum-section .section-introduction,
+.density-section .section-introduction,
+.uncertainty-section .section-introduction {
+  align-items: end;
+}
+
+.bound-callout {
+  display: grid;
+  grid-template-columns: minmax(230px, 0.9fr) minmax(260px, 1.3fr) auto;
+  gap: 20px 34px;
+  align-items: center;
+  margin-top: 18px;
+  padding: 18px 22px;
+  border-left: 3px solid var(--task07-accent);
+  border-top: 1px solid var(--task07-line-strong);
+  border-right: 1px solid var(--task07-line-strong);
+  border-bottom: 1px solid var(--task07-line-strong);
+  color: var(--task07-ink);
+  background: var(--task07-accent-pale);
+}
+
+.bound-callout > div {
+  display: grid;
+  gap: 5px;
+}
+
+.bound-callout > div span {
+  color: var(--task07-accent-dark);
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.bound-callout > div strong {
+  font-size: 17px;
+  line-height: 1.18;
+}
+
+.bound-callout p {
+  margin: 0;
+  color: #5e554e;
+  font-size: 14px;
+  line-height: 1.45;
+}
+
+.bound-callout__value {
+  color: var(--task07-accent-dark);
+  font-family: var(--figure);
+  font-size: clamp(22px, 2vw, 30px);
+  font-weight: 500;
+  white-space: nowrap;
+}
+
+.uncertainty-section .extension-actions {
+  grid-template-columns: minmax(0, 1fr) auto auto auto;
+  margin-top: 18px;
+}
+
+@media (max-width: 880px) {
+  .bound-callout {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .bound-callout__value {
+    grid-column: 1 / -1;
+  }
+}
+
+@media (max-width: 620px) {
+  .hero-copy h1 {
+    font-size: clamp(40px, 12vw, 58px);
+  }
+
+  .hero-copy > span {
+    font-size: 16px;
+  }
+
+  .bound-callout {
+    grid-template-columns: 1fr;
+    gap: 10px;
+    padding: 16px;
+  }
+
+  .bound-callout__value {
+    grid-column: 1;
+  }
+
+  .uncertainty-section .extension-actions {
+    grid-template-columns: 1fr;
+  }
+
+  .uncertainty-section .extension-actions > div {
+    grid-column: 1;
+  }
 }
 
 @media (max-width: 900px) {

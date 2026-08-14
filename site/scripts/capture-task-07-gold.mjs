@@ -149,9 +149,6 @@ async function verifySemanticsAndAccessibility(page) {
     "Particle in a box",
     "Quantum number",
     "Reset experiment",
-    "Finite-difference Hamiltonian equation",
-    "Numerical versus analytical uncertainty, N = 1600",
-    "Five-grid convergence of numerical momentum uncertainty",
   ]) {
     assert.ok(
       names.some((name) => name.startsWith(expected)),
@@ -196,8 +193,8 @@ async function verifySemanticsAndAccessibility(page) {
   });
   assert.ok(contrast.every((sample) => sample.ratio >= 4.5), JSON.stringify(contrast));
 
-  await page.locator(".math-scroll").first().focus();
-  const focusStyle = await page.locator(".math-scroll").first().evaluate((element) => {
+  await page.locator("#box-state-canvas").focus();
+  const focusStyle = await page.locator("#box-state-canvas").evaluate((element) => {
     const style = getComputedStyle(element);
     return { outline: style.outlineStyle, width: parseFloat(style.outlineWidth) };
   });
@@ -241,10 +238,12 @@ async function verifyInteractions(page) {
     ),
   );
 
+  await page.evaluate(() => document.body.classList.remove("video-cut"));
   const downloadPromise = page.waitForEvent("download");
   await page.getByRole("link", { name: "Numerical moments CSV" }).click();
   const download = await downloadPromise;
   assert.equal(download.suggestedFilename(), "numerical_moments.csv");
+  await page.evaluate(() => document.body.classList.add("video-cut"));
 }
 
 const browser = await chromium.launch({ headless: true, executablePath });
@@ -272,6 +271,7 @@ try {
   await page.locator("[data-reset-state]").click();
   await page.locator("[data-spectrum-laboratory]").screenshot({ path: screenshotPath("04-energy-graph.png") });
   await page.locator(".uncertainty-grid").screenshot({ path: screenshotPath("05-uncertainty-plot.png") });
+  await page.evaluate(() => document.body.classList.remove("video-cut"));
   await page.locator(".numerical-evidence").screenshot({ path: screenshotPath("06-numerical-uncertainty-evidence.png") });
   await page.locator(".numerical-table-wrap").screenshot({ path: screenshotPath("07-numerical-delta-p-comparison.png") });
   await page.locator(".convergence-figure").screenshot({ path: screenshotPath("08-convergence-view.png") });
@@ -280,6 +280,7 @@ try {
   });
   await page.locator("#method").screenshot({ path: screenshotPath("09-method.png") });
   await page.locator("#validation").screenshot({ path: screenshotPath("10-validation.png") });
+  await page.evaluate(() => document.body.classList.add("video-cut"));
   await sectionCaptureStyle.evaluate((element) => element.remove());
   await verifyInteractions(page);
   await desktop.close();

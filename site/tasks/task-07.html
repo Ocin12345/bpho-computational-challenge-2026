@@ -18,9 +18,10 @@
     <link rel="stylesheet" href="../assets/task-07-minimal.css?v=20260808a" />
     <link rel="stylesheet" href="../assets/proof-math.css?v=20260808" />
     <link rel="stylesheet" href="../assets/task-clean.css?v=20260809" />
-    <link rel="stylesheet" href="../assets/task-07-gold.css?v=20260813a" />
+    <link rel="stylesheet" href="../assets/task-video.css?v=20260809" />
+    <link rel="stylesheet" href="../assets/task-07-gold.css?v=20260814c" />
   </head>
-  <body data-task="07">
+  <body class="video-cut" data-task="07">
     <a class="skip-link" href="#state-laboratory">Skip to state laboratory</a>
 
     <header class="task-header">
@@ -33,8 +34,10 @@
       <nav class="section-nav" aria-label="Task 7 sections">
         <a href="#state">Experiment</a>
         <a href="#spectrum">Plot</a>
-        <a href="#method">Method</a>
-        <a href="#validation">Validation</a>
+        <a href="#density">Density</a>
+        <a href="#uncertainty">Uncertainty</a>
+        <a class="video-support-link" href="#method">Method</a>
+        <a class="video-support-link" href="#validation">Validation</a>
       </nav>
       <p class="task-identity"><span>Task 07</span><strong>Particle in a box</strong></p>
     </header>
@@ -42,11 +45,11 @@
     <main>
       <section class="box-hero" id="state" aria-labelledby="page-title">
         <header class="hero-copy">
-          <p>One electron · 1.00 nm infinite well</p>
+          <p>Task 07 · Infinite square well</p>
           <h1 id="page-title">Particle in a box</h1>
           <span>
-            Select a quantum state to compare its standing wave, probability
-            density, energy, nodes, and uncertainty product.
+            Solve the Schrödinger equation for one electron in a 1.00 nm box.
+            Show its discrete energies, probability densities, and uncertainty bound.
           </span>
         </header>
 
@@ -155,31 +158,16 @@
             Reset experiment
           </button>
 
-          <div class="hero-claim">
-            <strong>electron · a = 1.00 nm</strong>
-          </div>
         </form>
-
-        <div class="catalogue-strip" aria-label="Task 7 model summary">
-          <div>
-            <span>Allowed energies</span>
-            <strong>10</strong>
-          </div>
-          <div>
-            <span>Numerical validation</span>
-            <strong>5 grids · 50 checks</strong>
-          </div>
-        </div>
       </section>
 
       <section class="model-section" id="method" aria-labelledby="method-title">
         <header class="section-introduction section-introduction--paper">
           <p>Method</p>
-          <h2 id="method-title">From eigenvectors to numerical uncertainty</h2>
+          <h2 id="method-title">How the result is checked</h2>
           <span>
-            The analytical solution predicts the answer; a separate finite-difference
-            route tests it. Moments are evaluated directly from normalized numerical
-            eigenvectors on five successively refined grids.
+            A closed-form solution is checked by an independent finite-difference
+            eigensystem on five successively refined grids.
           </span>
         </header>
 
@@ -190,10 +178,8 @@
             <p>
               Dirichlet walls select ψ<sub>n</sub> = √(2/a) sin(nπx/a),
               E<sub>n</sub> = n²π²ℏ²/(2ma²), and
-              |ψ<sub>n</sub>|² = (2/a)sin²(nπx/a).
-            </p>
-            <p>
-              Exact moments give ⟨x⟩ = a/2, ⟨p⟩ = 0 and
+              |ψ<sub>n</sub>|² = (2/a)sin²(nπx/a). Exact moments give
+              ⟨x⟩ = a/2, ⟨p⟩ = 0, and
               ΔxΔp/ℏ = √(n²π²/12 − 1/2).
             </p>
           </article>
@@ -202,12 +188,8 @@
             <h3>Tridiagonal eigensystem</h3>
             <p>
               A uniform interior grid and central second derivative form a
-              symmetric tridiagonal Hamiltonian. Numerical eigenvectors are
-              normalized with the discrete SI inner product.
-            </p>
-            <p>
-              This is verification of the closed-form model—not experimental
-              evidence—and it does not insert analytical uncertainties into the operator calculation.
+              symmetric tridiagonal Hamiltonian. Normalized numerical eigenvectors
+              provide an independent check without inserting analytical uncertainties.
             </p>
           </article>
         </div>
@@ -219,7 +201,7 @@
               H<sub>ij</sub> = ℏ²(2δ<sub>ij</sub> − δ<sub>i,j+1</sub> − δ<sub>i,j−1</sub>)/(2mΔx²)
             </p>
             <small>
-              Zero ghost values impose ψ(0) = ψ(a) = 0. The eigensolver receives no
+              Zero ghost values impose ψ(0) = ψ(a) = 0; the eigensolver receives no
               analytical energies or uncertainty values.
             </small>
           </article>
@@ -247,23 +229,17 @@
             <span>n = 1 → 10</span>
             <small>all official states tested</small>
           </div>
-          <strong>Errors are measured against analytical results only after the numerical moments are computed.</strong>
-          <small>
-            These curves describe a stationary probability distribution, not a
-            particle trajectory; finite walls and time-dependent dynamics are outside
-            this Task 7 model.
-          </small>
+          <strong>Moments are computed numerically before comparison with the analytical result.</strong>
         </div>
       </section>
 
       <section class="spectrum-section" id="spectrum" aria-labelledby="spectrum-title">
         <header class="section-introduction">
-          <p>Required plot 1</p>
+          <p>Required plot 1 · Energy spectrum</p>
           <h2 id="spectrum-title">Energy rises as n²</h2>
           <span>
-            Stems and markers keep the allowed states visibly discrete. Select
-            any marker to update the page; no line implies
-            energies between the integers.
+            Ten discrete states follow E<sub>n</sub>/E<sub>1</sub> = n². Select a
+            marker to inspect a level; there are no energies between integers.
           </span>
         </header>
 
@@ -290,33 +266,15 @@
           </div>
         </div>
 
-        <div class="spectrum-notes">
-          <article>
-            <span>Ground energy</span>
-            <strong>0.376030 eV</strong>
-            <p>Electron in a 1.00 nm box.</p>
-          </article>
-          <article>
-            <span>Tenth level</span>
-            <strong>37.603016 eV</strong>
-            <p>E<sub>10</sub> = 100E<sub>1</sub>.</p>
-          </article>
-          <article>
-            <span>Successive gap</span>
-            <strong>ΔE<sub>n</sub> = (2n + 1)E<sub>1</sub></strong>
-            <p>Adjacent levels separate as n rises.</p>
-          </article>
-        </div>
       </section>
 
       <section class="density-section" id="density" aria-labelledby="density-title">
         <header class="section-introduction section-introduction--paper">
-          <p>Required plot 2</p>
+          <p>Required plot 2 · Born probability</p>
           <h2 id="density-title">Probability density inside the box</h2>
           <span>
-            All four required densities are normalized, non-negative, zero at
-            both walls, and symmetric about the midpoint. Toggle states to
-            inspect their nodes without conflating density with signed amplitude.
+            Compare the first four normalized densities. Toggle states to inspect
+            their nodes without confusing density with signed amplitude.
           </span>
         </header>
 
@@ -342,12 +300,6 @@
           </div>
         </div>
 
-        <div class="density-laws">
-          <p><span>At the walls</span><strong>a|ψ(0)|² = a|ψ(a)|² = 0</strong></p>
-          <p><span>Normalization</span><strong>∫₀¹ a|ψ|² d(x/a) = 1</strong></p>
-          <p><span>Symmetry</span><strong>|ψ(x)|² = |ψ(a−x)|²</strong></p>
-          <p><span>Nodes</span><strong>n − 1 interior zeros</strong></p>
-        </div>
       </section>
 
       <section
@@ -357,11 +309,10 @@
       >
         <header class="section-introduction">
           <p>Uncertainty proof</p>
-          <h2 id="uncertainty-title">The uncertainty bound</h2>
+          <h2 id="uncertainty-title">From standing waves to the uncertainty bound</h2>
           <span>
-            The derivation evaluates both position moments and
-            both momentum moments. Every positive integer state obeys
-            ΔxΔp ≥ ℏ/2; even the minimum ground-state product is strictly larger.
+            Evaluate the position and momentum moments. Every state obeys
+            ΔxΔp ≥ ℏ/2; the ground state gives 0.567862ℏ.
           </span>
         </header>
 
@@ -410,10 +361,21 @@
           </div>
         </div>
 
+        <aside class="bound-callout" aria-label="Task 7 uncertainty conclusion">
+          <div>
+            <span>Conclusion</span>
+            <strong>Ground state: closest approach to the bound.</strong>
+          </div>
+          <p>
+            Higher n increases the momentum spread.
+          </p>
+          <strong class="bound-callout__value">0.567862ℏ &nbsp;≥&nbsp; 0.5ℏ</strong>
+        </aside>
+
         <div class="extension-actions">
           <div>
             <span>Four-page derivation</span>
-            <strong>Analytical derivation and numerical result</strong>
+            <strong>Full derivation</strong>
           </div>
           <a href="../../reports/task07/particle_in_box_uncertainty.pdf">Read PDF</a>
           <a href="../../reports/task07/particle_in_box_uncertainty.tex">LaTeX source</a>
@@ -425,9 +387,8 @@
             <p>Independent numerical evidence</p>
             <h3 id="numerical-evidence-title">Finest-grid moments and five-grid convergence</h3>
             <span>
-              Representative states are shown below. Every displayed numerical value
-              comes from the N = 1600 eigenvectors; analytical values appear only in
-              the comparison columns.
+              N = 1600 moments are compared with the analytical reference; five grids
+              show second-order convergence.
             </span>
           </header>
           <div class="numerical-evidence-grid">
@@ -469,11 +430,6 @@
               </p>
             </figure>
           </div>
-          <p class="asymptotic-note">
-            <strong>n-dependence:</strong> as n grows, Δx → a/√12 while
-            Δp = nπℏ/a, so ΔxΔp ~ nπℏ/√12. The numerical sequence reproduces
-            this approximately linear high-n rise rather than merely clearing the bound.
-          </p>
         </section>
       </section>
 
@@ -482,9 +438,8 @@
           <p>Validation</p>
           <h2 id="validation-title">A reproducible, judge-readable evidence chain</h2>
           <span>
-            The page loads only after its manifest, scientific report, analytical
-            catalogue, finite-difference study, and numerical moments all pass
-            browser-side integrity checks.
+            The page unlocks only when the manifest, report, analytical catalogue,
+            finite-difference study, and numerical moments agree.
           </span>
         </header>
         <div class="validation-ledger" aria-live="polite">
