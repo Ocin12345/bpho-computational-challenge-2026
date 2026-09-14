@@ -13,6 +13,9 @@ what it deliberately does not claim.
 - **Result:** the fitted MSD slope is $0.9992\pm0.0031$, consistent with theory.
 - **Boundary:** this is a discrete ideal walk, not a model of forces, obstacles,
   correlated steps or a finite physical container.
+- **Advanced extension:** the same fixed-step law is independently sampled in
+  one, two and three dimensions; all three recover linear MSD growth and an
+  RMS exponent close to one half.
 
 ## Task 2 — Collision-driven Brownian motion
 
@@ -28,6 +31,10 @@ what it deliberately does not claim.
 - **Boundary:** the visible mass and radius ratios are pedagogical; the model
   omits a Maxwell speed distribution, fluid drag, hydrodynamics, rotation,
   three-dimensional motion and a quantitatively realistic pollen grain.
+- **Advanced extension:** a separate Maxwellian bath resolves every gas--gas
+  and gas--tracer hard-disc contact with no direction resets and conserves
+  total kinetic energy to floating-point precision. Hydrodynamics and
+  molecular potentials remain outside scope.
 
 ## Task 3 — Planck radiation and Einstein heat capacity
 
@@ -41,6 +48,10 @@ what it deliberately does not claim.
 - **Boundary:** the calculation omits emissivity spectra, atmosphere and
   detector response; the Einstein solid omits acoustic-mode dispersion,
   anharmonicity, electronic heat capacity and phase changes.
+- **Advanced extension:** Debye and Einstein lattice terms, electronic heat
+  capacity and a dilation term are fitted to the White--Collocott 1--300 K
+  copper table. The point uncertainties are conservative table-reading
+  uncertainties rather than a full source covariance model.
 
 ## Task 4 — Photoelectric effect
 
@@ -54,6 +65,10 @@ what it deliberately does not claim.
 - **Boundary:** the model does not predict photocurrent, energy distributions,
   surface-condition changes, contact potentials, space charge or apparatus
   response. The optional trajectories are explicitly schematic.
+- **Advanced extension:** weighted inverse regression and a seeded 600-run
+  recovery study infer $h$ and the work function with covariance, while nine
+  Millikan Table II slopes provide a historical cross-check. The synthetic
+  error model remains independent and Gaussian.
 
 ## Task 5 — Hydrogen spectrum
 
@@ -66,6 +81,11 @@ what it deliberately does not claim.
   ideal H-alpha at 656.112 nm.
 - **Boundary:** reduced mass, selection rules, line strengths and widths, fine
   and hyperfine structure, Lamb, Zeeman and Stark shifts are not modelled.
+- **Advanced extension:** reduced-mass Dirac levels, E1 radial integrals,
+  Einstein coefficients and natural/Doppler widths are implemented. The
+  displayed Lamb correction is explicitly an anchored pedagogical scaling,
+  not a precision bound-state QED result; hyperfine and external-field shifts
+  remain excluded.
 
 ## Task 6 — Electron diffraction
 
@@ -78,6 +98,10 @@ what it deliberately does not claim.
 - **Boundary:** ring brightness and width are schematic. Structure factors,
   crystallite broadening, beam spread, multiple scattering, detector response
   and relativistic corrections are outside the baseline.
+- **Advanced extension:** an AB graphite basis, reflection multiplicity,
+  Debye--Waller damping, Scherrer width, beam spread and detector resolution
+  produce a normalized finite-width powder profile. It remains a kinematic
+  model without dynamical multiple scattering or calibrated form factors.
 
 ## Task 7 — Particle in a one-dimensional box
 
@@ -90,6 +114,9 @@ what it deliberately does not claim.
   $\Delta x\Delta p\geq\hbar/2$.
 - **Boundary:** finite barriers, tunnelling, interactions, spin, fields,
   time-dependent superpositions and relativity are not included.
+- **Advanced extension:** finite-well bound states, exact rectangular-barrier
+  tunnelling and basis-expanded Gaussian wave-packet revival are implemented.
+  The potential remains one-dimensional, closed and piecewise constant.
 
 ## Task 8 — Quantum mismatch calculator
 
@@ -103,6 +130,10 @@ what it deliberately does not claim.
 - **Boundary:** this is not a full quantum-key-distribution protocol or a
   security proof; it omits loss, dark counts, decoherence, eavesdropping, key
   sifting, error correction and privacy amplification.
+- **Advanced extension:** a prepare--measure BB84 simulation adds Eve, loss and
+  dark-count hooks, sifting, QBER sampling, idealized reconciliation leakage
+  and Toeplitz privacy amplification. Its finite-size bound is pedagogical and
+  is not a composable or device-independent security proof.
 
 ## Task 9 — Compton scattering
 
@@ -116,6 +147,9 @@ what it deliberately does not claim.
   energy while the electron remains subluminal.
 - **Boundary:** atomic binding, attenuation, multiple scattering, polarisation,
   bulk transport, detector resolution and experimental backgrounds are omitted.
+- **Advanced extension:** Klein--Nishina events are passed through effective
+  binding, Doppler, second-scatter and Gaussian detector-response layers. This
+  is not material-specific Monte Carlo transport or a Geant4 replacement.
 
 ## Task 10 — Hydrogenic orbitals
 
@@ -130,6 +164,10 @@ what it deliberately does not claim.
 - **Boundary:** screening, correlation, spin-orbit coupling, fine and hyperfine
   structure, Lamb shifts, finite nuclear size, external fields, ionization,
   measurement and detector response are excluded.
+- **Advanced extension:** normalized real-$m$ superpositions, orthogonal
+  sp/sp2/sp3 hybrids, an H2+ LCAO model and Slater-screened independent-electron
+  densities are implemented. The morph coordinate is externally driven, and
+  the multi-electron densities do not include explicit electron correlation.
 
 ## Cross-project interpretation rule
 

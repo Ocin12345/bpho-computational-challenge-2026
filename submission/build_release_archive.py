@@ -14,11 +14,17 @@ from typing import Iterable, Sequence
 ROOT = Path(__file__).resolve().parents[1]
 ARCHIVE_ROOT = "BPhO_Computational_Challenge_2026"
 FIXED_ZIP_TIME = (2026, 1, 1, 0, 0, 0)
-ROOT_FILES = (Path(".gitignore"), Path("README.md"), Path("requirements.txt"))
+ROOT_FILES = (
+    Path(".gitignore"),
+    Path("README.md"),
+    Path("requirements.txt"),
+    Path("VIDEO_FILMING_CHECKLIST.md"),
+)
 ROOT_DIRECTORIES = (
     Path("data"),
     Path("figures"),
     Path("reports"),
+    Path("site"),
     Path("presentation"),
     Path("submission"),
     Path("task01_random_walk"),

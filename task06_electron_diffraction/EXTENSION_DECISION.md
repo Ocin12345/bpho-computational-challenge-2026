@@ -1,9 +1,39 @@
 # Task 6 Optional-Extension Decision
 
+## Post-baseline update — 2026-08-08
+
+The required baseline has now passed its full acceptance gate, so the preferred
+precision extension described below has been implemented as a separate,
+secondary comparison.  The official non-relativistic model and its 39 checks
+are unchanged.
+
+The extension compares
+
+$$
+\lambda_{\mathrm{nr}}=\frac{h}{\sqrt{2m_{\mathrm e}eV}}
+\quad\text{with}\quad
+\lambda_{\mathrm{rel}}
+=\frac{hc}{\sqrt{eV(eV+2m_{\mathrm e}c^2)}},
+$$
+
+then carries both wavelengths through the same exact Bragg and
+$x=r\sin(2\phi)$ screen geometry.  It contains 401 records, passes 10 focused
+checks, and reports the first-order inward ring shift for both graphite
+spacings.  Automatic animation remains deferred because it would not add
+validated physics.
+
+Generate the extension evidence with:
+
+```bash
+python3 -m task06_electron_diffraction.generate_relativistic_extension
+```
+
+The original decision below is retained as the pre-extension scope record.
+
 ## Decision
 
 Do not add an animation or relativistic correction to the authoritative Task
-6 competition slide at this stage.
+6 competition slide before the required baseline is accepted.
 
 ## Reason
 

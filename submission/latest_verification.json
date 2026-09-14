@@ -1,17 +1,17 @@
 {
   "project": "BPhO Computational Challenge 2026 Tasks 1\u201310",
-  "generated_at_utc": "2026-07-26T16:23:52.731127+00:00",
+  "generated_at_utc": "2026-09-14T07:56:34.158004+00:00",
   "mode": "validate",
   "full_task2_rerun": false,
   "passed": true,
-  "elapsed_seconds": 99.056155125,
+  "elapsed_seconds": 160.278509292,
   "environment": {
     "python": "3.9.6",
     "numpy": "2.0.2",
     "scipy": "1.13.1",
     "matplotlib": "3.9.4",
     "pillow": "11.3.0",
-    "times_new_roman": "/System/Library/Fonts/Supplemental/Times New Roman.ttf",
+    "times_new_roman": "Times New Roman.ttf",
     "platform": "darwin"
   },
   "steps": [
@@ -22,13 +22,13 @@
         "task02_brownian_motion/validation/reference_validation.json"
       ],
       "returncode": 0,
-      "elapsed_seconds": 0.0002994159999999968,
+      "elapsed_seconds": 0.00023237500000000688,
       "output_tail": "saved Task 2 report: 9/9 checks pass; refinement factors=[1, 2, 4]"
     },
     {
       "name": "task01_random_walk tests",
       "command": [
-        "/Applications/Xcode.app/Contents/Developer/usr/bin/python3",
+        "python",
         "-m",
         "unittest",
         "discover",
@@ -40,13 +40,13 @@
         "test_*.py"
       ],
       "returncode": 0,
-      "elapsed_seconds": 2.403523917,
-      "output_tail": ".....................................\n----------------------------------------------------------------------\nRan 37 tests in 2.139s\n\nOK\n"
+      "elapsed_seconds": 2.696566709,
+      "output_tail": "....................................................\n----------------------------------------------------------------------\nRan 52 tests in 2.426s\n\nOK\n"
     },
     {
       "name": "task02_brownian_motion tests",
       "command": [
-        "/Applications/Xcode.app/Contents/Developer/usr/bin/python3",
+        "python",
         "-m",
         "unittest",
         "discover",
@@ -58,13 +58,13 @@
         "test_*.py"
       ],
       "returncode": 0,
-      "elapsed_seconds": 18.312640084,
-      "output_tail": "................................................................................\n----------------------------------------------------------------------\nRan 80 tests in 17.330s\n\nOK\n"
+      "elapsed_seconds": 19.014919791,
+      "output_tail": "..............................................................................................\n----------------------------------------------------------------------\nRan 94 tests in 18.338s\n\nOK\n"
     },
     {
       "name": "task03_thermal_radiation tests",
       "command": [
-        "/Applications/Xcode.app/Contents/Developer/usr/bin/python3",
+        "python",
         "-m",
         "unittest",
         "discover",
@@ -76,13 +76,13 @@
         "test_*.py"
       ],
       "returncode": 0,
-      "elapsed_seconds": 8.090171666,
-      "output_tail": "...........................................................................................................\n----------------------------------------------------------------------\nRan 107 tests in 7.821s\n\nOK\n"
+      "elapsed_seconds": 8.137642790999998,
+      "output_tail": ".............................................................................................................................\n----------------------------------------------------------------------\nRan 125 tests in 7.661s\n\nOK\n"
     },
     {
       "name": "task04_photoelectric_effect tests",
       "command": [
-        "/Applications/Xcode.app/Contents/Developer/usr/bin/python3",
+        "python",
         "-m",
         "unittest",
         "discover",
@@ -94,13 +94,13 @@
         "test_*.py"
       ],
       "returncode": 0,
-      "elapsed_seconds": 52.107906459,
-      "output_tail": ".....................................................................................................................................................\n----------------------------------------------------------------------\nRan 149 tests in 51.830s\n\nOK\n"
+      "elapsed_seconds": 53.72328366599999,
+      "output_tail": "..........................................................................................................................................................\n----------------------------------------------------------------------\nRan 154 tests in 53.424s\n\nOK\n"
     },
     {
       "name": "task05_hydrogen_spectrum tests",
       "command": [
-        "/Applications/Xcode.app/Contents/Developer/usr/bin/python3",
+        "python",
         "-m",
         "unittest",
         "discover",
@@ -112,13 +112,13 @@
         "test_*.py"
       ],
       "returncode": 0,
-      "elapsed_seconds": 6.2315739169999915,
-      "output_tail": "..........................................\n----------------------------------------------------------------------\nRan 42 tests in 5.943s\n\nOK\n"
+      "elapsed_seconds": 6.645655165999997,
+      "output_tail": "..........................................................\n----------------------------------------------------------------------\nRan 58 tests in 6.081s\n\nOK\n"
     },
     {
       "name": "task06_electron_diffraction tests",
       "command": [
-        "/Applications/Xcode.app/Contents/Developer/usr/bin/python3",
+        "python",
         "-m",
         "unittest",
         "discover",
@@ -130,109 +130,359 @@
         "test_*.py"
       ],
       "returncode": 0,
-      "elapsed_seconds": 7.38813562499999,
-      "output_tail": ".............................\n----------------------------------------------------------------------\nRan 29 tests in 7.116s\n\nOK\n"
+      "elapsed_seconds": 6.697788750000001,
+      "output_tail": "..........................................\n----------------------------------------------------------------------\nRan 42 tests in 6.397s\n\nOK\n"
+    },
+    {
+      "name": "task07_particle_in_box tests",
+      "command": [
+        "python",
+        "-m",
+        "unittest",
+        "discover",
+        "-s",
+        "task07_particle_in_box",
+        "-t",
+        ".",
+        "-p",
+        "test_*.py"
+      ],
+      "returncode": 0,
+      "elapsed_seconds": 4.307694583999989,
+      "output_tail": "...............................................\n----------------------------------------------------------------------\nRan 47 tests in 3.816s\n\nOK\nTask 7 presentation validation: PASS (1 slide, 1 embedded 4K visual, 47-word final script, 4001x2250 300-DPI preview)\n"
+    },
+    {
+      "name": "task08_quantum_cryptography tests",
+      "command": [
+        "python",
+        "-m",
+        "unittest",
+        "discover",
+        "-s",
+        "task08_quantum_cryptography",
+        "-t",
+        ".",
+        "-p",
+        "test_*.py"
+      ],
+      "returncode": 0,
+      "elapsed_seconds": 9.515773417000005,
+      "output_tail": "....................................../Users/nicoliao/Documents/Codex/2026-09-14/for-x20/work/.venv/lib/python3.9/site-packages/matplotlib/backends/backend_pdf.py:1758: DeprecationWarning: 'mode' parameter is deprecated and will be removed in Pillow 13 (2026-10-15)\n  img = Image.fromarray(rgb8, mode='P')\n/Users/nicoliao/Documents/Codex/2026-09-14/for-x20/work/.venv/lib/python3.9/site-packages/matplotlib/backends/backend_pdf.py:1758: DeprecationWarning: 'mode' parameter is deprecated and will be removed in Pillow 13 (2026-10-15)\n  img = Image.fromarray(rgb8, mode='P')\n/Users/nicoliao/Documents/Codex/2026-09-14/for-x20/work/.venv/lib/python3.9/site-packages/matplotlib/backends/backend_pdf.py:1758: DeprecationWarning: 'mode' parameter is deprecated and will be removed in Pillow 13 (2026-10-15)\n  img = Image.fromarray(rgb8, mode='P')\n/Users/nicoliao/Documents/Codex/2026-09-14/for-x20/work/.venv/lib/python3.9/site-packages/matplotlib/backends/backend_pdf.py:1758: DeprecationWarning: 'mode' parameter is deprecated and will be removed in Pillow 13 (2026-10-15)\n  img = Image.fromarray(rgb8, mode='P')\n../Users/nicoliao/Documents/Codex/2026-09-14/for-x20/work/.venv/lib/python3.9/site-packages/matplotlib/backends/backend_pdf.py:1758: DeprecationWarning: 'mode' parameter is deprecated and will be removed in Pillow 13 (2026-10-15)\n  img = Image.fromarray(rgb8, mode='P')\n/Users/nicoliao/Documents/Codex/2026-09-14/for-x20/work/.venv/lib/python3.9/site-packages/matplotlib/backends/backend_pdf.py:1758: DeprecationWarning: 'mode' parameter is deprecated and will be removed in Pillow 13 (2026-10-15)\n  img = Image.fromarray(rgb8, mode='P')\n../Users/nicoliao/Documents/Codex/2026-09-14/for-x20/work/.venv/lib/python3.9/site-packages/matplotlib/backends/backend_pdf.py:1758: DeprecationWarning: 'mode' parameter is deprecated and will be removed in Pillow 13 (2026-10-15)\n  img = Image.fromarray(rgb8, mode='P')\n/Users/nicoliao/Documents/Codex/2026-09-14/for-x20/work/.venv/lib/python3.9/site-packages/matplotlib/backends/backend_pdf.py:1758: DeprecationWarning: 'mode' parameter is deprecated and will be removed in Pillow 13 (2026-10-15)\n  img = Image.fromarray(rgb8, mode='P')\n...................\n----------------------------------------------------------------------\nRan 61 tests in 8.877s\n\nOK\nTask 8 app validation: PASS (7 files, 2 synchronized angle controls, 5 angle presets, 4 photon-count presets, 3 described SVGs, accessible live graph and simulation, offline-only assets)\nTask 8 presentation validation: PASS (1 slide, 1 embedded 4K visual, 49-word final script, 4001x2250 300-DPI preview, 8 byte-identical source assets)\n"
+    },
+    {
+      "name": "task09_compton_scattering tests",
+      "command": [
+        "python",
+        "-m",
+        "unittest",
+        "discover",
+        "-s",
+        "task09_compton_scattering",
+        "-t",
+        ".",
+        "-p",
+        "test_*.py"
+      ],
+      "returncode": 0,
+      "elapsed_seconds": 6.204398291999993,
+      "output_tail": "......................................................\n----------------------------------------------------------------------\nRan 54 tests in 5.915s\n\nOK\nTask 9 presentation validation: PASS (1 slide, 1 embedded 4K visual, 48-word final script, 4001x2250 preview, 5 byte-identical source assets)\n"
+    },
+    {
+      "name": "task10_hydrogenic_orbitals tests",
+      "command": [
+        "python",
+        "-m",
+        "unittest",
+        "discover",
+        "-s",
+        "task10_hydrogenic_orbitals",
+        "-t",
+        ".",
+        "-p",
+        "test_*.py"
+      ],
+      "returncode": 0,
+      "elapsed_seconds": 37.551155167000005,
+      "output_tail": ".........................................../Users/nicoliao/Documents/Codex/2026-09-14/for-x20/work/.venv/lib/python3.9/site-packages/matplotlib/backends/backend_pdf.py:1758: DeprecationWarning: 'mode' parameter is deprecated and will be removed in Pillow 13 (2026-10-15)\n  img = Image.fromarray(rgb8, mode='P')\n...............\n----------------------------------------------------------------------\nRan 58 tests in 37.076s\n\nOK\nTask 10 presentation validation: PASS (1 slide, 1 embedded 4K visual, 50-word final script, 4001x2250 preview, 6 byte-identical source assets)\n"
     },
     {
       "name": "Task 3 science gate",
       "command": [
-        "/Applications/Xcode.app/Contents/Developer/usr/bin/python3",
+        "python",
         "-m",
         "task03_thermal_radiation.validate_task03"
       ],
       "returncode": 0,
-      "elapsed_seconds": 0.10472058399999185,
+      "elapsed_seconds": 0.1328185830000166,
       "output_tail": "Task 3 Stage 7: combined validation\n[PASS] planck_spectra_finite: observed=1, expected=1, unit=dimensionless, comparison=exact, tolerance=0\n[PASS] planck_spectra_non_negative: observed=1, expected=1, unit=dimensionless, comparison=exact, tolerance=0\n[PASS] planck_integrals_finite: observed=1, expected=1, unit=dimensionless, comparison=exact, tolerance=0\n[PASS] planck_exitance_identity: observed=0, expected=0, unit=dimensionless, comparison=relative_error_le, tolerance=1e-14\n[PASS] wien_peak_4000_k: observed=7.2444e-07, expected=7.24442988796e-07, unit=m, comparison=relative_error_le, tolerance=0.001\n[PASS] stefan_boltzmann_4000_k: observed=14516158.5288, expected=14516158.5131, unit=W m^-2, comparison=relative_error_le, tolerance=0.002\n[PASS] radiance_integral_4000_k: observed=4620636.76913, expected=4620636.76413, unit=W m^-2 sr^-1, comparison=relative_error_le, tolerance=0.002\n[PASS] wien_peak_5000_k: observed=5.7955e-07, expected=5.79554391037e-07, unit=m, comparison=relative_error_le, tolerance=0.001\n[PASS] stefan_boltzmann_5000_k: observed=35439840.1582, expected=35439840.1199, unit=W m^-2, comparison=relative_error_le, tolerance=0.002\n[PASS] radiance_integral_5000_k: observed=11280851.4871, expected=11280851.4749, unit=W m^-2 sr^-1, comparison=relative_error_le, tolerance=0.002\n[PASS] wien_peak_6000_k: observed=4.8296e-07, expected=4.82961992531e-07, unit=m, comparison=relative_error_le, tolerance=0.001\n[PASS] stefan_boltzmann_6000_k: observed=73488052.5521, expected=73488052.4726, unit=W m^-2, comparison=relative_error_le, tolerance=0.002\n[PASS] radiance_integral_6000_k: observed=23391973.6437, expected=23391973.6184, unit=W m^-2 sr^-1, comparison=relative_error_le, tolerance=0.002\n[PASS] einstein_results_finite: observed=1, expected=1, unit=dimensionless, comparison=exact, tolerance=0\n[PASS] einstein_zero_limit: observed=0, expected=0, unit=J mol^-1 K^-1, comparison=absolute_error_le, tolerance=0\n[PASS] einstein_physical_bounds: observed=0, expected=0, unit=dimensionless, comparison=relative_slack_le, tolerance=1e-12\n[PASS] einstein_monotonicity: observed=0, expected=0, unit=J mol^-1 K^-1, comparison=absolute_slack_le, tolerance=1e-12\n[PASS] einstein_anchor_ratio: observed=2.22044604925e-16, expected=0, unit=dimensionless, comparison=absolute_error_le, tolerance=1e-12\n[PASS] einstein_high_temperature_limit: observed=8.33329166595e-06, expected=0, unit=dimensionless, comparison=relative_error_le, tolerance=1e-05\n[PASS] einstein_frequency_au: observed=0.285501930194, expected=0.2855, unit=1e13 Hz, comparison=equal_after_4_decimal_rounding, tolerance=0\n[PASS] einstein_frequency_cu: observed=0.576881841303, expected=0.5769, unit=1e13 Hz, comparison=equal_after_4_decimal_rounding, tolerance=0\n[PASS] einstein_frequency_ti: observed=0.70535770989, expected=0.7054, unit=1e13 Hz, comparison=equal_after_4_decimal_rounding, tolerance=0\n[PASS] einstein_frequency_al: observed=0.71879309484, expected=0.7188, unit=1e13 Hz, comparison=equal_after_4_decimal_rounding, tolerance=0\n[PASS] einstein_frequency_fe: observed=0.789328865829, expected=0.7893, unit=1e13 Hz, comparison=equal_after_4_decimal_rounding, tolerance=0\n[PASS] einstein_frequency_si: observed=1.08322791162, expected=1.0832, unit=1e13 Hz, comparison=equal_after_4_decimal_rounding, tolerance=0\n[PASS] einstein_frequency_c: observed=3.74511355489, expected=3.7451, unit=1e13 Hz, comparison=equal_after_4_decimal_rounding, tolerance=0\n[PASS] einstein_normalized_collapse: observed=8.881784197e-16, expected=0, unit=dimensionless, comparison=maximum_absolute_difference_le, tolerance=1e-12\nTask 3 validation: PASS\n"
     },
     {
       "name": "Task 4 science gate",
       "command": [
-        "/Applications/Xcode.app/Contents/Developer/usr/bin/python3",
+        "python",
         "-m",
         "task04_photoelectric_effect.validate_task04"
       ],
       "returncode": 0,
-      "elapsed_seconds": 0.06881649999999695,
+      "elapsed_seconds": 0.06861975000001053,
       "output_tail": "158938213.1 tolerance=4.9999999999999999e-13 unit=Hz comparison=relative_error_lte\nPASS  cutoff_frequency_ni                observed=1112275051359062.2 expected=1112275051359062.4 tolerance=4.9999999999999999e-13 unit=Hz comparison=relative_error_lte\nPASS  cutoff_frequency_na                observed=580317418100380.25 expected=580317418100380.38 tolerance=4.9999999999999999e-13 unit=Hz comparison=relative_error_lte\nPASS  cutoff_wavelength_ag               observed=288.33534519348899 expected=288.33534519348899 tolerance=4.9999999999999999e-13 unit=nm comparison=relative_error_lte\nPASS  cutoff_wavelength_al               observed=288.33534519348899 expected=288.33534519348899 tolerance=4.9999999999999999e-13 unit=nm comparison=relative_error_lte\nPASS  cutoff_wavelength_au               observed=243.10627143764762 expected=243.10627143764756 tolerance=4.9999999999999999e-13 unit=nm comparison=relative_error_lte\nPASS  cutoff_wavelength_cu               observed=263.7961668791495 expected=263.7961668791495 tolerance=4.9999999999999999e-13 unit=nm comparison=relative_error_lte\nPASS  cutoff_wavelength_sn               observed=281.78226916636419 expected=281.78226916636424 tolerance=4.9999999999999999e-13 unit=nm comparison=relative_error_lte\nPASS  cutoff_wavelength_pb               observed=288.33534519348899 expected=288.33534519348899 tolerance=4.9999999999999999e-13 unit=nm comparison=relative_error_lte\nPASS  cutoff_wavelength_w                observed=275.52044096266729 expected=275.52044096266724 tolerance=4.9999999999999999e-13 unit=nm comparison=relative_error_lte\nPASS  cutoff_wavelength_ni               observed=269.53086615913105 expected=269.53086615913099 tolerance=4.9999999999999999e-13 unit=nm comparison=relative_error_lte\nPASS  cutoff_wavelength_na               observed=516.60082680500113 expected=516.60082680500113 tolerance=4.9999999999999999e-13 unit=nm comparison=relative_error_lte\nPASS  threshold_frequency_voltage        observed=1.0866116525826204e-15 expected=0 tolerance=4.9999999999999997e-12 unit=V comparison=absolute_error_lte\nPASS  threshold_wavelength_voltage       observed=9.8566964618960931e-16 expected=0 tolerance=4.9999999999999997e-12 unit=V comparison=absolute_error_lte\nPASS  frequency_emission_mask            observed=0 expected=0 tolerance=0 unit=count comparison=exact_equal\nPASS  wavelength_emission_mask           observed=0 expected=0 tolerance=0 unit=count comparison=exact_equal\nPASS  frequency_physical_voltage         observed=0 expected=0 tolerance=4.9999999999999997e-12 unit=V comparison=absolute_error_lte\nPASS  wavelength_physical_voltage        observed=1.7763568394002505e-15 expected=0 tolerance=4.9999999999999997e-12 unit=V comparison=absolute_error_lte\nPASS  frequency_physical_bounds          observed=0 expected=0 tolerance=9.9999999999999998e-13 unit=V comparison=absolute_error_lte\nPASS  wavelength_physical_bounds         observed=0 expected=0 tolerance=9.9999999999999998e-13 unit=V comparison=absolute_error_lte\nPASS  frequency_monotonicity             observed=0 expected=0 tolerance=9.9999999999999998e-13 unit=V comparison=absolute_error_lte\nPASS  wavelength_monotonicity            observed=0 expected=0 tolerance=9.9999999999999998e-13 unit=V comparison=absolute_error_lte\nPASS  duplicate_materials                observed=0 expected=0 tolerance=0 unit=count comparison=exact_equal\nPASS  cutoff_ordering                    observed=0 expected=0 tolerance=0 unit=count comparison=exact_equal\nPASS  frequency_wavelength_consistency   observed=2.2204460492503131e-15 expected=0 tolerance=9.9999999999999994e-12 unit=V comparison=absolute_error_lte\nPASS  frequency_anchor                   observed=6.6613381477509392e-16 expected=0 tolerance=4.9999999999999997e-12 unit=V comparison=absolute_error_lte\nPASS  wavelength_anchor                  observed=4.4408920985006262e-16 expected=0 tolerance=4.9999999999999997e-12 unit=V comparison=absolute_error_lte\nTask 4 validation: PASS (43/43 checks passed)\n"
     },
     {
       "name": "Task 5 science gate",
       "command": [
-        "/Applications/Xcode.app/Contents/Developer/usr/bin/python3",
+        "python",
         "-m",
         "task05_hydrogen_spectrum.validate_task05"
       ],
       "returncode": 0,
-      "elapsed_seconds": 0.05764087499998993,
+      "elapsed_seconds": 0.057948917000004485,
       "output_tail": "ected=0 tolerance=4.9999999999999997e-12 unit=eV comparison=absolute_error_lte\nPASS  level_joule_conversion             observed=1.2037062152420224e-35 expected=0 tolerance=8.0108831699999995e-31 unit=J comparison=absolute_error_lte\nPASS  level_ordering                     observed=0 expected=0 tolerance=0 unit=count comparison=exact_equal\nPASS  transition_count                   observed=0 expected=0 tolerance=0 unit=count comparison=exact_equal\nPASS  transition_pair_order              observed=0 expected=0 tolerance=0 unit=count comparison=exact_equal\nPASS  transition_uniqueness              observed=0 expected=0 tolerance=0 unit=count comparison=exact_equal\nPASS  transition_energy_difference       observed=1.7763568394002505e-15 expected=0 tolerance=4.9999999999999997e-12 unit=eV comparison=absolute_error_lte\nPASS  transition_energy_reference        observed=1.7763568394002505e-15 expected=0 tolerance=4.9999999999999997e-12 unit=eV comparison=absolute_error_lte\nPASS  photon_joule_conversion            observed=0 expected=0 tolerance=8.0108831699999995e-31 unit=J comparison=absolute_error_lte\nPASS  positive_finite_emissions          observed=0 expected=0 tolerance=0 unit=count comparison=exact_equal\nPASS  energy_wavelength_identity         observed=2.2204460492503131e-16 expected=0 tolerance=4.9999999999999999e-13 unit=dimensionless comparison=absolute_error_lte\nPASS  frequency_wavelength_identity      observed=2.2204460492503131e-16 expected=0 tolerance=4.9999999999999999e-13 unit=dimensionless comparison=absolute_error_lte\nPASS  rydberg_wavelength_reference       observed=3.8190882856825714e-16 expected=0 tolerance=4.9999999999999999e-13 unit=dimensionless comparison=absolute_error_lte\nPASS  frequency_reference                observed=5.0619332866221934e-16 expected=0 tolerance=4.9999999999999999e-13 unit=dimensionless comparison=absolute_error_lte\nPASS  named_line_lyman_alpha             observed=0 expected=0 tolerance=4.9999999999999997e-12 unit=dimensionless comparison=absolute_error_lte\nPASS  named_line_lyman_beta              observed=1.3861875999884888e-16 expected=0 tolerance=4.9999999999999997e-12 unit=dimensionless comparison=absolute_error_lte\nPASS  named_line_h_alpha                 observed=1.1750383762211657e-16 expected=0 tolerance=4.9999999999999997e-12 unit=dimensionless comparison=absolute_error_lte\nPASS  named_line_h_beta                  observed=0 expected=0 tolerance=4.9999999999999997e-12 unit=dimensionless comparison=absolute_error_lte\nPASS  named_line_h_gamma                 observed=0 expected=0 tolerance=4.9999999999999997e-12 unit=dimensionless comparison=absolute_error_lte\nPASS  named_line_h_delta                 observed=1.3861875999884888e-16 expected=0 tolerance=4.9999999999999997e-12 unit=dimensionless comparison=absolute_error_lte\nPASS  series_limit_n1                    observed=1.5594610499870497e-16 expected=0 tolerance=4.9999999999999997e-12 unit=dimensionless comparison=absolute_error_lte\nPASS  series_limit_n2                    observed=1.5594610499870497e-16 expected=0 tolerance=4.9999999999999997e-12 unit=dimensionless comparison=absolute_error_lte\nPASS  series_limit_n3                    observed=1.4687979702764571e-16 expected=0 tolerance=4.9999999999999997e-12 unit=dimensionless comparison=absolute_error_lte\nPASS  series_limit_n4                    observed=1.5594610499870497e-16 expected=0 tolerance=4.9999999999999997e-12 unit=dimensionless comparison=absolute_error_lte\nPASS  series_limit_n5                    observed=0 expected=0 tolerance=4.9999999999999997e-12 unit=dimensionless comparison=absolute_error_lte\nPASS  series_convergence                 observed=0 expected=0 tolerance=0 unit=count comparison=exact_equal\nPASS  series_and_line_labels             observed=0 expected=0 tolerance=0 unit=count comparison=exact_equal\nPASS  spectral_classification            observed=0 expected=0 tolerance=0 unit=count comparison=exact_equal\nTask 5 validation: PASS (30/30 checks passed)\n"
     },
     {
       "name": "Task 6 science gate",
       "command": [
-        "/Applications/Xcode.app/Contents/Developer/usr/bin/python3",
+        "python",
         "-m",
         "task06_electron_diffraction.validate_task06"
       ],
       "returncode": 0,
-      "elapsed_seconds": 0.10854983400000151,
+      "elapsed_seconds": 0.09980662499998516,
       "output_tail": "[PASS] voltage_enumeration: The evidence grid is exactly 1000 to 5000 V in 10 V steps.\n[PASS] spacing_catalogue: Both nominal graphite spacings are present in frozen order.\n[PASS] wavelength_decimal_reference: All wavelengths agree with an independent 60-digit Decimal path.\n[PASS] wavelength_monotonicity: Electron wavelength decreases strictly as voltage increases.\n[PASS] inverse_sqrt_voltage_scaling: lambda times sqrt(V) is constant over the full sweep.\n[PASS] kinetic_energy_identity: p squared over 2m equals the positive accelerating energy eV.\n[PASS] de_broglie_identity: Every stored momentum and wavelength satisfy p lambda = h.\n[PASS] maximum_bragg_orders: Every official maximum Bragg order matches Decimal flooring.\n[PASS] maximum_screen_orders: Every forward-screen maximum matches Decimal flooring.\n[PASS] maximum_order_monotonicity: Maximum orders never decrease as accelerating voltage rises.\n[PASS] catalogue_size: The flattened catalogue contains every Bragg order exactly once.\n[PASS] catalogue_ordering: Rows use voltage, spacing, then increasing-order sequence.\n[PASS] bragg_ratio_identity: Every q equals n lambda divided by 2d.\n[PASS] bragg_domain: All and only stored orders have 0 < q <= 1.\n[PASS] bragg_angle_identity: Every Bragg angle satisfies sin(theta) = q.\n[PASS] scattering_angle_identity: Every scattering angle satisfies phi = 2 theta.\n[PASS] photographic_geometry: Every photographic radius uses x = r sin(2 phi).\n[PASS] caliper_geometry: Every caliper diameter uses y = 2r sin(phi).\n[PASS] screen_visibility_classification: Forward-screen records are exactly those with q <= 1/sqrt(2).\n[PASS] order_status_labels: Controlled status labels agree with geometric visibility.\n[PASS] forward_screen_bounds: Displayed rings have 0 <= phi <= 90 degrees and 0 <= x <= r.\n[PASS] fit_record_counts: There is one primary and one normalized fit per spacing.\n[PASS] d1_first_order_gradient: d1 first-order gradient matches the independent formula.\n[PASS] d1_first_order_spacing_recovery: d1 primary fit recovers its nominal atomic spacing.\n[PASS] d1_first_order_intercept: d1 unconstrained diagnostic intercept is zero numerically.\n[PASS] d1_first_order_r_squared: d1 primary validation is a straight line.\n[PASS] d1_normalized_gradient: d1 all-order normalized gradient matches first order.\n[PASS] d1_normalized_spacing_recovery: d1 normalized fit recovers its nominal spacing.\n[PASS] d1_all_order_collapse: All d1 orders collapse onto one normalized line.\n[PASS] d2_first_order_gradient: d2 first-order gradient matches the independent formula.\n[PASS] d2_first_order_spacing_recovery: d2 primary fit recovers its nominal atomic spacing.\n[PASS] d2_first_order_intercept: d2 unconstrained diagnostic intercept is zero numerically.\n[PASS] d2_first_order_r_squared: d2 primary validation is a straight line.\n[PASS] d2_normalized_gradient: d2 all-order normalized gradient matches first order.\n[PASS] d2_normalized_spacing_recovery: d2 normalized fit recovers its nominal spacing.\n[PASS] d2_all_order_collapse: All d2 orders collapse onto one normalized line.\n[PASS] first_order_anchor_presence: Each endpoint and spacing has exactly one first-order record.\n[PASS] first_order_anchor_values: Endpoint wavelength, angle, and photographic radii match independent anchors.\n[PASS] first_order_ring_contraction: Both first-order rings contract strictly over the voltage sweep.\nTask 6 validation: 39/39 checks passed\n"
     },
     {
       "name": "Task 7 final gate",
       "command": [
-        "/Applications/Xcode.app/Contents/Developer/usr/bin/python3",
+        "python",
         "-m",
         "task07_particle_in_box.validate_task07_final"
       ],
       "returncode": 0,
-      "elapsed_seconds": 0.42762912500000994,
+      "elapsed_seconds": 0.4140079169999922,
       "output_tail": "Task 7 presentation validation: PASS (1 slide, 1 embedded 4K visual, 47-word final script, 4001x2250 300-DPI preview)\nTask 7 final artifact validation: 8/8 groups passed\n"
     },
     {
       "name": "Task 8 final gate",
       "command": [
-        "/Applications/Xcode.app/Contents/Developer/usr/bin/python3",
+        "python",
         "-m",
         "task08_quantum_cryptography.validate_task08_final"
       ],
       "returncode": 0,
-      "elapsed_seconds": 0.28041425000000686,
+      "elapsed_seconds": 0.25795958300000166,
       "output_tail": "Task 8 app validation: PASS (7 files, 2 synchronized angle controls, 5 angle presets, 4 photon-count presets, 3 described SVGs, accessible live graph and simulation, offline-only assets)\nTask 8 presentation validation: PASS (1 slide, 1 embedded 4K visual, 49-word final script, 4001x2250 300-DPI preview, 8 byte-identical source assets)\nTask 8 final artifact validation: 8/8 groups passed\n"
     },
     {
       "name": "Task 9 final gate",
       "command": [
-        "/Applications/Xcode.app/Contents/Developer/usr/bin/python3",
+        "python",
         "-m",
         "task09_compton_scattering.validate_task09_final"
       ],
       "returncode": 0,
-      "elapsed_seconds": 0.2815837499999958,
+      "elapsed_seconds": 0.2625095829999964,
       "output_tail": "Task 9 presentation validation: PASS (1 slide, 1 embedded 4K visual, 48-word final script, 4001x2250 preview, 5 byte-identical source assets)\nTask 9 final artifact validation: 8/8 groups passed\n"
     },
     {
       "name": "Task 10 final gate",
       "command": [
-        "/Applications/Xcode.app/Contents/Developer/usr/bin/python3",
+        "python",
         "-m",
         "task10_hydrogenic_orbitals.validate_task10_final"
       ],
       "returncode": 0,
-      "elapsed_seconds": 2.332611666999995,
+      "elapsed_seconds": 2.174030832999989,
       "output_tail": "Task 10 presentation validation: PASS (1 slide, 1 embedded 4K visual, 50-word final script, 4001x2250 preview, 6 byte-identical source assets)\nTask 10 final artifact validation: 8/8 groups passed\n"
     },
     {
-      "name": "Presentation bundle",
+      "name": "Advanced extension evidence gate",
       "command": [
-        "npm",
-        "run",
-        "validate",
-        "--prefix",
-        "presentation"
+        "python",
+        "-m",
+        "submission.validate_advanced_extensions"
       ],
       "returncode": 0,
-      "elapsed_seconds": 0.5063907079999979,
-      "output_tail": "\n> bpho-master-presentation@1.0.0 validate\n> python3 validate_task_presentations.py && python3 validate_typography.py && python3 master/validate_master_presentation.py\n\nTask 1 presentation validation: PASS (1 slide, 1 embedded 4K visual, 4001x2250 preview)\nTask 2 presentation validation: PASS (1 slide, 1 embedded 4K visual, 4001x2250 preview)\nTask 3 presentation validation: PASS (1 slide, 1 embedded 4K visual, 4001x2250 preview)\nTask 4 presentation validation: PASS (1 slide, 1 embedded 4K visual, 4001x2250 preview)\nTask 5 presentation validation: PASS (1 slide, 1 embedded 4K visual, 4001x2250 preview)\nTask 6 presentation validation: PASS (1 slide, 1 embedded 4K visual, 4001x2250 preview)\nTypography validation: PASS (30 Task 1\u20136 SVG figures use Times New Roman glyphs; 10 task decks and the master deck use Times New Roman themes)\nMaster presentation validation: PASS (10 slides, 10 embedded 4K summaries, 10 notes pages, 410 words, 164.0s at 150 wpm, all previews 4001x2250)\n"
+      "elapsed_seconds": 0.7616207080000095,
+      "output_tail": "Advanced extension validation: PASS\n35/35 checks; 10 tasks\n"
+    },
+    {
+      "name": "Advanced extension figure gate",
+      "command": [
+        "python",
+        "-m",
+        "submission.validate_advanced_figures"
+      ],
+      "returncode": 0,
+      "elapsed_seconds": 0.05042749999998364,
+      "output_tail": "Advanced figures validation: PASS (10 publication PNG/SVG pairs)\n"
+    },
+    {
+      "name": "Advanced lab static gate",
+      "command": [
+        "node",
+        "site/validate-advanced.mjs"
+      ],
+      "returncode": 0,
+      "elapsed_seconds": 0.14051866600001972,
+      "output_tail": "Advanced lab validation: PASS (35/35 science checks, 10 reports)\n"
+    },
+    {
+      "name": "Task presentations",
+      "command": [
+        "python",
+        "presentation/validate_task_presentations.py"
+      ],
+      "returncode": 0,
+      "elapsed_seconds": 0.0960736250000025,
+      "output_tail": "Task 1 presentation validation: PASS (1 slide, 1 embedded 4K visual, 4001x2250 preview)\nTask 2 presentation validation: PASS (1 slide, 1 embedded 4K visual, 4001x2250 preview)\nTask 3 presentation validation: PASS (1 slide, 1 embedded 4K visual, 4001x2250 preview)\nTask 4 presentation validation: PASS (1 slide, 1 embedded 4K visual, 4001x2250 preview)\nTask 5 presentation validation: PASS (1 slide, 1 embedded 4K visual, 4001x2250 preview)\nTask 6 presentation validation: PASS (1 slide, 1 embedded 4K visual, 4001x2250 preview)\n"
+    },
+    {
+      "name": "Presentation typography",
+      "command": [
+        "python",
+        "presentation/validate_typography.py"
+      ],
+      "returncode": 0,
+      "elapsed_seconds": 0.04915299999998979,
+      "output_tail": "Typography validation: PASS (30 Task 1\u20136 SVG figures use Times New Roman glyphs; 10 task decks and the master deck use Times New Roman themes)\n"
+    },
+    {
+      "name": "Master presentation",
+      "command": [
+        "python",
+        "presentation/master/validate_master_presentation.py"
+      ],
+      "returncode": 0,
+      "elapsed_seconds": 0.09039445799999157,
+      "output_tail": "Master presentation validation: PASS (10 slides, 10 embedded 4K summaries, 10 notes pages, 410 words, 164.0s at 150 wpm, all previews 4001x2250)\n"
+    },
+    {
+      "name": "Website assets and links",
+      "command": [
+        "python",
+        "-m",
+        "submission.validate_site"
+      ],
+      "returncode": 0,
+      "elapsed_seconds": 0.18806462500000976,
+      "output_tail": "Website dependencies: PASS (626 local references)\n"
+    },
+    {
+      "name": "Task 1 website gate",
+      "command": [
+        "node",
+        "site/validate-task-01.mjs"
+      ],
+      "returncode": 0,
+      "elapsed_seconds": 0.07200616599999421,
+      "output_tail": "PASS Official 2D task remains the default: The original 2D walk and ensemble remain intact, 2D opens by default, and the judge-facing validation view is present.\nPASS Dimensional study retained outside the filming path: The accepted 1D/3D study remains in source, while the visible filming path stays on the required 2D task.\nPASS Exact isotropic microscopic steps: 1D uses equiprobable signs and 3D samples uniform cos(theta), avoiding polar bias.\nPASS Dimension-correct large-N variance: Each CLT coordinate has variance Ns^2/d and displayed distance uses all coordinates.\nPASS Truthful 3D projection: The 3D view is labelled as an oblique projection and shows projected RMS great circles.\nPASS Independent accepted evidence: 12,000 exact walks per dimension are stored for 1D, 2D and 3D.\nPASS Universal RMS slope recovered: 1D=1.0013, 2D=0.9995, 3D=0.9988\nPASS Square-root exponent recovered: 1D=0.4972, 2D=0.4982, 3D=0.4996\nPASS Dimension-specific endpoint theory: Folded-normal, Rayleigh and Maxwell radial densities are compared with exact ensembles.\nPASS Uncertainty and fit reporting: Plots carry 95% confidence intervals and cards report slope and exponent uncertainty.\nPASS Responsive high-DPI graphs: Both graphs size from CSS dimensions, support high-DPI screens and stack on mobile.\nPASS Accessible native controls: Dimension selection is a labelled native radio group with visible keyboard focus and live status.\nPASS Fail-closed evidence state: If the accepted file fails validation, claims and exports remain unavailable.\nPASS Judge-facing validation view: The locked reference evidence is visible as a labelled MSD, angular and radial validation view.\nPASS Reproducible outputs: Every browser run is seeded and its data and presentation figure can be exported.\nPASS Method and assumptions are explicit: The page states the model assumptions, unit convention, and method beside the equations.\nPASS Reproducibility controls are available but secondary: Seed, speed and dimensional extensions are available in a clearly marked advanced disclosure.\nPASS Live and reference results are distinguished: Judge-facing copy distinguishes the visitor's live run from the committed reference result.\nPASS Canvas legend and export metadata: The visual encoding is explained and CSV exports carry the parameters needed to reproduce them.\nPASS Clean local presentation: The extension uses local assets, formal Times typography and no decorative gradients.\n\n20/20 Task 1 extension checks passed.\n"
+    },
+    {
+      "name": "Task 2 website gate",
+      "command": [
+        "node",
+        "site/validate-task-02.mjs"
+      ],
+      "returncode": 0,
+      "elapsed_seconds": 0.04474562499999024,
+      "output_tail": "PASS Local dependency policy: Task 2 uses local assets only and carries no decorative animation dependency.\nPASS Typography standard: The visible interface and scientific canvases use formal Times-based typography.\nPASS Judge-facing task structure: Task 2 exposes Simulation, Plot, Method, and Validation in the judge-facing navigation.\nPASS Official task framing: The page identifies the official task and retains a reliable route to All Tasks.\nPASS Locked reference evidence: Stored ensemble evidence is visibly distinguished from the live simulation and states its fit interval.\nPASS Transparent physical parameters: N, m, r, M, R, and M/m are visible, with live values updated from the actual simulation state.\nPASS Model assumptions disclosed: The simplified browser model and the separate Python reference analysis are described without implying full molecular dynamics.\nPASS Responsive and reduced-motion safeguards: The page has mobile, dynamic viewport and reduced-motion handling.\nPASS High-DPI canvas sizing: Simulation and evidence canvases size from untransformed CSS dimensions.\nPASS Hard-disc study retained outside the official task path: The accepted heat-bath comparison remains in source while the official Task 2 page stays focused on the required model.\nPASS Mutually exclusive bath physics: Direction randomization and gas-gas contacts are never active in the same model.\nPASS Hard-disc conservation evidence: 2000 controlled pairs; momentum and energy errors remain below 1e-12.\nPASS Extension interaction safeguards: The extension pauses off-screen, respects reduced motion, and exposes keyboard focus and fail-closed evidence.\nPASS Quantitative plot and validation output: The page exposes one principal MSD plot, concise endpoint evidence, convergence evidence, and figure exports.\nPASS Focused collision animation: The physical collision loop and reduced-mass derivation remain, while page-level decorative choreography is removed.\nPASS Evidence schema and ensemble: 64 seeded paths; 224 ensemble samples.\nPASS Diffusive fit quality: D=0.0022524125758681944; R\u00b2=0.9832392581647977.\nPASS Collision and convergence validation: Worst normalized collision error=2.1690414424057863e-15.\nPASS Unbiased ensemble result: Both final mean-displacement confidence intervals include zero and are exposed by the renderer.\nPASS Independent Python validation: 9 reference checks and 8 analysis checks pass in the stored reports.\n\n20/20 Task 2 checks passed.\n"
+    },
+    {
+      "name": "Task 3 website gate",
+      "command": [
+        "node",
+        "site/validate-task-03.mjs"
+      ],
+      "returncode": 0,
+      "elapsed_seconds": 0.03442824999999061,
+      "output_tail": "Task 03 website validation passed.\n  scientific source: 27 / 27 checks\n  Planck web series: 3 \u00d7 581 points\n  Einstein web series: 7 \u00d7 201 points\n  normalized curves: 7 \u00d7 201 points\n  Debye extension retained outside filming path: 251 validated normalized points across 7 solids\n  focused layout, controls, downloads and responsive rules: present\n"
+    },
+    {
+      "name": "Task 4 website gate",
+      "command": [
+        "node",
+        "site/validate-task-04.mjs"
+      ],
+      "returncode": 0,
+      "elapsed_seconds": 0.029604667000000973,
+      "output_tail": "PASS Accepted validation report: 43/43 independent checks pass.\nPASS Official nine-metal table: 9 cut-off records match the frozen official order.\nPASS Analytical cut-offs: Every stored f0=W/h and lambda0=hc/W agrees within 5e-13 relative error.\nPASS Honest overlapping materials: Ag, Al and Pb share the supplied 4.3 eV work function and are labelled as one overlap.\nPASS Complete required and extension content: The packaged interactive 3D app is primary; the duplicate 2D chamber and redundant evidence wall are absent while the required graph remains.\nPASS Full-page experiment handoff: Task 4 opens the packaged full experiment application instead of nesting it inside the editorial page.\nPASS Packaged 3D apparatus assets: The self-contained app bundle and five required GLB equipment models are present.\nPASS Local dependency and typography policy: Pinned local motion and fonts are used; scientific canvases use Times New Roman.\nPASS High-DPI interactive graph: The required graph sizes from CSS pixels and renders at up to 2x density.\nPASS Fail-closed evidence states: The graph keeps a local loading/error state and disables controls when its checked data cannot load.\nPASS Responsive and reduced-motion safeguards: Dynamic viewport, strict mobile, reduced-motion, and cleanup paths are present.\nPASS Task index integration: Task 4 is open from the task index and no longer marked disabled.\n\n12/12 Task 4 website checks passed.\n"
+    },
+    {
+      "name": "Task 5 website gate",
+      "command": [
+        "node",
+        "site/validate-task-05.mjs"
+      ],
+      "returncode": 0,
+      "elapsed_seconds": 0.031092958999977327,
+      "output_tail": "PASS Accepted reduced-mass extension evidence: 12/12 separate extension checks pass for all 45 transitions.\nPASS Reduced-mass physics identities: Every extension line follows the CODATA electron-proton mass ratio, lengthens wavelength, lowers energy, and preserves E\u03bb=hc.\nPASS Accepted validation report: 30/30 checks pass and their formula-consistency evidence is exposed on-page.\nPASS Complete Bohr catalogue: Ten exact levels and all 45 unique downward pairs are present.\nPASS Photon identities and classification: Every stored emission satisfies \u0394E, E\u03bb=hc, f\u03bb=c, and the declared 380\u2013750 nm convention.\nPASS Analytical series limits: Five analytical limits are exposed with honest visible-colour and UV/IR pseudocolour conventions.\nPASS Judge-facing method and model boundary: The five-route judge navigation exposes the ideal-model method, series map, H-alpha anchor, model boundary, and catalogue download.\nPASS Interactive atlas and synchronized line spectrum: Pointer, keyboard, filters, transition controls, selected-line highlighting, and CSV export are implemented.\nPASS Visible and initialized reduced-mass extension: The accepted 45-line moving-proton comparison is loaded, validated, visible, and downloadable.\nPASS Fail-closed evidence state without dormant loading: Both evidence loaders fail closed, while the extension script resolves the visible loading state to ready or explicit error.\nPASS Local typography and restrained presentation: The interface uses local formal typography, simple section navigation, and no decorative motion dependency.\nPASS High-DPI and idle-stable figures: Both canvases render at up to 2x density and perform no continuous idle repaint.\nPASS Original-resolution scientific figure: 3840\u00d72160 PNG and editable Times New Roman SVG agree with the accepted required graph.\nPASS Responsive and reduced-motion safeguards: Dynamic viewport, mobile section navigation, validation tables, reduced motion, and section tracking are present.\nPASS Honest extension boundary: The reduced-mass result remains separate from the baseline and excludes orbital, intensity, linewidth, and precision-spectroscopy claims.\nPASS Task index integration: Task 5 is open from the task index and no longer marked disabled.\n\n16/16 Task 5 website checks passed.\n"
+    },
+    {
+      "name": "Task 6 website gate",
+      "command": [
+        "node",
+        "site/validate-task-06.mjs"
+      ],
+      "returncode": 0,
+      "elapsed_seconds": 0.0783077910000145,
+      "output_tail": "PASS Accepted validation report: 39/39 independent checks pass.\nPASS Complete voltage and order evidence: 401 exact voltage samples, 11,386 Bragg records, and 7,927 forward-screen records are present.\nPASS Non-relativistic wavelength model: Every wavelength follows h/sqrt(2 m_e e V) across the full 1\u20135 kV grid.\nPASS Exact screen geometry and domains: All orders obey Bragg q\u22641, x=r sin(2\u03c6), and the independent q\u22641/sqrt(2) screen rule.\nPASS Official spacing recovery: Both 401-point first-order fits pass through the origin, reach R\u00b2=1, and recover 0.123/0.213 nm.\nPASS Complete required website content: The exact screen, graphite-spacing graph, voltage controls, geometric domains, and figures remain without a separate evidence section.\nPASS Judge-facing task structure: Experiment, Plot, Method, and Validation are reachable without shared video-cut hiding.\nPASS Visible angle and geometry definitions: The Method explicitly defines theta, phi=2theta, x, y, and the official assumptions.\nPASS Evidence-driven live diagnostics: Both first-order families expose live theta, phi, q, and photographic radius from checked evidence.\nPASS Controlled sweep reset and export: Task 6 provides a pausable 1-5 kV sweep, a 3 kV reset, and evidence-derived CSV export.\nPASS Judge-facing validation evidence: Visible validation distinguishes physical derivation, fitted evidence, and implementation checks.\nPASS Loaded advanced relativistic extension: The validated relativistic comparison is explicitly secondary and its browser module is loaded.\nPASS Validated relativistic precision extension: 401 relativistic records pass 10/10 checks while reproducing every official non-relativistic baseline wavelength.\nPASS Interactive and keyboard-complete model: Slider, presets, family controls, chart-point selection, and keyboard voltage stepping are implemented.\nPASS Fail-closed evidence state: Loading and local error states keep controls unavailable when checked diffraction data fail to load.\nPASS Local classical typography and restrained navigation: The page uses a local Times-led light theme, restrained section navigation, and no motion framework.\nPASS High-DPI and idle-stable figures: All three canvases render at up to 2x density and perform no continuous idle repaint.\nPASS Original-resolution scientific figures: Ring model is 2400\u00d71500; summary is 3840\u00d72160; generation uses Times New Roman.\nPASS Responsive and reduced-motion safeguards: Dynamic viewport, mobile layouts, reduced-motion handling, and cleanup paths are present.\nPASS Honest extension and intensity boundary: The implemented precision comparison remains secondary, quantitative, and separate from unmodelled intensity or decorative motion.\nPASS Task index integration: Task 6 is open from the task index and no longer marked disabled.\n\n21/21 Task 6 website checks passed.\n"
+    },
+    {
+      "name": "Task 7 website gate",
+      "command": [
+        "node",
+        "site/validate-task-07.mjs"
+      ],
+      "returncode": 0,
+      "elapsed_seconds": 0.040486624999999776,
+      "output_tail": "PASS Accepted superposition extension evidence: 14/14 separate checks pass across 17 phase anchors.\nPASS Superposition physics identities: Every phase anchor preserves normalization and matches the analytical position, left-probability, and energy relations.\nPASS Accepted validation report: 50/50 independent checks pass.\nPASS Complete discrete energy spectrum: Ten positive-integer states obey E_n/E_1=n\u00b2, with exact increasing level gaps.\nPASS Complete normalized stationary states: All 8,004 samples for n=1\u20134 obey the boundary-conditioned wavefunction and Born density.\nPASS Complete uncertainty extension data: All ten states include both moments, both standard deviations, and \u0394x\u0394p/\u210f\u22650.5.\nPASS Independent finite-difference convergence: Five grids and fifty eigenpairs converge at order two; finest-grid states meet the accepted errors and overlaps.\nPASS Independent numerical uncertainty evidence: Fifty grid-state moment records obey Heisenberg and converge at measured second order.\nPASS Complete required website content: The official experiment, plots, uncertainty evidence, method and validation are visible; optional superposition UI is absent.\nPASS Interactive and keyboard-complete model: The discrete selector, state presets, view modes, density filters, marker selection, and keyboard navigation are implemented.\nPASS Superposition implementation retained outside the filming path: The accepted superposition implementation remains in source, while the visible filming path ends with the official uncertainty result.\nPASS Judge-facing method and validation hierarchy: Navigation, reset, honest wavefunction scaling, numerical comparison and validation are explicit.\nPASS Fail-closed evidence state: Loading, verified, and explicit error states keep every control locked until all evidence agrees.\nPASS Local classical typography and restrained navigation: The page uses a local Times-led light theme, restrained section navigation, and no motion framework.\nPASS High-DPI and idle-stable figures: All five canvases render at up to 2x device density without continuous idle repaint.\nPASS Original-resolution scientific figures: Probability plot is 2400\u00d71500; summary is 3840\u00d72160; generation is locked to Times New Roman.\nPASS Analytical extension is complete: The page links the report and exposes all four moments, uncertainties, lower bound, and strict ground-state result.\nPASS Responsive and reduced-motion safeguards: Dynamic viewport layout, mobile breakpoints, reduced-motion handling, and cleanup paths are present.\nPASS Honest stationary-state and scope boundary: The accessible descriptions preserve the trajectory, measurement, and finite-wall boundaries without visible explanatory clutter.\nPASS Task index integration: Task 7 is open from the task index and no longer marked disabled.\n\n20/20 Task 7 website checks passed.\n"
+    },
+    {
+      "name": "Task 8 website gate",
+      "command": [
+        "node",
+        "site/validate-task-08.mjs"
+      ],
+      "returncode": 0,
+      "elapsed_seconds": 0.10708579100000293,
+      "output_tail": "PASS Accepted core validation report: 42/42 independent checks pass with the committed study digest.\nPASS Complete fixed-angle sweep: All 361 half-degree samples reproduce both equations and the signed contrast for \u03b8 = \u221230\u00b0.\nPASS Complete two-angle landscape: Every one of the 32,761 integer-degree pairs independently reproduces the classical and quantum mismatch surfaces.\nPASS Exact official and reference anchors: Five exact cases agree; the official example is locked to 3/8 versus 3/4.\nPASS Accepted finite-photon extension: The separate deterministic binomial layer passes 24/24 checks and reproduces the 363/770 default count anchor.\nPASS Finite-photon study retained outside the filming path: The deterministic sample remains in source, while the visible filming path is the exact comparison calculator required by the brief.\nPASS Complete required website content: The exact calculator remains visually primary; supporting equations, sweeps and samples stay in source without evidence ledgers or pass counters.\nPASS Interactive and keyboard-complete model: Both detector angles, five exact presets, four count presets, reproducible sampling, pointer exploration, and keyboard navigation are implemented.\nPASS Fail-closed evidence state: Loading, verified, and explicit failure states keep every calculator and sampling control locked until all evidence agrees.\nPASS Local classical typography and restrained navigation: The page uses a local Times-led light theme, restrained section navigation, and no motion framework.\nPASS High-DPI and idle-stable figures: All canvases render at up to 2\u00d7 device density and redraw only after input or resizing.\nPASS Original-resolution scientific figures: Three analytical figures are 2400\u00d71500; the summary is 3840\u00d72160; generation is locked to Times New Roman.\nPASS Responsive and reduced-motion safeguards: Dynamic viewport sizing, mobile breakpoints, reduced-motion handling, and cleanup paths are present.\nPASS Honest scientific scope boundary: Exact theory remains primary; the educational PRNG and the absent real-QKD mechanisms are explicitly disclosed.\nPASS Task index integration: Task 8 is open from the task index and no longer marked disabled.\n\n15/15 Task 8 website checks passed.\n"
+    },
+    {
+      "name": "Task 9 website gate",
+      "command": [
+        "node",
+        "site/validate-task-09.mjs"
+      ],
+      "returncode": 0,
+      "elapsed_seconds": 0.053525874999991174,
+      "output_tail": "PASS Accepted kinematic validation: 44/44 exact kinematic checks pass with the committed digest.\nPASS Complete official kinematic study: All 3,605 quarter-degree rows reproduce the shift, scattered energy, kinetic energy, relativistic speed, and quadrant-safe recoil direction.\nPASS Exact endpoints and official anchors: Fifteen 0\u00b0/90\u00b0/180\u00b0 anchors agree, and every zero-momentum forward direction is explicitly undefined.\nPASS Accepted Klein\u2013Nishina extension: 30/30 extension checks pass and remain separately scoped.\nPASS Complete cross-section study: All 3,605 cross-section rows reproduce the independent Klein\u2013Nishina equation with non-negative normalized density.\nPASS Complete required website content: The exact collision, three required curves, endpoint disclosure, and probability study remain without an evidence ledger.\nPASS Interactive and keyboard-complete model: Energy, angle, ten presets, chart selection, and keyboard navigation all drive the same validated physics functions.\nPASS Fail-closed evidence state: Loading, verified, and explicit failure states keep all twelve controls locked until both evidence layers agree.\nPASS Local classical typography and restrained navigation: The page uses a local Times-led light theme, restrained section navigation, and no motion framework.\nPASS High-DPI and idle-stable figures: All three canvases render at up to 2\u00d7 device density and redraw only after interaction or resizing.\nPASS Original-resolution scientific media: Three analytical figures are 2400\u00d71500, the summary is 3840\u00d72160, the animation has 73 frames, and generation is locked to Times New Roman.\nPASS Responsive and reduced-motion safeguards: Dynamic viewport layout, mobile breakpoints, reduced-motion handling, and cleanup paths are present.\nPASS Honest physical scope: The two-body assumptions, scattering-probability scope, excluded experimental effects, and undefined forward direction are explicit.\nPASS Task index integration: Task 9 is open from the task index and no longer marked disabled.\n\n14/14 Task 9 website checks passed.\n"
+    },
+    {
+      "name": "Task 10 website gate",
+      "command": [
+        "node",
+        "site/validate-task-10.mjs"
+      ],
+      "returncode": 0,
+      "elapsed_seconds": 0.06703862500000923,
+      "output_tail": "PASS Accepted scientific validation: 22/22 committed science checks pass with the accepted state digest.\nPASS Complete 204-state catalog: Every valid real-basis state through n=8 is present in deterministic n,l,m order with independently reproduced energy, nodes, degeneracy, and parity.\nPASS Complete official S-through-G gallery: All 1+3+5+7+9 magnetic states for 1s, 2p, 3d, 4f, and 5g are present with no omissions.\nPASS Normalized radial-profile evidence: All 6,005 representative radial samples are ordered, non-negative, and cumulatively monotonic.\nPASS Exact radial-node ledger: All 84 positive roots reproduce n-l-1 nodes and both radius scalings agree.\nPASS Analytic and scaling anchors: The 1s origin, 2s node, 2p angular node, hydrogen energy, and carbon Z-scaling anchors agree independently.\nPASS Hydrogenic-ion scaling comparison: The H, He+, and Li2+ 3d anchors independently reproduce finite-mass energies and radii, while the plotted density is converted from scaled radius to angstroms.\nPASS Complete required website content: The coloured-glass visualization, quantitative views, controls, gallery, and ion-scaling comparison remain without evidence downloads.\nPASS Interactive validated solver: State selection, 25 presets, display controls, pointer orbit, wheel zoom, keyboard camera control, and resizing all use the validated physics module.\nPASS Fail-closed evidence state: Controls remain locked until every data, science, static-media, and motion layer agrees; all four live figures expose explicit failure states.\nPASS Local typography and high-DPI figures: All dependencies are local, scientific labels use Times New Roman, canvases render at up to 2x density, and idle pages perform no animation loop.\nPASS Original-resolution publication media: Five inspected PNGs retain their accepted 2.4K-to-4K dimensions, the 13-file static package is complete, and generation is locked to Times New Roman.\nPASS Validated 4K stationary-view motion: The motion artifact is 4K, 80 frames, 20 fps, exactly four seconds, explicitly camera-only, and has a 4K reduced-motion poster.\nPASS Responsive and reduced-motion safeguards: Desktop, tablet, and phone layouts, reduced-motion handling, and cleanup paths are present.\nPASS Honest normalization and physical scope: Display controls remain separate from normalization and the stationary one-electron scope is stated clearly.\nPASS Clean competition presentation: No validation-dashboard or AI-sounding labels appear in the visible Task 10 presentation.\nPASS Task index integration: Task 10 is open from the task index and no longer marked disabled.\n\n17/17 Task 10 website checks passed.\n"
+    },
+    {
+      "name": "submission tests",
+      "command": [
+        "python",
+        "-m",
+        "unittest",
+        "discover",
+        "-s",
+        "submission",
+        "-t",
+        ".",
+        "-p",
+        "test_*.py"
+      ],
+      "returncode": 0,
+      "elapsed_seconds": 0.10709995799999206,
+      "output_tail": "..\n----------------------------------------------------------------------\nRan 2 tests in 0.014s\n\nOK\n"
     },
     {
       "name": "Project document links",
@@ -240,8 +490,8 @@
         "internal-markdown-link-check"
       ],
       "returncode": 0,
-      "elapsed_seconds": 0.13537170900001172,
-      "output_tail": "1044 local links resolved"
+      "elapsed_seconds": 0.07084320800001365,
+      "output_tail": "579 local links resolved"
     },
     {
       "name": "PowerPoint portability",
@@ -249,7 +499,7 @@
         "internal-pptx-portability-check"
       ],
       "returncode": 0,
-      "elapsed_seconds": 0.040232041999999524,
+      "elapsed_seconds": 0.05801850000000286,
       "output_tail": "11 PowerPoints contain no local-machine links"
     }
   ]

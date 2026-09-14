@@ -123,8 +123,46 @@ def task07_study_digest(study: Task07StudyResult) -> str:
         "numerical_positions_m",
         "numerical_wavefunctions_m_neg_half",
         "numerical_overlaps",
+        "numerical_momentum",
     ):
-        array = np.ascontiguousarray(getattr(study, name))
+        value = getattr(study, name)
+        if name == "numerical_momentum":
+            for nested_name in (
+                "grid_sizes",
+                "grid_spacings_m",
+                "quantum_numbers",
+                "normalizations",
+                "expected_x_m",
+                "expected_x_squared_m2",
+                "p_mean_kg_m_s",
+                "p_squared_kg2_m2_s2",
+                "delta_p_kg_m_s",
+                "delta_x_m",
+                "uncertainty_products_j_s",
+                "uncertainty_products_over_hbar",
+                "heisenberg_ratios",
+                "analytical_delta_x_m",
+                "analytical_delta_p_kg_m_s",
+                "analytical_uncertainty_products_j_s",
+                "analytical_uncertainty_products_over_hbar",
+                "relative_delta_x_errors",
+                "relative_p_squared_errors",
+                "relative_delta_p_errors",
+                "relative_uncertainty_errors",
+                "relative_energy_errors",
+                "eigenvector_overlaps",
+                "p_mean_scale_ratios",
+                "delta_p_convergence_orders",
+                "p_squared_convergence_orders",
+                "uncertainty_product_convergence_orders",
+            ):
+                nested = np.ascontiguousarray(getattr(value, nested_name))
+                digest.update(f"{name}.{nested_name}".encode("ascii"))
+                digest.update(nested.dtype.str.encode("ascii"))
+                digest.update(str(nested.shape).encode("ascii"))
+                digest.update(nested.tobytes())
+            continue
+        array = np.ascontiguousarray(value)
         digest.update(name.encode("ascii"))
         digest.update(array.dtype.str.encode("ascii"))
         digest.update(str(array.shape).encode("ascii"))
@@ -254,6 +292,9 @@ def validate_task07(
     if not isinstance(configuration, Task07Configuration):
         raise TypeError("configuration must be a Task07Configuration")
     checks: list[ValidationCheck] = []
+    numerical_momentum = study.numerical_momentum
+    if numerical_momentum is None:
+        raise ValueError("Task 7 study is missing numerical momentum evidence")
 
     expected_n = np.arange(1, configuration.maximum_quantum_number + 1, dtype=np.int64)
     checks.append(
@@ -693,6 +734,157 @@ def validate_task07(
             name="numerical_node_counts",
             mismatches=numerical_node_mismatches,
             explanation="The nth numerical eigenstate has n-1 interior sign changes.",
+        )
+    )
+
+    checks.append(
+        _exact_check(
+            name="numerical_moment_grid_identity",
+            mismatches=int(
+                not np.array_equal(numerical_momentum.grid_sizes, expected_grids)
+                or not np.array_equal(numerical_momentum.quantum_numbers, expected_n)
+            ),
+            explanation="Numerical moments cover all ten states on every refinement grid.",
+        )
+    )
+    checks.append(
+        _absolute_check(
+            name="numerical_momentum_normalization",
+            error=float(np.max(np.abs(numerical_momentum.normalizations - 1.0))),
+            tolerance=configuration.numerical_normalization_absolute_tolerance,
+            unit="probability",
+            explanation="Every finite-difference eigenvector has unit discrete norm.",
+        )
+    )
+    checks.append(
+        _absolute_check(
+            name="numerical_mean_position_midpoint",
+            error=float(
+                np.max(
+                    np.abs(
+                        numerical_momentum.expected_x_m
+                        - configuration.box_width_m / 2.0
+                    )
+                )
+            ),
+            tolerance=configuration.numerical_position_absolute_tolerance_m,
+            unit="m",
+            explanation="Direct quadrature places each stationary-state mean at a/2.",
+        )
+    )
+    checks.append(
+        _upper_bound_check(
+            name="numerical_mean_momentum_imaginary_residue",
+            observed=float(
+                np.max(np.abs(numerical_momentum.p_mean_kg_m_s.imag))
+                / np.max(numerical_momentum.analytical_delta_p_kg_m_s)
+            ),
+            upper_bound=configuration.numerical_mean_momentum_scale_tolerance,
+            tolerance=0.0,
+            unit="relative momentum",
+            explanation="The Hermitian momentum expectation has negligible imaginary residue.",
+        )
+    )
+    checks.append(
+        _upper_bound_check(
+            name="numerical_momentum_mean",
+            observed=float(np.max(numerical_momentum.p_mean_scale_ratios)),
+            upper_bound=configuration.numerical_mean_momentum_scale_tolerance,
+            tolerance=0.0,
+            unit="relative momentum",
+            explanation="Central differences recover zero mean momentum for the standing waves.",
+        )
+    )
+    checks.append(
+        _upper_bound_check(
+            name="numerical_p_squared_accuracy",
+            observed=float(np.max(numerical_momentum.relative_p_squared_errors[-1])),
+            upper_bound=configuration.numerical_moment_relative_tolerance,
+            tolerance=0.0,
+            unit="relative error",
+            explanation="The finite-difference p-squared operator meets the finest-grid target.",
+        )
+    )
+    checks.append(
+        _upper_bound_check(
+            name="numerical_delta_x_accuracy",
+            observed=float(np.max(numerical_momentum.relative_delta_x_errors[-1])),
+            upper_bound=configuration.numerical_moment_relative_tolerance,
+            tolerance=0.0,
+            unit="relative error",
+            explanation="Direct numerical position moments reproduce the analytical uncertainty.",
+        )
+    )
+    checks.append(
+        _upper_bound_check(
+            name="numerical_delta_p_accuracy",
+            observed=float(np.max(numerical_momentum.relative_delta_p_errors[-1])),
+            upper_bound=configuration.numerical_uncertainty_relative_tolerance,
+            tolerance=0.0,
+            unit="relative error",
+            explanation="Numerical momentum uncertainty meets the finest-grid target.",
+        )
+    )
+    checks.append(
+        _upper_bound_check(
+            name="numerical_uncertainty_accuracy",
+            observed=float(np.max(numerical_momentum.relative_uncertainty_errors[-1])),
+            upper_bound=configuration.numerical_uncertainty_relative_tolerance,
+            tolerance=0.0,
+            unit="relative error",
+            explanation="The independent numerical uncertainty product meets the target.",
+        )
+    )
+    checks.append(
+        _lower_bound_check(
+            name="numerical_uncertainty_bound",
+            observed=float(np.min(numerical_momentum.heisenberg_ratios)),
+            lower_bound=1.0,
+            tolerance=configuration.identity_relative_tolerance,
+            unit="2 Delta x Delta p / hbar",
+            explanation="Every numerical state on every grid obeys the Heisenberg bound.",
+        )
+    )
+    checks.append(
+        _exact_check(
+            name="numerical_uncertainty_refinement",
+            mismatches=int(
+                np.count_nonzero(
+                    np.diff(numerical_momentum.relative_delta_p_errors, axis=0) >= 0.0
+                )
+                + np.count_nonzero(
+                    np.diff(numerical_momentum.relative_uncertainty_errors, axis=0)
+                    >= 0.0
+                )
+            ),
+            explanation="Delta-p and uncertainty-product errors decrease on every refinement.",
+        )
+    )
+    combined_orders = np.concatenate(
+        (
+            numerical_momentum.delta_p_convergence_orders,
+            numerical_momentum.p_squared_convergence_orders,
+            numerical_momentum.uncertainty_product_convergence_orders,
+        )
+    )
+    checks.append(
+        _lower_bound_check(
+            name="numerical_uncertainty_convergence_lower",
+            observed=float(np.min(combined_orders)),
+            lower_bound=configuration.convergence_order_minimum,
+            tolerance=0.0,
+            unit="order",
+            explanation="Moment and uncertainty errors converge at approximately second order.",
+        )
+    )
+    checks.append(
+        _upper_bound_check(
+            name="numerical_uncertainty_convergence_upper",
+            observed=float(np.max(combined_orders)),
+            upper_bound=configuration.convergence_order_maximum,
+            tolerance=0.0,
+            unit="order",
+            explanation="Measured convergence is consistent with central differences.",
         )
     )
 

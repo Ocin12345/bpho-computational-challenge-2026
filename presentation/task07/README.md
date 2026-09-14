@@ -12,7 +12,7 @@ editable 16:9 PowerPoint wrapper around the validated 4K summary and includes:
 - the official probability-density and energy results;
 - the completed uncertainty-principle extension;
 - analytical equations and numerical anchors;
-- a 37/37 validation badge;
+- a 50/50 validation badge;
 - meaningful alternative text; and
 - the final competition script in the speaker-notes area.
 

@@ -185,6 +185,7 @@ class Task07StudyResult:
     numerical_positions_m: FloatArray
     numerical_wavefunctions_m_neg_half: FloatArray
     numerical_overlaps: FloatArray
+    numerical_momentum: object | None = None
 
     def __post_init__(self) -> None:
         if self.schema_version != "task07-study-v1":
@@ -270,6 +271,10 @@ class Task07StudyResult:
             raise ValueError("numerical wavefunction matrix has an invalid shape")
         if self.numerical_overlaps.shape != (numerical_state_count,):
             raise ValueError("numerical_overlaps has an invalid shape")
+        from task07_particle_in_box.momentum import NumericalMomentumStudy
+
+        if not isinstance(self.numerical_momentum, NumericalMomentumStudy):
+            raise TypeError("numerical_momentum must be a NumericalMomentumStudy")
 
     @property
     def ground_energy_ev(self) -> float:
@@ -339,6 +344,12 @@ def build_task07_study(
         dtype=np.float64,
     )
     finest = numerical_solutions[-1]
+    from task07_particle_in_box.momentum import build_numerical_momentum_study
+
+    numerical_momentum = build_numerical_momentum_study(
+        configuration,
+        solutions=numerical_solutions,
+    )
     expected_x = np.full(n.shape, expected_position_m(configuration.box_width_m))
     return Task07StudyResult(
         schema_version="task07-study-v1",
@@ -374,6 +385,7 @@ def build_task07_study(
         numerical_positions_m=finest.positions_m,
         numerical_wavefunctions_m_neg_half=finest.wavefunctions_m_neg_half,
         numerical_overlaps=finest.overlaps,
+        numerical_momentum=numerical_momentum,
     )
 
 

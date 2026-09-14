@@ -1,0 +1,17 @@
+{
+  "schema_version": "advanced-figures-v1",
+  "task_count": 10,
+  "source": "data/advanced_extensions.json",
+  "files": [
+    "task01_extension.png",
+    "task02_extension.png",
+    "task03_extension.png",
+    "task04_extension.png",
+    "task05_extension.png",
+    "task06_extension.png",
+    "task07_extension.png",
+    "task08_extension.png",
+    "task09_extension.png",
+    "task10_extension.png"
+  ]
+}

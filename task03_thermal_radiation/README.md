@@ -657,7 +657,8 @@ Stage 12 completed the independent acceptance pass recorded in
 - the private GitHub repository was synchronized with the clean local `main`
   branch.
 
-The complete official Task 3 baseline is therefore finished. No further Task
-3 code or simulation is required unless we deliberately choose an optional
-extension. The next challenge milestone should be Task 4 only when we decide
-to begin it.
+The complete official Task 3 baseline is therefore finished. On 8 August 2026
+the user deliberately reopened this boundary for the optional Einstein--Debye
+comparison described above. The extension is scientifically and visually
+separate from the official baseline; its accepted evidence and tests are
+recorded in [`FINAL_ACCEPTANCE.md`](FINAL_ACCEPTANCE.md).

@@ -109,7 +109,7 @@ async function buildPresentation() {
       "energies growing as quantum number squared. The lower middle panel " +
       "shows the uncertainty product above the one-half-h-bar bound. Result " +
       "cards give the ground energy, ground uncertainty, finite-difference " +
-      "error and thirty-seven passing checks.",
+      "error and fifty passing checks.",
   });
 
   slide.addNotes(
@@ -118,7 +118,7 @@ async function buildPresentation() {
       "conditions create standing waves and discrete energies growing as n " +
       "squared. The probability densities remain normalised, while the " +
       "uncertainty calculation gives 0.568 h-bar in the ground state, above " +
-      "Heisenberg's half-h-bar limit. Thirty-seven independent checks pass.\n\n" +
+      "Heisenberg's half-h-bar limit. Fifty independent checks pass.\n\n" +
       "CUES\n0–6 s: probability densities.\n" +
       "6–11 s: discrete energy spectrum.\n" +
       "11–16 s: uncertainty product and lower bound.\n" +

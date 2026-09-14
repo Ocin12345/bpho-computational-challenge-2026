@@ -66,8 +66,16 @@ interactions are represented by the random direction changes. Simulating
 small–small collisions while also randomizing directions would count the same
 molecular scattering twice.
 
-An optional later extension may replace direction randomization with explicit
-small–small hard-disc collisions. The two modes must remain separate.
+The implemented extension in
+[`small_particle_extension.py`](small_particle_extension.py) replaces direction
+randomization with explicit small–small hard-disc collisions. The two modes
+remain separate: enabling both would count the same molecular scattering twice.
+
+The extension uses equal-mass normal impulses, symmetric overlap correction and
+non-overlapping initialization. Its deterministic website evidence is generated
+with `python3 -m task02_brownian_motion.generate_extension_evidence`; focused
+tests verify pair momentum, elastic kinetic energy, geometry and the absence of
+direction resets in hard-disc mode.
 
 ## Step 3 software architecture
 

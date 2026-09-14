@@ -47,37 +47,32 @@
       <section class="editorial-story" id="origin" aria-labelledby="origin-title">
         <p class="story-script" aria-hidden="true">Origin</p>
         <div class="story-copy about-reveal" data-reveal>
-          <h2 id="origin-title">It started with the code.</h2>
+          <h2 id="origin-title">From Python to the browser.</h2>
           <p class="story-lead">
-            This website presents my submission for the 2026 British Physics
-            Olympiad Computational Challenge, centred on the theme of quantum
-            physics.
+            This is my project for the 2026 British Physics Olympiad Computational
+            Challenge. The ten tasks cover random motion, thermal radiation and
+            quantum physics.
           </p>
           <p>
-            The project brings together ten computational tasks exploring how
-            mathematical models, numerical methods, and interactive simulations can
-            be used to investigate physical phenomena that are often difficult to
-            observe directly.
+            The Python programs produce numerical results and plots. The website
+            lets you change the inputs and see what happens: increase the temperature
+            of a black body, choose an atomic transition, or compare orbital shapes.
           </p>
           <p>
-            The project began with scientific models written in Python. Although
-            these programs could calculate results and produce accurate graphs, they
-            did not fully communicate how the underlying physical systems behaved.
-            Many quantum phenomena become easier to understand when their evolution
-            can be observed and their parameters adjusted in real time.
+            Each task has a different modelling question. A random walk needs an
+            ensemble before its statistical pattern becomes clear. An atomic spectrum
+            needs discrete energy levels. A useful display should make that difference
+            visible, rather than treating every model as a moving particle.
           </p>
           <p>
-            I therefore developed this website to make the project more accessible
-            and exploratory. A browser-based platform allows the simulations,
-            explanations, results, and supporting materials to be brought together
-            in one place without requiring visitors to install specialist software.
+            You can explore the task pages in a browser without installing Python.
+            To repeat the calculations, download the repository and follow the setup
+            instructions. It includes the source, tests and saved data.
           </p>
           <p>
-            The website does not replace the mathematical work behind the project.
-            Instead, it provides a visual interface through which that work can be
-            investigated, questioned, and understood. Visitors can explore the
-            individual tasks, examine extensions of the original problems, read the
-            accompanying research paper, and attempt related problem sets.
+            The Advanced Lab collects optional investigations and their reports.
+            A separate research paper and problem sets are still in development;
+            they are not part of the available materials below.
           </p>
         </div>
       </section>
@@ -85,24 +80,23 @@
       <section class="editorial-story editorial-story--reverse" id="method" aria-labelledby="method-title">
         <p class="story-script" aria-hidden="true">Method</p>
         <div class="story-copy about-reveal" data-reveal>
-          <h2 id="method-title">The physics comes first.</h2>
+          <h2 id="method-title">How the models are checked.</h2>
           <p>
-            Each task begins with the relevant physical principles and mathematical
-            relationships. These are translated into computational models, tested
-            against analytical results where possible, and examined across a range
-            of parameters to ensure that their behaviour remains physically
-            reasonable.
+            The checks depend on the model. For random walks, the mean-square
+            displacement should grow with the number of steps. For Compton
+            scattering, energy and both components of momentum must balance.
+            The particle-in-a-box calculation is compared with an independent
+            finite-difference solution.
           </p>
           <p>
-            The project distinguishes between established physics, numerical
-            approximations, and exploratory extensions. Assumptions and limitations
-            are recorded alongside the results, while automated tests, convergence
-            checks, conservation laws, and comparisons with independent calculations
-            are used where appropriate.
+            The task documentation records the equations, parameter ranges and
+            approximations. Seeded runs make statistical results repeatable, while
+            refinement checks show how selected calculations respond to a smaller
+            time step or a finer grid.
           </p>
           <p class="story-note">
-            The aim is not simply to produce convincing animations, but to create
-            models whose behaviour can be explained, tested, and justified.
+            Passing these checks shows agreement with the stated model. It does not
+            establish that every approximation describes a real experiment.
           </p>
         </div>
       </section>
@@ -110,7 +104,7 @@
       <section class="editorial-story editorial-story--scope" id="scope" aria-labelledby="scope-title">
         <p class="story-script" aria-hidden="true">Ten</p>
         <div class="story-copy story-copy--wide about-reveal" data-reveal>
-          <h2 id="scope-title">Ten problems. One thread.</h2>
+          <h2 id="scope-title">The ten tasks.</h2>
           <p>
             The project is organised around ten computational challenges,
             progressing from statistical motion and thermal radiation to quantum
@@ -131,10 +125,9 @@
             <li><span>10</span>Hydrogenic orbitals</li>
           </ol>
           <p class="scope-closing">
-            Beyond the required tasks, the website also contains extended
-            investigations, an accompanying research paper, and original problem
-            sets. These sections develop selected ideas in greater depth and connect
-            the computational results to broader questions in physics.
+            The optional investigations include finite barriers, spectral line
+            broadening and a detector response for Compton scattering. Their reports
+            explain which assumptions have changed from the core tasks.
           </p>
         </div>
       </section>
@@ -142,30 +135,24 @@
       <section class="editorial-story editorial-story--reverse" id="design" aria-labelledby="design-title">
         <p class="story-script" aria-hidden="true">Seeing</p>
         <div class="story-copy about-reveal" data-reveal>
-          <h2 id="design-title">Make the invisible move.</h2>
+          <h2 id="design-title">What the pictures mean.</h2>
           <p class="story-lead">
-            Quantum physics is frequently presented through dense notation and
-            static diagrams.
+            An orbital picture shows probability density, not the path of an electron.
           </p>
           <p>
-            While these are essential, they can make it difficult to develop an
-            intuitive understanding of how a system changes or responds to different
-            conditions. The website therefore treats interaction as a form of
-            scientific explanation. Animation, responsive controls, and data
-            visualisation allow visitors to observe relationships that may be less
-            obvious from equations alone.
+            This distinction matters when a picture moves. Rotating an orbital
+            changes the viewpoint; it does not evolve the quantum state. Likewise,
+            the photoelectric trajectories illustrate the energy calculation without
+            predicting the behaviour of a complete apparatus.
           </p>
           <p>
-            The visual design draws inspiration from wavefunctions, interference
-            patterns, probability fields, and atomic structure, giving the project a
-            consistent identity rooted in its scientific subject. Clarity remains
-            more important than spectacle. Every visual element should help
-            communicate the physics, direct attention to meaningful results, or make
-            the project easier to navigate.
+            Read the axes, units and model notes alongside the plots. The coloured
+            field on the opening page is decorative. The task pages identify the
+            physical quantities their plots represent.
           </p>
           <p>
-            The aim is to create an experience that feels imaginative and engaging
-            while remaining scientifically disciplined.
+            Change one parameter at a time to compare the model's prediction with
+            what you expected.
           </p>
         </div>
       </section>
@@ -201,13 +188,20 @@
       <section class="editorial-resources" id="resources" aria-labelledby="resources-title">
         <div class="resource-heading about-reveal" data-reveal>
           <p class="story-script" aria-hidden="true">Sources</p>
-          <h2 id="resources-title">Open the work.</h2>
+          <h2 id="resources-title">Code and supporting material.</h2>
         </div>
         <ul class="resource-index about-reveal" data-reveal>
           <li>
             <a href="./lab.html">
               <span>Interactive tasks</span>
               <small>Enter the laboratory</small>
+              <i aria-hidden="true">↗</i>
+            </a>
+          </li>
+          <li>
+            <a href="./advanced.html">
+              <span>Advanced Lab</span>
+              <small>Optional investigations and reports</small>
               <i aria-hidden="true">↗</i>
             </a>
           </li>
@@ -251,24 +245,20 @@
       <section class="editorial-ending" aria-labelledby="ending-title">
         <div class="ending-copy about-reveal" data-reveal>
           <p class="story-script" aria-hidden="true">Still curious</p>
-          <h2 id="ending-title">Build it. Break it. Check it.</h2>
+          <h2 id="ending-title">Try a calculation.</h2>
           <p>
-            Although this project was created for the BPhO Computational Challenge,
-            its broader purpose extends beyond the competition. It demonstrates how
-            computation can connect mathematical theory, numerical experimentation,
-            and visual explanation within a single scientific experience.
+            Start with a task you know, change a parameter and check the result
+            against its equation. The repository's task folders show how the same
+            quantities are calculated in Python.
           </p>
           <p>
-            Future development could include more advanced simulations, deeper
-            extensions of selected tasks, additional problem sets, and improved tools
-            for comparing theoretical predictions with numerical results. The
-            website can therefore continue to grow as both a record of the original
-            submission and a platform for further exploration.
+            If a result looks wrong, note the task, inputs and browser version when
+            reporting it through the repository. Those details make it possible to
+            repeat the problem.
           </p>
           <p>
-            Ultimately, I hope the project encourages visitors to see quantum physics
-            not as a collection of inaccessible equations, but as a subject that can
-            be investigated, visualised, and understood through careful computation.
+            The source and saved evidence are available so that you can inspect the
+            calculations as well as the pictures.
           </p>
           <div class="editorial-thanks">
             <p>
@@ -301,6 +291,7 @@
       <span>Qingxiang Liao</span>
     </footer>
 
+    <button class="field-toggle" data-field-toggle type="button" aria-pressed="false" hidden>Pause background</button>
     <div class="cursor" data-cursor aria-hidden="true"></div>
     <script type="module" src="./assets/single.js"></script>
   </body>

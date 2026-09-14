@@ -55,7 +55,7 @@ REQUIRED_XML_TEXT = (
     "one-nanometre infinite box",
     "energies growing as n squared",
     "0.568 h-bar",
-    "Thirty-seven independent checks pass",
+    "Fifty independent checks pass",
     "Task 7 summary for an electron",
     "one-half-h-bar bound",
 )

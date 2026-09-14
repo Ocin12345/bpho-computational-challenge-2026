@@ -237,9 +237,9 @@ def validate_task07_final(
         _check(
             "scientific_report",
             validation_report.get("passed") is True
-            and len(scientific_checks) == 37
+            and len(scientific_checks) == 50
             and all(check.get("passed") is True for check in scientific_checks),
-            f"{sum(check.get('passed') is True for check in scientific_checks)}/37 checks",
+            f"{sum(check.get('passed') is True for check in scientific_checks)}/50 checks",
         ),
         _check("data_integrity", data_hashes_pass, data_hashes_detail),
         _check(

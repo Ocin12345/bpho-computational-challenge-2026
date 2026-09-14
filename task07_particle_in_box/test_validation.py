@@ -18,9 +18,9 @@ class ValidationTests(unittest.TestCase):
     def test_complete_validation_passes(self) -> None:
         report = validate_task07(self.study)
         self.assertTrue(report.passed)
-        self.assertEqual(len(report.checks), 37)
+        self.assertEqual(len(report.checks), 50)
         self.assertEqual(report.study_digest, task07_study_digest(self.study))
-        self.assertEqual(len({check.name for check in report.checks}), 37)
+        self.assertEqual(len({check.name for check in report.checks}), 50)
 
     def test_corrupted_energy_is_detected(self) -> None:
         energies = self.study.energies_j.copy()

@@ -188,7 +188,12 @@ calculates its eigenvalues without inserting the analytical spectrum.
 The observed convergence orders lie between 1.99896 and 1.99996, consistent
 with second-order discretization error. On the finest grid, the absolute overlap
 between every numerical eigenvector and its analytical counterpart exceeds
-0.999999. The 37-check acceptance suite also checks normalization,
+0.999999. Position and momentum moments are also computed directly from every
+normalized eigenvector. At 1600 points, the maximum relative errors in both
+momentum uncertainty and the uncertainty product are below
+\(1.605\times10^{-5}\), with measured convergence orders between 1.99961 and
+2.00038. All 50 grid-state pairs satisfy the Heisenberg bound. The 50-check
+acceptance suite also checks normalization,
 orthogonality, node counts, boundary values, energy scaling, expectation values
 and the uncertainty inequality.
 
@@ -211,4 +216,4 @@ The complete environment, build order, integrity checks and artifact inventory
 are recorded in
 [`REPRODUCIBILITY.md`](../../task07_particle_in_box/REPRODUCIBILITY.md).
 The deterministic manifest binds the accepted data and figures to the passing
-37-check study.
+50-check study.

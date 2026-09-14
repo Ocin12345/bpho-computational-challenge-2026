@@ -369,9 +369,139 @@
       "passed": true,
       "tolerance": 0.0,
       "unit": "count"
+    },
+    {
+      "comparison": "exact_equal",
+      "expected": 0.0,
+      "explanation": "Numerical moments cover all ten states on every refinement grid.",
+      "name": "numerical_moment_grid_identity",
+      "observed": 0.0,
+      "passed": true,
+      "tolerance": 0.0,
+      "unit": "count"
+    },
+    {
+      "comparison": "absolute_error_lte",
+      "expected": 0.0,
+      "explanation": "Every finite-difference eigenvector has unit discrete norm.",
+      "name": "numerical_momentum_normalization",
+      "observed": 1.5543122344752192e-15,
+      "passed": true,
+      "tolerance": 5e-12,
+      "unit": "probability"
+    },
+    {
+      "comparison": "absolute_error_lte",
+      "expected": 0.0,
+      "explanation": "Direct quadrature places each stationary-state mean at a/2.",
+      "name": "numerical_mean_position_midpoint",
+      "observed": 1.4589398053904026e-22,
+      "passed": true,
+      "tolerance": 2e-22,
+      "unit": "m"
+    },
+    {
+      "comparison": "less_than_or_equal",
+      "expected": 5e-12,
+      "explanation": "The Hermitian momentum expectation has negligible imaginary residue.",
+      "name": "numerical_mean_momentum_imaginary_residue",
+      "observed": 1.427757009384938e-17,
+      "passed": true,
+      "tolerance": 0.0,
+      "unit": "relative momentum"
+    },
+    {
+      "comparison": "less_than_or_equal",
+      "expected": 5e-12,
+      "explanation": "Central differences recover zero mean momentum for the standing waves.",
+      "name": "numerical_momentum_mean",
+      "observed": 4.756219250988942e-17,
+      "passed": true,
+      "tolerance": 0.0,
+      "unit": "relative momentum"
+    },
+    {
+      "comparison": "less_than_or_equal",
+      "expected": 4e-05,
+      "explanation": "The finite-difference p-squared operator meets the finest-grid target.",
+      "name": "numerical_p_squared_accuracy",
+      "observed": 3.208708474869767e-05,
+      "passed": true,
+      "tolerance": 0.0,
+      "unit": "relative error"
+    },
+    {
+      "comparison": "less_than_or_equal",
+      "expected": 4e-05,
+      "explanation": "Direct numerical position moments reproduce the analytical uncertainty.",
+      "name": "numerical_delta_x_accuracy",
+      "observed": 3.015058611388048e-11,
+      "passed": true,
+      "tolerance": 0.0,
+      "unit": "relative error"
+    },
+    {
+      "comparison": "less_than_or_equal",
+      "expected": 2e-05,
+      "explanation": "Numerical momentum uncertainty meets the finest-grid target.",
+      "name": "numerical_delta_p_accuracy",
+      "observed": 1.6043671074130403e-05,
+      "passed": true,
+      "tolerance": 0.0,
+      "unit": "relative error"
+    },
+    {
+      "comparison": "less_than_or_equal",
+      "expected": 2e-05,
+      "explanation": "The independent numerical uncertainty product meets the target.",
+      "name": "numerical_uncertainty_accuracy",
+      "observed": 1.6043701224546404e-05,
+      "passed": true,
+      "tolerance": 0.0,
+      "unit": "relative error"
+    },
+    {
+      "comparison": "greater_than_or_equal",
+      "expected": 1.0,
+      "explanation": "Every numerical state on every grid obeys the Heisenberg bound.",
+      "name": "numerical_uncertainty_bound",
+      "observed": 1.1356777778795601,
+      "passed": true,
+      "tolerance": 5e-12,
+      "unit": "2 Delta x Delta p / hbar"
+    },
+    {
+      "comparison": "exact_equal",
+      "expected": 0.0,
+      "explanation": "Delta-p and uncertainty-product errors decrease on every refinement.",
+      "name": "numerical_uncertainty_refinement",
+      "observed": 0.0,
+      "passed": true,
+      "tolerance": 0.0,
+      "unit": "count"
+    },
+    {
+      "comparison": "greater_than_or_equal",
+      "expected": 1.9,
+      "explanation": "Moment and uncertainty errors converge at approximately second order.",
+      "name": "numerical_uncertainty_convergence_lower",
+      "observed": 1.9989606621085239,
+      "passed": true,
+      "tolerance": 0.0,
+      "unit": "order"
+    },
+    {
+      "comparison": "less_than_or_equal",
+      "expected": 2.05,
+      "explanation": "Measured convergence is consistent with central differences.",
+      "name": "numerical_uncertainty_convergence_upper",
+      "observed": 2.000382748584955,
+      "passed": true,
+      "tolerance": 0.0,
+      "unit": "order"
     }
   ],
   "passed": true,
   "schema_version": "task07-validation-v1",
-  "study_digest": "67a3fd50191ff04c57d989b3b0cf5b49567b7f507653c861bf8b7bc3241bd09d"
+  "study_digest": "6d5a717748083fa967d7275cdcd197efc189e9edcc8985bd645bd52b90605d6c"
 }

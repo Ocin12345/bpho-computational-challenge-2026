@@ -13,9 +13,9 @@ The full acceptance evidence is recorded in
 [`FINAL_ACCEPTANCE.md`](FINAL_ACCEPTANCE.md). The scientific conclusions and
 limitations are documented in
 [`RESULTS_AND_INTERPRETATION.md`](RESULTS_AND_INTERPRETATION.md). The optional
-extension was explicitly deferred in
-[`EXTENSION_DECISION.md`](EXTENSION_DECISION.md) so the official graph remains
-the focus. The one-slide competition package is available in
+reduced-mass comparison is accepted as a separately validated lab in
+[`EXTENSION_DECISION.md`](EXTENSION_DECISION.md); it does not alter the
+official graph. The one-slide competition package is available in
 [`presentation/task05`](../presentation/task05/README.md).
 
 ## Completed implementation
@@ -200,17 +200,17 @@ The one-slide competition presentation will keep the required graph dominant.
 Supporting material will be included only when it adds explanatory value at
 final video resolution.
 
-## Optional-extension boundary
+## Optional reduced-mass extension
 
-The official brief does not require a Task 5 animation. A reduced-mass
-comparison or a compact energy-level transition animation may be considered
-only after the entire deterministic baseline is complete and visually
-accepted.
+After the deterministic baseline was completed and visually accepted, a
+separate reduced-mass comparison was added. It replaces the electron mass by
+$\mu=m_eM/(m_e+M)$ for a finite proton mass, while preserving every original
+stationary-nucleus result as the competition baseline.
 
-Any extension must remain separate from the authoritative ideal Bohr model.
-It must not delay the required graph or imply that the Bohr model predicts
-line intensity, selection rules, linewidth, fine structure, or a literal
-classical orbit.
+The extension has its own module, 12-check report, 45-row CSV, browser
+validation, interactive magnified line comparison, and export controls. It
+does not imply line intensity, selection rules, linewidth, fine structure, a
+precision experimental fit, or a literal classical orbit.
 
 ## Explicit exclusions from the baseline
 
@@ -308,8 +308,10 @@ The full details are in
 - **Stage 9:** the scientific interpretation distinguishes photon energy from
   bound-state energy, finite lines from analytical limits, and computational
   verification from experimental validation.
-- **Stage 10:** animation and reduced-mass work were deferred because neither
-  improves the required result enough to justify extra competition-video time.
+- **Stage 10:** the baseline first deferred all extra work. It was later
+  reopened for a longer Task 5 presentation, and the preferred reduced-mass
+  comparison was accepted as a separate optional lab; orbital animation
+  remains excluded.
 
 ## Stages 11 and 12 completion check
 

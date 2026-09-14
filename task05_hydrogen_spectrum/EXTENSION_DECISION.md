@@ -2,41 +2,60 @@
 
 ## Decision
 
-Do not add an animation or reduced-mass comparison to the Task 5 competition
-slide at this stage.
+Accept a separate ideal-versus-reduced-mass wavelength comparison. Do not add
+a classical electron-orbit animation.
 
-## Reason
+The accepted stationary-nucleus calculation remains the authoritative Task 5
+competition baseline. The extension is an optional precision lab after the
+baseline evidence and uses its own schema, validation report, CSV, interface,
+and interpretation boundary.
 
-The completed baseline already contains the exact official deliverable, all 45
-declared level differences, an energy-level explanation, a visible Balmer
-spectrum, an analytical convergence comparison, and quantitative validation.
-Those elements are more useful in a short ten-task video than motion that does
-not add another tested result.
+## Physical refinement
 
-A reduced-mass calculation is scientifically legitimate, but placing it beside
-the official stationary-nucleus equation would require extra narration to
-explain why two slightly different wavelength sets are both correct in their
-own conventions. That distinction is valuable for precision spectroscopy, but
-it is outside the official Task 5 scope and would weaken the clarity of the
-short competition slide.
+For a nucleus of mass $M$, the electron mass is replaced by the reduced mass
 
-An animated electron transition would also be schematic. The Bohr model does
-not describe a time-resolved classical path between circular orbits, and the
-official task asks for the emitted-photon energy--wavelength graph rather than
-an orbital animation.
+$$
+\mu=\frac{m_eM}{m_e+M}.
+$$
 
-## Reconsider only if
+For protium, using the 2022 CODATA electron-proton mass ratio,
 
-An extension may be added later if Task 5 receives its own longer presentation
-and the baseline slide remains unchanged. The preferred extension would be a
-separate ideal-versus-reduced-mass wavelength comparison with an explicit
-model label, not a decorative electron-orbit animation.
+$$
+\frac{\mu}{m_e}=\frac{1}{1+m_e/m_p},
+\qquad
+\lambda_H=\lambda_\infty\left(1+\frac{m_e}{m_p}\right).
+$$
 
-Any later extension must:
+The extension therefore lowers every ideal transition energy and frequency by
+$\mu/m_e$ and lengthens every wavelength by the same relative fraction,
+$m_e/m_p=5.446170214889\times10^{-4}$. The constant comes from the
+[NIST 2022 CODATA recommended values](https://physics.nist.gov/cuu/pdf/wall_2022.pdf).
 
-- preserve the stationary-nucleus results as the authoritative competition
-  baseline;
-- use a separately validated configuration and output schema;
-- avoid implying intensity, linewidth, or transition probability;
-- explain that an energy eigenstate is not a literal small planet orbit; and
-- remain optional and visually secondary.
+## Accepted evidence
+
+- all 45 baseline transitions are corrected without changing the baseline;
+- 12/12 independent structural, scaling, identity, and Decimal-anchor checks
+  pass;
+- H-$\alpha$ changes from $656.112276$ nm to $656.469606$ nm in this model;
+- CSV and JSON evidence regenerate byte-for-byte; and
+- the browser lab passes desktop and mobile interaction, overflow, console,
+  label, caption, and accessible-description checks.
+
+Regenerate and test with:
+
+```bash
+python3 -m task05_hydrogen_spectrum.generate_reduced_mass_extension
+python3 -m unittest task05_hydrogen_spectrum.test_reduced_mass_extension -v
+node site/validate-task-05.mjs
+```
+
+## Interpretation boundary
+
+The reduced-mass extension is not a precision fit to measured hydrogen. It
+does not model intensity, transition probability, linewidth, fine or hyperfine
+structure, Lamb shifts, fields, or broadening. Equal-height markers show
+wavelength position only.
+
+An electron energy eigenstate is also not a small planet following a resolved
+trajectory. A decorative orbital animation would make the model less honest,
+so it remains excluded.

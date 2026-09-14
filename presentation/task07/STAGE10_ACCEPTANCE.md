@@ -23,14 +23,14 @@ evidence into one accessible 16:9 competition slide.
 - The embedded media is the current validated 4K Task 7 summary, not a
   recompressed or manually edited copy.
 - The final script states the (n^2) energy law, normalized probability density,
-  strict (0.568\hbar>0.5\hbar) ground-state result and 37-check validation.
+  strict (0.568\hbar>0.5\hbar) ground-state result and 50-check validation.
 - PowerPoint XML contains no machine-specific path and uses frozen created and
   modified timestamps.
 - Both major and minor PowerPoint theme fonts are Times New Roman, with no
   residual Arial fallback in the generated theme.
 - The 300-DPI preview was inspected at its original 4001 × 2250 resolution.
 - Two consecutive deck builds produced the identical SHA-256 digest
-  `cd9efd3577d40ed946f3350d714b63579b9a1894fc9b3505ca2095d3831ed392`.
+  `7ef063c83114247375ee1ad73cfdc17c61ead78db1bf09eff1c2b98444ee0acc`.
 - The accepted preview SHA-256 digest is
   `9dd03951fefdb795cc4c068cada0f3c0a8b5520ac74e884e76d18682cb2a89ac`.
 

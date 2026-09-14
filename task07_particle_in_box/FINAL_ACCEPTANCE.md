@@ -41,15 +41,23 @@ duplicate.
 ## Numerical validation
 
 - [x] Independent tridiagonal finite-difference Hamiltonian implemented.
+- [x] Real-space central-difference (p_h=-i\hbar D_1) and
+  (p_h^2=-\hbar^2D_2) operators applied directly to normalized eigenvectors.
 - [x] Five grid refinements evaluated.
 - [x] First ten numerical energies converge monotonically.
 - [x] Observed convergence order is approximately two.
 - [x] Finest-grid eigenfunctions match analytical states.
 - [x] Normalisation, orthogonality and node counts pass.
+- [x] Numerical Δp, ΔxΔp and Heisenberg checks pass for all 50 grid-state pairs.
+- [x] Numerical moments, uncertainty convergence and downloads are visible on the
+  judge-facing Task 7 page.
+- [x] Numerical position and momentum moments are computed from eigenvectors.
+- [x] All 50 grid-state uncertainty products obey the Heisenberg bound.
+- [x] Numerical uncertainty errors decrease at measured second order.
 
 ## Reproducibility and evidence
 
-- [x] Seven ordered data artifacts generated.
+- [x] Nine ordered data artifacts generated.
 - [x] Manifest contains configuration, constants, schemas and SHA-256 hashes.
 - [x] Regeneration produces identical hashes.
 - [x] Forced late replacement failure restores prior outputs.
@@ -69,10 +77,10 @@ duplicate.
 
 ## Software quality
 
-- [x] 37 independent scientific checks pass.
+- [x] 50 independent scientific checks pass.
 - [x] 13 documentation checks pass.
 - [x] 8 final artifact groups pass.
-- [x] 27 focused software tests pass.
+- [x] 47 focused software tests pass, including direct finite-difference momentum tests.
 - [x] Invalid inputs and deliberately corrupted studies are rejected.
 - [x] Python sources compile successfully.
 - [x] Exact numerical Python dependencies are pinned.
@@ -104,3 +112,27 @@ python3 presentation/task07/validate_task07_presentation.py
 All Task 7 scientific, computational, report, accessibility-companion, figure
 and presentation requirements are accepted. Cross-task timing for the eventual
 ten-task video remains a separate final-production check.
+
+## Optional superposition addendum
+
+**Acceptance date:** 8 August 2026
+
+After the official uncertainty extension was accepted, Task 7 was reopened for
+one additional lab that compares a stationary eigenstate with a coherent
+equal-weight $n=1$ and $n=2$ superposition. The official baseline, figures,
+report, and presentation remain unchanged.
+
+- 14/14 separate superposition checks pass over 17 phase anchors;
+- all 8 focused extension tests pass within the current 47-test Task 7 suite;
+- the extension evidence regenerates byte-for-byte as JSON and CSV;
+- the website validator passes 20/20 checks, while the official page now keeps
+  the superposition UI out of the stationary-state judging path; and
+- desktop and mobile browser audits pass phase presets, analytical readouts,
+  high-DPI canvas rendering, accessible descriptions, page overflow, runtime
+  errors, and external-request checks.
+
+For the accepted $1.00$ nm electron box, the probability-density period is
+$3.666078$ fs. At phase $0$, $\langle x\rangle=0.319873a$ and the left-half
+probability is $92.441\%$; at phase $\pi$, these become $0.680127a$ and
+$7.559\%$. The mean energy remains $0.940075$ eV throughout. These values
+describe a quantum probability distribution, not a particle trajectory.

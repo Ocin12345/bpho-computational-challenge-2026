@@ -27,7 +27,8 @@ Acceptance date: 19 July 2026
 | 9 | final artifact gate passes 8/8 |
 | 10 | final artifact gate passes 8/8 |
 
-Tasks 1–6 therefore contribute 444 passing regression tests. Tasks 7–10 also
+Tasks 1–6 now contribute 497 passing regression tests, including the accepted
+extension suites. Tasks 7–10 also
 pass their existing presentation validators as part of their final gates. The
 full high-cost Task 2 baseline/half-step/quarter-step refinement was rerun during
 release hardening on 22 July 2026; all 9/9 declared checks passed and the saved

@@ -6,7 +6,7 @@
 > conditions create standing waves and discrete energies growing as n squared.
 > The probability densities remain normalised, while the uncertainty
 > calculation gives 0.568 h-bar in the ground state, above Heisenberg's
-> half-h-bar limit. Thirty-seven independent checks pass.
+> half-h-bar limit. Fifty independent checks pass.
 
 ### Visual cues
 
@@ -23,7 +23,7 @@
 > wavefunction gives the position probability density. Calculating the
 > position and momentum spreads gives 0.568 h-bar in the ground state, safely
 > above Heisenberg's half-h-bar limit. A separate finite-difference eigensolver
-> converges to the analytical spectrum, and all thirty-seven scientific checks
+> converges to the analytical spectrum, and all fifty scientific checks
 > pass.
 
 ## Rehearsal explanation

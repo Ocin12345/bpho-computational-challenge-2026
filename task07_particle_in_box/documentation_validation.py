@@ -215,6 +215,8 @@ def validate_task07_documentation(
                         "energy_levels.csv",
                         "stationary_states.csv",
                         "numerical_eigenvalues.csv",
+                        "numerical_moments.csv",
+                        "uncertainty_convergence.csv",
                         "validation_report.json",
                         "probability_densities",
                         "uncertainty_principle",

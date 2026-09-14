@@ -69,7 +69,7 @@ const TASKS = [
     source: path.join(REPOSITORY_ROOT, "figures/task07/task07_summary.png"),
     alt:
       "Task 7 summary: stationary probability densities, quantized energies, " +
-      "Heisenberg uncertainty and thirty-seven passing checks.",
+      "Heisenberg uncertainty and fifty passing checks.",
   },
   {
     number: 8,

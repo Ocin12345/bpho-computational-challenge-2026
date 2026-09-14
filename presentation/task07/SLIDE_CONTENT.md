@@ -20,7 +20,7 @@ The validated summary figure contains:
 - the ground energy \(0.376030\ \mathrm{eV}\);
 - the ground-state uncertainty product \(0.567862\hbar\);
 - the finest-grid maximum numerical error \(3.21\times10^{-5}\); and
-- the 37/37 scientific-validation badge.
+- the 50/50 scientific-validation badge.
 
 ## Image alternative text
 
@@ -29,7 +29,7 @@ panel shows four normalized stationary probability densities with increasing
 node count. The upper middle panel shows ten discrete energies growing as
 quantum number squared. The lower middle panel shows the uncertainty product
 above the one-half-h-bar bound. Result cards give the ground energy, ground
-uncertainty, finite-difference error and thirty-seven passing checks.
+uncertainty, finite-difference error and fifty passing checks.
 
 ## Content not to add
 

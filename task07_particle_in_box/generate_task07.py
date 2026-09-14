@@ -14,6 +14,8 @@ from collections.abc import Iterable
 from dataclasses import dataclass
 from pathlib import Path
 
+import numpy as np
+
 from task07_particle_in_box.analysis import Task07StudyResult, build_task07_study
 from task07_particle_in_box.configuration import (
     DEFAULT_CONFIGURATION,
@@ -66,6 +68,8 @@ DATA_FILENAMES = (
     "stationary_states.csv",
     "expectation_values.csv",
     "numerical_eigenvalues.csv",
+    "numerical_moments.csv",
+    "uncertainty_convergence.csv",
     "reference_anchors.json",
     "validation_report.json",
     "manifest.json",
@@ -263,6 +267,128 @@ def _write_numerical_eigenvalues(path: Path, study: Task07StudyResult) -> None:
     )
 
 
+def _write_numerical_moments(path: Path, study: Task07StudyResult) -> None:
+    evidence = study.numerical_momentum
+    if evidence is None:
+        raise ValueError("Task 7 numerical momentum evidence is missing")
+    rows: list[tuple[str, ...]] = []
+    for grid_index, grid_size in enumerate(evidence.grid_sizes):
+        for state_index, n in enumerate(evidence.quantum_numbers):
+            rows.append(
+                (
+                    str(int(grid_size)),
+                    _format_float(evidence.grid_spacings_m[grid_index]),
+                    str(int(n)),
+                    _format_float(evidence.normalizations[grid_index, state_index]),
+                    _format_float(evidence.expected_x_m[grid_index, state_index]),
+                    _format_float(evidence.expected_x_squared_m2[grid_index, state_index]),
+                    _format_float(evidence.p_mean_kg_m_s[grid_index, state_index].real),
+                    _format_float(evidence.p_mean_kg_m_s[grid_index, state_index].imag),
+                    _format_float(evidence.p_squared_kg2_m2_s2[grid_index, state_index]),
+                    _format_float(evidence.delta_x_m[grid_index, state_index]),
+                    _format_float(evidence.delta_p_kg_m_s[grid_index, state_index]),
+                    _format_float(evidence.uncertainty_products_j_s[grid_index, state_index]),
+                    _format_float(evidence.uncertainty_products_over_hbar[grid_index, state_index]),
+                    _format_float(evidence.heisenberg_ratios[grid_index, state_index]),
+                    _format_float(evidence.analytical_delta_x_m[state_index]),
+                    _format_float(evidence.analytical_delta_p_kg_m_s[state_index]),
+                    _format_float(evidence.analytical_uncertainty_products_j_s[state_index]),
+                    _format_float(evidence.analytical_uncertainty_products_over_hbar[state_index]),
+                    _format_float(evidence.relative_delta_x_errors[grid_index, state_index]),
+                    _format_float(evidence.relative_p_squared_errors[grid_index, state_index]),
+                    _format_float(evidence.relative_delta_p_errors[grid_index, state_index]),
+                    _format_float(evidence.relative_uncertainty_errors[grid_index, state_index]),
+                    _format_float(evidence.relative_energy_errors[grid_index, state_index]),
+                    _format_float(evidence.eigenvector_overlaps[grid_index, state_index]),
+                )
+            )
+    _write_csv(
+        path,
+        (
+            "interior_point_count",
+            "grid_spacing_m",
+            "quantum_number_n",
+            "normalization",
+            "expected_x_m_numeric",
+            "expected_x_squared_m2_numeric",
+            "p_mean_real_kg_m_s_numeric",
+            "p_mean_imaginary_kg_m_s_numeric",
+            "p_squared_kg2_m2_s2_numeric",
+            "delta_x_m_numeric",
+            "delta_p_kg_m_s_numeric",
+            "delta_x_delta_p_j_s_numeric",
+            "uncertainty_product_over_hbar_numeric",
+            "heisenberg_ratio_numeric",
+            "delta_x_m_analytical",
+            "delta_p_kg_m_s_analytical",
+            "delta_x_delta_p_j_s_analytical",
+            "uncertainty_product_over_hbar_analytical",
+            "relative_delta_x_error",
+            "relative_p_squared_error",
+            "relative_delta_p_error",
+            "relative_uncertainty_error",
+            "relative_energy_error",
+            "eigenvector_overlap",
+        ),
+        rows,
+    )
+
+
+def _write_uncertainty_convergence(path: Path, study: Task07StudyResult) -> None:
+    evidence = study.numerical_momentum
+    if evidence is None:
+        raise ValueError("Task 7 numerical momentum evidence is missing")
+    rows: list[tuple[str, ...]] = []
+    for grid_index, grid_size in enumerate(evidence.grid_sizes):
+        max_energy_error = float(np.max(evidence.relative_energy_errors[grid_index]))
+        max_dx_error = float(np.max(evidence.relative_delta_x_errors[grid_index]))
+        max_p2_error = float(np.max(evidence.relative_p_squared_errors[grid_index]))
+        max_dp_error = float(np.max(evidence.relative_delta_p_errors[grid_index]))
+        max_product_error = float(np.max(evidence.relative_uncertainty_errors[grid_index]))
+        rows.append(
+            (
+                str(int(grid_size)),
+                _format_float(evidence.grid_spacings_m[grid_index]),
+                _format_float(max_energy_error),
+                _format_float(max_dx_error),
+                _format_float(max_p2_error),
+                _format_float(max_dp_error),
+                _format_float(max_product_error),
+                _format_float(
+                    float(np.max(np.abs(evidence.normalizations[grid_index] - 1.0)))
+                ),
+                _format_float(float(np.max(evidence.p_mean_scale_ratios[grid_index]))),
+                _format_float(float(np.min(evidence.uncertainty_products_over_hbar[grid_index]))),
+                _format_float(float(np.min(evidence.eigenvector_overlaps[grid_index]))),
+                _format_float(float(np.min(evidence.delta_p_convergence_orders))),
+                _format_float(float(np.max(evidence.delta_p_convergence_orders))),
+                _format_float(float(np.min(evidence.uncertainty_product_convergence_orders))),
+                _format_float(float(np.max(evidence.uncertainty_product_convergence_orders))),
+            )
+        )
+    _write_csv(
+        path,
+        (
+            "interior_point_count",
+            "grid_spacing_m",
+            "maximum_energy_relative_error",
+            "maximum_delta_x_relative_error",
+            "maximum_p_squared_relative_error",
+            "maximum_delta_p_relative_error",
+            "maximum_uncertainty_relative_error",
+            "maximum_normalization_error",
+            "maximum_p_mean_scale_ratio",
+            "minimum_uncertainty_product_over_hbar",
+            "minimum_eigenvector_overlap",
+            "minimum_delta_p_convergence_order",
+            "maximum_delta_p_convergence_order",
+            "minimum_uncertainty_product_convergence_order",
+            "maximum_uncertainty_product_convergence_order",
+        ),
+        rows,
+    )
+
+
 def _write_json(path: Path, payload: dict[str, object]) -> None:
     with path.open("w", encoding="utf-8", newline="\n") as handle:
         json.dump(payload, handle, indent=2, sort_keys=True, allow_nan=False)
@@ -405,12 +531,14 @@ def _verify_prepared_data(
         configuration.position_point_count * len(configuration.density_quantum_numbers),
         configuration.maximum_quantum_number,
         len(configuration.numerical_grid_sizes) * configuration.numerical_state_count,
+        len(configuration.numerical_grid_sizes) * configuration.numerical_state_count,
+        len(configuration.numerical_grid_sizes),
     )
-    for path, row_count in zip(data_paths[:4], expected_rows):
+    for path, row_count in zip(data_paths[:6], expected_rows):
         with path.open(encoding="utf-8", newline="") as handle:
             if len(list(csv.DictReader(handle))) != row_count:
                 raise ValueError(f"{path.name} has the wrong row count")
-    for path in data_paths[4:]:
+    for path in data_paths[6:]:
         with path.open(encoding="utf-8") as handle:
             json.load(handle, parse_constant=_reject_json_constant)
     with data_paths[-1].open(encoding="utf-8") as handle:
@@ -491,12 +619,14 @@ def generate_task07(
         )
         _write_expectation_values(temporary_data / DATA_FILENAMES[2], study)
         _write_numerical_eigenvalues(temporary_data / DATA_FILENAMES[3], study)
+        _write_numerical_moments(temporary_data / DATA_FILENAMES[4], study)
+        _write_uncertainty_convergence(temporary_data / DATA_FILENAMES[5], study)
         _write_json(
-            temporary_data / DATA_FILENAMES[4],
+            temporary_data / DATA_FILENAMES[6],
             _reference_anchor_payload(configuration),
         )
         _write_json(
-            temporary_data / DATA_FILENAMES[5],
+            temporary_data / DATA_FILENAMES[7],
             _validation_payload(report),
         )
         figure_paths = generate_task07_figures(
@@ -505,9 +635,7 @@ def generate_task07(
             temporary_figures,
             configuration,
         )
-        pre_manifest_data = tuple(
-            temporary_data / filename for filename in DATA_FILENAMES[:-1]
-        )
+        pre_manifest_data = tuple(temporary_data / filename for filename in DATA_FILENAMES[:-1])
         _write_json(
             temporary_data / DATA_FILENAMES[-1],
             _manifest_payload(

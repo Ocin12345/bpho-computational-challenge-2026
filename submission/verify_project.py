@@ -71,6 +71,8 @@ def _environment() -> dict[str, str]:
     import scipy
     from matplotlib import font_manager
 
+    if shutil.which("node") is None:
+        raise RuntimeError("Node.js is required for the JavaScript checks. Install Node.js and retry.")
     font_path = font_manager.findfont(
         "Times New Roman",
         fallback_to_default=False,
@@ -101,15 +103,18 @@ def _run(step: CommandStep) -> StepResult:
             "PYTHONPATH": str(ROOT),
         }
     )
-    process = subprocess.run(
-        step.command,
-        cwd=ROOT,
-        env=environment,
-        text=True,
-        stdout=subprocess.PIPE,
-        stderr=subprocess.STDOUT,
-        check=False,
-    )
+    try:
+        process = subprocess.run(
+            step.command,
+            cwd=ROOT,
+            env=environment,
+            text=True,
+            stdout=subprocess.PIPE,
+            stderr=subprocess.STDOUT,
+            check=False,
+        )
+    except OSError as error:
+        process = subprocess.CompletedProcess(step.command, 1, stdout=str(error))
     elapsed = time.perf_counter() - started
     output = process.stdout or ""
     print(output, end="" if output.endswith("\n") else "\n", flush=True)
@@ -164,10 +169,13 @@ def _markdown_link_check() -> StepResult:
     missing: list[str] = []
     checked = 0
     for document in ROOT.rglob("*.md"):
+        relative_document = document.relative_to(ROOT)
         if any(
-            part in {".git", "node_modules", ".venv", "venv", "env"}
-            for part in document.parts
+            part in {".git", "node_modules", ".venv", "venv", "env", "release"}
+            for part in relative_document.parts
         ):
+            continue
+        if relative_document.parts[:2] == ("site", "vendor"):
             continue
         text = document.read_text(encoding="utf-8")
         for target in pattern.findall(text):
@@ -261,17 +269,25 @@ def _generation_steps(workers: int) -> tuple[CommandStep, ...]:
         CommandStep("Generate Task 1 ensemble", _python_module("task01_random_walk.plot_walk_ensemble")),
         CommandStep("Generate Task 1 statistics", _python_module("task01_random_walk.statistical_analysis")),
         CommandStep("Generate Task 1 animation", _python_module("task01_random_walk.animate_random_walk")),
+        CommandStep("Generate Task 1 web evidence", _python_module("task01_random_walk.generate_web_validation")),
+        CommandStep("Generate Task 1 dimensional evidence", _python_module("task01_random_walk.generate_dimensional_validation")),
         CommandStep("Run full Task 2 refinement", _python_module("task02_brownian_motion.validate_task02")),
         CommandStep(
             "Generate Task 2 ensembles",
             _python_module("task02_brownian_motion.analyze_task02", "--workers", str(workers)),
         ),
         CommandStep("Generate Task 2 visuals", _python_module("task02_brownian_motion.create_task02_visuals")),
+        CommandStep("Generate Task 2 web evidence", _python_module("task02_brownian_motion.generate_web_evidence")),
+        CommandStep("Generate Task 2 extension evidence", _python_module("task02_brownian_motion.generate_extension_evidence")),
         CommandStep("Generate Task 3 evidence", _python_module("task03_thermal_radiation.generate_task03")),
+        CommandStep("Generate Task 3 Debye evidence", _python_module("task03_thermal_radiation.generate_debye_validation")),
         CommandStep("Generate Task 4 evidence", _python_module("task04_photoelectric_effect.generate_task04", "--with-animation")),
         CommandStep("Generate Task 5 evidence", _python_module("task05_hydrogen_spectrum.generate_task05")),
+        CommandStep("Generate Task 5 reduced-mass evidence", _python_module("task05_hydrogen_spectrum.generate_reduced_mass_extension")),
         CommandStep("Generate Task 6 evidence", _python_module("task06_electron_diffraction.generate_task06")),
+        CommandStep("Generate Task 6 relativistic evidence", _python_module("task06_electron_diffraction.generate_relativistic_extension")),
         CommandStep("Generate Task 7 evidence", _python_module("task07_particle_in_box.generate_task07")),
+        CommandStep("Generate Task 7 superposition evidence", _python_module("task07_particle_in_box.generate_superposition_extension")),
         CommandStep("Generate Task 8 core evidence", _python_module("task08_quantum_cryptography.generate_task08")),
         CommandStep("Generate Task 8 sampling evidence", _python_module("task08_quantum_cryptography.generate_task08_statistics")),
         CommandStep("Generate Task 8 figures", _python_module("task08_quantum_cryptography.generate_task08_figures")),
@@ -283,6 +299,8 @@ def _generation_steps(workers: int) -> tuple[CommandStep, ...]:
         CommandStep("Generate Task 10 core evidence", _python_module("task10_hydrogenic_orbitals.generate_task10")),
         CommandStep("Generate Task 10 figures", _python_module("task10_hydrogenic_orbitals.generate_task10_figures")),
         CommandStep("Generate Task 10 motion", _python_module("task10_hydrogenic_orbitals.generate_task10_motion")),
+        CommandStep("Generate advanced extension evidence", _python_module("submission.generate_advanced_extensions")),
+        CommandStep("Generate advanced extension figures", _python_module("submission.generate_advanced_figures")),
         CommandStep("Build Task 1–2 summaries", (sys.executable, "presentation/build_task01_task02_summaries.py")),
         CommandStep("Build Task 1–6 decks", ("npm", "run", "build:tasks1-6", "--prefix", "presentation")),
         CommandStep("Build Task 7 deck", ("npm", "run", "build", "--prefix", "presentation/task07")),
@@ -310,6 +328,10 @@ def _validation_steps(full_task2: bool) -> tuple[CommandStep, ...]:
             (4, "photoelectric_effect"),
             (5, "hydrogen_spectrum"),
             (6, "electron_diffraction"),
+            (7, "particle_in_box"),
+            (8, "quantum_cryptography"),
+            (9, "compton_scattering"),
+            (10, "hydrogenic_orbitals"),
         )
     ]
     if full_task2:
@@ -329,9 +351,20 @@ def _validation_steps(full_task2: bool) -> tuple[CommandStep, ...]:
             CommandStep("Task 8 final gate", _python_module("task08_quantum_cryptography.validate_task08_final")),
             CommandStep("Task 9 final gate", _python_module("task09_compton_scattering.validate_task09_final")),
             CommandStep("Task 10 final gate", _python_module("task10_hydrogenic_orbitals.validate_task10_final")),
-            CommandStep("Presentation bundle", ("npm", "run", "validate", "--prefix", "presentation")),
+            CommandStep("Advanced extension evidence gate", _python_module("submission.validate_advanced_extensions")),
+            CommandStep("Advanced extension figure gate", _python_module("submission.validate_advanced_figures")),
+            CommandStep("Advanced lab static gate", ("node", "site/validate-advanced.mjs")),
+            CommandStep("Task presentations", (sys.executable, "presentation/validate_task_presentations.py")),
+            CommandStep("Presentation typography", (sys.executable, "presentation/validate_typography.py")),
+            CommandStep("Master presentation", (sys.executable, "presentation/master/validate_master_presentation.py")),
+            CommandStep("Website assets and links", _python_module("submission.validate_site")),
         )
     )
+    steps.extend(
+        CommandStep(f"Task {number} website gate", ("node", f"site/validate-task-{number:02d}.mjs"))
+        for number in range(1, 11)
+    )
+    steps.append(_unittest_step("submission"))
     return tuple(steps)
 
 
@@ -379,6 +412,10 @@ def main(arguments: Sequence[str] | None = None) -> int:
         return 1
 
     if options.regenerate:
+        for executable in (os.environ.get("SOFFICE", "soffice"), os.environ.get("PDFTOPPM", "pdftoppm"), "bash", "npm"):
+            if shutil.which(executable) is None:
+                print(f"Regeneration requires {executable}; see submission/README.md.", file=sys.stderr)
+                return 1
         for directory in (
             ROOT / "presentation",
             ROOT / "presentation/task07",

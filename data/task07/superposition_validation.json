@@ -1,0 +1,324 @@
+{
+  "baseline_model": "stationary states in a one-dimensional infinite square well",
+  "configuration": {
+    "box_width_m": 1e-09,
+    "box_width_nm": 1.0,
+    "particle": "electron",
+    "particle_mass_kg": 9.1093837139e-31,
+    "phase_anchor_count": 17,
+    "probabilities": [
+      0.5,
+      0.5
+    ],
+    "states": [
+      1,
+      2
+    ]
+  },
+  "derived": {
+    "beat_period_fs": 3.666077984962675,
+    "beat_period_s": 3.666077984962675e-15,
+    "energy_1_ev": 0.3760301621048726,
+    "energy_2_ev": 1.5041206484194904,
+    "energy_gap_ev": 1.1280904863146177,
+    "energy_uncertainty_ev": 0.5640452431573089,
+    "maximum_expected_position_over_width": 0.6801265486974893,
+    "mean_energy_ev": 0.9400754052621816,
+    "minimum_expected_position_over_width": 0.31987345130251066
+  },
+  "equations": {
+    "density": "a|Psi|^2 = sin^2(pi u) + sin^2(2 pi u) + 2 cos(theta) sin(pi u) sin(2 pi u)",
+    "mean_position": "<x>/a = 1/2 - 16 cos(theta)/(9 pi^2)",
+    "relative_phase": "theta = (E_2 - E_1) t / hbar",
+    "state": "Psi = (psi_1 + psi_2) / sqrt(2)"
+  },
+  "model": "equal coherent superposition of infinite-well states n=1 and n=2",
+  "phase_anchors": [
+    {
+      "expected_position_over_width": 0.31987345130251066,
+      "left_half_probability": 0.9244131815783876,
+      "normalization": 0.9999999999999984,
+      "phase_deg": 0.0,
+      "phase_index": 0,
+      "phase_rad": 0.0,
+      "time_fraction": 0.0,
+      "time_fs": 0.0
+    },
+    {
+      "expected_position_over_width": 0.333584768396492,
+      "left_half_probability": 0.8921066517882685,
+      "normalization": 1.0000000000000009,
+      "phase_deg": 22.5,
+      "phase_index": 1,
+      "phase_rad": 0.39269908169872414,
+      "time_fraction": 0.0625,
+      "time_fs": 0.2291298740601672
+    },
+    {
+      "expected_position_over_width": 0.37263129594427635,
+      "left_half_probability": 0.8001054387190354,
+      "normalization": 0.9999999999999981,
+      "phase_deg": 45.0,
+      "phase_index": 2,
+      "phase_rad": 0.7853981633974483,
+      "time_fraction": 0.125,
+      "time_fs": 0.4582597481203344
+    },
+    {
+      "expected_position_over_width": 0.4310685540843673,
+      "left_half_probability": 0.6624158930674054,
+      "normalization": 0.9999999999999981,
+      "phase_deg": 67.5,
+      "phase_index": 3,
+      "phase_rad": 1.1780972450961724,
+      "time_fraction": 0.1875,
+      "time_fs": 0.6873896221805016
+    },
+    {
+      "expected_position_over_width": 0.5,
+      "left_half_probability": 0.5,
+      "normalization": 0.9999999999999991,
+      "phase_deg": 90.0,
+      "phase_index": 4,
+      "phase_rad": 1.5707963267948966,
+      "time_fraction": 0.25,
+      "time_fs": 0.9165194962406688
+    },
+    {
+      "expected_position_over_width": 0.5689314459156327,
+      "left_half_probability": 0.33758410693259455,
+      "normalization": 1.000000000000001,
+      "phase_deg": 112.5,
+      "phase_index": 5,
+      "phase_rad": 1.9634954084936207,
+      "time_fraction": 0.3125,
+      "time_fs": 1.145649370300836
+    },
+    {
+      "expected_position_over_width": 0.6273687040557236,
+      "left_half_probability": 0.19989456128096467,
+      "normalization": 0.9999999999999999,
+      "phase_deg": 135.0,
+      "phase_index": 6,
+      "phase_rad": 2.356194490192345,
+      "time_fraction": 0.375,
+      "time_fs": 1.3747792443610032
+    },
+    {
+      "expected_position_over_width": 0.666415231603508,
+      "left_half_probability": 0.10789334821173141,
+      "normalization": 1.0000000000000004,
+      "phase_deg": 157.5,
+      "phase_index": 7,
+      "phase_rad": 2.748893571891069,
+      "time_fraction": 0.4375,
+      "time_fs": 1.6039091184211702
+    },
+    {
+      "expected_position_over_width": 0.6801265486974893,
+      "left_half_probability": 0.07558681842161241,
+      "normalization": 1.0000000000000007,
+      "phase_deg": 180.0,
+      "phase_index": 8,
+      "phase_rad": 3.141592653589793,
+      "time_fraction": 0.5,
+      "time_fs": 1.8330389924813375
+    },
+    {
+      "expected_position_over_width": 0.666415231603508,
+      "left_half_probability": 0.10789334821173141,
+      "normalization": 1.0000000000000007,
+      "phase_deg": 202.5,
+      "phase_index": 9,
+      "phase_rad": 3.5342917352885173,
+      "time_fraction": 0.5625,
+      "time_fs": 2.0621688665415046
+    },
+    {
+      "expected_position_over_width": 0.6273687040557236,
+      "left_half_probability": 0.19989456128096456,
+      "normalization": 0.9999999999999999,
+      "phase_deg": 225.0,
+      "phase_index": 10,
+      "phase_rad": 3.9269908169872414,
+      "time_fraction": 0.625,
+      "time_fs": 2.291298740601672
+    },
+    {
+      "expected_position_over_width": 0.5689314459156328,
+      "left_half_probability": 0.33758410693259433,
+      "normalization": 1.000000000000001,
+      "phase_deg": 247.49999999999997,
+      "phase_index": 11,
+      "phase_rad": 4.319689898685965,
+      "time_fraction": 0.6874999999999999,
+      "time_fs": 2.520428614661839
+    },
+    {
+      "expected_position_over_width": 0.5,
+      "left_half_probability": 0.49999999999999994,
+      "normalization": 0.9999999999999991,
+      "phase_deg": 270.0,
+      "phase_index": 12,
+      "phase_rad": 4.71238898038469,
+      "time_fraction": 0.75,
+      "time_fs": 2.7495584887220064
+    },
+    {
+      "expected_position_over_width": 0.43106855408436723,
+      "left_half_probability": 0.6624158930674056,
+      "normalization": 0.9999999999999981,
+      "phase_deg": 292.5,
+      "phase_index": 13,
+      "phase_rad": 5.105088062083414,
+      "time_fraction": 0.8125000000000001,
+      "time_fs": 2.978688362782174
+    },
+    {
+      "expected_position_over_width": 0.3726312959442764,
+      "left_half_probability": 0.8001054387190353,
+      "normalization": 0.9999999999999982,
+      "phase_deg": 315.0,
+      "phase_index": 14,
+      "phase_rad": 5.497787143782138,
+      "time_fraction": 0.875,
+      "time_fs": 3.2078182368423405
+    },
+    {
+      "expected_position_over_width": 0.33358476839649204,
+      "left_half_probability": 0.8921066517882685,
+      "normalization": 1.0000000000000013,
+      "phase_deg": 337.5,
+      "phase_index": 15,
+      "phase_rad": 5.890486225480862,
+      "time_fraction": 0.9374999999999999,
+      "time_fs": 3.4369481109025077
+    },
+    {
+      "expected_position_over_width": 0.31987345130251066,
+      "left_half_probability": 0.9244131815783876,
+      "normalization": 0.9999999999999984,
+      "phase_deg": 360.0,
+      "phase_index": 16,
+      "phase_rad": 6.283185307179586,
+      "time_fraction": 1.0,
+      "time_fs": 3.666077984962675
+    }
+  ],
+  "schema_version": "task07-superposition-v1",
+  "scope": {
+    "does_not_model": [
+      "measurement collapse",
+      "decoherence",
+      "finite walls",
+      "particle trajectories",
+      "interactions"
+    ],
+    "manual_phase_control": true
+  },
+  "status": "accepted_optional_extension",
+  "validation": {
+    "check_count": 14,
+    "checks": [
+      {
+        "expected": 17.0,
+        "name": "phase anchor count",
+        "observed": 17.0,
+        "passed": true,
+        "tolerance": 0.0
+      },
+      {
+        "expected": 0.0,
+        "name": "density normalization",
+        "observed": 1.887379141862766e-15,
+        "passed": true,
+        "tolerance": 2e-12
+      },
+      {
+        "expected": 0.0,
+        "name": "infinite-wall left boundary",
+        "observed": 0.0,
+        "passed": true,
+        "tolerance": 2e-15
+      },
+      {
+        "expected": 0.0,
+        "name": "infinite-wall right boundary",
+        "observed": 1.3497838043956716e-31,
+        "passed": true,
+        "tolerance": 2e-15
+      },
+      {
+        "expected": 1.0,
+        "name": "non-negative density",
+        "observed": 1.0,
+        "passed": true,
+        "tolerance": 0.0
+      },
+      {
+        "expected": 0.0,
+        "name": "analytical mean position",
+        "observed": 4.107825191113079e-15,
+        "passed": true,
+        "tolerance": 2e-07
+      },
+      {
+        "expected": 0.0,
+        "name": "analytical left probability",
+        "observed": 6.544985164946837e-08,
+        "passed": true,
+        "tolerance": 2e-07
+      },
+      {
+        "expected": 0.0,
+        "name": "full-cycle density revival",
+        "observed": 0.0,
+        "passed": true,
+        "tolerance": 2e-14
+      },
+      {
+        "expected": 0.0,
+        "name": "half-cycle mirror symmetry",
+        "observed": 2.4424906541753444e-15,
+        "passed": true,
+        "tolerance": 2e-14
+      },
+      {
+        "expected": 0.5,
+        "name": "quarter-cycle centred mean",
+        "observed": 0.5,
+        "passed": true,
+        "tolerance": 2e-15
+      },
+      {
+        "expected": 2.5,
+        "name": "energy expectation",
+        "observed": 2.5,
+        "passed": true,
+        "tolerance": 2e-15
+      },
+      {
+        "expected": 1.5,
+        "name": "energy uncertainty",
+        "observed": 1.4999999999999998,
+        "passed": true,
+        "tolerance": 2e-15
+      },
+      {
+        "expected": 1.0,
+        "name": "positive beat period",
+        "observed": 1.0,
+        "passed": true,
+        "tolerance": 0.0
+      },
+      {
+        "expected": 1.0,
+        "name": "mean position remains inside box",
+        "observed": 1.0,
+        "passed": true,
+        "tolerance": 0.0
+      }
+    ],
+    "passed": true
+  }
+}

@@ -1,42 +1,83 @@
 # Task 7 Extension Decision
 
+## Numerical momentum upgrade
+
+The official uncertainty result is now accompanied by a separate real-space
+finite-difference momentum calculation. Normalized eigenvectors from the
+100, 200, 400, 800 and 1600-point grids are acted on by central first- and
+second-derivative operators to obtain ⟨p⟩, ⟨p²⟩, Δp and ΔxΔp directly. The
+analytical values are comparison references only. The route is covered by
+regression tests, 50 scientific checks and the visible numerical-moments and
+convergence evidence on the Task 7 page.
+
 ## Decision
 
-Complete the official Heisenberg uncertainty-principle extension in full and
-defer unrelated quantum-well extensions until the accepted baseline is secure.
+Keep the official Heisenberg uncertainty-principle extension unchanged and
+accept one separate coherent-superposition lab after the full stationary-state
+baseline is secure.
 
-## Completed extension
+The new lab combines the accepted $n=1$ and $n=2$ infinite-well eigenstates
+with equal probabilities. It is optional, appears after the official proof,
+and uses its own model module, evidence schema, tests, browser controls, and
+interpretation boundary.
 
-The extension includes:
+## Why this extension
 
-- analytical derivation of \(\langle x\rangle\), \(\langle x^2\rangle\),
-  \(\langle p\rangle\) and \(\langle p^2\rangle\);
-- closed forms for \(\Delta x\), \(\Delta p\) and their product;
-- proof that every positive integer state satisfies
-  \(\Delta x\Delta p\geq\hbar/2\);
-- numerical evaluation for \(n=1\) to \(10\);
-- a dedicated high-resolution uncertainty figure; and
-- an editable LaTeX source plus compiled four-page PDF report.
+A single eigenstate has
 
-## Deferred extensions
+$$
+\psi_n(x,t)=\phi_n(x)e^{-iE_nt/\hbar},
+$$
 
-The following are scientifically useful but not required by Task 7:
+so its global phase changes while $|\psi_n|^2$ remains stationary. Motion in a
+density plot would therefore be misleading. A coherent superposition has a
+relative phase and a genuinely time-dependent density:
 
-- finite square wells and tunnelling;
-- time-dependent superpositions and wave packets;
-- two- and three-dimensional boxes;
-- perturbing electric fields;
-- interacting particles; and
-- a graphical user interface.
+$$
+\Psi(x,t)=\frac{1}{\sqrt2}\left(\psi_1+\psi_2\right),
+\qquad
+\theta=\frac{(E_2-E_1)t}{\hbar},
+$$
 
-A stationary-state animation was deliberately not selected: the factor
-\(e^{-iE_nt/\hbar}\) changes the global phase, while \(|\psi_n|^2\) remains
-constant. An animation of that density would therefore show no observable
-motion. A future animation would need a superposition or wave packet and would
-constitute a separate physical model.
+$$
+a|\Psi|^2
+=\sin^2(\pi u)+\sin^2(2\pi u)
++2\cos\theta\sin(\pi u)\sin(2\pi u),
+\qquad u=\frac{x}{a}.
+$$
 
-## Revisit condition
+This directly explains the difference between an unobservable global phase
+and observable interference.
 
-Consider another extension only after the complete Task 7 scientific, visual,
-LaTeX and presentation acceptance suite remains green and the wider ten-task
-submission schedule permits it.
+## Accepted implementation
+
+- equal $n=1$ and $n=2$ probabilities, each $1/2$;
+- manual relative-phase control from $0$ to $2\pi$ with five exact presets;
+- a normalized density chart and expectation-position marker;
+- live $t/T$, $\langle x\rangle/a$, left-half probability, and mean-energy
+  readouts;
+- the $1.00$ nm electron-box beat period, $T=3.666078$ fs;
+- 17 frozen phase anchors and 14/14 independent extension checks;
+- deterministic JSON and CSV evidence plus a PNG chart export; and
+- desktop and mobile interaction, overflow, console, semantics, and high-DPI
+  canvas audits.
+
+There is no autoplay. Time is controlled manually so the visual change remains
+a deliberate physics comparison rather than decorative motion.
+
+## Interpretation boundary
+
+The density is a probability distribution, not a classical particle path. The
+extension does not simulate measurement collapse, decoherence, finite walls,
+tunnelling, environmental noise, or particle interactions.
+
+Finite wells, higher-dimensional boxes, perturbing fields, and interacting
+particles remain deferred.
+
+## Reproduction
+
+```bash
+python3 -m task07_particle_in_box.generate_superposition_extension
+python3 -m unittest task07_particle_in_box.test_superposition_extension -v
+node site/validate-task-07.mjs
+```

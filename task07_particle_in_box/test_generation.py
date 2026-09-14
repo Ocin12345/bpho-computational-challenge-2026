@@ -37,6 +37,8 @@ class GenerationTests(unittest.TestCase):
                 "stationary_states.csv": 8004,
                 "expectation_values.csv": 10,
                 "numerical_eigenvalues.csv": 50,
+                "numerical_moments.csv": 50,
+                "uncertainty_convergence.csv": 5,
             }
             for filename, expected in expected_rows.items():
                 with (data / filename).open(encoding="utf-8", newline="") as handle:
@@ -44,11 +46,13 @@ class GenerationTests(unittest.TestCase):
             with (data / "validation_report.json").open(encoding="utf-8") as handle:
                 validation = json.load(handle)
             self.assertTrue(validation["passed"])
-            self.assertEqual(len(validation["checks"]), 37)
+            self.assertEqual(len(validation["checks"]), 50)
             with (data / "manifest.json").open(encoding="utf-8") as handle:
                 manifest = json.load(handle)
-            self.assertEqual(manifest["validation_check_count"], 37)
-            self.assertEqual(len(manifest["sha256"]), 18)
+            self.assertEqual(
+                manifest["validation_check_count"], len(validation["checks"])
+            )
+            self.assertEqual(len(manifest["sha256"]), 20)
             self.assertEqual(manifest["figure_font_family"], "Times New Roman")
             self.assertEqual(manifest["official_pages"], [48, 49])
             self.assertEqual(

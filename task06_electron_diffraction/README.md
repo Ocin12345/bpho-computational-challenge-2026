@@ -8,7 +8,9 @@ and 29 focused tests pass; six data artifacts and six high-resolution PNG/SVG
 figure pairs regenerate transactionally; and the figures have passed a
 multi-pass scientific and visual review. Results and limitations are recorded
 in [`RESULTS_AND_INTERPRETATION.md`](RESULTS_AND_INTERPRETATION.md). The
-optional animation and relativistic comparison are explicitly deferred in
+required baseline remains accepted. A separate relativistic precision comparison is now
+implemented in [`relativistic_extension.py`](relativistic_extension.py), while
+automatic animation remains deferred in
 [`EXTENSION_DECISION.md`](EXTENSION_DECISION.md). The editable one-slide
 competition package is in
 [`presentation/task06`](../presentation/task06/README.md), and the final local
@@ -19,6 +21,7 @@ Regenerate and verify the current baseline with:
 ```bash
 python3 -m task06_electron_diffraction.generate_task06
 python3 -m task06_electron_diffraction.validate_task06
+python3 -m task06_electron_diffraction.generate_relativistic_extension
 python3 -m unittest discover -s task06_electron_diffraction -p 'test_*.py' -q
 ```
 

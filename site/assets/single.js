@@ -12,6 +12,8 @@ const creditWords = document.querySelectorAll(".credit > *");
 const revealElements = document.querySelectorAll("[data-reveal]");
 const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
 const coarsePointer = window.matchMedia("(pointer: coarse)");
+const motionButton = document.querySelector("[data-field-toggle]");
+loader.classList.add("is-loading");
 
 const state = {
   live: !reduceMotion.matches,
@@ -406,12 +408,30 @@ function initializeContentReveals() {
     { rootMargin: "0px 0px -12% 0px", threshold: 0.08 },
   );
 
+  body.classList.add("reveal-ready");
   revealElements.forEach((element) => observer.observe(element));
 }
 
 window.addEventListener("pointermove", updatePointer, { passive: true });
 window.addEventListener("resize", resize, { passive: true });
 
-createField();
+const fieldAvailable = createField();
+function updateMotionButton() {
+  if (!motionButton) return;
+  motionButton.textContent = state.live ? "Pause background" : "Play background";
+  motionButton.setAttribute("aria-pressed", String(!state.live));
+}
+if (motionButton && fieldAvailable) {
+  motionButton.hidden = false;
+  updateMotionButton();
+  motionButton.addEventListener("click", () => {
+    state.live = !state.live;
+    updateMotionButton();
+  });
+  reduceMotion.addEventListener("change", () => {
+    state.live = !reduceMotion.matches;
+    updateMotionButton();
+  });
+}
 initializeContentReveals();
 finishLoader();

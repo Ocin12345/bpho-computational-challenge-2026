@@ -76,6 +76,11 @@ class Task07Configuration:
     anchor_relative_tolerance: float = 5.0e-11
     numerical_energy_relative_tolerance: float = 4.0e-5
     numerical_overlap_minimum: float = 0.999999
+    numerical_normalization_absolute_tolerance: float = 5.0e-12
+    numerical_position_absolute_tolerance_m: float = 2.0e-22
+    numerical_mean_momentum_scale_tolerance: float = 5.0e-12
+    numerical_moment_relative_tolerance: float = 4.0e-5
+    numerical_uncertainty_relative_tolerance: float = 2.0e-5
     convergence_order_minimum: float = 1.90
     convergence_order_maximum: float = 2.05
 
@@ -147,6 +152,11 @@ class Task07Configuration:
             "anchor_relative_tolerance",
             "numerical_energy_relative_tolerance",
             "numerical_overlap_minimum",
+            "numerical_normalization_absolute_tolerance",
+            "numerical_position_absolute_tolerance_m",
+            "numerical_mean_momentum_scale_tolerance",
+            "numerical_moment_relative_tolerance",
+            "numerical_uncertainty_relative_tolerance",
             "convergence_order_minimum",
             "convergence_order_maximum",
         ):

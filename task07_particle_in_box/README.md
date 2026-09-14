@@ -74,6 +74,8 @@ Data:
 - [`stationary_states.csv`](../data/task07/stationary_states.csv)
 - [`expectation_values.csv`](../data/task07/expectation_values.csv)
 - [`numerical_eigenvalues.csv`](../data/task07/numerical_eigenvalues.csv)
+- [`numerical_moments.csv`](../data/task07/numerical_moments.csv)
+- [`uncertainty_convergence.csv`](../data/task07/uncertainty_convergence.csv)
 - [`reference_anchors.json`](../data/task07/reference_anchors.json)
 - [`validation_report.json`](../data/task07/validation_report.json)
 - [`manifest.json`](../data/task07/manifest.json)
@@ -111,15 +113,35 @@ $$
 \geq\frac{\hbar}{2}.
 $$
 
+## Coherent-superposition extension
+
+After the official stationary-state and uncertainty package was accepted, a
+separate equal-weight $n=1$ and $n=2$ lab was added. Its relative phase
+$\theta=(E_2-E_1)t/\hbar$ changes the interference term in $|\Psi|^2$, moving
+probability between the two halves of the well while preserving normalization
+and mean energy.
+
+The extension provides manual phase control, exact presets, a normalized
+density chart, live expectation values, 17 phase anchors, 14/14 separate
+validation checks, CSV/JSON evidence, and a PNG export. It contains no
+autoplay and remains outside the authoritative competition baseline. See
+[`EXTENSION_DECISION.md`](EXTENSION_DECISION.md) for the equations and scope
+boundary.
+
 ## Validation strategy
 
-The analytical model is checked against high-precision scalar references and a
-separate finite-difference Hamiltonian. The numerical eigensolver uses grids
+The stationary analytical model is checked against high-precision scalar references and a
+separate finite-difference Hamiltonian. Numerical position and momentum moments
+are evaluated directly from its eigenvectors before analytical comparison. The numerical eigensolver uses grids
 from 100 to 1600 interior points and does not insert the analytical energy
 formula. The acceptance suite covers energy scaling, boundary conditions,
 normalisation, orthogonality, nodes, expectation values, uncertainty,
-eigenvalue convergence, eigenfunction overlap, deterministic regeneration and
-transaction rollback.
+eigenvalue and uncertainty convergence, the Heisenberg bound on all 50 numerical
+grid-state pairs, eigenfunction overlap, deterministic regeneration and
+transaction rollback. The superposition extension separately checks
+normalization, infinite-wall boundaries, non-negative density, analytical
+position and left-half probabilities, full-cycle revival, half-cycle mirror
+symmetry, energy moments, and the beat period.
 
 ## Interpretation
 

@@ -177,7 +177,17 @@ finite-difference model approximates the second derivative by
 \approx\frac{\psi_{j+1}-2\psi_j+\psi_{j-1}}{(\Delta x)^2},
 \end{equation}
 creating a symmetric tridiagonal Hamiltonian.  Its eigenvalues are calculated
-without inserting the analytical spectrum.
+without inserting the analytical spectrum.  Position and momentum moments are
+then computed directly from each normalized numerical eigenvector using
+\begin{equation}
+\langle A\rangle_h=\sum_j\psi_j^*(A_h\psi)_j\,\Delta x,
+\qquad
+(p_h\psi)_j=-i\hbar\frac{\psi_{j+1}-\psi_{j-1}}{2\Delta x}.
+\end{equation}
+The same zero-valued boundary points used by the Hamiltonian close the
+first- and second-derivative stencils.  Analytical uncertainties are introduced
+only after the numerical $\langle x\rangle$, $\langle x^2\rangle$,
+$\langle p\rangle$ and $\langle p^2\rangle$ have been evaluated.
 
 \begin{table}[H]
 \centering
@@ -195,10 +205,14 @@ Interior points & Maximum relative error\\
 \end{tabular}
 \end{table}
 
-The observed convergence orders lie between 1.99896 and 1.99996, consistent
-with the expected second-order discretisation error.  The finest-grid absolute
+For $N=1600$, the maximum relative errors in $\Delta p$ and
+$\Delta x\Delta p$ are both below $1.605\times10^{-5}$.  Their measured
+convergence orders over all ten states lie between 1.99961 and 2.00038,
+consistent with second-order discretisation.  The energy orders lie between
+1.99896 and 1.99996.  The finest-grid absolute
 overlap between every numerical eigenvector and its analytical counterpart is
-greater than 0.999999.  The automated acceptance suite additionally checks
+greater than 0.999999.  All fifty grid--state uncertainty products satisfy
+$\Delta x\Delta p\geq\hbar/2$.  The 50-check acceptance suite additionally checks
 normalisation, orthogonality, node counts, boundary values, energy scaling,
 expectation values and the uncertainty inequality.
 

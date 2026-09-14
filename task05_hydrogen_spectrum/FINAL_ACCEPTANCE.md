@@ -120,8 +120,9 @@ inside the PowerPoint.
 - `git diff --check`: pass;
 - private-key and common token-pattern scan over Task 5 artifacts: pass;
 - no generated cache or dependency folder is tracked; and
-- optional animation/reduced-mass work is explicitly deferred rather than
-  mixed into the official ideal-model result.
+- the optional reduced-mass work is stored and validated separately rather
+  than mixed into the official ideal-model result; orbital animation remains
+  excluded.
 
 ## Handoff boundary
 
@@ -129,3 +130,28 @@ The Task 5 files are deliberately left as local working-tree changes for review.
 No commit or push was performed as part of this acceptance run. Repository
 synchronization therefore remains a separate user-directed release action; it
 does not affect the scientific or artifact checks above.
+
+## Optional-extension acceptance addendum
+
+Date: 8 August 2026
+
+The Task 5 scope was reopened after baseline acceptance to implement the
+preferred finite-proton-mass extension. The accepted baseline remains frozen.
+
+- `reduced_mass_extension.py` applies
+  $\mu/m_e=1/(1+m_e/m_p)$ using the NIST 2022 CODATA electron-proton mass
+  ratio;
+- `reduced_mass_validation.json` and `reduced_mass_transitions.csv` contain a
+  separate 45-transition result set;
+- 12/12 extension validation checks and all 9 focused extension tests pass;
+- the complete Task 5 focused suite now contains 51 passing tests;
+- the static website validator passes 16/16 checks; and
+- desktop and mobile browser audits confirm the selector, H-$\alpha$ anchor,
+  five-line table, high-DPI canvas, fail-closed evidence state, semantic
+  labels, and absence of horizontal page overflow or runtime errors.
+
+The H-$\alpha$ vacuum wavelength changes from $656.112276$ nm in the accepted
+infinite-mass baseline to $656.469606$ nm in the reduced-mass-only model, a
+$357.330$ pm shift. This is not presented as a precision measured wavelength:
+fine structure, hyperfine structure, the Lamb shift, line strengths, and
+broadening remain excluded.
